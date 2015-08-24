@@ -1,0 +1,13 @@
+{
+  "name": "stellar-base",
+  "homepage": "https://github.com/stellar/bower-js-stellar-base",
+  "authors": [
+    "Stellar Development Foundation"
+  ],
+  "description": "Low level stellar support library",
+  "main": "./stellar-base.min.js",
+  "keywords": [
+    "stellar"
+  ],
+  "license": "Apache 2.0"
+}
