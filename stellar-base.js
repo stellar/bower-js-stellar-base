@@ -29174,6 +29174,11 @@ var StellarBase =
 	        return this._secretSeed;
 	      }
 	    },
+	    rawSecretKey: {
+	      value: function rawSecretKey() {
+	        return this._secretKey;
+	      }
+	    },
 	    canSign: {
 	      value: function canSign() {
 	        return !!this._secretKey;
@@ -30565,7 +30570,7 @@ var StellarBase =
 	            * @param {Asset} selling - What you're selling.
 	            * @param {Asset} buying - What you're buying.
 	            * @param {string} amount - The total amount you're selling. If 0, deletes the offer.
-	            * @param {number} price - The exchange rate ratio (takerpay / takerget)
+	            * @param {number} price - The exchange rate ratio (selling / buying)
 	            * @param {string} [opts.source] - The source account (defaults to transaction source).
 	            * @returns {xdr.CreatePassiveOfferOp}
 	            */
