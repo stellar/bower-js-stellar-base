@@ -2649,7 +2649,7 @@ var StellarBase =
 
 	var _interopRequireWildcard = function (obj) { return obj && obj.__esModule ? obj : { "default": obj }; };
 
-	// Automatically generated on 2015-07-27T16:14:51+02:00
+	// Automatically generated on 2015-09-01T12:50:28+02:00
 	// DO NOT EDIT or your changes may be overwritten
 
 	/* jshint maxstatements:2147483647  */
@@ -3056,7 +3056,7 @@ var StellarBase =
 	  //       SequenceNumber seqNum;    // last sequence number used for this account
 	  //       uint32 numSubEntries;     // number of sub-entries this account has
 	  //                                 // drives the reserve
-	  //       AccountID* inflationDest; // Account to vote during inflation
+	  //       AccountID* inflationDest; // Account to vote for during inflation
 	  //       uint32 flags;             // see AccountFlags
 	  //  
 	  //       string32 homeDomain; // can be used for reverse federation and memo lookup
@@ -3111,7 +3111,7 @@ var StellarBase =
 	  //   struct TrustLineEntry
 	  //   {
 	  //       AccountID accountID; // account this trustline belongs to
-	  //       Asset asset;   // type of asset (with issuer)
+	  //       Asset asset;         // type of asset (with issuer)
 	  //       int64 balance;       // how much of this asset the user has.
 	  //                            // Asset defines the unit for this;
 	  //  
@@ -3164,8 +3164,8 @@ var StellarBase =
 	  //       AccountID sellerID;
 	  //       uint64 offerID;
 	  //       Asset selling; // A
-	  //       Asset buying; // B
-	  //       int64 amount;       // amount of A
+	  //       Asset buying;  // B
+	  //       int64 amount;  // amount of A
 	  //  
 	  //       /* price for this offer:
 	  //           price of A in terms of B
@@ -3189,18 +3189,18 @@ var StellarBase =
 
 	  // === xdr source ============================================================
 	  //
-	  //   union LedgerEntry switch (LedgerEntryType type)
-	  //   {
-	  //   case ACCOUNT:
-	  //       AccountEntry account;
-	  //   case TRUSTLINE:
-	  //       TrustLineEntry trustLine;
-	  //   case OFFER:
-	  //       OfferEntry offer;
-	  //   };
+	  //   union switch (LedgerEntryType type)
+	  //       {
+	  //       case ACCOUNT:
+	  //           AccountEntry account;
+	  //       case TRUSTLINE:
+	  //           TrustLineEntry trustLine;
+	  //       case OFFER:
+	  //           OfferEntry offer;
+	  //       }
 	  //
 	  // ===========================================================================
-	  xdr.union("LedgerEntry", {
+	  xdr.union("LedgerEntryData", {
 	    switchOn: xdr.lookup("LedgerEntryType"),
 	    switchName: "type",
 	    switches: [["account", "account"], ["trustline", "trustLine"], ["offer", "offer"]],
@@ -3208,6 +3208,50 @@ var StellarBase =
 	      account: xdr.lookup("AccountEntry"),
 	      trustLine: xdr.lookup("TrustLineEntry"),
 	      offer: xdr.lookup("OfferEntry") } });
+
+	  // === xdr source ============================================================
+	  //
+	  //   union switch (int v)
+	  //       {
+	  //       case 0:
+	  //           void;
+	  //       }
+	  //
+	  // ===========================================================================
+	  xdr.union("LedgerEntryExt", {
+	    switchOn: xdr.int(),
+	    switchName: "v",
+	    switches: [[0, xdr["void"]()]],
+	    arms: {} });
+
+	  // === xdr source ============================================================
+	  //
+	  //   struct LedgerEntry
+	  //   {
+	  //       uint32 lastModifiedLedgerSeq; // ledger the LedgerEntry was last changed
+	  //  
+	  //       union switch (LedgerEntryType type)
+	  //       {
+	  //       case ACCOUNT:
+	  //           AccountEntry account;
+	  //       case TRUSTLINE:
+	  //           TrustLineEntry trustLine;
+	  //       case OFFER:
+	  //           OfferEntry offer;
+	  //       }
+	  //       data;
+	  //  
+	  //       // reserved for future use
+	  //       union switch (int v)
+	  //       {
+	  //       case 0:
+	  //           void;
+	  //       }
+	  //       ext;
+	  //   };
+	  //
+	  // ===========================================================================
+	  xdr.struct("LedgerEntry", [["lastModifiedLedgerSeq", xdr.lookup("Uint32")], ["data", xdr.lookup("LedgerEntryData")], ["ext", xdr.lookup("LedgerEntryExt")]]);
 
 	  // === xdr source ============================================================
 	  //
@@ -3871,7 +3915,7 @@ var StellarBase =
 	  //   struct PaymentOp
 	  //   {
 	  //       AccountID destination; // recipient of the payment
-	  //       Asset asset;     // what they end up with
+	  //       Asset asset;           // what they end up with
 	  //       int64 amount;          // amount they end up with
 	  //   };
 	  //
@@ -3883,12 +3927,12 @@ var StellarBase =
 	  //   struct PathPaymentOp
 	  //   {
 	  //       Asset sendAsset; // asset we pay with
-	  //       int64 sendMax;         // the maximum amount of sendAsset to
-	  //                              // send (excluding fees).
-	  //                              // The operation will fail if can't be met
+	  //       int64 sendMax;   // the maximum amount of sendAsset to
+	  //                        // send (excluding fees).
+	  //                        // The operation will fail if can't be met
 	  //  
 	  //       AccountID destination; // recipient of the payment
-	  //       Asset destAsset; // what they end up with
+	  //       Asset destAsset;       // what they end up with
 	  //       int64 destAmount;      // amount they end up with
 	  //  
 	  //       Asset path<5>; // additional hops it must go through to get there
@@ -3917,10 +3961,10 @@ var StellarBase =
 	  //
 	  //   struct CreatePassiveOfferOp
 	  //   {
-	  //       Asset selling;  // A
-	  //       Asset buying;   // B
-	  //       int64 amount;   // amount taker gets. if set to 0, delete the offer
-	  //       Price price;    // cost of A in terms of B
+	  //       Asset selling; // A
+	  //       Asset buying;  // B
+	  //       int64 amount;  // amount taker gets. if set to 0, delete the offer
+	  //       Price price;   // cost of A in terms of B
 	  //   };
 	  //
 	  // ===========================================================================
@@ -3972,7 +4016,7 @@ var StellarBase =
 	  //       case ASSET_TYPE_CREDIT_ALPHANUM4:
 	  //           opaque assetCode4[4];
 	  //  
-	  //   	case ASSET_TYPE_CREDIT_ALPHANUM12:
+	  //       case ASSET_TYPE_CREDIT_ALPHANUM12:
 	  //           opaque assetCode12[12];
 	  //  
 	  //           // add other asset types here in the future
@@ -3998,7 +4042,7 @@ var StellarBase =
 	  //       case ASSET_TYPE_CREDIT_ALPHANUM4:
 	  //           opaque assetCode4[4];
 	  //  
-	  //   	case ASSET_TYPE_CREDIT_ALPHANUM12:
+	  //       case ASSET_TYPE_CREDIT_ALPHANUM12:
 	  //           opaque assetCode12[12];
 	  //  
 	  //           // add other asset types here in the future
@@ -4211,20 +4255,20 @@ var StellarBase =
 	  //   struct ClaimOfferAtom
 	  //   {
 	  //       // emited to identify the offer
-	  //       AccountID offerOwner; // Account that owns the offer
+	  //       AccountID sellerID; // Account that owns the offer
 	  //       uint64 offerID;
 	  //  
 	  //       // amount and asset taken from the owner
-	  //       Asset assetClaimed;
-	  //       int64 amountClaimed;
+	  //       Asset assetSold;
+	  //       int64 amountSold;
 	  //  
-	  //       // amount and assetsent to the owner
-	  //       Asset assetSend;
-	  //       int64 amountSend;
+	  //       // amount and asset sent to the owner
+	  //       Asset assetBought;
+	  //       int64 amountBought;
 	  //   };
 	  //
 	  // ===========================================================================
-	  xdr.struct("ClaimOfferAtom", [["offerOwner", xdr.lookup("AccountId")], ["offerId", xdr.lookup("Uint64")], ["assetClaimed", xdr.lookup("Asset")], ["amountClaimed", xdr.lookup("Int64")], ["assetSend", xdr.lookup("Asset")], ["amountSend", xdr.lookup("Int64")]]);
+	  xdr.struct("ClaimOfferAtom", [["sellerId", xdr.lookup("AccountId")], ["offerId", xdr.lookup("Uint64")], ["assetSold", xdr.lookup("Asset")], ["amountSold", xdr.lookup("Int64")], ["assetBought", xdr.lookup("Asset")], ["amountBought", xdr.lookup("Int64")]]);
 
 	  // === xdr source ============================================================
 	  //
@@ -4280,7 +4324,7 @@ var StellarBase =
 	  //       PAYMENT_SRC_NO_TRUST = -3,       // no trust line on source account
 	  //       PAYMENT_SRC_NOT_AUTHORIZED = -4, // source not authorized to transfer
 	  //       PAYMENT_NO_DESTINATION = -5,     // destination account does not exist
-	  //       PAYMENT_NO_TRUST = -6, // destination missing a trust line for asset
+	  //       PAYMENT_NO_TRUST = -6,       // destination missing a trust line for asset
 	  //       PAYMENT_NOT_AUTHORIZED = -7, // destination not authorized to hold asset
 	  //       PAYMENT_LINE_FULL = -8       // destination would go above their limit
 	  //   };
@@ -4328,11 +4372,12 @@ var StellarBase =
 	  //       PATH_PAYMENT_SRC_NO_TRUST = -3,       // no trust line on source account
 	  //       PATH_PAYMENT_SRC_NOT_AUTHORIZED = -4, // source not authorized to transfer
 	  //       PATH_PAYMENT_NO_DESTINATION = -5,     // destination account does not exist
-	  //       PATH_PAYMENT_NO_TRUST = -6,       // dest missing a trust line for asset
-	  //       PATH_PAYMENT_NOT_AUTHORIZED = -7, // dest not authorized to hold asset
-	  //       PATH_PAYMENT_LINE_FULL = -8,      // dest would go above their limit
-	  //       PATH_PAYMENT_TOO_FEW_OFFERS = -9, // not enough offers to satisfy path
-	  //       PATH_PAYMENT_OVER_SENDMAX = -10   // could not satisfy sendmax
+	  //       PATH_PAYMENT_NO_TRUST = -6,           // dest missing a trust line for asset
+	  //       PATH_PAYMENT_NOT_AUTHORIZED = -7,     // dest not authorized to hold asset
+	  //       PATH_PAYMENT_LINE_FULL = -8,          // dest would go above their limit
+	  //       PATH_PAYMENT_TOO_FEW_OFFERS = -9,     // not enough offers to satisfy path
+	  //       PATH_PAYMENT_OFFER_CROSS_SELF = -10,  // would cross one of its own offers
+	  //       PATH_PAYMENT_OVER_SENDMAX = -11       // could not satisfy sendmax
 	  //   };
 	  //
 	  // ===========================================================================
@@ -4347,7 +4392,8 @@ var StellarBase =
 	    pathPaymentNotAuthorized: -7,
 	    pathPaymentLineFull: -8,
 	    pathPaymentTooFewOffer: -9,
-	    pathPaymentOverSendmax: -10 });
+	    pathPaymentOfferCrossSelf: -10,
+	    pathPaymentOverSendmax: -11 });
 
 	  // === xdr source ============================================================
 	  //
@@ -4661,7 +4707,7 @@ var StellarBase =
 	  //   union AccountMergeResult switch (AccountMergeResultCode code)
 	  //   {
 	  //   case ACCOUNT_MERGE_SUCCESS:
-	  //       void;
+	  //       int64 sourceAccountBalance; // how much got transfered from source account
 	  //   default:
 	  //       void;
 	  //   };
@@ -4670,8 +4716,9 @@ var StellarBase =
 	  xdr.union("AccountMergeResult", {
 	    switchOn: xdr.lookup("AccountMergeResultCode"),
 	    switchName: "code",
-	    switches: [["accountMergeSuccess", xdr["void"]()]],
-	    arms: {},
+	    switches: [["accountMergeSuccess", "sourceAccountBalance"]],
+	    arms: {
+	      sourceAccountBalance: xdr.lookup("Int64") },
 	    defaultArm: xdr["void"]() });
 
 	  // === xdr source ============================================================
@@ -4826,7 +4873,7 @@ var StellarBase =
 	  //   {
 	  //       txSUCCESS = 0, // all operations succeeded
 	  //  
-	  //       txFAILED = -1, // one of the operations failed (but none were applied)
+	  //       txFAILED = -1, // one of the operations failed (none were applied)
 	  //  
 	  //       txTOO_EARLY = -2,         // ledger closeTime before minTime
 	  //       txTOO_LATE = -3,          // ledger closeTime after maxTime
@@ -30154,7 +30201,7 @@ var StellarBase =
 
 	            /**
 	            * Signs the transaction with the given Keypair.
-	            * @param {Keypair[]} keypairs
+	            * @param {...Keypair} keypairs
 	            */
 
 	            value: function sign() {
@@ -30263,6 +30310,8 @@ var StellarBase =
 
 	var padRight = _lodash.padRight;
 	var trimRight = _lodash.trimRight;
+	var isUndefined = _lodash.isUndefined;
+	var isString = _lodash.isString;
 
 	/**
 	* @class Operation
@@ -30403,7 +30452,7 @@ var StellarBase =
 	            * @param {object} opts
 	            * @param {Asset} opts.asset - The asset for the trust line.
 	            * @param {string} [opts.limit] - The limit for the asset, defaults to max int64.
-	            *                                If the limit is set to 0 it deletes the trustline.
+	            *                                If the limit is set to "0" it deletes the trustline.
 	            * @param {string} [opts.source] - The source account (defaults to transaction source).
 	            * @returns {xdr.ChangeTrustOp}
 	            */
@@ -30411,6 +30460,9 @@ var StellarBase =
 	            value: function changeTrust(opts) {
 	                var attributes = {};
 	                attributes.line = opts.asset.toXdrObject();
+	                if (!isUndefined(opts.limit) && !isString(opts.limit)) {
+	                    throw new TypeError("limit argument must be of type String");
+	                }
 	                var limit = opts.limit ? opts.limit : "9223372036854775807";
 	                attributes.limit = Hyper.fromString(limit);
 	                if (opts.source) {
@@ -30680,6 +30732,7 @@ var StellarBase =
 	                    case "changeTrust":
 	                        result.type = "changeTrust";
 	                        result.line = Asset.fromOperation(attrs.line());
+	                        result.limit = attrs.limit().toString();
 	                        break;
 	                    case "allowTrust":
 	                        result.type = "allowTrust";
