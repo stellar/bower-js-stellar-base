@@ -2633,11 +2633,16 @@ var StellarBase =
 	exports.UnsignedHyper = _jsXdr.UnsignedHyper;
 	exports.Hyper = _jsXdr.Hyper;
 	exports.Transaction = __webpack_require__(85).Transaction;
-	exports.TransactionBuilder = __webpack_require__(89).TransactionBuilder;
+	exports.TransactionBuilder = __webpack_require__(90).TransactionBuilder;
 	exports.Asset = __webpack_require__(87).Asset;
 	exports.Operation = __webpack_require__(86).Operation;
-	exports.Memo = __webpack_require__(91).Memo;
-	exports.Account = __webpack_require__(90).Account;
+	exports.Memo = __webpack_require__(92).Memo;
+	exports.Account = __webpack_require__(91).Account;
+
+	var _network = __webpack_require__(89);
+
+	exports.Network = _network.Network;
+	exports.Networks = _network.Networks;
 
 	_defaults(exports, _interopRequireWildcard(__webpack_require__(71)));
 
@@ -30151,6 +30156,8 @@ var StellarBase =
 
 	var Operation = __webpack_require__(86).Operation;
 
+	var Network = __webpack_require__(89).Network;
+
 	var _lodash = __webpack_require__(14);
 
 	var map = _lodash.map;
@@ -30250,12 +30257,7 @@ var StellarBase =
 	            */
 
 	            value: function signatureBase() {
-	                return Buffer.concat([this.signatureBasePrefix(), this.tx.toXDR()]);
-	            }
-	        },
-	        signatureBasePrefix: {
-	            value: function signatureBasePrefix() {
-	                return xdr.EnvelopeType.envelopeTypeTx().toXDR();
+	                return Buffer.concat([Network.current().networkId(), xdr.EnvelopeType.envelopeTypeTx().toXDR(), this.tx.toXDR()]);
 	            }
 	        },
 	        toEnvelope: {
@@ -30817,7 +30819,11 @@ var StellarBase =
 
 	var encodeCheck = __webpack_require__(71).encodeCheck;
 
-	var padRight = __webpack_require__(14).padRight;
+	var _lodash = __webpack_require__(14);
+
+	var clone = _lodash.clone;
+	var padRight = _lodash.padRight;
+	var trimRight = _lodash.trimRight;
 
 	/**
 	* Asset class represents an asset, either the native asset ("XLM")
@@ -30845,9 +30851,7 @@ var StellarBase =
 	            throw new Error("Issuer cannot be null");
 	        }
 
-	        // pad code with null bytes if necessary
-	        var padLength = code.length <= 4 ? 4 : 12;
-	        this.code = padRight(code, padLength, "\u0000");
+	        this.code = code;
 	        this.issuer = issuer;
 	    }
 
@@ -30872,13 +30876,37 @@ var StellarBase =
 	                        xdrTypeString = "assetTypeCreditAlphanum12";
 	                    }
 
+	                    // pad code with null bytes if necessary
+	                    var padLength = this.code.length <= 4 ? 4 : 12;
+	                    var paddedCode = padRight(this.code, padLength, "\u0000");
+
 	                    var assetType = new xdrType({
-	                        assetCode: this.code,
+	                        assetCode: paddedCode,
 	                        issuer: Keypair.fromAddress(this.issuer).accountId()
 	                    });
 
 	                    return new xdr.Asset(xdrTypeString, assetType);
 	                }
+	            }
+	        },
+	        getCode: {
+
+	            /**
+	             * Return the asset code
+	             */
+
+	            value: function getCode() {
+	                return clone(this.code);
+	            }
+	        },
+	        getIssuer: {
+
+	            /**
+	             * Return the asset issuer
+	             **/
+
+	            value: function getIssuer() {
+	                return clone(this.issuer);
 	            }
 	        },
 	        isNative: {
@@ -30898,7 +30926,7 @@ var StellarBase =
 	            */
 
 	            value: function equals(asset) {
-	                return this.code == asset.code && this.issuer == asset.issuer;
+	                return this.code == asset.getCode() && this.issuer == asset.getIssuer();
 	            }
 	        }
 	    }, {
@@ -30921,6 +30949,7 @@ var StellarBase =
 
 	            value: function fromOperation(cx) {
 	                var anum = undefined,
+	                    code = undefined,
 	                    issuer = undefined;
 	                switch (cx["switch"]()) {
 	                    case xdr.AssetType.assetTypeNative():
@@ -30928,11 +30957,13 @@ var StellarBase =
 	                    case xdr.AssetType.assetTypeCreditAlphanum4():
 	                        anum = cx.alphaNum4();
 	                        issuer = encodeCheck("accountId", anum.issuer().ed25519());
-	                        return new this(anum.assetCode(), issuer);
+	                        code = trimRight(anum.assetCode(), "\u0000");
+	                        return new this(code, issuer);
 	                    case xdr.AssetType.assetTypeCreditAlphanum12():
 	                        anum = cx.alphaNum12();
 	                        issuer = encodeCheck("accountId", anum.issuer().ed25519());
-	                        return new this(anum.assetCode(), issuer);
+	                        code = trimRight(anum.assetCode(), "\u0000");
+	                        return new this(code, issuer);
 	                    default:
 	                        throw new Error("Invalid asset type: " + cx["switch"]().name);
 	                }
@@ -30992,6 +31023,100 @@ var StellarBase =
 
 	"use strict";
 
+	var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
+	var hash = __webpack_require__(54).hash;
+
+	var Networks = {
+		PUBLIC: "Public Global Stellar Network ; September 2015",
+		TESTNET: "Test SDF Network ; September 2015" };
+
+	exports.Networks = Networks;
+	var current;
+
+	/**
+	 * The Network class provides helper methods to get the passphrase or id for different
+	 * stellar networks.  It also provides the current() class method that returns the network
+	 * that will be used by this process for the purposes of generating signatures
+	 *
+	 * The public network is the default, but you can also override the default by using the `use`,
+	 * `usePublicNet` and `useTestNet` helper methods
+	 *
+	 */
+
+	var Network = exports.Network = (function () {
+		function Network(networkPassphrase) {
+			_classCallCheck(this, Network);
+
+			this._networkPassphrase = networkPassphrase;
+		}
+
+		_createClass(Network, {
+			networkPassphrase: {
+				value: function networkPassphrase() {
+					return this._networkPassphrase;
+				}
+			},
+			networkId: {
+				value: function networkId() {
+					return hash(this.networkPassphrase());
+				}
+			}
+		}, {
+			useDefault: {
+				value: function useDefault() {
+					this.usePublicNet();
+				}
+			},
+			usePublicNet: {
+				value: function usePublicNet() {
+					this.use(new Network(Networks.PUBLIC));
+				}
+			},
+			useTestNet: {
+				value: function useTestNet() {
+					this.use(new Network(Networks.TESTNET));
+				}
+			},
+			use: {
+				value: function use(network) {
+					current = network;
+				}
+			},
+			current: {
+				value: (function (_current) {
+					var _currentWrapper = function current() {
+						return _current.apply(this, arguments);
+					};
+
+					_currentWrapper.toString = function () {
+						return _current.toString();
+					};
+
+					return _currentWrapper;
+				})(function () {
+					return current;
+				})
+			}
+		});
+
+		return Network;
+	})();
+
+	Network.useDefault();
+
+/***/ },
+/* 90 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
 	var _toConsumableArray = function (arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i]; return arr2; } else { return Array.from(arr); } };
 
 	var _createClass = (function () { function defineProperties(target, props) { for (var key in props) { var prop = props[key]; prop.configurable = true; if (prop.value) prop.writable = true; } Object.defineProperties(target, props); } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -31008,13 +31133,13 @@ var StellarBase =
 	var hash = _index.hash;
 	var Keypair = _index.Keypair;
 
-	var Account = __webpack_require__(90).Account;
+	var Account = __webpack_require__(91).Account;
 
 	var Operation = __webpack_require__(86).Operation;
 
 	var Transaction = __webpack_require__(85).Transaction;
 
-	var Memo = __webpack_require__(91).Memo;
+	var Memo = __webpack_require__(92).Memo;
 
 	var map = __webpack_require__(14).map;
 
@@ -31146,7 +31271,7 @@ var StellarBase =
 	})();
 
 /***/ },
-/* 90 */
+/* 91 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -31202,7 +31327,7 @@ var StellarBase =
 	})();
 
 /***/ },
-/* 91 */
+/* 92 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(Buffer) {"use strict";
