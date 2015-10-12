@@ -17883,20 +17883,22 @@ var StellarBase =
 	 */
 	Buffer.TYPED_ARRAY_SUPPORT = global.TYPED_ARRAY_SUPPORT !== undefined
 	  ? global.TYPED_ARRAY_SUPPORT
-	  : (function () {
-	      function Bar () {}
-	      try {
-	        var arr = new Uint8Array(1)
-	        arr.foo = function () { return 42 }
-	        arr.constructor = Bar
-	        return arr.foo() === 42 && // typed array instances can be augmented
-	            arr.constructor === Bar && // constructor can be set
-	            typeof arr.subarray === 'function' && // chrome 9-10 lack `subarray`
-	            arr.subarray(1, 1).byteLength === 0 // ie10 has broken `subarray`
-	      } catch (e) {
-	        return false
-	      }
-	    })()
+	  : typedArraySupport()
+
+	function typedArraySupport () {
+	  function Bar () {}
+	  try {
+	    var arr = new Uint8Array(1)
+	    arr.foo = function () { return 42 }
+	    arr.constructor = Bar
+	    return arr.foo() === 42 && // typed array instances can be augmented
+	        arr.constructor === Bar && // constructor can be set
+	        typeof arr.subarray === 'function' && // chrome 9-10 lack `subarray`
+	        arr.subarray(1, 1).byteLength === 0 // ie10 has broken `subarray`
+	  } catch (e) {
+	    return false
+	  }
+	}
 
 	function kMaxLength () {
 	  return Buffer.TYPED_ARRAY_SUPPORT
@@ -18850,7 +18852,7 @@ var StellarBase =
 	  offset = offset | 0
 	  if (!noAssert) checkInt(this, value, offset, 1, 0xff, 0)
 	  if (!Buffer.TYPED_ARRAY_SUPPORT) value = Math.floor(value)
-	  this[offset] = value
+	  this[offset] = (value & 0xff)
 	  return offset + 1
 	}
 
@@ -18867,7 +18869,7 @@ var StellarBase =
 	  offset = offset | 0
 	  if (!noAssert) checkInt(this, value, offset, 2, 0xffff, 0)
 	  if (Buffer.TYPED_ARRAY_SUPPORT) {
-	    this[offset] = value
+	    this[offset] = (value & 0xff)
 	    this[offset + 1] = (value >>> 8)
 	  } else {
 	    objectWriteUInt16(this, value, offset, true)
@@ -18881,7 +18883,7 @@ var StellarBase =
 	  if (!noAssert) checkInt(this, value, offset, 2, 0xffff, 0)
 	  if (Buffer.TYPED_ARRAY_SUPPORT) {
 	    this[offset] = (value >>> 8)
-	    this[offset + 1] = value
+	    this[offset + 1] = (value & 0xff)
 	  } else {
 	    objectWriteUInt16(this, value, offset, false)
 	  }
@@ -18903,7 +18905,7 @@ var StellarBase =
 	    this[offset + 3] = (value >>> 24)
 	    this[offset + 2] = (value >>> 16)
 	    this[offset + 1] = (value >>> 8)
-	    this[offset] = value
+	    this[offset] = (value & 0xff)
 	  } else {
 	    objectWriteUInt32(this, value, offset, true)
 	  }
@@ -18918,7 +18920,7 @@ var StellarBase =
 	    this[offset] = (value >>> 24)
 	    this[offset + 1] = (value >>> 16)
 	    this[offset + 2] = (value >>> 8)
-	    this[offset + 3] = value
+	    this[offset + 3] = (value & 0xff)
 	  } else {
 	    objectWriteUInt32(this, value, offset, false)
 	  }
@@ -18971,7 +18973,7 @@ var StellarBase =
 	  if (!noAssert) checkInt(this, value, offset, 1, 0x7f, -0x80)
 	  if (!Buffer.TYPED_ARRAY_SUPPORT) value = Math.floor(value)
 	  if (value < 0) value = 0xff + value + 1
-	  this[offset] = value
+	  this[offset] = (value & 0xff)
 	  return offset + 1
 	}
 
@@ -18980,7 +18982,7 @@ var StellarBase =
 	  offset = offset | 0
 	  if (!noAssert) checkInt(this, value, offset, 2, 0x7fff, -0x8000)
 	  if (Buffer.TYPED_ARRAY_SUPPORT) {
-	    this[offset] = value
+	    this[offset] = (value & 0xff)
 	    this[offset + 1] = (value >>> 8)
 	  } else {
 	    objectWriteUInt16(this, value, offset, true)
@@ -18994,7 +18996,7 @@ var StellarBase =
 	  if (!noAssert) checkInt(this, value, offset, 2, 0x7fff, -0x8000)
 	  if (Buffer.TYPED_ARRAY_SUPPORT) {
 	    this[offset] = (value >>> 8)
-	    this[offset + 1] = value
+	    this[offset + 1] = (value & 0xff)
 	  } else {
 	    objectWriteUInt16(this, value, offset, false)
 	  }
@@ -19006,7 +19008,7 @@ var StellarBase =
 	  offset = offset | 0
 	  if (!noAssert) checkInt(this, value, offset, 4, 0x7fffffff, -0x80000000)
 	  if (Buffer.TYPED_ARRAY_SUPPORT) {
-	    this[offset] = value
+	    this[offset] = (value & 0xff)
 	    this[offset + 1] = (value >>> 8)
 	    this[offset + 2] = (value >>> 16)
 	    this[offset + 3] = (value >>> 24)
@@ -19025,7 +19027,7 @@ var StellarBase =
 	    this[offset] = (value >>> 24)
 	    this[offset + 1] = (value >>> 16)
 	    this[offset + 2] = (value >>> 8)
-	    this[offset + 3] = value
+	    this[offset + 3] = (value & 0xff)
 	  } else {
 	    objectWriteUInt32(this, value, offset, false)
 	  }
@@ -28421,11 +28423,8 @@ var StellarBase =
 	            if (!_account.Account.isValidAddress(opts.destination)) {
 	                throw new Error("destination is invalid");
 	            }
-	            if (!(0, _lodash.isString)(opts.startingBalance)) {
-	                throw new TypeError('startingBalance argument must be of type String');
-	            }
-	            if ((0, _lodash.isEmpty)(opts.startingBalance)) {
-	                throw new TypeError('startingBalance argument must not be empty');
+	            if (!this.isValidAmount(opts.startingBalance)) {
+	                throw new TypeError('startingBalance argument must be of type String and represent a positive number');
 	            }
 	            var attributes = {};
 	            attributes.destination = _keypair.Keypair.fromAddress(opts.destination).accountId();
@@ -28457,11 +28456,8 @@ var StellarBase =
 	            if (!opts.asset) {
 	                throw new Error("Must provide an asset for a payment operation");
 	            }
-	            if (!(0, _lodash.isString)(opts.amount)) {
-	                throw new TypeError('amount argument must be of type String');
-	            }
-	            if ((0, _lodash.isEmpty)(opts.amount)) {
-	                throw new TypeError('amount argument must not be empty');
+	            if (!this.isValidAmount(opts.amount)) {
+	                throw new TypeError('amount argument must be of type String and represent a positive number');
 	            }
 
 	            var attributes = {};
@@ -28497,11 +28493,8 @@ var StellarBase =
 	            if (!opts.sendAsset) {
 	                throw new Error("Must specify a send asset");
 	            }
-	            if (!(0, _lodash.isString)(opts.sendMax)) {
-	                throw new TypeError('sendMax argument must be of type String');
-	            }
-	            if ((0, _lodash.isEmpty)(opts.sendMax)) {
-	                throw new TypeError('sendMax argument must not be empty');
+	            if (!this.isValidAmount(opts.sendMax)) {
+	                throw new TypeError('sendMax argument must be of type String and represent a positive number');
 	            }
 	            if (!_account.Account.isValidAddress(opts.destination)) {
 	                throw new Error("destination is invalid");
@@ -28509,11 +28502,8 @@ var StellarBase =
 	            if (!opts.destAsset) {
 	                throw new Error("Must provide a destAsset for a payment operation");
 	            }
-	            if (!(0, _lodash.isString)(opts.destAmount)) {
-	                throw new TypeError('destAmount argument must be of type String');
-	            }
-	            if ((0, _lodash.isEmpty)(opts.destAmount)) {
-	                throw new TypeError('destAmount argument must not be empty');
+	            if (!this.isValidAmount(opts.destAmount)) {
+	                throw new TypeError('destAmount argument must be of type String and represent a positive number');
 	            }
 
 	            var attributes = {};
@@ -28554,8 +28544,8 @@ var StellarBase =
 	        value: function changeTrust(opts) {
 	            var attributes = {};
 	            attributes.line = opts.asset.toXdrObject();
-	            if (!(0, _lodash.isUndefined)(opts.limit) && !(0, _lodash.isString)(opts.limit)) {
-	                throw new TypeError('limit argument must be of type String');
+	            if (!(0, _lodash.isUndefined)(opts.limit) && !this.isValidAmount(opts.limit, true)) {
+	                throw new TypeError('limit argument must be of type String and represent a number');
 	            }
 
 	            if (opts.limit) {
@@ -28718,8 +28708,8 @@ var StellarBase =
 	            var attributes = {};
 	            attributes.selling = opts.selling.toXdrObject();
 	            attributes.buying = opts.buying.toXdrObject();
-	            if (!(0, _lodash.isString)(opts.amount)) {
-	                throw new TypeError('amount argument must be of type String');
+	            if (!this.isValidAmount(opts.amount)) {
+	                throw new TypeError('amount argument must be of type String and represent a positive number');
 	            }
 	            attributes.amount = this._toXDRAmount(opts.amount);
 	            if ((0, _lodash.isUndefined)(opts.price)) {
@@ -28763,8 +28753,8 @@ var StellarBase =
 	            var attributes = {};
 	            attributes.selling = opts.selling.toXdrObject();
 	            attributes.buying = opts.buying.toXdrObject();
-	            if (!(0, _lodash.isString)(opts.amount)) {
-	                throw new TypeError('amount argument must be of type String');
+	            if (!this.isValidAmount(opts.amount)) {
+	                throw new TypeError('amount argument must be of type String and represent a positive number');
 	            }
 	            attributes.amount = this._toXDRAmount(opts.amount);
 	            if ((0, _lodash.isUndefined)(opts.price)) {
@@ -28930,6 +28920,44 @@ var StellarBase =
 	                    throw new Error("Unknown operation");
 	            }
 	            return result;
+	        }
+	    }, {
+	        key: "isValidAmount",
+	        value: function isValidAmount(value) {
+	            var allowZero = arguments.length <= 1 || arguments[1] === undefined ? false : arguments[1];
+
+	            if (!(0, _lodash.isString)(value)) {
+	                return false;
+	            }
+
+	            var amount = undefined;
+	            try {
+	                amount = new _bignumberJs2["default"](value);
+	            } catch (e) {
+	                return false;
+	            }
+
+	            // == 0
+	            if (!allowZero && amount.isZero()) {
+	                return false;
+	            }
+
+	            // < 0
+	            if (amount.isNegative()) {
+	                return false;
+	            }
+
+	            // Infinity
+	            if (!amount.isFinite()) {
+	                return false;
+	            }
+
+	            // NaN
+	            if (amount.isNaN()) {
+	                return false;
+	            }
+
+	            return true;
 	        }
 	    }, {
 	        key: "_toXDRAmount",
