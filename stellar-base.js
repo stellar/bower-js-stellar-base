@@ -28248,7 +28248,6 @@ var StellarBase =
 
 	var _lodash = __webpack_require__(10);
 
-	var MAX_FEE = 1000;
 	var MIN_LEDGER = 0;
 	var MAX_LEDGER = 0xFFFFFFFF; // max uint32
 
@@ -32020,7 +32019,7 @@ var StellarBase =
 
 	var _lodash = __webpack_require__(10);
 
-	var FEE = 1000;
+	var BASE_FEE = 100; // Stroops
 	var MIN_LEDGER = 0;
 	var MAX_LEDGER = 0xFFFFFFFF; // max uint32
 
@@ -32060,7 +32059,7 @@ var StellarBase =
 	    * @constructor
 	    * @param {Account} sourceAccount - The source account for this transaction.
 	    * @param {object} [opts]
-	    * @param {number} [opts.fee] - The max fee willing to pay for this transaction.
+	    * @param {number} [opts.fee] - The max fee willing to pay per operation in this transaction (in stroops).
 	    * @param {object} [opts.timebounds] - The timebounds for the validity of this transaction.
 	    * @param {string} [opts.timebounds.minTime] - 64 bit unix timestamp
 	    * @param {string} [opts.timebounds.maxTime] - 64 bit unix timestamp
@@ -32080,7 +32079,7 @@ var StellarBase =
 	        this.operations = [];
 	        this.signers = [];
 
-	        this.fee = opts.fee || FEE;
+	        this.baseFee = opts.fee || BASE_FEE;
 	        this.timebounds = opts.timebounds;
 
 	        this.memo = opts.memo || _memo.Memo.none();
@@ -32132,7 +32131,7 @@ var StellarBase =
 	        value: function build() {
 	            var attrs = {
 	                sourceAccount: _keypair.Keypair.fromAddress(this.source.address).accountId(),
-	                fee: this.fee,
+	                fee: this.baseFee * this.operations.length,
 	                seqNum: _generatedStellarXdr_generated2["default"].SequenceNumber.fromString(String(Number(this.source.sequence) + 1)),
 	                memo: this.memo,
 	                ext: new _generatedStellarXdr_generated2["default"].TransactionExt(0)
@@ -32161,21 +32160,27 @@ var StellarBase =
 /* 87 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(Buffer) {"use strict";
+	/* WEBPACK VAR INJECTION */(function(Buffer) {'use strict';
 
-	Object.defineProperty(exports, "__esModule", {
+	Object.defineProperty(exports, '__esModule', {
 	    value: true
 	});
 
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
 	var _generatedStellarXdr_generated = __webpack_require__(2);
 
 	var _generatedStellarXdr_generated2 = _interopRequireDefault(_generatedStellarXdr_generated);
+
+	var _lodash = __webpack_require__(10);
+
+	var _bignumberJs = __webpack_require__(84);
+
+	var _bignumberJs2 = _interopRequireDefault(_bignumberJs);
 
 	/**
 	* @class Memo
@@ -32187,13 +32192,13 @@ var StellarBase =
 	    }
 
 	    _createClass(Memo, null, [{
-	        key: "none",
+	        key: 'none',
 
 	        /**
 	        * Returns an empty memo.
 	        */
 	        value: function none() {
-	            return _generatedStellarXdr_generated2["default"].Memo.memoNone();
+	            return _generatedStellarXdr_generated2['default'].Memo.memoNone();
 	        }
 
 	        /**
@@ -32202,15 +32207,15 @@ var StellarBase =
 	        * @returns {xdr.Memo}
 	        */
 	    }, {
-	        key: "text",
+	        key: 'text',
 	        value: function text(_text) {
-	            if (typeof _text !== "string") {
+	            if (!(0, _lodash.isString)(_text)) {
 	                throw new Error("Expects string type got a " + typeof _text);
 	            }
-	            if (Buffer.byteLength(_text, "ascii") > 32) {
-	                throw new Error("Text should be < 32 bytes (ascii encoded). Got " + Buffer.byteLength(_text, "ascii"));
+	            if (Buffer.byteLength(_text, "ascii") > 28) {
+	                throw new Error("Text should be < 28 bytes (ascii encoded). Got " + Buffer.byteLength(_text, "ascii"));
 	            }
-	            return _generatedStellarXdr_generated2["default"].Memo.memoText(_text);
+	            return _generatedStellarXdr_generated2['default'].Memo.memoText(_text);
 	        }
 
 	        /**
@@ -32219,12 +32224,32 @@ var StellarBase =
 	        * @returns {xdr.Memo}
 	        */
 	    }, {
-	        key: "id",
+	        key: 'id',
 	        value: function id(_id) {
-	            if (Number(_id) === "NaN") {
-	                throw new Error("Expects a int64 as a string. Got " + _id);
+	            var error = new Error("Expects a int64 as a string. Got " + _id);
+
+	            if (!(0, _lodash.isString)(_id)) {
+	                throw error;
 	            }
-	            return _generatedStellarXdr_generated2["default"].Memo.memoId(_id);
+
+	            var number = undefined;
+	            try {
+	                number = new _bignumberJs2['default'](_id);
+	            } catch (e) {
+	                throw error;
+	            }
+
+	            // Infinity
+	            if (!number.isFinite()) {
+	                throw error;
+	            }
+
+	            // NaN
+	            if (number.isNaN()) {
+	                throw error;
+	            }
+
+	            return _generatedStellarXdr_generated2['default'].Memo.memoId(_id);
 	        }
 
 	        /**
@@ -32232,12 +32257,23 @@ var StellarBase =
 	        * @param {array|string} hash - 32 byte hash
 	        */
 	    }, {
-	        key: "hash",
+	        key: 'hash',
 	        value: function hash(_hash) {
-	            if (typeof _hash === "string" && Buffer.byteLength(_hash) != 32) {
-	                throw new Error("Expects a 32 byte hash value. Got " + Buffer.byteLength(_hash) + " bytes instead");
+	            var error = new Error("Expects a 32 byte hash value. Got " + _hash);
+
+	            if ((0, _lodash.isUndefined)(_hash)) {
+	                throw error;
 	            }
-	            return _generatedStellarXdr_generated2["default"].Memo.memoHash(_hash);
+
+	            if ((0, _lodash.isString)(_hash) && Buffer.byteLength(_hash) != 32) {
+	                throw error;
+	            }
+
+	            if (!_hash.length || _hash.length != 32) {
+	                throw error;
+	            }
+
+	            return _generatedStellarXdr_generated2['default'].Memo.memoHash(_hash);
 	        }
 
 	        /**
@@ -32245,12 +32281,23 @@ var StellarBase =
 	        * @param {array|string} hash - 32 byte hash
 	        */
 	    }, {
-	        key: "returnHash",
+	        key: 'returnHash',
 	        value: function returnHash(hash) {
-	            if (typeof hash === "string" && Buffer.byteLength(hash) != 32) {
-	                throw new Error("Expects a 32 byte hash value. Got " + Buffer.byteLength(hash) + " bytes instead");
+	            var error = new Error("Expects a 32 byte hash value. Got " + hash);
+
+	            if ((0, _lodash.isUndefined)(hash)) {
+	                throw error;
 	            }
-	            return _generatedStellarXdr_generated2["default"].Memo.memoReturn(hash);
+
+	            if ((0, _lodash.isString)(hash) && Buffer.byteLength(hash) != 32) {
+	                throw error;
+	            }
+
+	            if (!hash.length || hash.length != 32) {
+	                throw error;
+	            }
+
+	            return _generatedStellarXdr_generated2['default'].Memo.memoReturn(hash);
 	        }
 	    }]);
 
