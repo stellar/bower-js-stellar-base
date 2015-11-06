@@ -29066,7 +29066,7 @@ var StellarBase =
 	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
-	    value: true
+	  value: true
 	});
 
 	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -29094,154 +29094,158 @@ var StellarBase =
 	*/
 
 	var Asset = (function () {
-	    _createClass(Asset, null, [{
-	        key: "native",
+	  _createClass(Asset, null, [{
+	    key: "native",
 
-	        /**
-	        * Returns an asset object for the native asset.
-	        */
-	        value: function native() {
-	            return new Asset("XLM");
-	        }
-
-	        /**
-	        * Returns an asset object from its XDR object representation.
-	        * @param {xdr.Asset} cx - The asset xdr object.
-	        */
-	    }, {
-	        key: "fromOperation",
-	        value: function fromOperation(cx) {
-	            var anum = undefined,
-	                code = undefined,
-	                issuer = undefined;
-	            switch (cx["switch"]()) {
-	                case _generatedStellarXdr_generated2["default"].AssetType.assetTypeNative():
-	                    return this.native();
-	                case _generatedStellarXdr_generated2["default"].AssetType.assetTypeCreditAlphanum4():
-	                    anum = cx.alphaNum4();
-	                    issuer = (0, _strkey.encodeCheck)("accountId", anum.issuer().ed25519());
-	                    code = (0, _lodash.trimRight)(anum.assetCode(), '\0');
-	                    return new this(code, issuer);
-	                case _generatedStellarXdr_generated2["default"].AssetType.assetTypeCreditAlphanum12():
-	                    anum = cx.alphaNum12();
-	                    issuer = (0, _strkey.encodeCheck)("accountId", anum.issuer().ed25519());
-	                    code = (0, _lodash.trimRight)(anum.assetCode(), '\0');
-	                    return new this(code, issuer);
-	                default:
-	                    throw new Error("Invalid asset type: " + cx["switch"]().name);
-	            }
-	        }
-
-	        /**
-	        * An asset code describes an asset code and issuer pair. In the case of the native
-	        * asset XLM, the issuer will be null.
-	        * @constructor
-	        * @param {string} code - The asset code.
-	        * @param {string} issuer - The address of the issuer.
-	        */
-	    }]);
-
-	    function Asset(code, issuer) {
-	        _classCallCheck(this, Asset);
-
-	        if (code.length > 12) {
-	            throw new Error("Asset code must be 12 characters at max");
-	        }
-	        if (String(code).toLowerCase() !== "xlm" && !issuer) {
-	            throw new Error("Issuer cannot be null");
-	        }
-	        if (issuer && !_account.Account.isValidAddress(issuer)) {
-	            throw new Error("Issuer is invalid");
-	        }
-
-	        this.code = code;
-	        this.issuer = issuer;
+	    /**
+	    * Returns an asset object for the native asset.
+	    */
+	    value: function native() {
+	      return new Asset("XLM");
 	    }
 
 	    /**
-	    * Returns the xdr object for this asset.
+	    * Returns an asset object from its XDR object representation.
+	    * @param {xdr.Asset} cx - The asset xdr object.
 	    */
+	  }, {
+	    key: "fromOperation",
+	    value: function fromOperation(cx) {
+	      var anum = undefined,
+	          code = undefined,
+	          issuer = undefined;
+	      switch (cx["switch"]()) {
+	        case _generatedStellarXdr_generated2["default"].AssetType.assetTypeNative():
+	          return this.native();
+	        case _generatedStellarXdr_generated2["default"].AssetType.assetTypeCreditAlphanum4():
+	          anum = cx.alphaNum4();
+	          issuer = (0, _strkey.encodeCheck)("accountId", anum.issuer().ed25519());
+	          code = (0, _lodash.trimRight)(anum.assetCode(), '\0');
+	          return new this(code, issuer);
+	        case _generatedStellarXdr_generated2["default"].AssetType.assetTypeCreditAlphanum12():
+	          anum = cx.alphaNum12();
+	          issuer = (0, _strkey.encodeCheck)("accountId", anum.issuer().ed25519());
+	          code = (0, _lodash.trimRight)(anum.assetCode(), '\0');
+	          return new this(code, issuer);
+	        default:
+	          throw new Error("Invalid asset type: " + cx["switch"]().name);
+	      }
+	    }
 
-	    _createClass(Asset, [{
-	        key: "toXdrObject",
-	        value: function toXdrObject() {
-	            if (this.isNative()) {
-	                return _generatedStellarXdr_generated2["default"].Asset.assetTypeNative();
-	            } else {
-	                var xdrType = undefined,
-	                    xdrTypeString = undefined;
-	                if (this.code.length <= 4) {
-	                    xdrType = _generatedStellarXdr_generated2["default"].AssetAlphaNum4;
-	                    xdrTypeString = 'assetTypeCreditAlphanum4';
-	                } else {
-	                    xdrType = _generatedStellarXdr_generated2["default"].AssetAlphaNum12;
-	                    xdrTypeString = 'assetTypeCreditAlphanum12';
-	                }
+	    /**
+	    * An asset code describes an asset code and issuer pair. In the case of the native
+	    * asset XLM, the issuer will be null.
+	    * @constructor
+	    * @param {string} code - The asset code.
+	    * @param {string} issuer - The address of the issuer.
+	    */
+	  }]);
 
-	                // pad code with null bytes if necessary
-	                var padLength = this.code.length <= 4 ? 4 : 12;
-	                var paddedCode = (0, _lodash.padRight)(this.code, padLength, '\0');
+	  function Asset(code, issuer) {
+	    _classCallCheck(this, Asset);
 
-	                var assetType = new xdrType({
-	                    assetCode: paddedCode,
-	                    issuer: _keypair.Keypair.fromAddress(this.issuer).accountId()
-	                });
+	    if (code.length > 12) {
+	      throw new Error("Asset code must be 12 characters at max");
+	    }
+	    if (String(code).toLowerCase() !== "xlm" && !issuer) {
+	      throw new Error("Issuer cannot be null");
+	    }
+	    if (issuer && !_account.Account.isValidAddress(issuer)) {
+	      throw new Error("Issuer is invalid");
+	    }
 
-	                return new _generatedStellarXdr_generated2["default"].Asset(xdrTypeString, assetType);
-	            }
+	    this.code = code;
+	    this.issuer = issuer;
+	  }
+
+	  /**
+	  * Returns the xdr object for this asset.
+	  */
+
+	  _createClass(Asset, [{
+	    key: "toXdrObject",
+	    value: function toXdrObject() {
+	      if (this.isNative()) {
+	        return _generatedStellarXdr_generated2["default"].Asset.assetTypeNative();
+	      } else {
+	        var xdrType = undefined,
+	            xdrTypeString = undefined;
+	        if (this.code.length <= 4) {
+	          xdrType = _generatedStellarXdr_generated2["default"].AssetAlphaNum4;
+	          xdrTypeString = 'assetTypeCreditAlphanum4';
+	        } else {
+	          xdrType = _generatedStellarXdr_generated2["default"].AssetAlphaNum12;
+	          xdrTypeString = 'assetTypeCreditAlphanum12';
 	        }
 
-	        /**
-	         * Return the asset code
-	         */
-	    }, {
-	        key: "getCode",
-	        value: function getCode() {
-	            return (0, _lodash.clone)(this.code);
-	        }
+	        // pad code with null bytes if necessary
+	        var padLength = this.code.length <= 4 ? 4 : 12;
+	        var paddedCode = (0, _lodash.padRight)(this.code, padLength, '\0');
 
-	        /**
-	         * Return the asset issuer
-	         **/
-	    }, {
-	        key: "getIssuer",
-	        value: function getIssuer() {
-	            return (0, _lodash.clone)(this.issuer);
-	        }
+	        var assetType = new xdrType({
+	          assetCode: paddedCode,
+	          issuer: _keypair.Keypair.fromAddress(this.issuer).accountId()
+	        });
 
-	        /**
-	         * Return the asset type
-	         */
-	    }, {
-	        key: "getAssetType",
-	        value: function getAssetType() {
-	            if (this.code.length >= 1 && this.code.length <= 4) {
-	                return "credit_alphanum4";
-	            } else if (this.code.length >= 5 && this.code.length <= 12) {
-	                return "credit_alphanum12";
-	            }
-	        }
+	        return new _generatedStellarXdr_generated2["default"].Asset(xdrTypeString, assetType);
+	      }
+	    }
 
-	        /**
-	        * Returns true if this asset object is the native asset.
-	        */
-	    }, {
-	        key: "isNative",
-	        value: function isNative() {
-	            return !this.issuer;
-	        }
+	    /**
+	     * Return the asset code
+	     */
+	  }, {
+	    key: "getCode",
+	    value: function getCode() {
+	      return (0, _lodash.clone)(this.code);
+	    }
 
-	        /**
-	        * Returns true if this asset equals the given asset.
-	        */
-	    }, {
-	        key: "equals",
-	        value: function equals(asset) {
-	            return this.code == asset.getCode() && this.issuer == asset.getIssuer();
-	        }
-	    }]);
+	    /**
+	     * Return the asset issuer
+	     **/
+	  }, {
+	    key: "getIssuer",
+	    value: function getIssuer() {
+	      return (0, _lodash.clone)(this.issuer);
+	    }
 
-	    return Asset;
+	    /**
+	     * Return the asset type
+	     */
+	  }, {
+	    key: "getAssetType",
+	    value: function getAssetType() {
+	      if (this.isNative()) {
+	        return 'native';
+	      } else {
+	        if (this.code.length >= 1 && this.code.length <= 4) {
+	          return "credit_alphanum4";
+	        } else if (this.code.length >= 5 && this.code.length <= 12) {
+	          return "credit_alphanum12";
+	        }
+	      }
+	    }
+
+	    /**
+	    * Returns true if this asset object is the native asset.
+	    */
+	  }, {
+	    key: "isNative",
+	    value: function isNative() {
+	      return !this.issuer;
+	    }
+
+	    /**
+	    * Returns true if this asset equals the given asset.
+	    */
+	  }, {
+	    key: "equals",
+	    value: function equals(asset) {
+	      return this.code == asset.getCode() && this.issuer == asset.getIssuer();
+	    }
+	  }]);
+
+	  return Asset;
 	})();
 
 	exports.Asset = Asset;
