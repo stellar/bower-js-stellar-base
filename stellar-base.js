@@ -28793,7 +28793,7 @@ var StellarBase =
 	        * This operation generates the inflation.
 	        * @param {object} [opts]
 	        * @param {string} [opts.source] - The optional source account.
-	        * @returns {xdr.AccountMergeOp}
+	        * @returns {xdr.InflationOp}
 	        */
 	    }, {
 	        key: "inflation",
@@ -29207,6 +29207,19 @@ var StellarBase =
 	        key: "getIssuer",
 	        value: function getIssuer() {
 	            return (0, _lodash.clone)(this.issuer);
+	        }
+
+	        /**
+	         * Return the asset type
+	         */
+	    }, {
+	        key: "getAssetType",
+	        value: function getAssetType() {
+	            if (this.code.length >= 1 && this.code.length <= 4) {
+	                return "credit_alphanum4";
+	            } else if (this.code.length >= 5 && this.code.length <= 12) {
+	                return "credit_alphanum12";
+	            }
 	        }
 
 	        /**
