@@ -28946,6 +28946,11 @@ var StellarBase =
 	                return false;
 	            }
 
+	            // Decimal places (max 7)
+	            if (amount.decimalPlaces() > 7) {
+	                return false;
+	            }
+
 	            // Infinity
 	            if (!amount.isFinite()) {
 	                return false;
@@ -32177,23 +32182,25 @@ var StellarBase =
 /* 87 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(Buffer) {'use strict';
+	/* WEBPACK VAR INJECTION */(function(Buffer) {"use strict";
 
-	Object.defineProperty(exports, '__esModule', {
+	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
 
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	var _generatedStellarXdr_generated = __webpack_require__(2);
 
 	var _generatedStellarXdr_generated2 = _interopRequireDefault(_generatedStellarXdr_generated);
 
 	var _lodash = __webpack_require__(10);
+
+	var _jsXdr = __webpack_require__(3);
 
 	var _bignumberJs = __webpack_require__(84);
 
@@ -32209,13 +32216,13 @@ var StellarBase =
 	    }
 
 	    _createClass(Memo, null, [{
-	        key: 'none',
+	        key: "none",
 
 	        /**
 	        * Returns an empty memo.
 	        */
 	        value: function none() {
-	            return _generatedStellarXdr_generated2['default'].Memo.memoNone();
+	            return _generatedStellarXdr_generated2["default"].Memo.memoNone();
 	        }
 
 	        /**
@@ -32224,7 +32231,7 @@ var StellarBase =
 	        * @returns {xdr.Memo}
 	        */
 	    }, {
-	        key: 'text',
+	        key: "text",
 	        value: function text(_text) {
 	            if (!(0, _lodash.isString)(_text)) {
 	                throw new Error("Expects string type got a " + typeof _text);
@@ -32232,7 +32239,7 @@ var StellarBase =
 	            if (Buffer.byteLength(_text, "ascii") > 28) {
 	                throw new Error("Text should be < 28 bytes (ascii encoded). Got " + Buffer.byteLength(_text, "ascii"));
 	            }
-	            return _generatedStellarXdr_generated2['default'].Memo.memoText(_text);
+	            return _generatedStellarXdr_generated2["default"].Memo.memoText(_text);
 	        }
 
 	        /**
@@ -32241,7 +32248,7 @@ var StellarBase =
 	        * @returns {xdr.Memo}
 	        */
 	    }, {
-	        key: 'id',
+	        key: "id",
 	        value: function id(_id) {
 	            var error = new Error("Expects a int64 as a string. Got " + _id);
 
@@ -32251,7 +32258,7 @@ var StellarBase =
 
 	            var number = undefined;
 	            try {
-	                number = new _bignumberJs2['default'](_id);
+	                number = new _bignumberJs2["default"](_id);
 	            } catch (e) {
 	                throw error;
 	            }
@@ -32266,7 +32273,7 @@ var StellarBase =
 	                throw error;
 	            }
 
-	            return _generatedStellarXdr_generated2['default'].Memo.memoId(_id);
+	            return _generatedStellarXdr_generated2["default"].Memo.memoId(_jsXdr.UnsignedHyper.fromString(_id));
 	        }
 
 	        /**
@@ -32274,7 +32281,7 @@ var StellarBase =
 	        * @param {array|string} hash - 32 byte hash
 	        */
 	    }, {
-	        key: 'hash',
+	        key: "hash",
 	        value: function hash(_hash) {
 	            var error = new Error("Expects a 32 byte hash value. Got " + _hash);
 
@@ -32290,7 +32297,7 @@ var StellarBase =
 	                throw error;
 	            }
 
-	            return _generatedStellarXdr_generated2['default'].Memo.memoHash(_hash);
+	            return _generatedStellarXdr_generated2["default"].Memo.memoHash(_hash);
 	        }
 
 	        /**
@@ -32298,7 +32305,7 @@ var StellarBase =
 	        * @param {array|string} hash - 32 byte hash
 	        */
 	    }, {
-	        key: 'returnHash',
+	        key: "returnHash",
 	        value: function returnHash(hash) {
 	            var error = new Error("Expects a 32 byte hash value. Got " + hash);
 
@@ -32314,7 +32321,7 @@ var StellarBase =
 	                throw error;
 	            }
 
-	            return _generatedStellarXdr_generated2['default'].Memo.memoReturn(hash);
+	            return _generatedStellarXdr_generated2["default"].Memo.memoReturn(hash);
 	        }
 	    }]);
 
