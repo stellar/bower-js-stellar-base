@@ -32278,19 +32278,22 @@ var StellarBase =
 
 	        /**
 	        * Creates and returns a "hash" memo.
-	        * @param {array|string} hash - 32 byte hash
+	        * @param {array|string} hash - 32 byte hash or hex encoded string
 	        */
 	    }, {
 	        key: "hash",
 	        value: function hash(_hash) {
-	            var error = new Error("Expects a 32 byte hash value. Got " + _hash);
+	            var error = new Error("Expects a 32 byte hash value or hex encoded string. Got " + _hash);
 
 	            if ((0, _lodash.isUndefined)(_hash)) {
 	                throw error;
 	            }
 
-	            if ((0, _lodash.isString)(_hash) && Buffer.byteLength(_hash) != 32) {
-	                throw error;
+	            if ((0, _lodash.isString)(_hash)) {
+	                if (!/^[0-9A-Fa-f]{64}$/g.test(_hash)) {
+	                    throw error;
+	                }
+	                _hash = new Buffer(_hash, 'hex');
 	            }
 
 	            if (!_hash.length || _hash.length != 32) {
@@ -32302,19 +32305,22 @@ var StellarBase =
 
 	        /**
 	        * Creates and returns a "return hash" memo.
-	        * @param {array|string} hash - 32 byte hash
+	        * @param {array|string} hash - 32 byte hash or hex encoded string
 	        */
 	    }, {
 	        key: "returnHash",
 	        value: function returnHash(hash) {
-	            var error = new Error("Expects a 32 byte hash value. Got " + hash);
+	            var error = new Error("Expects a 32 byte hash value or hex encoded string. Got " + hash);
 
 	            if ((0, _lodash.isUndefined)(hash)) {
 	                throw error;
 	            }
 
-	            if ((0, _lodash.isString)(hash) && Buffer.byteLength(hash) != 32) {
-	                throw error;
+	            if ((0, _lodash.isString)(hash)) {
+	                if (!/^[0-9A-Fa-f]{64}$/g.test(hash)) {
+	                    throw error;
+	                }
+	                hash = new Buffer(hash, 'hex');
 	            }
 
 	            if (!hash.length || hash.length != 32) {
