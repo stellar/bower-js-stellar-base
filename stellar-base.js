@@ -28697,7 +28697,7 @@ var StellarBase =
 	        * @param {Asset} buying - What you're buying.
 	        * @param {string} amount - The total amount you're selling. If 0, deletes the offer.
 	        * @param {number|string|BigNumber} price - The exchange rate ratio (takerpay / takerget)
-	        * @param {string} offerId - If 0, will create a new offer (default). Otherwise, edits an exisiting offer.
+	        * @param {number|string} offerId - If 0, will create a new offer (default). Otherwise, edits an exisiting offer.
 	        * @param {string} [opts.source] - The source account (defaults to transaction source).
 	        * @returns {xdr.ManageOfferOp}
 	        */
@@ -28707,8 +28707,8 @@ var StellarBase =
 	            var attributes = {};
 	            attributes.selling = opts.selling.toXdrObject();
 	            attributes.buying = opts.buying.toXdrObject();
-	            if (!this.isValidAmount(opts.amount)) {
-	                throw new TypeError('amount argument must be of type String and represent a positive number');
+	            if (!this.isValidAmount(opts.amount, true)) {
+	                throw new TypeError('amount argument must be of type String and represent a positive number or zero');
 	            }
 	            attributes.amount = this._toXDRAmount(opts.amount);
 	            if ((0, _lodash.isUndefined)(opts.price)) {
@@ -28717,9 +28717,7 @@ var StellarBase =
 	            attributes.price = this._toXDRPrice(opts.price);
 
 	            if (!(0, _lodash.isUndefined)(opts.offerId)) {
-	                if (!(0, _lodash.isString)(opts.offerId)) {
-	                    throw new TypeError('offerId argument must be of type String');
-	                }
+	                opts.offerId = opts.offerId.toString();
 	            } else {
 	                opts.offerId = '0';
 	            }
