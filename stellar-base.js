@@ -27154,73 +27154,36 @@ var StellarBase =
 	var nacl = __webpack_require__(61);
 
 	var Keypair = (function () {
-	  _createClass(Keypair, null, [{
-	    key: "fromSeed",
-	    value: function fromSeed(seed) {
-	      var rawSeed = strkey.decodeCheck("seed", seed);
-	      return this.fromRawSeed(rawSeed);
-	    }
+	  /**
+	   * `Keypair` represents public (and secret) keys of the account.
+	   *
+	   * Use more convenient methods to create `Keypair` object:
+	   * * `{@link Keypair.fromAddress}`
+	   * * `{@link Keypair.fromSeed}`
+	   * * `{@link Keypair.random}`
+	   *
+	   * @constructor
+	   * @param {object} keys
+	   * @param {string} keys.publicKey Raw public key
+	   * @param {string} [keys.secretSeed] Raw secret key seed.
+	   */
 
-	    /**
-	     * Base58 address encoding is **DEPRECATED**! Use this method only for transition to base32.
-	     * @param seed Base58 secret seed
-	     * @returns StrKey KeyPair object
-	     */
-	  }, {
-	    key: "fromBase58Seed",
-	    value: function fromBase58Seed(seed) {
-	      var rawSeed = base58.decodeBase58Check("seed", seed);
-	      return this.fromRawSeed(rawSeed);
-	    }
-
-	    /**
-	     * Create Keypair object from secret seed raw bytes
-	     *
-	     * @param rawSeed Array of bytes of secret seed
-	     * @returns {Keypair}
-	     */
-	  }, {
-	    key: "fromRawSeed",
-	    value: function fromRawSeed(rawSeed) {
-	      rawSeed = new Buffer(rawSeed);
-	      var rawSeedU8 = new Uint8Array(rawSeed);
-	      var keys = nacl.sign.keyPair.fromSeed(rawSeedU8);
-	      keys.secretSeed = rawSeed;
-
-	      return new this(keys);
-	    }
-	  }, {
-	    key: "master",
-	    value: function master() {
-	      return this.fromRawSeed(_network.Network.current().networkId());
-	    }
-	  }, {
-	    key: "fromAddress",
-	    value: function fromAddress(address) {
-	      var publicKey = strkey.decodeCheck("accountId", address);
-	      if (publicKey.length !== 32) {
-	        throw new Error('Invalid Stellar address');
-	      }
-	      return new this({ publicKey: publicKey });
-	    }
-	  }, {
-	    key: "random",
-	    value: function random() {
-	      var seed = nacl.randomBytes(32);
-	      return this.fromRawSeed(seed);
-	    }
-	  }]);
-
-	  function Keypair(keysAndSeed) {
+	  function Keypair(keys) {
 	    _classCallCheck(this, Keypair);
 
-	    this._publicKey = new Buffer(keysAndSeed.publicKey);
+	    this._publicKey = new Buffer(keys.publicKey);
 
-	    if (keysAndSeed.secretSeed) {
-	      this._secretSeed = new Buffer(keysAndSeed.secretSeed);
-	      this._secretKey = new Buffer(keysAndSeed.secretKey);
+	    if (keys.secretSeed) {
+	      this._secretSeed = new Buffer(keys.secretSeed);
+	      this._secretKey = new Buffer(keys.secretKey);
 	    }
 	  }
+
+	  /**
+	   * Creates a new `Keypair` instance from secret key seed.
+	   * @param {string} seed Secret key seed
+	   * @returns {Keypair}
+	   */
 
 	  _createClass(Keypair, [{
 	    key: "accountId",
@@ -27232,6 +27195,11 @@ var StellarBase =
 	    value: function publicKey() {
 	      return new _generatedStellarXdr_generated2["default"].PublicKey.keyTypeEd25519(this._publicKey);
 	    }
+
+	    /**
+	     * Returns raw public key
+	     * @returns {Buffer}
+	     */
 	  }, {
 	    key: "rawPublicKey",
 	    value: function rawPublicKey() {
@@ -27244,31 +27212,62 @@ var StellarBase =
 
 	      return a.slice(a.length - 4);
 	    }
+
+	    /**
+	     * Returns account ID associated with this `Keypair` object.
+	     * @returns {string}
+	     */
 	  }, {
 	    key: "address",
 	    value: function address() {
 	      return strkey.encodeCheck("accountId", this._publicKey);
 	    }
+
+	    /**
+	     * Returns seed associated with this `Keypair` object
+	     * @returns {string}
+	     */
 	  }, {
 	    key: "seed",
 	    value: function seed() {
 	      return strkey.encodeCheck("seed", this._secretSeed);
 	    }
+
+	    /**
+	     * Returns raw secret key seed.
+	     * @returns {Buffer}
+	     */
 	  }, {
 	    key: "rawSeed",
 	    value: function rawSeed() {
 	      return this._secretSeed;
 	    }
+
+	    /**
+	     * Returns raw secret key.
+	     * @returns {Buffer}
+	     */
 	  }, {
 	    key: "rawSecretKey",
 	    value: function rawSecretKey() {
 	      return this._secretKey;
 	    }
+
+	    /**
+	     * Returns `true` if this `Keypair` object contains secret key and can sign.
+	     * @returns {boolean}
+	     */
 	  }, {
 	    key: "canSign",
 	    value: function canSign() {
 	      return !!this._secretKey;
 	    }
+
+	    /**
+	     * Signs data.
+	     * @param {Buffer} data Data to sign
+	     * @returns {Buffer}
+	     */
 	  }, {
 	    key: "sign",
 	    value: function sign(data) {
@@ -27278,6 +27277,13 @@ var StellarBase =
 
 	      return (0, _signing.sign)(data, this._secretKey);
 	    }
+
+	    /**
+	     * Verifies if `signature` for `data` is valid.
+	     * @param {Buffer} data Signed data
+	     * @param {Buffer} signature Signature
+	     * @returns {boolean}
+	     */
 	  }, {
 	    key: "verify",
 	    value: function verify(data, signature) {
@@ -27290,6 +27296,78 @@ var StellarBase =
 	      var hint = this.signatureHint();
 
 	      return new _generatedStellarXdr_generated2["default"].DecoratedSignature({ hint: hint, signature: signature });
+	    }
+	  }], [{
+	    key: "fromSeed",
+	    value: function fromSeed(seed) {
+	      var rawSeed = strkey.decodeCheck("seed", seed);
+	      return this.fromRawSeed(rawSeed);
+	    }
+
+	    /**
+	     * Base58 address encoding is **DEPRECATED**! Use this method only for transition to strkey encoding.
+	     * @param {string} seed Base58 secret seed
+	     * @deprecated Use {@link Keypair.fromSeed}
+	     * @returns {Keypair}
+	     */
+	  }, {
+	    key: "fromBase58Seed",
+	    value: function fromBase58Seed(seed) {
+	      var rawSeed = base58.decodeBase58Check("seed", seed);
+	      return this.fromRawSeed(rawSeed);
+	    }
+
+	    /**
+	     * Creates a new `Keypair` object from secret seed raw bytes.
+	     *
+	     * @param {Buffer} rawSeed Buffer containing secret seed
+	     * @returns {Keypair}
+	     */
+	  }, {
+	    key: "fromRawSeed",
+	    value: function fromRawSeed(rawSeed) {
+	      rawSeed = new Buffer(rawSeed);
+	      var rawSeedU8 = new Uint8Array(rawSeed);
+	      var keys = nacl.sign.keyPair.fromSeed(rawSeedU8);
+	      keys.secretSeed = rawSeed;
+
+	      return new this(keys);
+	    }
+
+	    /**
+	     * Returns `Keypair` object representing network master key.
+	     * @returns {Keypair}
+	     */
+	  }, {
+	    key: "master",
+	    value: function master() {
+	      return this.fromRawSeed(_network.Network.current().networkId());
+	    }
+
+	    /**
+	     * Creates a new `Keypair` object from account ID.
+	     * @param {string} address account ID
+	     * @returns {Keypair}
+	     */
+	  }, {
+	    key: "fromAddress",
+	    value: function fromAddress(address) {
+	      var publicKey = strkey.decodeCheck("accountId", address);
+	      if (publicKey.length !== 32) {
+	        throw new Error('Invalid Stellar address');
+	      }
+	      return new this({ publicKey: publicKey });
+	    }
+
+	    /**
+	     * Create a random `Keypair` object.
+	     * @returns {Keypair}
+	     */
+	  }, {
+	    key: "random",
+	    value: function random() {
+	      var seed = nacl.randomBytes(32);
+	      return this.fromRawSeed(seed);
 	    }
 	  }]);
 
@@ -27315,6 +27393,12 @@ var StellarBase =
 
 	var _hashing = __webpack_require__(50);
 
+	/**
+	 * Contains passphrases for common networks:
+	 * * `Networks.PUBLIC`: `Public Global Stellar Network ; September 2015`
+	 * * `Networks.TESTNET`: `Test SDF Network ; September 2015`
+	 * @type {{PUBLIC: string, TESTNET: string}}
+	 */
 	var Networks = {
 		PUBLIC: "Public Global Stellar Network ; September 2015",
 		TESTNET: "Test SDF Network ; September 2015"
@@ -27323,63 +27407,19 @@ var StellarBase =
 	exports.Networks = Networks;
 	var _current;
 
-	/**
-	 * The Network class provides helper methods to get the passphrase or id for different
-	 * stellar networks.  It also provides the current() class method that returns the network
-	 * that will be used by this process for the purposes of generating signatures
-	 *
-	 * The public network is the default, but you can also override the default by using the `use`,
-	 * `usePublicNetwork` and `useTestNetwork` helper methods
-	 *
-	 */
-
 	var Network = (function () {
-		_createClass(Network, null, [{
-			key: "useDefault",
-			value: function useDefault() {
-				this.useTestNetwork();
-			}
-		}, {
-			key: "usePublicNetwork",
-			value: function usePublicNetwork() {
-				this.use(new Network(Networks.PUBLIC));
-			}
-
-			/**
-	   * Alias for `usePublicNetwork`.
-	   * @deprecated Use `usePublicNetwork` method
-	   */
-		}, {
-			key: "usePublicNet",
-			value: function usePublicNet() {
-				this.usePublicNetwork();
-			}
-		}, {
-			key: "useTestNetwork",
-			value: function useTestNetwork() {
-				this.use(new Network(Networks.TESTNET));
-			}
-
-			/**
-	   * Alias for `useTestNetwork`.
-	   * @deprecated Use `useTestNetwork` method
-	   */
-		}, {
-			key: "useTestNet",
-			value: function useTestNet() {
-				this.useTestNetwork();
-			}
-		}, {
-			key: "use",
-			value: function use(network) {
-				_current = network;
-			}
-		}, {
-			key: "current",
-			value: function current() {
-				return _current;
-			}
-		}]);
+		/**
+	   * The Network class provides helper methods to get the passphrase or id for different
+	   * stellar networks.  It also provides the {@link Network.current} class method that returns the network
+	   * that will be used by this process for the purposes of generating signatures.
+	   *
+	   * The test network is the default, but you can also override the default by using the `use`,
+	   * `usePublicNetwork` and `useTestNetwork` helper methods.
+	   *
+	  * Creates a new `Network` object.
+	  * @constructor
+	  * @param {string} networkPassphrase Network passphrase
+	  */
 
 		function Network(networkPassphrase) {
 			_classCallCheck(this, Network);
@@ -27387,15 +27427,92 @@ var StellarBase =
 			this._networkPassphrase = networkPassphrase;
 		}
 
+		/**
+	  * Use default network (right now default network is `testnet`).
+	  */
+
 		_createClass(Network, [{
 			key: "networkPassphrase",
+
+			/**
+	   * Returns network passphrase.
+	   * @returns {string}
+	   */
 			value: function networkPassphrase() {
 				return this._networkPassphrase;
 			}
+
+			/**
+	   * Returns Network ID. Network ID is SHA-256 hash of network passphrase.
+	   * @returns {string}
+	   */
 		}, {
 			key: "networkId",
 			value: function networkId() {
 				return (0, _hashing.hash)(this.networkPassphrase());
+			}
+		}], [{
+			key: "useDefault",
+			value: function useDefault() {
+				this.useTestNetwork();
+			}
+
+			/**
+	   * Use Stellar Public Network
+	   */
+		}, {
+			key: "usePublicNetwork",
+			value: function usePublicNetwork() {
+				this.use(new Network(Networks.PUBLIC));
+			}
+
+			/**
+	   * Alias for {@link Network.usePublicNetwork}.
+	   * @deprecated Use {@link Network.usePublicNetwork} method
+	   */
+		}, {
+			key: "usePublicNet",
+			value: function usePublicNet() {
+				this.usePublicNetwork();
+			}
+
+			/**
+	   * Use test network.
+	   */
+		}, {
+			key: "useTestNetwork",
+			value: function useTestNetwork() {
+				this.use(new Network(Networks.TESTNET));
+			}
+
+			/**
+	   * Alias for {@link Network.useTestNetwork}.
+	   * @deprecated Use {@link Network.useTestNetwork} method
+	   */
+		}, {
+			key: "useTestNet",
+			value: function useTestNet() {
+				this.useTestNetwork();
+			}
+
+			/**
+	   * Use network defined by Network object.
+	   * @param {Network} network Network to use
+	   */
+		}, {
+			key: "use",
+			value: function use(network) {
+				_current = network;
+			}
+
+			/**
+	   * Returns currently selected network.
+	   * @returns {Network}
+	   */
+		}, {
+			key: "current",
+			value: function current() {
+				return _current;
 			}
 		}]);
 
@@ -28395,15 +28512,13 @@ var StellarBase =
 	var MAX_LEDGER = 0xFFFFFFFF; // max uint32
 
 	var Transaction = (function () {
-
 	    /**
-	    * A new Transaction object is created from a transaction envelope (or via TransactionBuilder).
+	    * A new Transaction object is created from a transaction envelope or via {@link TransactionBuilder}.
 	    * Once a Transaction has been created from an envelope, its attributes and operations
-	    * should not be changed. You should only add signers to a Transaction object before
+	    * should not be changed. You should only add signers (using {@link Transaction#sign}) to a Transaction object before
 	    * submitting to the network or forwarding on to additional signers.
 	    * @constructor
-	    * @param {string|xdr.TransactionEnvelope} envelope - The transaction envelope object or
-	    *                                                    base64 encoded string.
+	    * @param {string|xdr.TransactionEnvelope} envelope - The transaction envelope object or base64 encoded string.
 	    */
 
 	    function Transaction(envelope) {
@@ -28432,9 +28547,10 @@ var StellarBase =
 	    }
 
 	    /**
-	    * Signs the transaction with the given Keypair.
-	    * @param {...Keypair} keypairs
-	    */
+	     * Signs the transaction with the given {@link Keypair}.
+	     * @param {...Keypair} keypairs Keypairs of signers
+	     * @returns {void}
+	     */
 
 	    _createClass(Transaction, [{
 	        key: "sign",
@@ -28454,8 +28570,9 @@ var StellarBase =
 	        }
 
 	        /**
-	        * Returns a hash for this transaction, suitable for signing.
-	        */
+	         * Returns a hash for this transaction, suitable for signing.
+	         * @returns {Buffer}
+	         */
 	    }, {
 	        key: "hash",
 	        value: function hash() {
@@ -28463,13 +28580,14 @@ var StellarBase =
 	        }
 
 	        /**
-	        * Returns the "signature base" of this transaction, which is the value
-	        * that, when hashed, should be signed to create a signature that
-	        * validators on the Stellar Network will accept.
-	        *
-	        * It is composed of a 4 prefix bytes followed by the xdr-encoded form
-	        * of this transaction.
-	        */
+	         * Returns the "signature base" of this transaction, which is the value
+	         * that, when hashed, should be signed to create a signature that
+	         * validators on the Stellar Network will accept.
+	         *
+	         * It is composed of a 4 prefix bytes followed by the xdr-encoded form
+	         * of this transaction.
+	         * @returns {Buffer}
+	         */
 	    }, {
 	        key: "signatureBase",
 	        value: function signatureBase() {
@@ -28477,8 +28595,9 @@ var StellarBase =
 	        }
 
 	        /**
-	        * To envelope returns a xdr.TransactionEnvelope which can be submitted to the network.
-	        */
+	         * To envelope returns a xdr.TransactionEnvelope which can be submitted to the network.
+	         * @returns {xdr.TransactionEnvelope}
+	         */
 	    }, {
 	        key: "toEnvelope",
 	        value: function toEnvelope() {
@@ -28540,9 +28659,21 @@ var StellarBase =
 	var MAX_INT64 = '9223372036854775807';
 
 	/**
-	* @class Operation
-	* See https://stellar.org/developers/learn/concepts/operations.html  for more information about how operations work in Stellar.
-	*/
+	 * `Operation` class represents [operations](https://www.stellar.org/developers/learn/concepts/operations.html) in Stellar network.
+	 * Use one of static methods to create operations:
+	 * * `{@link Operation.createAccount}`
+	 * * `{@link Operation.payment}`
+	 * * `{@link Operation.pathPayment}`
+	 * * `{@link Operation.manageOffer}`
+	 * * `{@link Operation.createPassiveOffer}`
+	 * * `{@link Operation.setOptions}`
+	 * * `{@link Operation.changeTrust}`
+	 * * `{@link Operation.allowTrust}`
+	 * * `{@link Operation.accountMerge}`
+	 * * `{@link Operation.inflation}`
+	 *
+	 * @class Operation
+	 */
 
 	var Operation = (function () {
 	    function Operation() {
@@ -28557,7 +28688,7 @@ var StellarBase =
 	        * @param {object} opts
 	        * @param {string} opts.destination - Destination address to create an account for.
 	        * @param {string} opts.startingBalance - Amount in XLM the account should be funded for. Must be greater
-	        *                                   than the reserve balance amount.
+	        *                                   than the [reserve balance amount](https://www.stellar.org/developers/learn/concepts/fees.html).
 	        * @param {string} [opts.source] - The source account for the payment. Defaults to the transaction's source account.
 	        * @returns {xdr.CreateAccountOp}
 	        */
@@ -28585,7 +28716,7 @@ var StellarBase =
 	        * @param {object} opts
 	        * @param {string} opts.destination - The destination address.
 	        * @param {Asset} opts.asset - The asset to send.
-	        * @param {string} opts.amount - The amount in XLM to send.
+	        * @param {string} opts.amount - The amount to send.
 	        * @param {string} [opts.source] - The source account for the payment. Defaults to the transaction's source account.
 	        * @returns {xdr.PaymentOp}
 	        */
@@ -28625,7 +28756,7 @@ var StellarBase =
 	        * @param {string} opts.destination - The destination account to send to.
 	        * @param {Asset} opts.destAsset - The asset the destination will receive.
 	        * @param {string} opts.destAmount - The amount the destination receives.
-	        * @param {array} [opts.path] - An array of Asset objects to use as the path.
+	        * @param {Asset[]} opts.path - An array of Asset objects to use as the path.
 	        * @param {string} [opts.source] - The source account for the payment. Defaults to the transaction's source account.
 	        * @returns {xdr.PathPaymentOp}
 	        */
@@ -28836,11 +28967,11 @@ var StellarBase =
 	        * Returns a XDR ManageOfferOp. A "manage offer" operation creates, updates, or
 	        * deletes an offer.
 	        * @param {object} opts
-	        * @param {Asset} selling - What you're selling.
-	        * @param {Asset} buying - What you're buying.
-	        * @param {string} amount - The total amount you're selling. If 0, deletes the offer.
-	        * @param {number|string|BigNumber} price - The exchange rate ratio (takerpay / takerget)
-	        * @param {number|string} offerId - If 0, will create a new offer (default). Otherwise, edits an exisiting offer.
+	        * @param {Asset} opts.selling - What you're selling.
+	        * @param {Asset} opts.buying - What you're buying.
+	        * @param {string} opts.amount - The total amount you're selling. If 0, deletes the offer.
+	        * @param {number|string|BigNumber} opts.price - The exchange rate ratio (selling / buying).
+	        * @param {number|string} [opts.offerId ]- If `0`, will create a new offer (default). Otherwise, edits an exisiting offer.
 	        * @param {string} [opts.source] - The source account (defaults to transaction source).
 	        * @returns {xdr.ManageOfferOp}
 	        */
@@ -28880,10 +29011,10 @@ var StellarBase =
 	        * useful for offers just used as 1:1 exchanges for path payments. Use manage offer
 	        * to manage this offer after using this operation to create it.
 	        * @param {object} opts
-	        * @param {Asset} selling - What you're selling.
-	        * @param {Asset} buying - What you're buying.
-	        * @param {string} amount - The total amount you're selling. If 0, deletes the offer.
-	        * @param {number|string|BigNumber} price - The exchange rate ratio (selling / buying)
+	        * @param {Asset} opts.selling - What you're selling.
+	        * @param {Asset} opts.buying - What you're buying.
+	        * @param {string} opts.amount - The total amount you're selling. If 0, deletes the offer.
+	        * @param {number|string|BigNumber} opts.price - The exchange rate ratio (selling / buying)
 	        * @param {string} [opts.source] - The source account (defaults to transaction source).
 	        * @returns {xdr.CreatePassiveOfferOp}
 	        */
@@ -28961,7 +29092,7 @@ var StellarBase =
 	        * Converts the XDR Operation object to the opts object used to create the XDR
 	        * operation.
 	        * @param {xdr.Operation} operation - An XDR Operation.
-	        * @return {object}
+	        * @return {Operation}
 	        */
 	    }, {
 	        key: "operationToObject",
@@ -29104,23 +29235,39 @@ var StellarBase =
 
 	            return true;
 	        }
+
+	        /**
+	         * @private
+	         */
 	    }, {
 	        key: "_toXDRAmount",
 	        value: function _toXDRAmount(value) {
 	            var amount = new _bignumberJs2["default"](value).mul(ONE);
 	            return _jsXdr.Hyper.fromString(amount.toString());
 	        }
+
+	        /**
+	         * @private
+	         */
 	    }, {
 	        key: "_fromXDRAmount",
 	        value: function _fromXDRAmount(value) {
 	            return new _bignumberJs2["default"](value).div(ONE).toString();
 	        }
+
+	        /**
+	         * @private
+	         */
 	    }, {
 	        key: "_fromXDRPrice",
 	        value: function _fromXDRPrice(price) {
 	            var n = new _bignumberJs2["default"](price.n());
 	            return n.div(new _bignumberJs2["default"](price.d())).toString();
 	        }
+
+	        /**
+	         * @private
+	         */
 	    }, {
 	        key: "_toXDRPrice",
 	        value: function _toXDRPrice(price) {
@@ -29157,20 +29304,55 @@ var StellarBase =
 
 	var _strkey = __webpack_require__(67);
 
-	/**
-	* @class Account
-	* Represents a single account in Stellar network and its sequence number.
-	* Account tracts the sequence number as it is used by TransactionBuilder.
-	* See https://stellar.org/developers/learn/concepts/accounts.html  for more information about how accounts work in Stellar.
-	*/
-
 	var Account = (function () {
-	    _createClass(Account, null, [{
-	        key: "isValidAddress",
+	    /**
+	     * Create a new Account object.
+	     *
+	     * `Account` represents a single account in Stellar network and it's sequence number.
+	     * Account tracts the sequence number as it is used by {@link TransactionBuilder}.
+	     * See [Accounts](https://stellar.org/developers/learn/concepts/accounts.html) for more information about how
+	     * accounts work in Stellar.
+	     * @constructor
+	     * @param {string} address ID of the account
+	     * @param {number} sequence current sequence number of the account
+	     */
+
+	    function Account(address, sequence) {
+	        _classCallCheck(this, Account);
+
+	        if (!Account.isValidAddress(address)) {
+	            throw new Error('address is invalid');
+	        }
+	        this.address = address;
+	        this.sequence = sequence;
+	    }
+
+	    /**
+	     * Returns true if the given address is a valid Stellar address.
+	     * @param {string} address account ID to check
+	     * @returns {boolean}
+	     */
+
+	    _createClass(Account, [{
+	        key: "getAddress",
 
 	        /**
-	        * Returns true if the given address is a valid Stellar address.
-	        */
+	         * @returns {string}
+	         */
+	        value: function getAddress() {
+	            return this.address;
+	        }
+
+	        /**
+	         * @returns {number}
+	         */
+	    }, {
+	        key: "getSequenceNumber",
+	        value: function getSequenceNumber() {
+	            return this.sequence;
+	        }
+	    }], [{
+	        key: "isValidAddress",
 	        value: function isValidAddress(address) {
 	            try {
 	                var decoded = (0, _strkey.decodeCheck)("accountId", address);
@@ -29182,23 +29364,7 @@ var StellarBase =
 	            }
 	            return true;
 	        }
-
-	        /**
-	        * Create a new Account object.
-	        * @param {string} address
-	        * @param {number} sequence
-	        */
 	    }]);
-
-	    function Account(address, sequence) {
-	        _classCallCheck(this, Account);
-
-	        if (!Account.isValidAddress(address)) {
-	            throw new Error('address is invalid');
-	        }
-	        this.address = address;
-	        this.sequence = sequence;
-	    }
 
 	    return Account;
 	})();
@@ -29233,59 +29399,18 @@ var StellarBase =
 
 	var _lodash = __webpack_require__(10);
 
-	/**
-	* Asset class represents an asset, either the native asset ("XLM")
-	* or a asset code / issuer address pair.
-	* @class Asset
-	*/
-
 	var Asset = (function () {
-	  _createClass(Asset, null, [{
-	    key: "native",
-
-	    /**
-	    * Returns an asset object for the native asset.
-	    */
-	    value: function native() {
-	      return new Asset("XLM");
-	    }
-
-	    /**
-	    * Returns an asset object from its XDR object representation.
-	    * @param {xdr.Asset} cx - The asset xdr object.
-	    */
-	  }, {
-	    key: "fromOperation",
-	    value: function fromOperation(cx) {
-	      var anum = undefined,
-	          code = undefined,
-	          issuer = undefined;
-	      switch (cx["switch"]()) {
-	        case _generatedStellarXdr_generated2["default"].AssetType.assetTypeNative():
-	          return this.native();
-	        case _generatedStellarXdr_generated2["default"].AssetType.assetTypeCreditAlphanum4():
-	          anum = cx.alphaNum4();
-	          issuer = (0, _strkey.encodeCheck)("accountId", anum.issuer().ed25519());
-	          code = (0, _lodash.trimRight)(anum.assetCode(), '\0');
-	          return new this(code, issuer);
-	        case _generatedStellarXdr_generated2["default"].AssetType.assetTypeCreditAlphanum12():
-	          anum = cx.alphaNum12();
-	          issuer = (0, _strkey.encodeCheck)("accountId", anum.issuer().ed25519());
-	          code = (0, _lodash.trimRight)(anum.assetCode(), '\0');
-	          return new this(code, issuer);
-	        default:
-	          throw new Error("Invalid asset type: " + cx["switch"]().name);
-	      }
-	    }
-
-	    /**
-	    * An asset code describes an asset code and issuer pair. In the case of the native
-	    * asset XLM, the issuer will be null.
-	    * @constructor
-	    * @param {string} code - The asset code.
-	    * @param {string} issuer - The address of the issuer.
-	    */
-	  }]);
+	  /**
+	   * Asset class represents an asset, either the native asset (`XLM`)
+	   * or a asset code / issuer address pair.
+	   *
+	   * An asset code describes an asset code and issuer pair. In the case of the native
+	   * asset XLM, the issuer will be null.
+	   *
+	   * @constructor
+	   * @param {string} code - The asset code.
+	   * @param {string} issuer - The account ID of the issuer.
+	   */
 
 	  function Asset(code, issuer) {
 	    _classCallCheck(this, Asset);
@@ -29305,11 +29430,17 @@ var StellarBase =
 	  }
 
 	  /**
-	  * Returns the xdr object for this asset.
+	  * Returns an asset object for the native asset.
+	  * @Return {Asset}
 	  */
 
 	  _createClass(Asset, [{
 	    key: "toXdrObject",
+
+	    /**
+	     * Returns the xdr object for this asset.
+	     * @returns {xdr.Asset}
+	     */
 	    value: function toXdrObject() {
 	      if (this.isNative()) {
 	        return _generatedStellarXdr_generated2["default"].Asset.assetTypeNative();
@@ -29339,6 +29470,7 @@ var StellarBase =
 
 	    /**
 	     * Return the asset code
+	     * @returns {string}
 	     */
 	  }, {
 	    key: "getCode",
@@ -29348,7 +29480,8 @@ var StellarBase =
 
 	    /**
 	     * Return the asset issuer
-	     **/
+	     * @returns {string}
+	     */
 	  }, {
 	    key: "getIssuer",
 	    value: function getIssuer() {
@@ -29356,7 +29489,14 @@ var StellarBase =
 	    }
 
 	    /**
-	     * Return the asset type
+	     * Return the asset type. Can be one of following types:
+	     *
+	     * * `native`
+	     * * `credit_alphanum4`
+	     * * `credit_alphanum4`
+	     *
+	     * @see [Assets concept](https://www.stellar.org/developers/learn/concepts/assets.html)
+	     * @returns {string}
 	     */
 	  }, {
 	    key: "getAssetType",
@@ -29373,8 +29513,9 @@ var StellarBase =
 	    }
 
 	    /**
-	    * Returns true if this asset object is the native asset.
-	    */
+	     * Returns true if this asset object is the native asset.
+	     * @returns {boolean}
+	     */
 	  }, {
 	    key: "isNative",
 	    value: function isNative() {
@@ -29382,12 +29523,48 @@ var StellarBase =
 	    }
 
 	    /**
-	    * Returns true if this asset equals the given asset.
-	    */
+	     * Returns true if this asset equals the given asset.
+	     * @param {Asset} asset Asset to compare
+	     * @returns {boolean}
+	     */
 	  }, {
 	    key: "equals",
 	    value: function equals(asset) {
 	      return this.code == asset.getCode() && this.issuer == asset.getIssuer();
+	    }
+	  }], [{
+	    key: "native",
+	    value: function native() {
+	      return new Asset("XLM");
+	    }
+
+	    /**
+	     * Returns an asset object from its XDR object representation.
+	     * @param {xdr.Asset} assetXdr - The asset xdr object.
+	     * @returns {Asset}
+	     */
+	  }, {
+	    key: "fromOperation",
+	    value: function fromOperation(assetXdr) {
+	      var anum = undefined,
+	          code = undefined,
+	          issuer = undefined;
+	      switch (assetXdr["switch"]()) {
+	        case _generatedStellarXdr_generated2["default"].AssetType.assetTypeNative():
+	          return this.native();
+	        case _generatedStellarXdr_generated2["default"].AssetType.assetTypeCreditAlphanum4():
+	          anum = assetXdr.alphaNum4();
+	          issuer = (0, _strkey.encodeCheck)("accountId", anum.issuer().ed25519());
+	          code = (0, _lodash.trimRight)(anum.assetCode(), '\0');
+	          return new this(code, issuer);
+	        case _generatedStellarXdr_generated2["default"].AssetType.assetTypeCreditAlphanum12():
+	          anum = assetXdr.alphaNum12();
+	          issuer = (0, _strkey.encodeCheck)("accountId", anum.issuer().ed25519());
+	          code = (0, _lodash.trimRight)(anum.assetCode(), '\0');
+	          return new this(code, issuer);
+	        default:
+	          throw new Error("Invalid asset type: " + assetXdr["switch"]().name);
+	      }
 	    }
 	  }]);
 
@@ -32109,6 +32286,7 @@ var StellarBase =
 
 	/**
 	 * Calculates and returns the best rational approximation of the given real number.
+	 * @private
 	 * @param {string|number|BigNumber} number
 	 * @returns {array} first element is n (numerator), second element is d (denominator)
 	 */
@@ -32186,59 +32364,60 @@ var StellarBase =
 	var MIN_LEDGER = 0;
 	var MAX_LEDGER = 0xFFFFFFFF; // max uint32
 
-	/**
-	* @class TransactionBuilder
-	*/
-
 	var TransactionBuilder = (function () {
 
 	    /**
-	    * <p>Transaction builder helps constructs a new Transaction using the given account
-	    * as the transaction's "source account". The transaction will use the current sequence
-	    * number of the given account as its sequence number and increment the given account's
-	    * sequence number by one. The given source account must include a private key for signing
-	    * the transaction or an error will be thrown.</p>
-	    *
-	    * <p>Operations can be added to the transaction via their corresponding builder methods, and
-	    * each returns the TransactionBuilder object so they can be chained together. After adding
-	    * the desired operations, call the build() method on the TransactionBuilder to return a fully
-	    * constructed Transaction that can be signed. The returned transaction will contain the
-	    * sequence number of the source account and include the signature from the source account.</p>
-	    *
-	    * <p>The following code example creates a new transaction with two payment operations
-	    * and a changeTrust operation. The Transaction's source account first funds destinationA,
-	    * then extends a trust line to destination A for an asset, then destinationA sends the
-	    * source account an amount of that asset. The built transaction would need to be signed by
-	    * both the source account and the destinationA account for it to be valid.</p>
-	    *
-	    * <pre>var transaction = new TransactionBuilder(source)
-	    *   .addOperation(Operation.payment({
+	     * <p>Transaction builder helps constructs a new `{@link Transaction}` using the given {@link Account}
+	     * as the transaction's "source account". The transaction will use the current sequence
+	     * number of the given account as its sequence number and increment the given account's
+	     * sequence number by one. The given source account must include a private key for signing
+	     * the transaction or an error will be thrown.</p>
+	     *
+	     * <p>Operations can be added to the transaction via their corresponding builder methods, and
+	     * each returns the TransactionBuilder object so they can be chained together. After adding
+	     * the desired operations, call the `build()` method on the `TransactionBuilder` to return a fully
+	     * constructed `{@link Transaction}` that can be signed. The returned transaction will contain the
+	     * sequence number of the source account and include the signature from the source account.</p>
+	     *
+	     * <p>The following code example creates a new transaction with {@link Operation.createAccount} and
+	     * {@link Operation.payment} operations.
+	     * The Transaction's source account first funds `destinationA`, then sends
+	     * a payment to `destinationB`. The built transaction is then signed by `sourceKeypair`.</p>
+	     *
+	     * ```
+	     * var transaction = new TransactionBuilder(source)
+	     *   .addOperation(Operation.createAccount({
 	            destination: destinationA,
-	            amount: "20000000",
-	            asset: Asset.native()
+	            startingBalance: "20"
 	        }) // <- funds and creates destinationA
-	    *   .build();
-	    * </pre>
-	    * @constructor
-	    * @param {Account} sourceAccount - The source account for this transaction.
-	    * @param {object} [opts]
-	    * @param {number} [opts.fee] - The max fee willing to pay per operation in this transaction (in stroops).
-	    * @param {object} [opts.timebounds] - The timebounds for the validity of this transaction.
-	    * @param {string} [opts.timebounds.minTime] - 64 bit unix timestamp
-	    * @param {string} [opts.timebounds.maxTime] - 64 bit unix timestamp
-	    * @param {Memo} [opts.memo] - The memo for the transaction
-	    * @param {}
-	    */
+	        .addOperation(Operation.payment({
+	            destination: destinationB,
+	            amount: "100"
+	            asset: Asset.native()
+	        }) // <- sends 100 XLM to destinationB
+	     *   .build();
+	     *
+	     * transaction.sign(sourceKeypair);
+	     * ```
+	     * @constructor
+	     * @param {Account} sourceAccount - The source account for this transaction.
+	     * @param {object} [opts]
+	     * @param {number} [opts.fee] - The max fee willing to pay per operation in this transaction (**in stroops**).
+	     * @param {object} [opts.timebounds] - The timebounds for the validity of this transaction.
+	     * @param {string} [opts.timebounds.minTime] - 64 bit unix timestamp
+	     * @param {string} [opts.timebounds.maxTime] - 64 bit unix timestamp
+	     * @param {Memo} [opts.memo] - The memo for the transaction
+	     */
 
-	    function TransactionBuilder(source) {
+	    function TransactionBuilder(sourceAccount) {
 	        var opts = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
 	        _classCallCheck(this, TransactionBuilder);
 
-	        if (!source) {
+	        if (!sourceAccount) {
 	            throw new Error("must specify source account for the transaction");
 	        }
-	        this.source = source;
+	        this.source = sourceAccount;
 	        this.operations = [];
 	        this.signers = [];
 
@@ -32252,9 +32431,10 @@ var StellarBase =
 	    }
 
 	    /**
-	    * Adds an operation to the transaction.
-	    * @param {xdr.Operation} The xdr operation object, use {@link Operation} static methods.
-	    */
+	     * Adds an operation to the transaction.
+	     * @param {xdr.Operation} operation The xdr operation object, use {@link Operation} static methods.
+	     * @returns {TransactionBuilder}
+	     */
 
 	    _createClass(TransactionBuilder, [{
 	        key: "addOperation",
@@ -32264,8 +32444,9 @@ var StellarBase =
 	        }
 
 	        /**
-	         * Adds a memo to the transaction
-	         * @param {xdr.Memo} The xdr memo object, use {@link Memo} static methods.
+	         * Adds a memo to the transaction.
+	         * @param {xdr.Memo} memo The xdr memo object, use {@link Memo} static methods.
+	         * @returns {TransactionBuilder}
 	         */
 	    }, {
 	        key: "addMemo",
@@ -32275,8 +32456,10 @@ var StellarBase =
 	        }
 
 	        /**
-	        * Adds the given signer's signature to the transaction.
-	        */
+	         * Adds the given signer's signature to the transaction.
+	         * @deprecated Use {@link Transaction#sign}
+	         * @returns {TransactionBuilder}
+	         */
 	    }, {
 	        key: "addSigner",
 	        value: function addSigner(keypair) {
@@ -32285,10 +32468,10 @@ var StellarBase =
 	        }
 
 	        /**
-	        * This will build the transaction and sign it with the source account. It will
-	        * also increment the source account's sequence number by 1.
-	        * @returns {Transaction} will return the built Transaction.
-	        */
+	         * This will build the transaction and sign it with the {@link Keypair} passed to {@link TransactionBuilder#addSigner}.
+	         * It will also increment the source account's sequence number by 1.
+	         * @returns {Transaction} This method will return the built {@link Transaction}.
+	         */
 	    }, {
 	        key: "build",
 	        value: function build() {
@@ -32348,8 +32531,11 @@ var StellarBase =
 	var _bignumberJs2 = _interopRequireDefault(_bignumberJs);
 
 	/**
-	* @class Memo
-	*/
+	 * `Memo` represents memos attached to transactions. Use static methods to create memos.
+	 *
+	 * @see [Transactions concept](https://www.stellar.org/developers/learn/concepts/transactions.html)
+	 * @class Memo
+	 */
 
 	var Memo = (function () {
 	    function Memo() {
@@ -32360,17 +32546,18 @@ var StellarBase =
 	        key: "none",
 
 	        /**
-	        * Returns an empty memo.
-	        */
+	         * Returns an empty memo (`MEMO_NONE`).
+	         * @returns {xdr.Memo}
+	         */
 	        value: function none() {
 	            return _generatedStellarXdr_generated2["default"].Memo.memoNone();
 	        }
 
 	        /**
-	        * Creates and returns a "text" memo.
-	        * @param {string} text - memo text
-	        * @returns {xdr.Memo}
-	        */
+	         * Creates and returns a `MEMO_TEXT` memo.
+	         * @param {string} text - memo text
+	         * @returns {xdr.Memo}
+	         */
 	    }, {
 	        key: "text",
 	        value: function text(_text) {
@@ -32384,10 +32571,10 @@ var StellarBase =
 	        }
 
 	        /**
-	        * Creates and returns an "id" memo.
-	        * @param {string} id - 64 bit id
-	        * @returns {xdr.Memo}
-	        */
+	         * Creates and returns a `MEMO_ID` memo.
+	         * @param {string} id - 64-bit number represented as a string
+	         * @returns {xdr.Memo}
+	         */
 	    }, {
 	        key: "id",
 	        value: function id(_id) {
@@ -32418,9 +32605,10 @@ var StellarBase =
 	        }
 
 	        /**
-	        * Creates and returns a "hash" memo.
-	        * @param {array|string} hash - 32 byte hash or hex encoded string
-	        */
+	         * Creates and returns a `MEMO_HASH` memo.
+	         * @param {array|string} hash - 32 byte hash or hex encoded string
+	         * @returns {xdr.Memo}
+	         */
 	    }, {
 	        key: "hash",
 	        value: function hash(_hash) {
@@ -32445,9 +32633,10 @@ var StellarBase =
 	        }
 
 	        /**
-	        * Creates and returns a "return hash" memo.
-	        * @param {array|string} hash - 32 byte hash or hex encoded string
-	        */
+	         * Creates and returns a `MEMO_RETURN` memo.
+	         * @param {array|string} hash - 32 byte hash or hex encoded string
+	         * @returns {xdr.Memo}
+	         */
 	    }, {
 	        key: "returnHash",
 	        value: function returnHash(hash) {
