@@ -17845,6 +17845,8 @@ var StellarBase =
 	 */
 	/* eslint-disable no-proto */
 
+	'use strict'
+
 	var base64 = __webpack_require__(14)
 	var ieee754 = __webpack_require__(15)
 	var isArray = __webpack_require__(16)
@@ -17927,8 +17929,10 @@ var StellarBase =
 	    return new Buffer(arg)
 	  }
 
-	  this.length = 0
-	  this.parent = undefined
+	  if (!Buffer.TYPED_ARRAY_SUPPORT) {
+	    this.length = 0
+	    this.parent = undefined
+	  }
 
 	  // Common case.
 	  if (typeof arg === 'number') {
@@ -18059,6 +18063,10 @@ var StellarBase =
 	if (Buffer.TYPED_ARRAY_SUPPORT) {
 	  Buffer.prototype.__proto__ = Uint8Array.prototype
 	  Buffer.__proto__ = Uint8Array
+	} else {
+	  // pre-set for values that may exist in the future
+	  Buffer.prototype.length = undefined
+	  Buffer.prototype.parent = undefined
 	}
 
 	function allocate (that, length) {
@@ -18208,10 +18216,6 @@ var StellarBase =
 	  }
 	}
 	Buffer.byteLength = byteLength
-
-	// pre-set for values that may exist in the future
-	Buffer.prototype.length = undefined
-	Buffer.prototype.parent = undefined
 
 	function slowToString (encoding, start, end) {
 	  var loweredCase = false
@@ -19608,8 +19612,10 @@ var StellarBase =
 /* 16 */
 /***/ function(module, exports) {
 
+	var toString = {}.toString;
+
 	module.exports = Array.isArray || function (arr) {
-	  return Object.prototype.toString.call(arr) == '[object Array]';
+	  return toString.call(arr) == '[object Array]';
 	};
 
 
@@ -27128,7 +27134,7 @@ var StellarBase =
 	   * `Keypair` represents public (and secret) keys of the account.
 	   *
 	   * Use more convenient methods to create `Keypair` object:
-	   * * `{@link Keypair.fromAddress}`
+	   * * `{@link Keypair.fromAccountId}`
 	   * * `{@link Keypair.fromSeed}`
 	   * * `{@link Keypair.random}`
 	   *
@@ -27156,13 +27162,13 @@ var StellarBase =
 	   */
 
 	  _createClass(Keypair, [{
-	    key: "accountId",
-	    value: function accountId() {
+	    key: "xdrAccountId",
+	    value: function xdrAccountId() {
 	      return new _generatedStellarXdr_generated2["default"].AccountId.keyTypeEd25519(this._publicKey);
 	    }
 	  }, {
-	    key: "publicKey",
-	    value: function publicKey() {
+	    key: "xdrPublicKey",
+	    value: function xdrPublicKey() {
 	      return new _generatedStellarXdr_generated2["default"].PublicKey.keyTypeEd25519(this._publicKey);
 	    }
 
@@ -27178,7 +27184,7 @@ var StellarBase =
 	  }, {
 	    key: "signatureHint",
 	    value: function signatureHint() {
-	      var a = this.accountId().toXDR();
+	      var a = this.xdrAccountId().toXDR();
 
 	      return a.slice(a.length - 4);
 	    }
@@ -27190,6 +27196,17 @@ var StellarBase =
 	  }, {
 	    key: "address",
 	    value: function address() {
+	      console.warn("Keypair#address is deprecated, please use Keypair#accountId instead");
+	      return this.accountId();
+	    }
+
+	    /**
+	     * Returns account ID associated with this `Keypair` object.
+	     * @returns {string}
+	     */
+	  }, {
+	    key: "accountId",
+	    value: function accountId() {
 	      return strkey.encodeCheck("accountId", this._publicKey);
 	    }
 
@@ -27318,13 +27335,26 @@ var StellarBase =
 	     * Creates a new `Keypair` object from account ID.
 	     * @param {string} address account ID
 	     * @returns {Keypair}
+	     * @deprecated Use {@link Keypair.fromAccountId}
 	     */
 	  }, {
 	    key: "fromAddress",
 	    value: function fromAddress(address) {
-	      var publicKey = strkey.decodeCheck("accountId", address);
+	      console.warn("Keypair#fromAddress is deprecated, please use Keypair#fromAccountId instead");
+	      return Keypair.fromAccountId(address);
+	    }
+
+	    /**
+	     * Creates a new `Keypair` object from account ID.
+	     * @param {string} accountId account ID (ex. `GB3KJPLFUYN5VL6R3GU3EGCGVCKFDSD7BEDX42HWG5BWFKB3KQGJJRMA`)
+	     * @returns {Keypair}
+	     */
+	  }, {
+	    key: "fromAccountId",
+	    value: function fromAccountId(accountId) {
+	      var publicKey = strkey.decodeCheck("accountId", accountId);
 	      if (publicKey.length !== 32) {
-	        throw new Error('Invalid Stellar address');
+	        throw new Error('Invalid Stellar accountId');
 	      }
 	      return new this({ publicKey: publicKey });
 	    }
@@ -28656,21 +28686,21 @@ var StellarBase =
 	        /**
 	        * Create and fund a non existent account.
 	        * @param {object} opts
-	        * @param {string} opts.destination - Destination address to create an account for.
+	        * @param {string} opts.destination - Destination account ID to create an account for.
 	        * @param {string} opts.startingBalance - Amount in XLM the account should be funded for. Must be greater
 	        *                                   than the [reserve balance amount](https://www.stellar.org/developers/learn/concepts/fees.html).
 	        * @param {string} [opts.source] - The source account for the payment. Defaults to the transaction's source account.
 	        * @returns {xdr.CreateAccountOp}
 	        */
 	        value: function createAccount(opts) {
-	            if (!_account.Account.isValidAddress(opts.destination)) {
+	            if (!_account.Account.isValidAccountId(opts.destination)) {
 	                throw new Error("destination is invalid");
 	            }
 	            if (!this.isValidAmount(opts.startingBalance)) {
 	                throw new TypeError('startingBalance argument must be of type String and represent a positive number');
 	            }
 	            var attributes = {};
-	            attributes.destination = _keypair.Keypair.fromAddress(opts.destination).accountId();
+	            attributes.destination = _keypair.Keypair.fromAccountId(opts.destination).xdrAccountId();
 	            attributes.startingBalance = this._toXDRAmount(opts.startingBalance);
 	            var createAccount = new _generatedStellarXdr_generated2["default"].CreateAccountOp(attributes);
 
@@ -28684,7 +28714,7 @@ var StellarBase =
 	        /**
 	        * Create a payment operation.
 	        * @param {object} opts
-	        * @param {string} opts.destination - The destination address.
+	        * @param {string} opts.destination - The destination account ID.
 	        * @param {Asset} opts.asset - The asset to send.
 	        * @param {string} opts.amount - The amount to send.
 	        * @param {string} [opts.source] - The source account for the payment. Defaults to the transaction's source account.
@@ -28693,7 +28723,7 @@ var StellarBase =
 	    }, {
 	        key: "payment",
 	        value: function payment(opts) {
-	            if (!_account.Account.isValidAddress(opts.destination)) {
+	            if (!_account.Account.isValidAccountId(opts.destination)) {
 	                throw new Error("destination is invalid");
 	            }
 	            if (!opts.asset) {
@@ -28704,7 +28734,7 @@ var StellarBase =
 	            }
 
 	            var attributes = {};
-	            attributes.destination = _keypair.Keypair.fromAddress(opts.destination).accountId();
+	            attributes.destination = _keypair.Keypair.fromAccountId(opts.destination).xdrAccountId();
 	            attributes.asset = opts.asset.toXdrObject();
 	            attributes.amount = this._toXDRAmount(opts.amount);
 	            var payment = new _generatedStellarXdr_generated2["default"].PaymentOp(attributes);
@@ -28739,7 +28769,7 @@ var StellarBase =
 	            if (!this.isValidAmount(opts.sendMax)) {
 	                throw new TypeError('sendMax argument must be of type String and represent a positive number');
 	            }
-	            if (!_account.Account.isValidAddress(opts.destination)) {
+	            if (!_account.Account.isValidAccountId(opts.destination)) {
 	                throw new Error("destination is invalid");
 	            }
 	            if (!opts.destAsset) {
@@ -28752,7 +28782,7 @@ var StellarBase =
 	            var attributes = {};
 	            attributes.sendAsset = opts.sendAsset.toXdrObject();
 	            attributes.sendMax = this._toXDRAmount(opts.sendMax);
-	            attributes.destination = _keypair.Keypair.fromAddress(opts.destination).accountId();
+	            attributes.destination = _keypair.Keypair.fromAccountId(opts.destination).xdrAccountId();
 	            attributes.destAsset = opts.destAsset.toXdrObject();
 	            attributes.destAmount = this._toXDRAmount(opts.destAmount);
 
@@ -28822,11 +28852,11 @@ var StellarBase =
 	    }, {
 	        key: "allowTrust",
 	        value: function allowTrust(opts) {
-	            if (!_account.Account.isValidAddress(opts.trustor)) {
+	            if (!_account.Account.isValidAccountId(opts.trustor)) {
 	                throw new Error("trustor is invalid");
 	            }
 	            var attributes = {};
-	            attributes.trustor = _keypair.Keypair.fromAddress(opts.trustor).accountId();
+	            attributes.trustor = _keypair.Keypair.fromAccountId(opts.trustor).xdrAccountId();
 	            if (opts.assetCode.length <= 4) {
 	                var code = (0, _lodash.padRight)(opts.assetCode, 4, '\0');
 	                attributes.asset = _generatedStellarXdr_generated2["default"].AllowTrustOpAsset.assetTypeCreditAlphanum4(code);
@@ -28853,7 +28883,7 @@ var StellarBase =
 	        *   - AUTH_REQUIRED_FLAG = 0x1
 	        *   - AUTH_REVOCABLE_FLAG = 0x2
 	        * @param {object} opts
-	        * @param {string} [opts.inflationDest] - Set this address as the account's inflation destination.
+	        * @param {string} [opts.inflationDest] - Set this account ID as the account's inflation destination.
 	        * @param {number} [opts.clearFlags] - Bitmap integer for which flags to clear.
 	        * @param {number} [opts.setFlags] - Bitmap integer for which flags to set.
 	        * @param {number} [opts.masterWeight] - The master key weight.
@@ -28874,10 +28904,10 @@ var StellarBase =
 	            var attributes = {};
 
 	            if (opts.inflationDest) {
-	                if (!_account.Account.isValidAddress(opts.inflationDest)) {
+	                if (!_account.Account.isValidAccountId(opts.inflationDest)) {
 	                    throw new Error("inflationDest is invalid");
 	                }
-	                attributes.inflationDest = _keypair.Keypair.fromAddress(opts.inflationDest).accountId();
+	                attributes.inflationDest = _keypair.Keypair.fromAccountId(opts.inflationDest).xdrAccountId();
 	            }
 
 	            attributes.clearFlags = opts.clearFlags;
@@ -28910,7 +28940,7 @@ var StellarBase =
 	            attributes.homeDomain = opts.homeDomain;
 
 	            if (opts.signer) {
-	                if (!_account.Account.isValidAddress(opts.signer.address)) {
+	                if (!_account.Account.isValidAccountId(opts.signer.address)) {
 	                    throw new Error("signer.address is invalid");
 	                }
 
@@ -28919,7 +28949,7 @@ var StellarBase =
 	                }
 
 	                attributes.signer = new _generatedStellarXdr_generated2["default"].Signer({
-	                    pubKey: _keypair.Keypair.fromAddress(opts.signer.address).accountId(),
+	                    pubKey: _keypair.Keypair.fromAccountId(opts.signer.address).xdrAccountId(),
 	                    weight: opts.signer.weight
 	                });
 	            }
@@ -28943,6 +28973,7 @@ var StellarBase =
 	        * @param {number|string|BigNumber} opts.price - The exchange rate ratio (selling / buying).
 	        * @param {number|string} [opts.offerId ]- If `0`, will create a new offer (default). Otherwise, edits an exisiting offer.
 	        * @param {string} [opts.source] - The source account (defaults to transaction source).
+	        * @throws {Error} Throws `Error` when the best rational approximation of `price` cannot be found.
 	        * @returns {xdr.ManageOfferOp}
 	        */
 	    }, {
@@ -28986,6 +29017,7 @@ var StellarBase =
 	        * @param {string} opts.amount - The total amount you're selling. If 0, deletes the offer.
 	        * @param {number|string|BigNumber} opts.price - The exchange rate ratio (selling / buying)
 	        * @param {string} [opts.source] - The source account (defaults to transaction source).
+	        * @throws {Error} Throws `Error` when the best rational approximation of `price` cannot be found.
 	        * @returns {xdr.CreatePassiveOfferOp}
 	        */
 	    }, {
@@ -29022,10 +29054,10 @@ var StellarBase =
 	        key: "accountMerge",
 	        value: function accountMerge(opts) {
 	            var opAttributes = {};
-	            if (!_account.Account.isValidAddress(opts.destination)) {
+	            if (!_account.Account.isValidAccountId(opts.destination)) {
 	                throw new Error("destination is invalid");
 	            }
-	            opAttributes.body = _generatedStellarXdr_generated2["default"].OperationBody.accountMerge(_keypair.Keypair.fromAddress(opts.destination).accountId());
+	            opAttributes.body = _generatedStellarXdr_generated2["default"].OperationBody.accountMerge(_keypair.Keypair.fromAccountId(opts.destination).xdrAccountId());
 	            this.setSourceAccount(opAttributes, opts);
 
 	            return new _generatedStellarXdr_generated2["default"].Operation(opAttributes);
@@ -29051,10 +29083,10 @@ var StellarBase =
 	        key: "setSourceAccount",
 	        value: function setSourceAccount(opAttributes, opts) {
 	            if (opts.source) {
-	                if (!_account.Account.isValidAddress(opts.source)) {
+	                if (!_account.Account.isValidAccountId(opts.source)) {
 	                    throw new Error("Source address is invalid");
 	                }
-	                opAttributes.sourceAccount = _keypair.Keypair.fromAddress(opts.source).accountId();
+	                opAttributes.sourceAccount = _keypair.Keypair.fromAccountId(opts.source).xdrAccountId();
 	            }
 	        }
 
@@ -29283,49 +29315,87 @@ var StellarBase =
 	     * See [Accounts](https://stellar.org/developers/learn/concepts/accounts.html) for more information about how
 	     * accounts work in Stellar.
 	     * @constructor
-	     * @param {string} address ID of the account
+	     * @param {string} accountId ID of the account (ex. `GB3KJPLFUYN5VL6R3GU3EGCGVCKFDSD7BEDX42HWG5BWFKB3KQGJJRMA`)
 	     * @param {number} sequence current sequence number of the account
 	     */
 
-	    function Account(address, sequence) {
+	    function Account(accountId, sequence) {
 	        _classCallCheck(this, Account);
 
-	        if (!Account.isValidAddress(address)) {
+	        if (!Account.isValidAccountId(accountId)) {
 	            throw new Error('address is invalid');
 	        }
-	        this.address = address;
+	        this._accountId = accountId;
 	        this.sequence = sequence;
+	        // @deprecated
+	        this.address = accountId;
 	    }
 
 	    /**
-	     * Returns true if the given address is a valid Stellar address.
+	     * Returns true if the given accountId is a valid Stellar account ID.
 	     * @param {string} address account ID to check
 	     * @returns {boolean}
+	     * @deprecated Use {@link Account#isValidAccountId}
 	     */
 
 	    _createClass(Account, [{
-	        key: "getAddress",
+	        key: "accountId",
 
 	        /**
+	         * Returns Stellar account ID, ex. `GB3KJPLFUYN5VL6R3GU3EGCGVCKFDSD7BEDX42HWG5BWFKB3KQGJJRMA`
 	         * @returns {string}
 	         */
-	        value: function getAddress() {
-	            return this.address;
+	        value: function accountId() {
+	            return this._accountId;
 	        }
 
 	        /**
 	         * @returns {number}
 	         */
 	    }, {
+	        key: "sequenceNumber",
+	        value: function sequenceNumber() {
+	            return this.sequence;
+	        }
+
+	        /**
+	         * @returns {string}
+	         * @deprecated Use {@link Account#accountId}
+	         */
+	    }, {
+	        key: "getAddress",
+	        value: function getAddress() {
+	            console.warn("Account#getAddress is deprecated, please use Account#accountId instead");
+	            return this.address;
+	        }
+
+	        /**
+	         * @returns {number}
+	         * @deprecated Use {@link Account#sequenceNumber}
+	         */
+	    }, {
 	        key: "getSequenceNumber",
 	        value: function getSequenceNumber() {
+	            console.warn("Account#getSequenceNumber is deprecated, please use Account#sequenceNumber instead");
 	            return this.sequence;
 	        }
 	    }], [{
 	        key: "isValidAddress",
 	        value: function isValidAddress(address) {
+	            console.warn("Account#isValidAddress is deprecated, please use Account#isValidAccountId instead");
+	            return Account.isValidAccountId(address);
+	        }
+
+	        /**
+	         * Returns true if the given accountId is a valid Stellar account ID.
+	         * @param {string} accountId account ID to check
+	         * @returns {boolean}
+	         */
+	    }, {
+	        key: "isValidAccountId",
+	        value: function isValidAccountId(accountId) {
 	            try {
-	                var decoded = (0, _strkey.decodeCheck)("accountId", address);
+	                var decoded = (0, _strkey.decodeCheck)("accountId", accountId);
 	                if (decoded.length !== 32) {
 	                    return false;
 	                }
@@ -29372,7 +29442,7 @@ var StellarBase =
 	var Asset = (function () {
 	  /**
 	   * Asset class represents an asset, either the native asset (`XLM`)
-	   * or a asset code / issuer address pair.
+	   * or a asset code / issuer account ID pair.
 	   *
 	   * An asset code describes an asset code and issuer pair. In the case of the native
 	   * asset XLM, the issuer will be null.
@@ -29391,7 +29461,7 @@ var StellarBase =
 	    if (String(code).toLowerCase() !== "xlm" && !issuer) {
 	      throw new Error("Issuer cannot be null");
 	    }
-	    if (issuer && !_account.Account.isValidAddress(issuer)) {
+	    if (issuer && !_account.Account.isValidAccountId(issuer)) {
 	      throw new Error("Issuer is invalid");
 	    }
 
@@ -29431,7 +29501,7 @@ var StellarBase =
 
 	        var assetType = new xdrType({
 	          assetCode: paddedCode,
-	          issuer: _keypair.Keypair.fromAddress(this.issuer).accountId()
+	          issuer: _keypair.Keypair.fromAccountId(this.issuer).xdrAccountId()
 	        });
 
 	        return new _generatedStellarXdr_generated2["default"].Asset(xdrTypeString, assetType);
@@ -32236,17 +32306,17 @@ var StellarBase =
 /* 85 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
 
-	Object.defineProperty(exports, '__esModule', {
+	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
 
-	var _slicedToArray = (function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i['return']) _i['return'](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError('Invalid attempt to destructure non-iterable instance'); } }; })();
+	var _slicedToArray = (function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; })();
 
 	exports.best_r = best_r;
 
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 	var _bignumberJs = __webpack_require__(84);
 
@@ -32258,14 +32328,15 @@ var StellarBase =
 	 * Calculates and returns the best rational approximation of the given real number.
 	 * @private
 	 * @param {string|number|BigNumber} number
+	 * @throws Error Throws `Error` when the best rational approximation cannot be found.
 	 * @returns {array} first element is n (numerator), second element is d (denominator)
 	 */
 
 	function best_r(number) {
-	  number = new _bignumberJs2['default'](number);
+	  number = new _bignumberJs2["default"](number);
 	  var a;
 	  var f;
-	  var fractions = [[new _bignumberJs2['default'](0), new _bignumberJs2['default'](1)], [new _bignumberJs2['default'](1), new _bignumberJs2['default'](0)]];
+	  var fractions = [[new _bignumberJs2["default"](0), new _bignumberJs2["default"](1)], [new _bignumberJs2["default"](1), new _bignumberJs2["default"](0)]];
 	  var i = 2;
 	  while (true) {
 	    if (number.gt(MAX_INT)) {
@@ -32282,14 +32353,18 @@ var StellarBase =
 	    if (f.eq(0)) {
 	      break;
 	    }
-	    number = new _bignumberJs2['default'](1).div(f);
-	    i = i + 1;
+	    number = new _bignumberJs2["default"](1).div(f);
+	    i++;
 	  }
 
 	  var _fractions = _slicedToArray(fractions[fractions.length - 1], 2);
 
 	  var n = _fractions[0];
 	  var d = _fractions[1];
+
+	  if (n.isZero() || d.isZero()) {
+	    throw new Error("Couldn't find approximation");
+	  }
 
 	  return [n.toNumber(), d.toNumber()];
 	}
@@ -32446,7 +32521,7 @@ var StellarBase =
 	        key: "build",
 	        value: function build() {
 	            var attrs = {
-	                sourceAccount: _keypair.Keypair.fromAddress(this.source.address).accountId(),
+	                sourceAccount: _keypair.Keypair.fromAccountId(this.source.accountId()).xdrAccountId(),
 	                fee: this.baseFee * this.operations.length,
 	                seqNum: _generatedStellarXdr_generated2["default"].SequenceNumber.fromString(String(Number(this.source.sequence) + 1)),
 	                memo: this.memo,
