@@ -29294,6 +29294,11 @@ var StellarBase =
 	                return false;
 	            }
 
+	            // > Max value
+	            if (amount.times(ONE).greaterThan(new _bignumberJs2["default"](MAX_INT64).toString())) {
+	                return false;
+	            }
+
 	            // Decimal places (max 7)
 	            if (amount.decimalPlaces() > 7) {
 	                return false;
