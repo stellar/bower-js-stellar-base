@@ -137,7 +137,7 @@ var StellarBase =
 	  }
 	});
 
-	var _asset = __webpack_require__(83);
+	var _asset = __webpack_require__(84);
 
 	Object.defineProperty(exports, "Asset", {
 	  enumerable: true,
@@ -27268,17 +27268,6 @@ var StellarBase =
 	     * @returns {string}
 	     */
 	  }, {
-	    key: "address",
-	    value: function address() {
-	      console.warn("Keypair#address is deprecated, please use Keypair#accountId instead");
-	      return this.accountId();
-	    }
-
-	    /**
-	     * Returns account ID associated with this `Keypair` object.
-	     * @returns {string}
-	     */
-	  }, {
 	    key: "accountId",
 	    value: function accountId() {
 	      return strkey.encodeCheck("accountId", this._publicKey);
@@ -27407,19 +27396,6 @@ var StellarBase =
 
 	    /**
 	     * Creates a new `Keypair` object from account ID.
-	     * @param {string} address account ID
-	     * @returns {Keypair}
-	     * @deprecated Use {@link Keypair.fromAccountId}
-	     */
-	  }, {
-	    key: "fromAddress",
-	    value: function fromAddress(address) {
-	      console.warn("Keypair#fromAddress is deprecated, please use Keypair#fromAccountId instead");
-	      return Keypair.fromAccountId(address);
-	    }
-
-	    /**
-	     * Creates a new `Keypair` object from account ID.
 	     * @param {string} accountId account ID (ex. `GB3KJPLFUYN5VL6R3GU3EGCGVCKFDSD7BEDX42HWG5BWFKB3KQGJJRMA`)
 	     * @returns {Keypair}
 	     */
@@ -27541,32 +27517,12 @@ var StellarBase =
 			}
 
 			/**
-	   * Alias for {@link Network.usePublicNetwork}.
-	   * @deprecated Use {@link Network.usePublicNetwork} method
-	   */
-		}, {
-			key: "usePublicNet",
-			value: function usePublicNet() {
-				this.usePublicNetwork();
-			}
-
-			/**
 	   * Use test network.
 	   */
 		}, {
 			key: "useTestNetwork",
 			value: function useTestNetwork() {
 				this.use(new Network(Networks.TESTNET));
-			}
-
-			/**
-	   * Alias for {@link Network.useTestNetwork}.
-	   * @deprecated Use {@link Network.useTestNetwork} method
-	   */
-		}, {
-			key: "useTestNet",
-			value: function useTestNet() {
-				this.useTestNetwork();
 			}
 
 			/**
@@ -28719,11 +28675,11 @@ var StellarBase =
 
 	var _strkey = __webpack_require__(67);
 
-	var _asset = __webpack_require__(83);
+	var _asset = __webpack_require__(84);
 
 	var _lodash = __webpack_require__(10);
 
-	var _bignumberJs = __webpack_require__(84);
+	var _bignumberJs = __webpack_require__(83);
 
 	var _bignumberJs2 = _interopRequireDefault(_bignumberJs);
 
@@ -29373,15 +29329,23 @@ var StellarBase =
 /* 82 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
-	Object.defineProperty(exports, "__esModule", {
+	Object.defineProperty(exports, '__esModule', {
 	    value: true
 	});
 
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+	var _bignumberJs = __webpack_require__(83);
+
+	var _bignumberJs2 = _interopRequireDefault(_bignumberJs);
+
+	var _lodash = __webpack_require__(10);
 
 	var _strkey = __webpack_require__(67);
 
@@ -29395,7 +29359,7 @@ var StellarBase =
 	     * accounts work in Stellar.
 	     * @constructor
 	     * @param {string} accountId ID of the account (ex. `GB3KJPLFUYN5VL6R3GU3EGCGVCKFDSD7BEDX42HWG5BWFKB3KQGJJRMA`)
-	     * @param {number} sequence current sequence number of the account
+	     * @param {string} sequence current sequence number of the account
 	     */
 
 	    function Account(accountId, sequence) {
@@ -29404,21 +29368,21 @@ var StellarBase =
 	        if (!Account.isValidAccountId(accountId)) {
 	            throw new Error('address is invalid');
 	        }
+	        if (!(0, _lodash.isString)(sequence)) {
+	            throw new Error('sequence must be of type string');
+	        }
 	        this._accountId = accountId;
-	        this.sequence = sequence;
-	        // @deprecated
-	        this.address = accountId;
+	        this.sequence = new _bignumberJs2['default'](sequence);
 	    }
 
 	    /**
 	     * Returns true if the given accountId is a valid Stellar account ID.
-	     * @param {string} address account ID to check
+	     * @param {string} accountId account ID to check
 	     * @returns {boolean}
-	     * @deprecated Use {@link Account#isValidAccountId}
 	     */
 
 	    _createClass(Account, [{
-	        key: "accountId",
+	        key: 'accountId',
 
 	        /**
 	         * Returns Stellar account ID, ex. `GB3KJPLFUYN5VL6R3GU3EGCGVCKFDSD7BEDX42HWG5BWFKB3KQGJJRMA`
@@ -29429,49 +29393,24 @@ var StellarBase =
 	        }
 
 	        /**
-	         * @returns {number}
-	         */
-	    }, {
-	        key: "sequenceNumber",
-	        value: function sequenceNumber() {
-	            return this.sequence;
-	        }
-
-	        /**
 	         * @returns {string}
-	         * @deprecated Use {@link Account#accountId}
 	         */
 	    }, {
-	        key: "getAddress",
-	        value: function getAddress() {
-	            console.warn("Account#getAddress is deprecated, please use Account#accountId instead");
-	            return this.address;
+	        key: 'sequenceNumber',
+	        value: function sequenceNumber() {
+	            return this.sequence.toString();
 	        }
 
 	        /**
-	         * @returns {number}
-	         * @deprecated Use {@link Account#sequenceNumber}
+	         * Increments sequence number in this object by one.
 	         */
 	    }, {
-	        key: "getSequenceNumber",
-	        value: function getSequenceNumber() {
-	            console.warn("Account#getSequenceNumber is deprecated, please use Account#sequenceNumber instead");
-	            return this.sequence;
+	        key: 'incrementSequenceNumber',
+	        value: function incrementSequenceNumber() {
+	            this.sequence = this.sequence.add(1);
 	        }
 	    }], [{
-	        key: "isValidAddress",
-	        value: function isValidAddress(address) {
-	            console.warn("Account#isValidAddress is deprecated, please use Account#isValidAccountId instead");
-	            return Account.isValidAccountId(address);
-	        }
-
-	        /**
-	         * Returns true if the given accountId is a valid Stellar account ID.
-	         * @param {string} accountId account ID to check
-	         * @returns {boolean}
-	         */
-	    }, {
-	        key: "isValidAccountId",
+	        key: 'isValidAccountId',
 	        value: function isValidAccountId(accountId) {
 	            try {
 	                var decoded = (0, _strkey.decodeCheck)("accountId", accountId);
@@ -29492,208 +29431,6 @@ var StellarBase =
 
 /***/ },
 /* 83 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	var _generatedStellarXdr_generated = __webpack_require__(2);
-
-	var _generatedStellarXdr_generated2 = _interopRequireDefault(_generatedStellarXdr_generated);
-
-	var _account = __webpack_require__(82);
-
-	var _keypair = __webpack_require__(63);
-
-	var _strkey = __webpack_require__(67);
-
-	var _lodash = __webpack_require__(10);
-
-	var Asset = (function () {
-	  /**
-	   * Asset class represents an asset, either the native asset (`XLM`)
-	   * or a asset code / issuer account ID pair.
-	   *
-	   * An asset code describes an asset code and issuer pair. In the case of the native
-	   * asset XLM, the issuer will be null.
-	   *
-	   * @constructor
-	   * @param {string} code - The asset code.
-	   * @param {string} issuer - The account ID of the issuer.
-	   */
-
-	  function Asset(code, issuer) {
-	    _classCallCheck(this, Asset);
-
-	    if (code.length > 12) {
-	      throw new Error("Asset code must be 12 characters at max");
-	    }
-	    if (String(code).toLowerCase() !== "xlm" && !issuer) {
-	      throw new Error("Issuer cannot be null");
-	    }
-	    if (issuer && !_account.Account.isValidAccountId(issuer)) {
-	      throw new Error("Issuer is invalid");
-	    }
-
-	    this.code = code;
-	    this.issuer = issuer;
-	  }
-
-	  /**
-	  * Returns an asset object for the native asset.
-	  * @Return {Asset}
-	  */
-
-	  _createClass(Asset, [{
-	    key: "toXdrObject",
-
-	    /**
-	     * Returns the xdr object for this asset.
-	     * @returns {xdr.Asset}
-	     */
-	    value: function toXdrObject() {
-	      if (this.isNative()) {
-	        return _generatedStellarXdr_generated2["default"].Asset.assetTypeNative();
-	      } else {
-	        var xdrType = undefined,
-	            xdrTypeString = undefined;
-	        if (this.code.length <= 4) {
-	          xdrType = _generatedStellarXdr_generated2["default"].AssetAlphaNum4;
-	          xdrTypeString = 'assetTypeCreditAlphanum4';
-	        } else {
-	          xdrType = _generatedStellarXdr_generated2["default"].AssetAlphaNum12;
-	          xdrTypeString = 'assetTypeCreditAlphanum12';
-	        }
-
-	        // pad code with null bytes if necessary
-	        var padLength = this.code.length <= 4 ? 4 : 12;
-	        var paddedCode = (0, _lodash.padRight)(this.code, padLength, '\0');
-
-	        var assetType = new xdrType({
-	          assetCode: paddedCode,
-	          issuer: _keypair.Keypair.fromAccountId(this.issuer).xdrAccountId()
-	        });
-
-	        return new _generatedStellarXdr_generated2["default"].Asset(xdrTypeString, assetType);
-	      }
-	    }
-
-	    /**
-	     * Return the asset code
-	     * @returns {string}
-	     */
-	  }, {
-	    key: "getCode",
-	    value: function getCode() {
-	      return (0, _lodash.clone)(this.code);
-	    }
-
-	    /**
-	     * Return the asset issuer
-	     * @returns {string}
-	     */
-	  }, {
-	    key: "getIssuer",
-	    value: function getIssuer() {
-	      return (0, _lodash.clone)(this.issuer);
-	    }
-
-	    /**
-	     * Return the asset type. Can be one of following types:
-	     *
-	     * * `native`
-	     * * `credit_alphanum4`
-	     * * `credit_alphanum12`
-	     *
-	     * @see [Assets concept](https://www.stellar.org/developers/learn/concepts/assets.html)
-	     * @returns {string}
-	     */
-	  }, {
-	    key: "getAssetType",
-	    value: function getAssetType() {
-	      if (this.isNative()) {
-	        return 'native';
-	      } else {
-	        if (this.code.length >= 1 && this.code.length <= 4) {
-	          return "credit_alphanum4";
-	        } else if (this.code.length >= 5 && this.code.length <= 12) {
-	          return "credit_alphanum12";
-	        }
-	      }
-	    }
-
-	    /**
-	     * Returns true if this asset object is the native asset.
-	     * @returns {boolean}
-	     */
-	  }, {
-	    key: "isNative",
-	    value: function isNative() {
-	      return !this.issuer;
-	    }
-
-	    /**
-	     * Returns true if this asset equals the given asset.
-	     * @param {Asset} asset Asset to compare
-	     * @returns {boolean}
-	     */
-	  }, {
-	    key: "equals",
-	    value: function equals(asset) {
-	      return this.code == asset.getCode() && this.issuer == asset.getIssuer();
-	    }
-	  }], [{
-	    key: "native",
-	    value: function native() {
-	      return new Asset("XLM");
-	    }
-
-	    /**
-	     * Returns an asset object from its XDR object representation.
-	     * @param {xdr.Asset} assetXdr - The asset xdr object.
-	     * @returns {Asset}
-	     */
-	  }, {
-	    key: "fromOperation",
-	    value: function fromOperation(assetXdr) {
-	      var anum = undefined,
-	          code = undefined,
-	          issuer = undefined;
-	      switch (assetXdr["switch"]()) {
-	        case _generatedStellarXdr_generated2["default"].AssetType.assetTypeNative():
-	          return this.native();
-	        case _generatedStellarXdr_generated2["default"].AssetType.assetTypeCreditAlphanum4():
-	          anum = assetXdr.alphaNum4();
-	          issuer = (0, _strkey.encodeCheck)("accountId", anum.issuer().ed25519());
-	          code = (0, _lodash.trimRight)(anum.assetCode(), '\0');
-	          return new this(code, issuer);
-	        case _generatedStellarXdr_generated2["default"].AssetType.assetTypeCreditAlphanum12():
-	          anum = assetXdr.alphaNum12();
-	          issuer = (0, _strkey.encodeCheck)("accountId", anum.issuer().ed25519());
-	          code = (0, _lodash.trimRight)(anum.assetCode(), '\0');
-	          return new this(code, issuer);
-	        default:
-	          throw new Error("Invalid asset type: " + assetXdr["switch"]().name);
-	      }
-	    }
-	  }]);
-
-	  return Asset;
-	})();
-
-	exports.Asset = Asset;
-
-/***/ },
-/* 84 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/*! bignumber.js v2.0.7 https://github.com/MikeMcl/bignumber.js/LICENCE */
@@ -32382,6 +32119,208 @@ var StellarBase =
 
 
 /***/ },
+/* 84 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var _generatedStellarXdr_generated = __webpack_require__(2);
+
+	var _generatedStellarXdr_generated2 = _interopRequireDefault(_generatedStellarXdr_generated);
+
+	var _account = __webpack_require__(82);
+
+	var _keypair = __webpack_require__(63);
+
+	var _strkey = __webpack_require__(67);
+
+	var _lodash = __webpack_require__(10);
+
+	var Asset = (function () {
+	  /**
+	   * Asset class represents an asset, either the native asset (`XLM`)
+	   * or a asset code / issuer account ID pair.
+	   *
+	   * An asset code describes an asset code and issuer pair. In the case of the native
+	   * asset XLM, the issuer will be null.
+	   *
+	   * @constructor
+	   * @param {string} code - The asset code.
+	   * @param {string} issuer - The account ID of the issuer.
+	   */
+
+	  function Asset(code, issuer) {
+	    _classCallCheck(this, Asset);
+
+	    if (code.length > 12) {
+	      throw new Error("Asset code must be 12 characters at max");
+	    }
+	    if (String(code).toLowerCase() !== "xlm" && !issuer) {
+	      throw new Error("Issuer cannot be null");
+	    }
+	    if (issuer && !_account.Account.isValidAccountId(issuer)) {
+	      throw new Error("Issuer is invalid");
+	    }
+
+	    this.code = code;
+	    this.issuer = issuer;
+	  }
+
+	  /**
+	  * Returns an asset object for the native asset.
+	  * @Return {Asset}
+	  */
+
+	  _createClass(Asset, [{
+	    key: "toXdrObject",
+
+	    /**
+	     * Returns the xdr object for this asset.
+	     * @returns {xdr.Asset}
+	     */
+	    value: function toXdrObject() {
+	      if (this.isNative()) {
+	        return _generatedStellarXdr_generated2["default"].Asset.assetTypeNative();
+	      } else {
+	        var xdrType = undefined,
+	            xdrTypeString = undefined;
+	        if (this.code.length <= 4) {
+	          xdrType = _generatedStellarXdr_generated2["default"].AssetAlphaNum4;
+	          xdrTypeString = 'assetTypeCreditAlphanum4';
+	        } else {
+	          xdrType = _generatedStellarXdr_generated2["default"].AssetAlphaNum12;
+	          xdrTypeString = 'assetTypeCreditAlphanum12';
+	        }
+
+	        // pad code with null bytes if necessary
+	        var padLength = this.code.length <= 4 ? 4 : 12;
+	        var paddedCode = (0, _lodash.padRight)(this.code, padLength, '\0');
+
+	        var assetType = new xdrType({
+	          assetCode: paddedCode,
+	          issuer: _keypair.Keypair.fromAccountId(this.issuer).xdrAccountId()
+	        });
+
+	        return new _generatedStellarXdr_generated2["default"].Asset(xdrTypeString, assetType);
+	      }
+	    }
+
+	    /**
+	     * Return the asset code
+	     * @returns {string}
+	     */
+	  }, {
+	    key: "getCode",
+	    value: function getCode() {
+	      return (0, _lodash.clone)(this.code);
+	    }
+
+	    /**
+	     * Return the asset issuer
+	     * @returns {string}
+	     */
+	  }, {
+	    key: "getIssuer",
+	    value: function getIssuer() {
+	      return (0, _lodash.clone)(this.issuer);
+	    }
+
+	    /**
+	     * Return the asset type. Can be one of following types:
+	     *
+	     * * `native`
+	     * * `credit_alphanum4`
+	     * * `credit_alphanum12`
+	     *
+	     * @see [Assets concept](https://www.stellar.org/developers/learn/concepts/assets.html)
+	     * @returns {string}
+	     */
+	  }, {
+	    key: "getAssetType",
+	    value: function getAssetType() {
+	      if (this.isNative()) {
+	        return 'native';
+	      } else {
+	        if (this.code.length >= 1 && this.code.length <= 4) {
+	          return "credit_alphanum4";
+	        } else if (this.code.length >= 5 && this.code.length <= 12) {
+	          return "credit_alphanum12";
+	        }
+	      }
+	    }
+
+	    /**
+	     * Returns true if this asset object is the native asset.
+	     * @returns {boolean}
+	     */
+	  }, {
+	    key: "isNative",
+	    value: function isNative() {
+	      return !this.issuer;
+	    }
+
+	    /**
+	     * Returns true if this asset equals the given asset.
+	     * @param {Asset} asset Asset to compare
+	     * @returns {boolean}
+	     */
+	  }, {
+	    key: "equals",
+	    value: function equals(asset) {
+	      return this.code == asset.getCode() && this.issuer == asset.getIssuer();
+	    }
+	  }], [{
+	    key: "native",
+	    value: function native() {
+	      return new Asset("XLM");
+	    }
+
+	    /**
+	     * Returns an asset object from its XDR object representation.
+	     * @param {xdr.Asset} assetXdr - The asset xdr object.
+	     * @returns {Asset}
+	     */
+	  }, {
+	    key: "fromOperation",
+	    value: function fromOperation(assetXdr) {
+	      var anum = undefined,
+	          code = undefined,
+	          issuer = undefined;
+	      switch (assetXdr["switch"]()) {
+	        case _generatedStellarXdr_generated2["default"].AssetType.assetTypeNative():
+	          return this.native();
+	        case _generatedStellarXdr_generated2["default"].AssetType.assetTypeCreditAlphanum4():
+	          anum = assetXdr.alphaNum4();
+	          issuer = (0, _strkey.encodeCheck)("accountId", anum.issuer().ed25519());
+	          code = (0, _lodash.trimRight)(anum.assetCode(), '\0');
+	          return new this(code, issuer);
+	        case _generatedStellarXdr_generated2["default"].AssetType.assetTypeCreditAlphanum12():
+	          anum = assetXdr.alphaNum12();
+	          issuer = (0, _strkey.encodeCheck)("accountId", anum.issuer().ed25519());
+	          code = (0, _lodash.trimRight)(anum.assetCode(), '\0');
+	          return new this(code, issuer);
+	        default:
+	          throw new Error("Invalid asset type: " + assetXdr["switch"]().name);
+	      }
+	    }
+	  }]);
+
+	  return Asset;
+	})();
+
+	exports.Asset = Asset;
+
+/***/ },
 /* 85 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -32397,7 +32336,7 @@ var StellarBase =
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-	var _bignumberJs = __webpack_require__(84);
+	var _bignumberJs = __webpack_require__(83);
 
 	var _bignumberJs2 = _interopRequireDefault(_bignumberJs);
 
@@ -32481,6 +32420,10 @@ var StellarBase =
 	var _transaction = __webpack_require__(80);
 
 	var _memo = __webpack_require__(87);
+
+	var _bignumberJs = __webpack_require__(83);
+
+	var _bignumberJs2 = _interopRequireDefault(_bignumberJs);
 
 	var _lodash = __webpack_require__(10);
 
@@ -32580,18 +32523,6 @@ var StellarBase =
 	        }
 
 	        /**
-	         * Adds the given signer's signature to the transaction.
-	         * @deprecated Use {@link Transaction#sign}
-	         * @returns {TransactionBuilder}
-	         */
-	    }, {
-	        key: "addSigner",
-	        value: function addSigner(keypair) {
-	            this.signers.push(keypair);
-	            return this;
-	        }
-
-	        /**
 	         * This will build the transaction and sign it with the {@link Keypair} passed to {@link TransactionBuilder#addSigner}.
 	         * It will also increment the source account's sequence number by 1.
 	         * @returns {Transaction} This method will return the built {@link Transaction}.
@@ -32599,10 +32530,12 @@ var StellarBase =
 	    }, {
 	        key: "build",
 	        value: function build() {
+	            var sequenceNumber = new _bignumberJs2["default"](this.source.sequenceNumber()).add(1);
+
 	            var attrs = {
 	                sourceAccount: _keypair.Keypair.fromAccountId(this.source.accountId()).xdrAccountId(),
 	                fee: this.baseFee * this.operations.length,
-	                seqNum: _generatedStellarXdr_generated2["default"].SequenceNumber.fromString(String(Number(this.source.sequence) + 1)),
+	                seqNum: _generatedStellarXdr_generated2["default"].SequenceNumber.fromString(sequenceNumber.toString()),
 	                memo: this.memo,
 	                ext: new _generatedStellarXdr_generated2["default"].TransactionExt(0)
 	            };
@@ -32616,7 +32549,7 @@ var StellarBase =
 	            var tx = new _transaction.Transaction(xenv);
 	            tx.sign.apply(tx, _toConsumableArray(this.signers));
 
-	            this.source.sequence = this.source.sequence + 1;
+	            this.source.incrementSequenceNumber();
 	            return tx;
 	        }
 	    }]);
@@ -32650,7 +32583,7 @@ var StellarBase =
 
 	var _jsXdr = __webpack_require__(3);
 
-	var _bignumberJs = __webpack_require__(84);
+	var _bignumberJs = __webpack_require__(83);
 
 	var _bignumberJs2 = _interopRequireDefault(_bignumberJs);
 
