@@ -30506,7 +30506,7 @@ var StellarBase =
 
 	                    if (attrs.signer()) {
 	                        var signer = {};
-	                        signer.address = accountIdtoAddress(attrs.signer().pubKey());
+	                        signer.pubKey = accountIdtoAddress(attrs.signer().pubKey());
 	                        signer.weight = attrs.signer().weight();
 	                        result.signer = signer;
 	                    }
@@ -37509,6 +37509,10 @@ var StellarBase =
 
 	var _lodashMap2 = _interopRequireDefault(_lodashMap);
 
+	var _lodashIsUndefined = __webpack_require__(67);
+
+	var _lodashIsUndefined2 = _interopRequireDefault(_lodashIsUndefined);
+
 	var BASE_FEE = 100; // Stroops
 	var MIN_LEDGER = 0;
 	var MAX_LEDGER = 0xFFFFFFFF; // max uint32
@@ -37570,7 +37574,8 @@ var StellarBase =
 	        this.operations = [];
 	        this.signers = [];
 
-	        this.baseFee = opts.fee || BASE_FEE;
+	        this.baseFee = (0, _lodashIsUndefined2["default"])(opts.fee) ? BASE_FEE : opts.fee;
+
 	        this.timebounds = (0, _lodashClone2["default"])(opts.timebounds);
 
 	        this.memo = opts.memo || _memo.Memo.none();
