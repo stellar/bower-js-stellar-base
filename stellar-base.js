@@ -22514,7 +22514,7 @@ var StellarBase =
 	        var padding = calculatePadding(length);
 	        var result = io.slice(length);
 	        io.slice(padding); //consume padding
-	        return result.buffer().toString("ascii");
+	        return result.buffer().toString("utf8");
 	      }
 	    },
 	    write: {
@@ -22526,15 +22526,19 @@ var StellarBase =
 	        if (!isString(value)) {
 	          throw new Error("XDR Write Error: " + value + " is not a string,");
 	        }
-	        var buffer = new Buffer(value, "ascii");
+	        var buffer = new Buffer(value, "utf8");
 
-	        Int.write(value.length, io);
+	        Int.write(buffer.length, io);
 	        io.writeBufferPadded(buffer);
 	      }
 	    },
 	    isValid: {
 	      value: function isValid(value) {
-	        return isString(value) && value.length <= this._maxLength;
+	        if (!isString(value)) {
+	          return false;
+	        }
+	        var buffer = new Buffer(value, "utf8");
+	        return buffer.length <= this._maxLength;
 	      }
 	    }
 	  });
@@ -37830,8 +37834,8 @@ var StellarBase =
 	            if (!(0, _lodashIsString2["default"])(_text)) {
 	                throw new Error("Expects string type got a " + typeof _text);
 	            }
-	            if (Buffer.byteLength(_text, "ascii") > 28) {
-	                throw new Error("Text should be <= 28 bytes (ascii encoded). Got " + Buffer.byteLength(_text, "ascii"));
+	            if (Buffer.byteLength(_text, "utf8") > 28) {
+	                throw new Error("Text should be <= 28 bytes. Got " + Buffer.byteLength(_text, "utf8"));
 	            }
 	            return _generatedStellarXdr_generated2["default"].Memo.memoText(_text);
 	        }
