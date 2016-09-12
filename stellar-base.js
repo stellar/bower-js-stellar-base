@@ -97,6 +97,12 @@ var StellarBase =
 	    return _signing.verify;
 	  }
 	});
+	Object.defineProperty(exports, "FastSigning", {
+	  enumerable: true,
+	  get: function get() {
+	    return _signing.FastSigning;
+	  }
+	});
 
 	var _keypair = __webpack_require__(63);
 
@@ -155,6 +161,24 @@ var StellarBase =
 	  enumerable: true,
 	  get: function get() {
 	    return _operation.Operation;
+	  }
+	});
+	Object.defineProperty(exports, "AuthRequiredFlag", {
+	  enumerable: true,
+	  get: function get() {
+	    return _operation.AuthRequiredFlag;
+	  }
+	});
+	Object.defineProperty(exports, "AuthRevocableFlag", {
+	  enumerable: true,
+	  get: function get() {
+	    return _operation.AuthRevocableFlag;
+	  }
+	});
+	Object.defineProperty(exports, "AuthImmutableFlag", {
+	  enumerable: true,
+	  get: function get() {
+	    return _operation.AuthImmutableFlag;
 	  }
 	});
 
@@ -21034,25 +21058,40 @@ var StellarBase =
 	var cachedSetTimeout;
 	var cachedClearTimeout;
 
+	function defaultSetTimout() {
+	    throw new Error('setTimeout has not been defined');
+	}
+	function defaultClearTimeout () {
+	    throw new Error('clearTimeout has not been defined');
+	}
 	(function () {
 	    try {
-	        cachedSetTimeout = setTimeout;
-	    } catch (e) {
-	        cachedSetTimeout = function () {
-	            throw new Error('setTimeout is not defined');
+	        if (typeof setTimeout === 'function') {
+	            cachedSetTimeout = setTimeout;
+	        } else {
+	            cachedSetTimeout = defaultSetTimout;
 	        }
+	    } catch (e) {
+	        cachedSetTimeout = defaultSetTimout;
 	    }
 	    try {
-	        cachedClearTimeout = clearTimeout;
-	    } catch (e) {
-	        cachedClearTimeout = function () {
-	            throw new Error('clearTimeout is not defined');
+	        if (typeof clearTimeout === 'function') {
+	            cachedClearTimeout = clearTimeout;
+	        } else {
+	            cachedClearTimeout = defaultClearTimeout;
 	        }
+	    } catch (e) {
+	        cachedClearTimeout = defaultClearTimeout;
 	    }
 	} ())
 	function runTimeout(fun) {
 	    if (cachedSetTimeout === setTimeout) {
 	        //normal enviroments in sane situations
+	        return setTimeout(fun, 0);
+	    }
+	    // if setTimeout wasn't available but was latter defined
+	    if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
+	        cachedSetTimeout = setTimeout;
 	        return setTimeout(fun, 0);
 	    }
 	    try {
@@ -21073,6 +21112,11 @@ var StellarBase =
 	function runClearTimeout(marker) {
 	    if (cachedClearTimeout === clearTimeout) {
 	        //normal enviroments in sane situations
+	        return clearTimeout(marker);
+	    }
+	    // if clearTimeout wasn't available but was latter defined
+	    if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
+	        cachedClearTimeout = clearTimeout;
 	        return clearTimeout(marker);
 	    }
 	    try {
@@ -25122,6 +25166,15 @@ var StellarBase =
 	exports.verify = verify;
 	var actualMethods = {};
 
+	/**
+	 * Use this flag to check if fast signing (provided by `ed25519` package) is available.
+	 * If your app is signing a large number of transaction or verifying a large number
+	 * of signatures make sure `ed25519` package is installed.
+	 */
+	var FastSigning = checkFastSigning();
+
+	exports.FastSigning = FastSigning;
+
 	function sign(data, secretKey) {
 	  return actualMethods.sign(data, secretKey);
 	}
@@ -25130,51 +25183,69 @@ var StellarBase =
 	  return actualMethods.verify(data, signature, publicKey);
 	}
 
-	// if in node
-	if (typeof window === 'undefined') {
-	  (function () {
-	    // NOTE: we use commonjs style require here because es6 imports
-	    // can only occur at the top level.  thanks, obama.
-	    var ed25519 = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"ed25519\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
-
-	    actualMethods.sign = function (data, secretKey) {
-	      data = new Buffer(data);
-	      return ed25519.Sign(data, secretKey);
-	    };
-
-	    actualMethods.verify = function (data, signature, publicKey) {
-	      data = new Buffer(data);
+	function checkFastSigning() {
+	  var ed25519Used;
+	  // if in node
+	  if (typeof window === 'undefined') {
+	    (function () {
+	      // NOTE: we use commonjs style require here because es6 imports
+	      // can only occur at the top level.  thanks, obama.
+	      var ed25519 = undefined;
 	      try {
-	        return ed25519.Verify(data, signature, publicKey);
-	      } catch (e) {
-	        return false;
+	        ed25519 = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"ed25519\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+	        ed25519Used = true;
+	      } catch (err) {
+	        ed25519Used = false;
 	      }
-	    };
-	  })();
-	} else {
-	  (function () {
-	    // fallback to tweetnacl.js if we're in the browser
-	    var nacl = __webpack_require__(61);
 
-	    actualMethods.sign = function (data, secretKey) {
-	      data = new Buffer(data);
-	      data = new Uint8Array(data.toJSON().data);
-	      secretKey = new Uint8Array(secretKey.toJSON().data);
+	      if (ed25519Used) {
+	        actualMethods.sign = function (data, secretKey) {
+	          data = new Buffer(data);
+	          return ed25519.Sign(data, secretKey);
+	        };
 
-	      var signature = nacl.sign.detached(data, secretKey);
+	        actualMethods.verify = function (data, signature, publicKey) {
+	          data = new Buffer(data);
+	          try {
+	            return ed25519.Verify(data, signature, publicKey);
+	          } catch (e) {
+	            return false;
+	          }
+	        };
+	      }
+	    })();
+	  } else {
+	    ed25519Used = false;
+	  }
 
-	      return new Buffer(signature);
-	    };
+	  if (!ed25519Used) {
+	    (function () {
+	      // fallback to tweetnacl.js if we're in the browser or
+	      // if there was a failure installing ed25519
+	      var nacl = __webpack_require__(61);
 
-	    actualMethods.verify = function (data, signature, publicKey) {
-	      data = new Buffer(data);
-	      data = new Uint8Array(data.toJSON().data);
-	      signature = new Uint8Array(signature.toJSON().data);
-	      publicKey = new Uint8Array(publicKey.toJSON().data);
+	      actualMethods.sign = function (data, secretKey) {
+	        data = new Buffer(data);
+	        data = new Uint8Array(data.toJSON().data);
+	        secretKey = new Uint8Array(secretKey.toJSON().data);
 
-	      return nacl.sign.detached.verify(data, signature, publicKey);
-	    };
-	  })();
+	        var signature = nacl.sign.detached(data, secretKey);
+
+	        return new Buffer(signature);
+	      };
+
+	      actualMethods.verify = function (data, signature, publicKey) {
+	        data = new Buffer(data);
+	        data = new Uint8Array(data.toJSON().data);
+	        signature = new Uint8Array(signature.toJSON().data);
+	        publicKey = new Uint8Array(publicKey.toJSON().data);
+
+	        return nacl.sign.detached.verify(data, signature, publicKey);
+	      };
+	    })();
+	  }
+
+	  return ed25519Used;
 	}
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(13).Buffer))
 
@@ -30261,6 +30332,31 @@ var StellarBase =
 	var MAX_INT64 = '9223372036854775807';
 
 	/**
+	 * When set using `{@link Operation.setOptions}` option, requires the issuing account to
+	 * give other accounts permission before they can hold the issuing account’s credit.
+	 * @constant
+	 * @see [Account flags](https://www.stellar.org/developers/guides/concepts/accounts.html#flags)
+	 */
+	var AuthRequiredFlag = 1 << 0;
+	exports.AuthRequiredFlag = AuthRequiredFlag;
+	/**
+	 * When set using `{@link Operation.setOptions}` option, allows the issuing account to
+	 * revoke its credit held by other accounts.
+	 * @constant
+	 * @see [Account flags](https://www.stellar.org/developers/guides/concepts/accounts.html#flags)
+	 */
+	var AuthRevocableFlag = 1 << 1;
+	exports.AuthRevocableFlag = AuthRevocableFlag;
+	/**
+	 * When set using `{@link Operation.setOptions}` option, then none of the authorization flags
+	 * can be set and the account can never be deleted.
+	 * @constant
+	 * @see [Account flags](https://www.stellar.org/developers/guides/concepts/accounts.html#flags)
+	 */
+	var AuthImmutableFlag = 1 << 2;
+
+	exports.AuthImmutableFlag = AuthImmutableFlag;
+	/**
 	 * `Operation` class represents [operations](https://www.stellar.org/developers/learn/concepts/operations.html) in Stellar network.
 	 * Use one of static methods to create operations:
 	 * * `{@link Operation.createAccount}`
@@ -30482,14 +30578,16 @@ var StellarBase =
 	        /**
 	        * Returns an XDR SetOptionsOp. A "set options" operations set or clear account flags,
 	        * set the account's inflation destination, and/or add new signers to the account.
-	        * The account flags are the xdr.AccountFlags enum, which are:
-	        *   - AUTH_REQUIRED_FLAG = 0x1
-	        *   - AUTH_REVOCABLE_FLAG = 0x2
-	        *   - AUTH_IMMUTABLE_FLAG = 0x4
+	        * The flags used in `opts.clearFlags` and `opts.setFlags` can be the following:
+	        *   - `{@link AuthRequiredFlag}`
+	        *   - `{@link AuthRevocableFlag}`
+	        *   - `{@link AuthImmutableFlag}`
+	        *
+	        * It's possible to set/clear multiple flags at once using logical or.
 	        * @param {object} opts
 	        * @param {string} [opts.inflationDest] - Set this account ID as the account's inflation destination.
-	        * @param {(number|string)} [opts.clearFlags] - Bitmap integer for which flags to clear.
-	        * @param {(number|string)} [opts.setFlags] - Bitmap integer for which flags to set.
+	        * @param {(number|string)} [opts.clearFlags] - Bitmap integer for which account flags to clear.
+	        * @param {(number|string)} [opts.setFlags] - Bitmap integer for which account flags to set.
 	        * @param {number|string} [opts.masterWeight] - The master key weight.
 	        * @param {number|string} [opts.lowThreshold] - The sum weight for the low threshold.
 	        * @param {number|string} [opts.medThreshold] - The sum weight for the medium threshold.
@@ -30501,6 +30599,7 @@ var StellarBase =
 	        * @param {string} [opts.homeDomain] - sets the home domain used for reverse federation lookup.
 	        * @param {string} [opts.source] - The source account (defaults to transaction source).
 	        * @returns {xdr.SetOptionsOp}
+	        * @see [Account flags](https://www.stellar.org/developers/guides/concepts/accounts.html#flags)
 	        */
 	    }, {
 	        key: "setOptions",
