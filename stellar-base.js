@@ -62,10 +62,6 @@ var StellarBase =
 	  value: true
 	});
 
-	function _interopExportWildcard(obj, defaults) { var newObj = defaults({}, obj); delete newObj["default"]; return newObj; }
-
-	function _defaults(obj, defaults) { var keys = Object.getOwnPropertyNames(defaults); for (var i = 0; i < keys.length; i++) { var key = keys[i]; var value = Object.getOwnPropertyDescriptor(defaults, key); if (value && value.configurable && obj[key] === undefined) { Object.defineProperty(obj, key, value); } } return obj; }
-
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 	var _generatedStellarXdr_generated = __webpack_require__(2);
@@ -137,7 +133,7 @@ var StellarBase =
 	  }
 	});
 
-	var _transaction_builder = __webpack_require__(224);
+	var _transaction_builder = __webpack_require__(275);
 
 	Object.defineProperty(exports, "TransactionBuilder", {
 	  enumerable: true,
@@ -182,7 +178,7 @@ var StellarBase =
 	  }
 	});
 
-	var _memo = __webpack_require__(226);
+	var _memo = __webpack_require__(277);
 
 	Object.defineProperty(exports, "Memo", {
 	  enumerable: true,
@@ -191,7 +187,7 @@ var StellarBase =
 	  }
 	});
 
-	var _account = __webpack_require__(225);
+	var _account = __webpack_require__(276);
 
 	Object.defineProperty(exports, "Account", {
 	  enumerable: true,
@@ -217,2889 +213,2111 @@ var StellarBase =
 
 	var _strkey = __webpack_require__(69);
 
-	_defaults(exports, _interopExportWildcard(_strkey, _defaults));
-
+	Object.defineProperty(exports, "StrKey", {
+	  enumerable: true,
+	  get: function get() {
+	    return _strkey.StrKey;
+	  }
+	});
 	exports["default"] = module.exports;
 
 /***/ },
 /* 2 */
 /***/ function(module, exports, __webpack_require__) {
 
-	// Automatically generated on 2016-02-22T13:07:20+01:00
+	// Automatically generated on 2017-01-25T18:59:57+01:00
 	// DO NOT EDIT or your changes may be overwritten
-
-	/* jshint maxstatements:2147483647  */
-	/* jshint esnext:true  */
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj["default"] = obj; return newObj; } }
-
-	var _jsXdr = __webpack_require__(3);
-
-	var XDR = _interopRequireWildcard(_jsXdr);
-
-	var types = XDR.config(function (xdr) {
-
-	  // === xdr source ============================================================
-	  //
-	  //   typedef opaque Value<>;
-	  //
-	  // ===========================================================================
-	  xdr.typedef("Value", xdr.varOpaque());
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct SCPBallot
-	  //   {
-	  //       uint32 counter; // n
-	  //       Value value;    // x
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.struct("ScpBallot", [["counter", xdr.lookup("Uint32")], ["value", xdr.lookup("Value")]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   enum SCPStatementType
-	  //   {
-	  //       SCP_ST_PREPARE = 0,
-	  //       SCP_ST_CONFIRM = 1,
-	  //       SCP_ST_EXTERNALIZE = 2,
-	  //       SCP_ST_NOMINATE = 3
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr["enum"]("ScpStatementType", {
-	    scpStPrepare: 0,
-	    scpStConfirm: 1,
-	    scpStExternalize: 2,
-	    scpStNominate: 3
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct SCPNomination
-	  //   {
-	  //       Hash quorumSetHash; // D
-	  //       Value votes<>;      // X
-	  //       Value accepted<>;   // Y
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.struct("ScpNomination", [["quorumSetHash", xdr.lookup("Hash")], ["votes", xdr.varArray(xdr.lookup("Value"), 2147483647)], ["accepted", xdr.varArray(xdr.lookup("Value"), 2147483647)]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct
-	  //           {
-	  //               Hash quorumSetHash;       // D
-	  //               SCPBallot ballot;         // b
-	  //               SCPBallot* prepared;      // p
-	  //               SCPBallot* preparedPrime; // p'
-	  //               uint32 nC;                // c.n
-	  //               uint32 nH;                // h.n
-	  //           }
-	  //
-	  // ===========================================================================
-	  xdr.struct("ScpStatementPrepare", [["quorumSetHash", xdr.lookup("Hash")], ["ballot", xdr.lookup("ScpBallot")], ["prepared", xdr.option(xdr.lookup("ScpBallot"))], ["preparedPrime", xdr.option(xdr.lookup("ScpBallot"))], ["nC", xdr.lookup("Uint32")], ["nH", xdr.lookup("Uint32")]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct
-	  //           {
-	  //               SCPBallot ballot;   // b
-	  //               uint32 nPrepared;   // p.n
-	  //               uint32 nCommit;     // c.n
-	  //               uint32 nH;          // h.n
-	  //               Hash quorumSetHash; // D
-	  //           }
-	  //
-	  // ===========================================================================
-	  xdr.struct("ScpStatementConfirm", [["ballot", xdr.lookup("ScpBallot")], ["nPrepared", xdr.lookup("Uint32")], ["nCommit", xdr.lookup("Uint32")], ["nH", xdr.lookup("Uint32")], ["quorumSetHash", xdr.lookup("Hash")]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct
-	  //           {
-	  //               SCPBallot commit;         // c
-	  //               uint32 nH;                // h.n
-	  //               Hash commitQuorumSetHash; // D used before EXTERNALIZE
-	  //           }
-	  //
-	  // ===========================================================================
-	  xdr.struct("ScpStatementExternalize", [["commit", xdr.lookup("ScpBallot")], ["nH", xdr.lookup("Uint32")], ["commitQuorumSetHash", xdr.lookup("Hash")]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   union switch (SCPStatementType type)
-	  //       {
-	  //       case SCP_ST_PREPARE:
-	  //           struct
-	  //           {
-	  //               Hash quorumSetHash;       // D
-	  //               SCPBallot ballot;         // b
-	  //               SCPBallot* prepared;      // p
-	  //               SCPBallot* preparedPrime; // p'
-	  //               uint32 nC;                // c.n
-	  //               uint32 nH;                // h.n
-	  //           } prepare;
-	  //       case SCP_ST_CONFIRM:
-	  //           struct
-	  //           {
-	  //               SCPBallot ballot;   // b
-	  //               uint32 nPrepared;   // p.n
-	  //               uint32 nCommit;     // c.n
-	  //               uint32 nH;          // h.n
-	  //               Hash quorumSetHash; // D
-	  //           } confirm;
-	  //       case SCP_ST_EXTERNALIZE:
-	  //           struct
-	  //           {
-	  //               SCPBallot commit;         // c
-	  //               uint32 nH;                // h.n
-	  //               Hash commitQuorumSetHash; // D used before EXTERNALIZE
-	  //           } externalize;
-	  //       case SCP_ST_NOMINATE:
-	  //           SCPNomination nominate;
-	  //       }
-	  //
-	  // ===========================================================================
-	  xdr.union("ScpStatementPledges", {
-	    switchOn: xdr.lookup("ScpStatementType"),
-	    switchName: "type",
-	    switches: [["scpStPrepare", "prepare"], ["scpStConfirm", "confirm"], ["scpStExternalize", "externalize"], ["scpStNominate", "nominate"]],
-	    arms: {
-	      prepare: xdr.lookup("ScpStatementPrepare"),
-	      confirm: xdr.lookup("ScpStatementConfirm"),
-	      externalize: xdr.lookup("ScpStatementExternalize"),
-	      nominate: xdr.lookup("ScpNomination")
-	    }
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct SCPStatement
-	  //   {
-	  //       NodeID nodeID;    // v
-	  //       uint64 slotIndex; // i
-	  //  
-	  //       union switch (SCPStatementType type)
-	  //       {
-	  //       case SCP_ST_PREPARE:
-	  //           struct
-	  //           {
-	  //               Hash quorumSetHash;       // D
-	  //               SCPBallot ballot;         // b
-	  //               SCPBallot* prepared;      // p
-	  //               SCPBallot* preparedPrime; // p'
-	  //               uint32 nC;                // c.n
-	  //               uint32 nH;                // h.n
-	  //           } prepare;
-	  //       case SCP_ST_CONFIRM:
-	  //           struct
-	  //           {
-	  //               SCPBallot ballot;   // b
-	  //               uint32 nPrepared;   // p.n
-	  //               uint32 nCommit;     // c.n
-	  //               uint32 nH;          // h.n
-	  //               Hash quorumSetHash; // D
-	  //           } confirm;
-	  //       case SCP_ST_EXTERNALIZE:
-	  //           struct
-	  //           {
-	  //               SCPBallot commit;         // c
-	  //               uint32 nH;                // h.n
-	  //               Hash commitQuorumSetHash; // D used before EXTERNALIZE
-	  //           } externalize;
-	  //       case SCP_ST_NOMINATE:
-	  //           SCPNomination nominate;
-	  //       }
-	  //       pledges;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.struct("ScpStatement", [["nodeId", xdr.lookup("NodeId")], ["slotIndex", xdr.lookup("Uint64")], ["pledges", xdr.lookup("ScpStatementPledges")]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct SCPEnvelope
-	  //   {
-	  //       SCPStatement statement;
-	  //       Signature signature;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.struct("ScpEnvelope", [["statement", xdr.lookup("ScpStatement")], ["signature", xdr.lookup("Signature")]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct SCPQuorumSet
-	  //   {
-	  //       uint32 threshold;
-	  //       PublicKey validators<>;
-	  //       SCPQuorumSet innerSets<>;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.struct("ScpQuorumSet", [["threshold", xdr.lookup("Uint32")], ["validators", xdr.varArray(xdr.lookup("PublicKey"), 2147483647)], ["innerSets", xdr.varArray(xdr.lookup("ScpQuorumSet"), 2147483647)]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   typedef PublicKey AccountID;
-	  //
-	  // ===========================================================================
-	  xdr.typedef("AccountId", xdr.lookup("PublicKey"));
-
-	  // === xdr source ============================================================
-	  //
-	  //   typedef opaque Thresholds[4];
-	  //
-	  // ===========================================================================
-	  xdr.typedef("Thresholds", xdr.opaque(4));
-
-	  // === xdr source ============================================================
-	  //
-	  //   typedef string string32<32>;
-	  //
-	  // ===========================================================================
-	  xdr.typedef("String32", xdr.string(32));
-
-	  // === xdr source ============================================================
-	  //
-	  //   typedef string string64<64>;
-	  //
-	  // ===========================================================================
-	  xdr.typedef("String64", xdr.string(64));
-
-	  // === xdr source ============================================================
-	  //
-	  //   typedef uint64 SequenceNumber;
-	  //
-	  // ===========================================================================
-	  xdr.typedef("SequenceNumber", xdr.lookup("Uint64"));
-
-	  // === xdr source ============================================================
-	  //
-	  //   typedef opaque DataValue<64>;
-	  //
-	  // ===========================================================================
-	  xdr.typedef("DataValue", xdr.varOpaque(64));
-
-	  // === xdr source ============================================================
-	  //
-	  //   enum AssetType
-	  //   {
-	  //       ASSET_TYPE_NATIVE = 0,
-	  //       ASSET_TYPE_CREDIT_ALPHANUM4 = 1,
-	  //       ASSET_TYPE_CREDIT_ALPHANUM12 = 2
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr["enum"]("AssetType", {
-	    assetTypeNative: 0,
-	    assetTypeCreditAlphanum4: 1,
-	    assetTypeCreditAlphanum12: 2
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct
-	  //       {
-	  //           opaque assetCode[4]; // 1 to 4 characters
-	  //           AccountID issuer;
-	  //       }
-	  //
-	  // ===========================================================================
-	  xdr.struct("AssetAlphaNum4", [["assetCode", xdr.opaque(4)], ["issuer", xdr.lookup("AccountId")]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct
-	  //       {
-	  //           opaque assetCode[12]; // 5 to 12 characters
-	  //           AccountID issuer;
-	  //       }
-	  //
-	  // ===========================================================================
-	  xdr.struct("AssetAlphaNum12", [["assetCode", xdr.opaque(12)], ["issuer", xdr.lookup("AccountId")]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   union Asset switch (AssetType type)
-	  //   {
-	  //   case ASSET_TYPE_NATIVE: // Not credit
-	  //       void;
-	  //  
-	  //   case ASSET_TYPE_CREDIT_ALPHANUM4:
-	  //       struct
-	  //       {
-	  //           opaque assetCode[4]; // 1 to 4 characters
-	  //           AccountID issuer;
-	  //       } alphaNum4;
-	  //  
-	  //   case ASSET_TYPE_CREDIT_ALPHANUM12:
-	  //       struct
-	  //       {
-	  //           opaque assetCode[12]; // 5 to 12 characters
-	  //           AccountID issuer;
-	  //       } alphaNum12;
-	  //  
-	  //       // add other asset types here in the future
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.union("Asset", {
-	    switchOn: xdr.lookup("AssetType"),
-	    switchName: "type",
-	    switches: [["assetTypeNative", xdr["void"]()], ["assetTypeCreditAlphanum4", "alphaNum4"], ["assetTypeCreditAlphanum12", "alphaNum12"]],
-	    arms: {
-	      alphaNum4: xdr.lookup("AssetAlphaNum4"),
-	      alphaNum12: xdr.lookup("AssetAlphaNum12")
-	    }
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct Price
-	  //   {
-	  //       int32 n; // numerator
-	  //       int32 d; // denominator
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.struct("Price", [["n", xdr.lookup("Int32")], ["d", xdr.lookup("Int32")]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   enum ThresholdIndexes
-	  //   {
-	  //       THRESHOLD_MASTER_WEIGHT = 0,
-	  //       THRESHOLD_LOW = 1,
-	  //       THRESHOLD_MED = 2,
-	  //       THRESHOLD_HIGH = 3
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr["enum"]("ThresholdIndices", {
-	    thresholdMasterWeight: 0,
-	    thresholdLow: 1,
-	    thresholdMed: 2,
-	    thresholdHigh: 3
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   enum LedgerEntryType
-	  //   {
-	  //       ACCOUNT = 0,
-	  //       TRUSTLINE = 1,
-	  //       OFFER = 2,
-	  //       DATA = 3
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr["enum"]("LedgerEntryType", {
-	    account: 0,
-	    trustline: 1,
-	    offer: 2,
-	    datum: 3
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct Signer
-	  //   {
-	  //       AccountID pubKey;
-	  //       uint32 weight; // really only need 1byte
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.struct("Signer", [["pubKey", xdr.lookup("AccountId")], ["weight", xdr.lookup("Uint32")]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   enum AccountFlags
-	  //   { // masks for each flag
-	  //  
-	  //       // Flags set on issuer accounts
-	  //       // TrustLines are created with authorized set to "false" requiring
-	  //       // the issuer to set it for each TrustLine
-	  //       AUTH_REQUIRED_FLAG = 0x1,
-	  //       // If set, the authorized flag in TrustLines can be cleared
-	  //       // otherwise, authorization cannot be revoked
-	  //       AUTH_REVOCABLE_FLAG = 0x2,
-	  //       // Once set, causes all AUTH_* flags to be read-only
-	  //       AUTH_IMMUTABLE_FLAG = 0x4
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr["enum"]("AccountFlags", {
-	    authRequiredFlag: 1,
-	    authRevocableFlag: 2,
-	    authImmutableFlag: 4
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   union switch (int v)
-	  //       {
-	  //       case 0:
-	  //           void;
-	  //       }
-	  //
-	  // ===========================================================================
-	  xdr.union("AccountEntryExt", {
-	    switchOn: xdr.int(),
-	    switchName: "v",
-	    switches: [[0, xdr["void"]()]],
-	    arms: {}
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct AccountEntry
-	  //   {
-	  //       AccountID accountID;      // master public key for this account
-	  //       int64 balance;            // in stroops
-	  //       SequenceNumber seqNum;    // last sequence number used for this account
-	  //       uint32 numSubEntries;     // number of sub-entries this account has
-	  //                                 // drives the reserve
-	  //       AccountID* inflationDest; // Account to vote for during inflation
-	  //       uint32 flags;             // see AccountFlags
-	  //  
-	  //       string32 homeDomain; // can be used for reverse federation and memo lookup
-	  //  
-	  //       // fields used for signatures
-	  //       // thresholds stores unsigned bytes: [weight of master|low|medium|high]
-	  //       Thresholds thresholds;
-	  //  
-	  //       Signer signers<20>; // possible signers for this account
-	  //  
-	  //       // reserved for future use
-	  //       union switch (int v)
-	  //       {
-	  //       case 0:
-	  //           void;
-	  //       }
-	  //       ext;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.struct("AccountEntry", [["accountId", xdr.lookup("AccountId")], ["balance", xdr.lookup("Int64")], ["seqNum", xdr.lookup("SequenceNumber")], ["numSubEntries", xdr.lookup("Uint32")], ["inflationDest", xdr.option(xdr.lookup("AccountId"))], ["flags", xdr.lookup("Uint32")], ["homeDomain", xdr.lookup("String32")], ["thresholds", xdr.lookup("Thresholds")], ["signers", xdr.varArray(xdr.lookup("Signer"), 20)], ["ext", xdr.lookup("AccountEntryExt")]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   enum TrustLineFlags
-	  //   {
-	  //       // issuer has authorized account to perform transactions with its credit
-	  //       AUTHORIZED_FLAG = 1
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr["enum"]("TrustLineFlags", {
-	    authorizedFlag: 1
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   union switch (int v)
-	  //       {
-	  //       case 0:
-	  //           void;
-	  //       }
-	  //
-	  // ===========================================================================
-	  xdr.union("TrustLineEntryExt", {
-	    switchOn: xdr.int(),
-	    switchName: "v",
-	    switches: [[0, xdr["void"]()]],
-	    arms: {}
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct TrustLineEntry
-	  //   {
-	  //       AccountID accountID; // account this trustline belongs to
-	  //       Asset asset;         // type of asset (with issuer)
-	  //       int64 balance;       // how much of this asset the user has.
-	  //                            // Asset defines the unit for this;
-	  //  
-	  //       int64 limit;  // balance cannot be above this
-	  //       uint32 flags; // see TrustLineFlags
-	  //  
-	  //       // reserved for future use
-	  //       union switch (int v)
-	  //       {
-	  //       case 0:
-	  //           void;
-	  //       }
-	  //       ext;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.struct("TrustLineEntry", [["accountId", xdr.lookup("AccountId")], ["asset", xdr.lookup("Asset")], ["balance", xdr.lookup("Int64")], ["limit", xdr.lookup("Int64")], ["flags", xdr.lookup("Uint32")], ["ext", xdr.lookup("TrustLineEntryExt")]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   enum OfferEntryFlags
-	  //   {
-	  //       // issuer has authorized account to perform transactions with its credit
-	  //       PASSIVE_FLAG = 1
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr["enum"]("OfferEntryFlags", {
-	    passiveFlag: 1
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   union switch (int v)
-	  //       {
-	  //       case 0:
-	  //           void;
-	  //       }
-	  //
-	  // ===========================================================================
-	  xdr.union("OfferEntryExt", {
-	    switchOn: xdr.int(),
-	    switchName: "v",
-	    switches: [[0, xdr["void"]()]],
-	    arms: {}
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct OfferEntry
-	  //   {
-	  //       AccountID sellerID;
-	  //       uint64 offerID;
-	  //       Asset selling; // A
-	  //       Asset buying;  // B
-	  //       int64 amount;  // amount of A
-	  //  
-	  //       /* price for this offer:
-	  //           price of A in terms of B
-	  //           price=AmountB/AmountA=priceNumerator/priceDenominator
-	  //           price is after fees
-	  //       */
-	  //       Price price;
-	  //       uint32 flags; // see OfferEntryFlags
-	  //  
-	  //       // reserved for future use
-	  //       union switch (int v)
-	  //       {
-	  //       case 0:
-	  //           void;
-	  //       }
-	  //       ext;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.struct("OfferEntry", [["sellerId", xdr.lookup("AccountId")], ["offerId", xdr.lookup("Uint64")], ["selling", xdr.lookup("Asset")], ["buying", xdr.lookup("Asset")], ["amount", xdr.lookup("Int64")], ["price", xdr.lookup("Price")], ["flags", xdr.lookup("Uint32")], ["ext", xdr.lookup("OfferEntryExt")]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   union switch (int v)
-	  //       {
-	  //       case 0:
-	  //           void;
-	  //       }
-	  //
-	  // ===========================================================================
-	  xdr.union("DataEntryExt", {
-	    switchOn: xdr.int(),
-	    switchName: "v",
-	    switches: [[0, xdr["void"]()]],
-	    arms: {}
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct DataEntry
-	  //   {
-	  //       AccountID accountID; // account this data belongs to
-	  //       string64 dataName;
-	  //       DataValue dataValue;
-	  //  
-	  //       // reserved for future use
-	  //       union switch (int v)
-	  //       {
-	  //       case 0:
-	  //           void;
-	  //       }
-	  //       ext;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.struct("DataEntry", [["accountId", xdr.lookup("AccountId")], ["dataName", xdr.lookup("String64")], ["dataValue", xdr.lookup("DataValue")], ["ext", xdr.lookup("DataEntryExt")]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   union switch (LedgerEntryType type)
-	  //       {
-	  //       case ACCOUNT:
-	  //           AccountEntry account;
-	  //       case TRUSTLINE:
-	  //           TrustLineEntry trustLine;
-	  //       case OFFER:
-	  //           OfferEntry offer;
-	  //       case DATA:
-	  //           DataEntry data;
-	  //       }
-	  //
-	  // ===========================================================================
-	  xdr.union("LedgerEntryData", {
-	    switchOn: xdr.lookup("LedgerEntryType"),
-	    switchName: "type",
-	    switches: [["account", "account"], ["trustline", "trustLine"], ["offer", "offer"], ["datum", "data"]],
-	    arms: {
-	      account: xdr.lookup("AccountEntry"),
-	      trustLine: xdr.lookup("TrustLineEntry"),
-	      offer: xdr.lookup("OfferEntry"),
-	      data: xdr.lookup("DataEntry")
-	    }
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   union switch (int v)
-	  //       {
-	  //       case 0:
-	  //           void;
-	  //       }
-	  //
-	  // ===========================================================================
-	  xdr.union("LedgerEntryExt", {
-	    switchOn: xdr.int(),
-	    switchName: "v",
-	    switches: [[0, xdr["void"]()]],
-	    arms: {}
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct LedgerEntry
-	  //   {
-	  //       uint32 lastModifiedLedgerSeq; // ledger the LedgerEntry was last changed
-	  //  
-	  //       union switch (LedgerEntryType type)
-	  //       {
-	  //       case ACCOUNT:
-	  //           AccountEntry account;
-	  //       case TRUSTLINE:
-	  //           TrustLineEntry trustLine;
-	  //       case OFFER:
-	  //           OfferEntry offer;
-	  //       case DATA:
-	  //           DataEntry data;
-	  //       }
-	  //       data;
-	  //  
-	  //       // reserved for future use
-	  //       union switch (int v)
-	  //       {
-	  //       case 0:
-	  //           void;
-	  //       }
-	  //       ext;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.struct("LedgerEntry", [["lastModifiedLedgerSeq", xdr.lookup("Uint32")], ["data", xdr.lookup("LedgerEntryData")], ["ext", xdr.lookup("LedgerEntryExt")]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   enum EnvelopeType
-	  //   {
-	  //       ENVELOPE_TYPE_SCP = 1,
-	  //       ENVELOPE_TYPE_TX = 2,
-	  //       ENVELOPE_TYPE_AUTH = 3
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr["enum"]("EnvelopeType", {
-	    envelopeTypeScp: 1,
-	    envelopeTypeTx: 2,
-	    envelopeTypeAuth: 3
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   typedef opaque UpgradeType<128>;
-	  //
-	  // ===========================================================================
-	  xdr.typedef("UpgradeType", xdr.varOpaque(128));
-
-	  // === xdr source ============================================================
-	  //
-	  //   union switch (int v)
-	  //       {
-	  //       case 0:
-	  //           void;
-	  //       }
-	  //
-	  // ===========================================================================
-	  xdr.union("StellarValueExt", {
-	    switchOn: xdr.int(),
-	    switchName: "v",
-	    switches: [[0, xdr["void"]()]],
-	    arms: {}
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct StellarValue
-	  //   {
-	  //       Hash txSetHash;   // transaction set to apply to previous ledger
-	  //       uint64 closeTime; // network close time
-	  //  
-	  //       // upgrades to apply to the previous ledger (usually empty)
-	  //       // this is a vector of encoded 'LedgerUpgrade' so that nodes can drop
-	  //       // unknown steps during consensus if needed.
-	  //       // see notes below on 'LedgerUpgrade' for more detail
-	  //       // max size is dictated by number of upgrade types (+ room for future)
-	  //       UpgradeType upgrades<6>;
-	  //  
-	  //       // reserved for future use
-	  //       union switch (int v)
-	  //       {
-	  //       case 0:
-	  //           void;
-	  //       }
-	  //       ext;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.struct("StellarValue", [["txSetHash", xdr.lookup("Hash")], ["closeTime", xdr.lookup("Uint64")], ["upgrades", xdr.varArray(xdr.lookup("UpgradeType"), 6)], ["ext", xdr.lookup("StellarValueExt")]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   union switch (int v)
-	  //       {
-	  //       case 0:
-	  //           void;
-	  //       }
-	  //
-	  // ===========================================================================
-	  xdr.union("LedgerHeaderExt", {
-	    switchOn: xdr.int(),
-	    switchName: "v",
-	    switches: [[0, xdr["void"]()]],
-	    arms: {}
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct LedgerHeader
-	  //   {
-	  //       uint32 ledgerVersion;    // the protocol version of the ledger
-	  //       Hash previousLedgerHash; // hash of the previous ledger header
-	  //       StellarValue scpValue;   // what consensus agreed to
-	  //       Hash txSetResultHash;    // the TransactionResultSet that led to this ledger
-	  //       Hash bucketListHash;     // hash of the ledger state
-	  //  
-	  //       uint32 ledgerSeq; // sequence number of this ledger
-	  //  
-	  //       int64 totalCoins; // total number of stroops in existence.
-	  //                         // 10,000,000 stroops in 1 XLM
-	  //  
-	  //       int64 feePool;       // fees burned since last inflation run
-	  //       uint32 inflationSeq; // inflation sequence number
-	  //  
-	  //       uint64 idPool; // last used global ID, used for generating objects
-	  //  
-	  //       uint32 baseFee;     // base fee per operation in stroops
-	  //       uint32 baseReserve; // account base reserve in stroops
-	  //  
-	  //       uint32 maxTxSetSize; // maximum size a transaction set can be
-	  //  
-	  //       Hash skipList[4]; // hashes of ledgers in the past. allows you to jump back
-	  //                         // in time without walking the chain back ledger by ledger
-	  //                         // each slot contains the oldest ledger that is mod of
-	  //                         // either 50  5000  50000 or 500000 depending on index
-	  //                         // skipList[0] mod(50), skipList[1] mod(5000), etc
-	  //  
-	  //       // reserved for future use
-	  //       union switch (int v)
-	  //       {
-	  //       case 0:
-	  //           void;
-	  //       }
-	  //       ext;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.struct("LedgerHeader", [["ledgerVersion", xdr.lookup("Uint32")], ["previousLedgerHash", xdr.lookup("Hash")], ["scpValue", xdr.lookup("StellarValue")], ["txSetResultHash", xdr.lookup("Hash")], ["bucketListHash", xdr.lookup("Hash")], ["ledgerSeq", xdr.lookup("Uint32")], ["totalCoins", xdr.lookup("Int64")], ["feePool", xdr.lookup("Int64")], ["inflationSeq", xdr.lookup("Uint32")], ["idPool", xdr.lookup("Uint64")], ["baseFee", xdr.lookup("Uint32")], ["baseReserve", xdr.lookup("Uint32")], ["maxTxSetSize", xdr.lookup("Uint32")], ["skipList", xdr.array(xdr.lookup("Hash"), 4)], ["ext", xdr.lookup("LedgerHeaderExt")]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   enum LedgerUpgradeType
-	  //   {
-	  //       LEDGER_UPGRADE_VERSION = 1,
-	  //       LEDGER_UPGRADE_BASE_FEE = 2,
-	  //       LEDGER_UPGRADE_MAX_TX_SET_SIZE = 3
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr["enum"]("LedgerUpgradeType", {
-	    ledgerUpgradeVersion: 1,
-	    ledgerUpgradeBaseFee: 2,
-	    ledgerUpgradeMaxTxSetSize: 3
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   union LedgerUpgrade switch (LedgerUpgradeType type)
-	  //   {
-	  //   case LEDGER_UPGRADE_VERSION:
-	  //       uint32 newLedgerVersion; // update ledgerVersion
-	  //   case LEDGER_UPGRADE_BASE_FEE:
-	  //       uint32 newBaseFee; // update baseFee
-	  //   case LEDGER_UPGRADE_MAX_TX_SET_SIZE:
-	  //       uint32 newMaxTxSetSize; // update maxTxSetSize
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.union("LedgerUpgrade", {
-	    switchOn: xdr.lookup("LedgerUpgradeType"),
-	    switchName: "type",
-	    switches: [["ledgerUpgradeVersion", "newLedgerVersion"], ["ledgerUpgradeBaseFee", "newBaseFee"], ["ledgerUpgradeMaxTxSetSize", "newMaxTxSetSize"]],
-	    arms: {
-	      newLedgerVersion: xdr.lookup("Uint32"),
-	      newBaseFee: xdr.lookup("Uint32"),
-	      newMaxTxSetSize: xdr.lookup("Uint32")
-	    }
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct
-	  //       {
-	  //           AccountID accountID;
-	  //       }
-	  //
-	  // ===========================================================================
-	  xdr.struct("LedgerKeyAccount", [["accountId", xdr.lookup("AccountId")]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct
-	  //       {
-	  //           AccountID accountID;
-	  //           Asset asset;
-	  //       }
-	  //
-	  // ===========================================================================
-	  xdr.struct("LedgerKeyTrustLine", [["accountId", xdr.lookup("AccountId")], ["asset", xdr.lookup("Asset")]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct
-	  //       {
-	  //           AccountID sellerID;
-	  //           uint64 offerID;
-	  //       }
-	  //
-	  // ===========================================================================
-	  xdr.struct("LedgerKeyOffer", [["sellerId", xdr.lookup("AccountId")], ["offerId", xdr.lookup("Uint64")]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct
-	  //       {
-	  //           AccountID accountID;
-	  //           string64 dataName;
-	  //       }
-	  //
-	  // ===========================================================================
-	  xdr.struct("LedgerKeyData", [["accountId", xdr.lookup("AccountId")], ["dataName", xdr.lookup("String64")]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   union LedgerKey switch (LedgerEntryType type)
-	  //   {
-	  //   case ACCOUNT:
-	  //       struct
-	  //       {
-	  //           AccountID accountID;
-	  //       } account;
-	  //  
-	  //   case TRUSTLINE:
-	  //       struct
-	  //       {
-	  //           AccountID accountID;
-	  //           Asset asset;
-	  //       } trustLine;
-	  //  
-	  //   case OFFER:
-	  //       struct
-	  //       {
-	  //           AccountID sellerID;
-	  //           uint64 offerID;
-	  //       } offer;
-	  //  
-	  //   case DATA:
-	  //       struct
-	  //       {
-	  //           AccountID accountID;
-	  //           string64 dataName;
-	  //       } data;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.union("LedgerKey", {
-	    switchOn: xdr.lookup("LedgerEntryType"),
-	    switchName: "type",
-	    switches: [["account", "account"], ["trustline", "trustLine"], ["offer", "offer"], ["datum", "data"]],
-	    arms: {
-	      account: xdr.lookup("LedgerKeyAccount"),
-	      trustLine: xdr.lookup("LedgerKeyTrustLine"),
-	      offer: xdr.lookup("LedgerKeyOffer"),
-	      data: xdr.lookup("LedgerKeyData")
-	    }
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   enum BucketEntryType
-	  //   {
-	  //       LIVEENTRY = 0,
-	  //       DEADENTRY = 1
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr["enum"]("BucketEntryType", {
-	    liveentry: 0,
-	    deadentry: 1
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   union BucketEntry switch (BucketEntryType type)
-	  //   {
-	  //   case LIVEENTRY:
-	  //       LedgerEntry liveEntry;
-	  //  
-	  //   case DEADENTRY:
-	  //       LedgerKey deadEntry;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.union("BucketEntry", {
-	    switchOn: xdr.lookup("BucketEntryType"),
-	    switchName: "type",
-	    switches: [["liveentry", "liveEntry"], ["deadentry", "deadEntry"]],
-	    arms: {
-	      liveEntry: xdr.lookup("LedgerEntry"),
-	      deadEntry: xdr.lookup("LedgerKey")
-	    }
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   const MAX_TX_PER_LEDGER = 5000;
-	  //
-	  // ===========================================================================
-	  xdr["const"]("MAX_TX_PER_LEDGER", 5000);
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct TransactionSet
-	  //   {
-	  //       Hash previousLedgerHash;
-	  //       TransactionEnvelope txs<MAX_TX_PER_LEDGER>;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.struct("TransactionSet", [["previousLedgerHash", xdr.lookup("Hash")], ["txes", xdr.varArray(xdr.lookup("TransactionEnvelope"), xdr.lookup("MAX_TX_PER_LEDGER"))]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct TransactionResultPair
-	  //   {
-	  //       Hash transactionHash;
-	  //       TransactionResult result; // result for the transaction
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.struct("TransactionResultPair", [["transactionHash", xdr.lookup("Hash")], ["result", xdr.lookup("TransactionResult")]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct TransactionResultSet
-	  //   {
-	  //       TransactionResultPair results<MAX_TX_PER_LEDGER>;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.struct("TransactionResultSet", [["results", xdr.varArray(xdr.lookup("TransactionResultPair"), xdr.lookup("MAX_TX_PER_LEDGER"))]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   union switch (int v)
-	  //       {
-	  //       case 0:
-	  //           void;
-	  //       }
-	  //
-	  // ===========================================================================
-	  xdr.union("TransactionHistoryEntryExt", {
-	    switchOn: xdr.int(),
-	    switchName: "v",
-	    switches: [[0, xdr["void"]()]],
-	    arms: {}
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct TransactionHistoryEntry
-	  //   {
-	  //       uint32 ledgerSeq;
-	  //       TransactionSet txSet;
-	  //  
-	  //       // reserved for future use
-	  //       union switch (int v)
-	  //       {
-	  //       case 0:
-	  //           void;
-	  //       }
-	  //       ext;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.struct("TransactionHistoryEntry", [["ledgerSeq", xdr.lookup("Uint32")], ["txSet", xdr.lookup("TransactionSet")], ["ext", xdr.lookup("TransactionHistoryEntryExt")]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   union switch (int v)
-	  //       {
-	  //       case 0:
-	  //           void;
-	  //       }
-	  //
-	  // ===========================================================================
-	  xdr.union("TransactionHistoryResultEntryExt", {
-	    switchOn: xdr.int(),
-	    switchName: "v",
-	    switches: [[0, xdr["void"]()]],
-	    arms: {}
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct TransactionHistoryResultEntry
-	  //   {
-	  //       uint32 ledgerSeq;
-	  //       TransactionResultSet txResultSet;
-	  //  
-	  //       // reserved for future use
-	  //       union switch (int v)
-	  //       {
-	  //       case 0:
-	  //           void;
-	  //       }
-	  //       ext;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.struct("TransactionHistoryResultEntry", [["ledgerSeq", xdr.lookup("Uint32")], ["txResultSet", xdr.lookup("TransactionResultSet")], ["ext", xdr.lookup("TransactionHistoryResultEntryExt")]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   union switch (int v)
-	  //       {
-	  //       case 0:
-	  //           void;
-	  //       }
-	  //
-	  // ===========================================================================
-	  xdr.union("LedgerHeaderHistoryEntryExt", {
-	    switchOn: xdr.int(),
-	    switchName: "v",
-	    switches: [[0, xdr["void"]()]],
-	    arms: {}
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct LedgerHeaderHistoryEntry
-	  //   {
-	  //       Hash hash;
-	  //       LedgerHeader header;
-	  //  
-	  //       // reserved for future use
-	  //       union switch (int v)
-	  //       {
-	  //       case 0:
-	  //           void;
-	  //       }
-	  //       ext;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.struct("LedgerHeaderHistoryEntry", [["hash", xdr.lookup("Hash")], ["header", xdr.lookup("LedgerHeader")], ["ext", xdr.lookup("LedgerHeaderHistoryEntryExt")]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct LedgerSCPMessages
-	  //   {
-	  //       uint32 ledgerSeq;
-	  //       SCPEnvelope messages<>;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.struct("LedgerScpMessages", [["ledgerSeq", xdr.lookup("Uint32")], ["messages", xdr.varArray(xdr.lookup("ScpEnvelope"), 2147483647)]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct SCPHistoryEntryV0
-	  //   {
-	  //       SCPQuorumSet quorumSets<>; // additional quorum sets used by ledgerMessages
-	  //       LedgerSCPMessages ledgerMessages;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.struct("ScpHistoryEntryV0", [["quorumSets", xdr.varArray(xdr.lookup("ScpQuorumSet"), 2147483647)], ["ledgerMessages", xdr.lookup("LedgerScpMessages")]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   union SCPHistoryEntry switch (int v)
-	  //   {
-	  //   case 0:
-	  //       SCPHistoryEntryV0 v0;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.union("ScpHistoryEntry", {
-	    switchOn: xdr.int(),
-	    switchName: "v",
-	    switches: [[0, "v0"]],
-	    arms: {
-	      v0: xdr.lookup("ScpHistoryEntryV0")
-	    }
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   enum LedgerEntryChangeType
-	  //   {
-	  //       LEDGER_ENTRY_CREATED = 0, // entry was added to the ledger
-	  //       LEDGER_ENTRY_UPDATED = 1, // entry was modified in the ledger
-	  //       LEDGER_ENTRY_REMOVED = 2, // entry was removed from the ledger
-	  //       LEDGER_ENTRY_STATE = 3    // value of the entry
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr["enum"]("LedgerEntryChangeType", {
-	    ledgerEntryCreated: 0,
-	    ledgerEntryUpdated: 1,
-	    ledgerEntryRemoved: 2,
-	    ledgerEntryState: 3
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   union LedgerEntryChange switch (LedgerEntryChangeType type)
-	  //   {
-	  //   case LEDGER_ENTRY_CREATED:
-	  //       LedgerEntry created;
-	  //   case LEDGER_ENTRY_UPDATED:
-	  //       LedgerEntry updated;
-	  //   case LEDGER_ENTRY_REMOVED:
-	  //       LedgerKey removed;
-	  //   case LEDGER_ENTRY_STATE:
-	  //       LedgerEntry state;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.union("LedgerEntryChange", {
-	    switchOn: xdr.lookup("LedgerEntryChangeType"),
-	    switchName: "type",
-	    switches: [["ledgerEntryCreated", "created"], ["ledgerEntryUpdated", "updated"], ["ledgerEntryRemoved", "removed"], ["ledgerEntryState", "state"]],
-	    arms: {
-	      created: xdr.lookup("LedgerEntry"),
-	      updated: xdr.lookup("LedgerEntry"),
-	      removed: xdr.lookup("LedgerKey"),
-	      state: xdr.lookup("LedgerEntry")
-	    }
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   typedef LedgerEntryChange LedgerEntryChanges<>;
-	  //
-	  // ===========================================================================
-	  xdr.typedef("LedgerEntryChanges", xdr.varArray(xdr.lookup("LedgerEntryChange"), 2147483647));
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct OperationMeta
-	  //   {
-	  //       LedgerEntryChanges changes;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.struct("OperationMeta", [["changes", xdr.lookup("LedgerEntryChanges")]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   union TransactionMeta switch (int v)
-	  //   {
-	  //   case 0:
-	  //       OperationMeta operations<>;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.union("TransactionMeta", {
-	    switchOn: xdr.int(),
-	    switchName: "v",
-	    switches: [[0, "operations"]],
-	    arms: {
-	      operations: xdr.varArray(xdr.lookup("OperationMeta"), 2147483647)
-	    }
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   enum ErrorCode
-	  //   {
-	  //       ERR_MISC = 0, // Unspecific error
-	  //       ERR_DATA = 1, // Malformed data
-	  //       ERR_CONF = 2, // Misconfiguration error
-	  //       ERR_AUTH = 3, // Authentication failure
-	  //       ERR_LOAD = 4  // System overloaded
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr["enum"]("ErrorCode", {
-	    errMisc: 0,
-	    errDatum: 1,
-	    errConf: 2,
-	    errAuth: 3,
-	    errLoad: 4
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct Error
-	  //   {
-	  //       ErrorCode code;
-	  //       string msg<100>;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.struct("Error", [["code", xdr.lookup("ErrorCode")], ["msg", xdr.string(100)]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct AuthCert
-	  //   {
-	  //       Curve25519Public pubkey;
-	  //       uint64 expiration;
-	  //       Signature sig;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.struct("AuthCert", [["pubkey", xdr.lookup("Curve25519Public")], ["expiration", xdr.lookup("Uint64")], ["sig", xdr.lookup("Signature")]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct Hello
-	  //   {
-	  //       uint32 ledgerVersion;
-	  //       uint32 overlayVersion;
-	  //       uint32 overlayMinVersion;
-	  //       Hash networkID;
-	  //       string versionStr<100>;
-	  //       int listeningPort;
-	  //       NodeID peerID;
-	  //       AuthCert cert;
-	  //       uint256 nonce;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.struct("Hello", [["ledgerVersion", xdr.lookup("Uint32")], ["overlayVersion", xdr.lookup("Uint32")], ["overlayMinVersion", xdr.lookup("Uint32")], ["networkId", xdr.lookup("Hash")], ["versionStr", xdr.string(100)], ["listeningPort", xdr.int()], ["peerId", xdr.lookup("NodeId")], ["cert", xdr.lookup("AuthCert")], ["nonce", xdr.lookup("Uint256")]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct Auth
-	  //   {
-	  //       // Empty message, just to confirm
-	  //       // establishment of MAC keys.
-	  //       int unused;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.struct("Auth", [["unused", xdr.int()]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   enum IPAddrType
-	  //   {
-	  //       IPv4 = 0,
-	  //       IPv6 = 1
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr["enum"]("IpAddrType", {
-	    iPv4: 0,
-	    iPv6: 1
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   union switch (IPAddrType type)
-	  //       {
-	  //       case IPv4:
-	  //           opaque ipv4[4];
-	  //       case IPv6:
-	  //           opaque ipv6[16];
-	  //       }
-	  //
-	  // ===========================================================================
-	  xdr.union("PeerAddressIp", {
-	    switchOn: xdr.lookup("IpAddrType"),
-	    switchName: "type",
-	    switches: [["iPv4", "ipv4"], ["iPv6", "ipv6"]],
-	    arms: {
-	      ipv4: xdr.opaque(4),
-	      ipv6: xdr.opaque(16)
-	    }
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct PeerAddress
-	  //   {
-	  //       union switch (IPAddrType type)
-	  //       {
-	  //       case IPv4:
-	  //           opaque ipv4[4];
-	  //       case IPv6:
-	  //           opaque ipv6[16];
-	  //       }
-	  //       ip;
-	  //       uint32 port;
-	  //       uint32 numFailures;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.struct("PeerAddress", [["ip", xdr.lookup("PeerAddressIp")], ["port", xdr.lookup("Uint32")], ["numFailures", xdr.lookup("Uint32")]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   enum MessageType
-	  //   {
-	  //       ERROR_MSG = 0,
-	  //       AUTH = 2,
-	  //       DONT_HAVE = 3,
-	  //  
-	  //       GET_PEERS = 4, // gets a list of peers this guy knows about
-	  //       PEERS = 5,
-	  //  
-	  //       GET_TX_SET = 6, // gets a particular txset by hash
-	  //       TX_SET = 7,
-	  //  
-	  //       TRANSACTION = 8, // pass on a tx you have heard about
-	  //  
-	  //       // SCP
-	  //       GET_SCP_QUORUMSET = 9,
-	  //       SCP_QUORUMSET = 10,
-	  //       SCP_MESSAGE = 11,
-	  //       GET_SCP_STATE = 12,
-	  //  
-	  //       // new messages
-	  //       HELLO = 13
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr["enum"]("MessageType", {
-	    errorMsg: 0,
-	    auth: 2,
-	    dontHave: 3,
-	    getPeer: 4,
-	    peer: 5,
-	    getTxSet: 6,
-	    txSet: 7,
-	    transaction: 8,
-	    getScpQuorumset: 9,
-	    scpQuorumset: 10,
-	    scpMessage: 11,
-	    getScpState: 12,
-	    hello: 13
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct DontHave
-	  //   {
-	  //       MessageType type;
-	  //       uint256 reqHash;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.struct("DontHave", [["type", xdr.lookup("MessageType")], ["reqHash", xdr.lookup("Uint256")]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   union StellarMessage switch (MessageType type)
-	  //   {
-	  //   case ERROR_MSG:
-	  //       Error error;
-	  //   case HELLO:
-	  //       Hello hello;
-	  //   case AUTH:
-	  //       Auth auth;
-	  //   case DONT_HAVE:
-	  //       DontHave dontHave;
-	  //   case GET_PEERS:
-	  //       void;
-	  //   case PEERS:
-	  //       PeerAddress peers<>;
-	  //  
-	  //   case GET_TX_SET:
-	  //       uint256 txSetHash;
-	  //   case TX_SET:
-	  //       TransactionSet txSet;
-	  //  
-	  //   case TRANSACTION:
-	  //       TransactionEnvelope transaction;
-	  //  
-	  //   // SCP
-	  //   case GET_SCP_QUORUMSET:
-	  //       uint256 qSetHash;
-	  //   case SCP_QUORUMSET:
-	  //       SCPQuorumSet qSet;
-	  //   case SCP_MESSAGE:
-	  //       SCPEnvelope envelope;
-	  //   case GET_SCP_STATE:
-	  //       uint32 getSCPLedgerSeq; // ledger seq requested ; if 0, requests the latest
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.union("StellarMessage", {
-	    switchOn: xdr.lookup("MessageType"),
-	    switchName: "type",
-	    switches: [["errorMsg", "error"], ["hello", "hello"], ["auth", "auth"], ["dontHave", "dontHave"], ["getPeer", xdr["void"]()], ["peer", "peers"], ["getTxSet", "txSetHash"], ["txSet", "txSet"], ["transaction", "transaction"], ["getScpQuorumset", "qSetHash"], ["scpQuorumset", "qSet"], ["scpMessage", "envelope"], ["getScpState", "getScpLedgerSeq"]],
-	    arms: {
-	      error: xdr.lookup("Error"),
-	      hello: xdr.lookup("Hello"),
-	      auth: xdr.lookup("Auth"),
-	      dontHave: xdr.lookup("DontHave"),
-	      peers: xdr.varArray(xdr.lookup("PeerAddress"), 2147483647),
-	      txSetHash: xdr.lookup("Uint256"),
-	      txSet: xdr.lookup("TransactionSet"),
-	      transaction: xdr.lookup("TransactionEnvelope"),
-	      qSetHash: xdr.lookup("Uint256"),
-	      qSet: xdr.lookup("ScpQuorumSet"),
-	      envelope: xdr.lookup("ScpEnvelope"),
-	      getScpLedgerSeq: xdr.lookup("Uint32")
-	    }
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct
-	  //   {
-	  //      uint64 sequence;
-	  //      StellarMessage message;
-	  //      HmacSha256Mac mac;
-	  //       }
-	  //
-	  // ===========================================================================
-	  xdr.struct("AuthenticatedMessageV0", [["sequence", xdr.lookup("Uint64")], ["message", xdr.lookup("StellarMessage")], ["mac", xdr.lookup("HmacSha256Mac")]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   union AuthenticatedMessage switch (uint32 v)
-	  //   {
-	  //   case 0:
-	  //       struct
-	  //   {
-	  //      uint64 sequence;
-	  //      StellarMessage message;
-	  //      HmacSha256Mac mac;
-	  //       } v0;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.union("AuthenticatedMessage", {
-	    switchOn: xdr.lookup("Uint32"),
-	    switchName: "v",
-	    switches: [[0, "v0"]],
-	    arms: {
-	      v0: xdr.lookup("AuthenticatedMessageV0")
-	    }
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct DecoratedSignature
-	  //   {
-	  //       SignatureHint hint;  // last 4 bytes of the public key, used as a hint
-	  //       Signature signature; // actual signature
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.struct("DecoratedSignature", [["hint", xdr.lookup("SignatureHint")], ["signature", xdr.lookup("Signature")]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   enum OperationType
-	  //   {
-	  //       CREATE_ACCOUNT = 0,
-	  //       PAYMENT = 1,
-	  //       PATH_PAYMENT = 2,
-	  //       MANAGE_OFFER = 3,
-	  //       CREATE_PASSIVE_OFFER = 4,
-	  //       SET_OPTIONS = 5,
-	  //       CHANGE_TRUST = 6,
-	  //       ALLOW_TRUST = 7,
-	  //       ACCOUNT_MERGE = 8,
-	  //       INFLATION = 9,
-	  //       MANAGE_DATA = 10
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr["enum"]("OperationType", {
-	    createAccount: 0,
-	    payment: 1,
-	    pathPayment: 2,
-	    manageOffer: 3,
-	    createPassiveOffer: 4,
-	    setOption: 5,
-	    changeTrust: 6,
-	    allowTrust: 7,
-	    accountMerge: 8,
-	    inflation: 9,
-	    manageDatum: 10
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct CreateAccountOp
-	  //   {
-	  //       AccountID destination; // account to create
-	  //       int64 startingBalance; // amount they end up with
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.struct("CreateAccountOp", [["destination", xdr.lookup("AccountId")], ["startingBalance", xdr.lookup("Int64")]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct PaymentOp
-	  //   {
-	  //       AccountID destination; // recipient of the payment
-	  //       Asset asset;           // what they end up with
-	  //       int64 amount;          // amount they end up with
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.struct("PaymentOp", [["destination", xdr.lookup("AccountId")], ["asset", xdr.lookup("Asset")], ["amount", xdr.lookup("Int64")]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct PathPaymentOp
-	  //   {
-	  //       Asset sendAsset; // asset we pay with
-	  //       int64 sendMax;   // the maximum amount of sendAsset to
-	  //                        // send (excluding fees).
-	  //                        // The operation will fail if can't be met
-	  //  
-	  //       AccountID destination; // recipient of the payment
-	  //       Asset destAsset;       // what they end up with
-	  //       int64 destAmount;      // amount they end up with
-	  //  
-	  //       Asset path<5>; // additional hops it must go through to get there
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.struct("PathPaymentOp", [["sendAsset", xdr.lookup("Asset")], ["sendMax", xdr.lookup("Int64")], ["destination", xdr.lookup("AccountId")], ["destAsset", xdr.lookup("Asset")], ["destAmount", xdr.lookup("Int64")], ["path", xdr.varArray(xdr.lookup("Asset"), 5)]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct ManageOfferOp
-	  //   {
-	  //       Asset selling;
-	  //       Asset buying;
-	  //       int64 amount; // amount being sold. if set to 0, delete the offer
-	  //       Price price;  // price of thing being sold in terms of what you are buying
-	  //  
-	  //       // 0=create a new offer, otherwise edit an existing offer
-	  //       uint64 offerID;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.struct("ManageOfferOp", [["selling", xdr.lookup("Asset")], ["buying", xdr.lookup("Asset")], ["amount", xdr.lookup("Int64")], ["price", xdr.lookup("Price")], ["offerId", xdr.lookup("Uint64")]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct CreatePassiveOfferOp
-	  //   {
-	  //       Asset selling; // A
-	  //       Asset buying;  // B
-	  //       int64 amount;  // amount taker gets. if set to 0, delete the offer
-	  //       Price price;   // cost of A in terms of B
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.struct("CreatePassiveOfferOp", [["selling", xdr.lookup("Asset")], ["buying", xdr.lookup("Asset")], ["amount", xdr.lookup("Int64")], ["price", xdr.lookup("Price")]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct SetOptionsOp
-	  //   {
-	  //       AccountID* inflationDest; // sets the inflation destination
-	  //  
-	  //       uint32* clearFlags; // which flags to clear
-	  //       uint32* setFlags;   // which flags to set
-	  //  
-	  //       // account threshold manipulation
-	  //       uint32* masterWeight; // weight of the master account
-	  //       uint32* lowThreshold;
-	  //       uint32* medThreshold;
-	  //       uint32* highThreshold;
-	  //  
-	  //       string32* homeDomain; // sets the home domain
-	  //  
-	  //       // Add, update or remove a signer for the account
-	  //       // signer is deleted if the weight is 0
-	  //       Signer* signer;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.struct("SetOptionsOp", [["inflationDest", xdr.option(xdr.lookup("AccountId"))], ["clearFlags", xdr.option(xdr.lookup("Uint32"))], ["setFlags", xdr.option(xdr.lookup("Uint32"))], ["masterWeight", xdr.option(xdr.lookup("Uint32"))], ["lowThreshold", xdr.option(xdr.lookup("Uint32"))], ["medThreshold", xdr.option(xdr.lookup("Uint32"))], ["highThreshold", xdr.option(xdr.lookup("Uint32"))], ["homeDomain", xdr.option(xdr.lookup("String32"))], ["signer", xdr.option(xdr.lookup("Signer"))]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct ChangeTrustOp
-	  //   {
-	  //       Asset line;
-	  //  
-	  //       // if limit is set to 0, deletes the trust line
-	  //       int64 limit;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.struct("ChangeTrustOp", [["line", xdr.lookup("Asset")], ["limit", xdr.lookup("Int64")]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   union switch (AssetType type)
-	  //       {
-	  //       // ASSET_TYPE_NATIVE is not allowed
-	  //       case ASSET_TYPE_CREDIT_ALPHANUM4:
-	  //           opaque assetCode4[4];
-	  //  
-	  //       case ASSET_TYPE_CREDIT_ALPHANUM12:
-	  //           opaque assetCode12[12];
-	  //  
-	  //           // add other asset types here in the future
-	  //       }
-	  //
-	  // ===========================================================================
-	  xdr.union("AllowTrustOpAsset", {
-	    switchOn: xdr.lookup("AssetType"),
-	    switchName: "type",
-	    switches: [["assetTypeCreditAlphanum4", "assetCode4"], ["assetTypeCreditAlphanum12", "assetCode12"]],
-	    arms: {
-	      assetCode4: xdr.opaque(4),
-	      assetCode12: xdr.opaque(12)
-	    }
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct AllowTrustOp
-	  //   {
-	  //       AccountID trustor;
-	  //       union switch (AssetType type)
-	  //       {
-	  //       // ASSET_TYPE_NATIVE is not allowed
-	  //       case ASSET_TYPE_CREDIT_ALPHANUM4:
-	  //           opaque assetCode4[4];
-	  //  
-	  //       case ASSET_TYPE_CREDIT_ALPHANUM12:
-	  //           opaque assetCode12[12];
-	  //  
-	  //           // add other asset types here in the future
-	  //       }
-	  //       asset;
-	  //  
-	  //       bool authorize;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.struct("AllowTrustOp", [["trustor", xdr.lookup("AccountId")], ["asset", xdr.lookup("AllowTrustOpAsset")], ["authorize", xdr.bool()]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct ManageDataOp
-	  //   {
-	  //       string64 dataName;
-	  //       DataValue* dataValue;   // set to null to clear
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.struct("ManageDataOp", [["dataName", xdr.lookup("String64")], ["dataValue", xdr.option(xdr.lookup("DataValue"))]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   union switch (OperationType type)
-	  //       {
-	  //       case CREATE_ACCOUNT:
-	  //           CreateAccountOp createAccountOp;
-	  //       case PAYMENT:
-	  //           PaymentOp paymentOp;
-	  //       case PATH_PAYMENT:
-	  //           PathPaymentOp pathPaymentOp;
-	  //       case MANAGE_OFFER:
-	  //           ManageOfferOp manageOfferOp;
-	  //       case CREATE_PASSIVE_OFFER:
-	  //           CreatePassiveOfferOp createPassiveOfferOp;
-	  //       case SET_OPTIONS:
-	  //           SetOptionsOp setOptionsOp;
-	  //       case CHANGE_TRUST:
-	  //           ChangeTrustOp changeTrustOp;
-	  //       case ALLOW_TRUST:
-	  //           AllowTrustOp allowTrustOp;
-	  //       case ACCOUNT_MERGE:
-	  //           AccountID destination;
-	  //       case INFLATION:
-	  //           void;
-	  //       case MANAGE_DATA:
-	  //           ManageDataOp manageDataOp;
-	  //       }
-	  //
-	  // ===========================================================================
-	  xdr.union("OperationBody", {
-	    switchOn: xdr.lookup("OperationType"),
-	    switchName: "type",
-	    switches: [["createAccount", "createAccountOp"], ["payment", "paymentOp"], ["pathPayment", "pathPaymentOp"], ["manageOffer", "manageOfferOp"], ["createPassiveOffer", "createPassiveOfferOp"], ["setOption", "setOptionsOp"], ["changeTrust", "changeTrustOp"], ["allowTrust", "allowTrustOp"], ["accountMerge", "destination"], ["inflation", xdr["void"]()], ["manageDatum", "manageDataOp"]],
-	    arms: {
-	      createAccountOp: xdr.lookup("CreateAccountOp"),
-	      paymentOp: xdr.lookup("PaymentOp"),
-	      pathPaymentOp: xdr.lookup("PathPaymentOp"),
-	      manageOfferOp: xdr.lookup("ManageOfferOp"),
-	      createPassiveOfferOp: xdr.lookup("CreatePassiveOfferOp"),
-	      setOptionsOp: xdr.lookup("SetOptionsOp"),
-	      changeTrustOp: xdr.lookup("ChangeTrustOp"),
-	      allowTrustOp: xdr.lookup("AllowTrustOp"),
-	      destination: xdr.lookup("AccountId"),
-	      manageDataOp: xdr.lookup("ManageDataOp")
-	    }
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct Operation
-	  //   {
-	  //       // sourceAccount is the account used to run the operation
-	  //       // if not set, the runtime defaults to "sourceAccount" specified at
-	  //       // the transaction level
-	  //       AccountID* sourceAccount;
-	  //  
-	  //       union switch (OperationType type)
-	  //       {
-	  //       case CREATE_ACCOUNT:
-	  //           CreateAccountOp createAccountOp;
-	  //       case PAYMENT:
-	  //           PaymentOp paymentOp;
-	  //       case PATH_PAYMENT:
-	  //           PathPaymentOp pathPaymentOp;
-	  //       case MANAGE_OFFER:
-	  //           ManageOfferOp manageOfferOp;
-	  //       case CREATE_PASSIVE_OFFER:
-	  //           CreatePassiveOfferOp createPassiveOfferOp;
-	  //       case SET_OPTIONS:
-	  //           SetOptionsOp setOptionsOp;
-	  //       case CHANGE_TRUST:
-	  //           ChangeTrustOp changeTrustOp;
-	  //       case ALLOW_TRUST:
-	  //           AllowTrustOp allowTrustOp;
-	  //       case ACCOUNT_MERGE:
-	  //           AccountID destination;
-	  //       case INFLATION:
-	  //           void;
-	  //       case MANAGE_DATA:
-	  //           ManageDataOp manageDataOp;
-	  //       }
-	  //       body;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.struct("Operation", [["sourceAccount", xdr.option(xdr.lookup("AccountId"))], ["body", xdr.lookup("OperationBody")]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   enum MemoType
-	  //   {
-	  //       MEMO_NONE = 0,
-	  //       MEMO_TEXT = 1,
-	  //       MEMO_ID = 2,
-	  //       MEMO_HASH = 3,
-	  //       MEMO_RETURN = 4
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr["enum"]("MemoType", {
-	    memoNone: 0,
-	    memoText: 1,
-	    memoId: 2,
-	    memoHash: 3,
-	    memoReturn: 4
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   union Memo switch (MemoType type)
-	  //   {
-	  //   case MEMO_NONE:
-	  //       void;
-	  //   case MEMO_TEXT:
-	  //       string text<28>;
-	  //   case MEMO_ID:
-	  //       uint64 id;
-	  //   case MEMO_HASH:
-	  //       Hash hash; // the hash of what to pull from the content server
-	  //   case MEMO_RETURN:
-	  //       Hash retHash; // the hash of the tx you are rejecting
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.union("Memo", {
-	    switchOn: xdr.lookup("MemoType"),
-	    switchName: "type",
-	    switches: [["memoNone", xdr["void"]()], ["memoText", "text"], ["memoId", "id"], ["memoHash", "hash"], ["memoReturn", "retHash"]],
-	    arms: {
-	      text: xdr.string(28),
-	      id: xdr.lookup("Uint64"),
-	      hash: xdr.lookup("Hash"),
-	      retHash: xdr.lookup("Hash")
-	    }
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct TimeBounds
-	  //   {
-	  //       uint64 minTime;
-	  //       uint64 maxTime;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.struct("TimeBounds", [["minTime", xdr.lookup("Uint64")], ["maxTime", xdr.lookup("Uint64")]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   union switch (int v)
-	  //       {
-	  //       case 0:
-	  //           void;
-	  //       }
-	  //
-	  // ===========================================================================
-	  xdr.union("TransactionExt", {
-	    switchOn: xdr.int(),
-	    switchName: "v",
-	    switches: [[0, xdr["void"]()]],
-	    arms: {}
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct Transaction
-	  //   {
-	  //       // account used to run the transaction
-	  //       AccountID sourceAccount;
-	  //  
-	  //       // the fee the sourceAccount will pay
-	  //       uint32 fee;
-	  //  
-	  //       // sequence number to consume in the account
-	  //       SequenceNumber seqNum;
-	  //  
-	  //       // validity range (inclusive) for the last ledger close time
-	  //       TimeBounds* timeBounds;
-	  //  
-	  //       Memo memo;
-	  //  
-	  //       Operation operations<100>;
-	  //  
-	  //       // reserved for future use
-	  //       union switch (int v)
-	  //       {
-	  //       case 0:
-	  //           void;
-	  //       }
-	  //       ext;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.struct("Transaction", [["sourceAccount", xdr.lookup("AccountId")], ["fee", xdr.lookup("Uint32")], ["seqNum", xdr.lookup("SequenceNumber")], ["timeBounds", xdr.option(xdr.lookup("TimeBounds"))], ["memo", xdr.lookup("Memo")], ["operations", xdr.varArray(xdr.lookup("Operation"), 100)], ["ext", xdr.lookup("TransactionExt")]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct TransactionEnvelope
-	  //   {
-	  //       Transaction tx;
-	  //       DecoratedSignature signatures<20>;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.struct("TransactionEnvelope", [["tx", xdr.lookup("Transaction")], ["signatures", xdr.varArray(xdr.lookup("DecoratedSignature"), 20)]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct ClaimOfferAtom
-	  //   {
-	  //       // emitted to identify the offer
-	  //       AccountID sellerID; // Account that owns the offer
-	  //       uint64 offerID;
-	  //  
-	  //       // amount and asset taken from the owner
-	  //       Asset assetSold;
-	  //       int64 amountSold;
-	  //  
-	  //       // amount and asset sent to the owner
-	  //       Asset assetBought;
-	  //       int64 amountBought;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.struct("ClaimOfferAtom", [["sellerId", xdr.lookup("AccountId")], ["offerId", xdr.lookup("Uint64")], ["assetSold", xdr.lookup("Asset")], ["amountSold", xdr.lookup("Int64")], ["assetBought", xdr.lookup("Asset")], ["amountBought", xdr.lookup("Int64")]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   enum CreateAccountResultCode
-	  //   {
-	  //       // codes considered as "success" for the operation
-	  //       CREATE_ACCOUNT_SUCCESS = 0, // account was created
-	  //  
-	  //       // codes considered as "failure" for the operation
-	  //       CREATE_ACCOUNT_MALFORMED = -1,   // invalid destination
-	  //       CREATE_ACCOUNT_UNDERFUNDED = -2, // not enough funds in source account
-	  //       CREATE_ACCOUNT_LOW_RESERVE =
-	  //           -3, // would create an account below the min reserve
-	  //       CREATE_ACCOUNT_ALREADY_EXIST = -4 // account already exists
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr["enum"]("CreateAccountResultCode", {
-	    createAccountSuccess: 0,
-	    createAccountMalformed: -1,
-	    createAccountUnderfunded: -2,
-	    createAccountLowReserve: -3,
-	    createAccountAlreadyExist: -4
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   union CreateAccountResult switch (CreateAccountResultCode code)
-	  //   {
-	  //   case CREATE_ACCOUNT_SUCCESS:
-	  //       void;
-	  //   default:
-	  //       void;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.union("CreateAccountResult", {
-	    switchOn: xdr.lookup("CreateAccountResultCode"),
-	    switchName: "code",
-	    switches: [["createAccountSuccess", xdr["void"]()]],
-	    arms: {},
-	    defaultArm: xdr["void"]()
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   enum PaymentResultCode
-	  //   {
-	  //       // codes considered as "success" for the operation
-	  //       PAYMENT_SUCCESS = 0, // payment successfuly completed
-	  //  
-	  //       // codes considered as "failure" for the operation
-	  //       PAYMENT_MALFORMED = -1,          // bad input
-	  //       PAYMENT_UNDERFUNDED = -2,        // not enough funds in source account
-	  //       PAYMENT_SRC_NO_TRUST = -3,       // no trust line on source account
-	  //       PAYMENT_SRC_NOT_AUTHORIZED = -4, // source not authorized to transfer
-	  //       PAYMENT_NO_DESTINATION = -5,     // destination account does not exist
-	  //       PAYMENT_NO_TRUST = -6,       // destination missing a trust line for asset
-	  //       PAYMENT_NOT_AUTHORIZED = -7, // destination not authorized to hold asset
-	  //       PAYMENT_LINE_FULL = -8,      // destination would go above their limit
-	  //       PAYMENT_NO_ISSUER = -9       // missing issuer on asset
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr["enum"]("PaymentResultCode", {
-	    paymentSuccess: 0,
-	    paymentMalformed: -1,
-	    paymentUnderfunded: -2,
-	    paymentSrcNoTrust: -3,
-	    paymentSrcNotAuthorized: -4,
-	    paymentNoDestination: -5,
-	    paymentNoTrust: -6,
-	    paymentNotAuthorized: -7,
-	    paymentLineFull: -8,
-	    paymentNoIssuer: -9
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   union PaymentResult switch (PaymentResultCode code)
-	  //   {
-	  //   case PAYMENT_SUCCESS:
-	  //       void;
-	  //   default:
-	  //       void;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.union("PaymentResult", {
-	    switchOn: xdr.lookup("PaymentResultCode"),
-	    switchName: "code",
-	    switches: [["paymentSuccess", xdr["void"]()]],
-	    arms: {},
-	    defaultArm: xdr["void"]()
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   enum PathPaymentResultCode
-	  //   {
-	  //       // codes considered as "success" for the operation
-	  //       PATH_PAYMENT_SUCCESS = 0, // success
-	  //  
-	  //       // codes considered as "failure" for the operation
-	  //       PATH_PAYMENT_MALFORMED = -1,          // bad input
-	  //       PATH_PAYMENT_UNDERFUNDED = -2,        // not enough funds in source account
-	  //       PATH_PAYMENT_SRC_NO_TRUST = -3,       // no trust line on source account
-	  //       PATH_PAYMENT_SRC_NOT_AUTHORIZED = -4, // source not authorized to transfer
-	  //       PATH_PAYMENT_NO_DESTINATION = -5,     // destination account does not exist
-	  //       PATH_PAYMENT_NO_TRUST = -6,           // dest missing a trust line for asset
-	  //       PATH_PAYMENT_NOT_AUTHORIZED = -7,     // dest not authorized to hold asset
-	  //       PATH_PAYMENT_LINE_FULL = -8,          // dest would go above their limit
-	  //       PATH_PAYMENT_NO_ISSUER = -9,          // missing issuer on one asset
-	  //       PATH_PAYMENT_TOO_FEW_OFFERS = -10,    // not enough offers to satisfy path
-	  //       PATH_PAYMENT_OFFER_CROSS_SELF = -11,  // would cross one of its own offers
-	  //       PATH_PAYMENT_OVER_SENDMAX = -12       // could not satisfy sendmax
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr["enum"]("PathPaymentResultCode", {
-	    pathPaymentSuccess: 0,
-	    pathPaymentMalformed: -1,
-	    pathPaymentUnderfunded: -2,
-	    pathPaymentSrcNoTrust: -3,
-	    pathPaymentSrcNotAuthorized: -4,
-	    pathPaymentNoDestination: -5,
-	    pathPaymentNoTrust: -6,
-	    pathPaymentNotAuthorized: -7,
-	    pathPaymentLineFull: -8,
-	    pathPaymentNoIssuer: -9,
-	    pathPaymentTooFewOffer: -10,
-	    pathPaymentOfferCrossSelf: -11,
-	    pathPaymentOverSendmax: -12
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct SimplePaymentResult
-	  //   {
-	  //       AccountID destination;
-	  //       Asset asset;
-	  //       int64 amount;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.struct("SimplePaymentResult", [["destination", xdr.lookup("AccountId")], ["asset", xdr.lookup("Asset")], ["amount", xdr.lookup("Int64")]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct
-	  //       {
-	  //           ClaimOfferAtom offers<>;
-	  //           SimplePaymentResult last;
-	  //       }
-	  //
-	  // ===========================================================================
-	  xdr.struct("PathPaymentResultSuccess", [["offers", xdr.varArray(xdr.lookup("ClaimOfferAtom"), 2147483647)], ["last", xdr.lookup("SimplePaymentResult")]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   union PathPaymentResult switch (PathPaymentResultCode code)
-	  //   {
-	  //   case PATH_PAYMENT_SUCCESS:
-	  //       struct
-	  //       {
-	  //           ClaimOfferAtom offers<>;
-	  //           SimplePaymentResult last;
-	  //       } success;
-	  //   case PATH_PAYMENT_NO_ISSUER:
-	  //       Asset noIssuer; // the asset that caused the error
-	  //   default:
-	  //       void;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.union("PathPaymentResult", {
-	    switchOn: xdr.lookup("PathPaymentResultCode"),
-	    switchName: "code",
-	    switches: [["pathPaymentSuccess", "success"], ["pathPaymentNoIssuer", "noIssuer"]],
-	    arms: {
-	      success: xdr.lookup("PathPaymentResultSuccess"),
-	      noIssuer: xdr.lookup("Asset")
-	    },
-	    defaultArm: xdr["void"]()
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   enum ManageOfferResultCode
-	  //   {
-	  //       // codes considered as "success" for the operation
-	  //       MANAGE_OFFER_SUCCESS = 0,
-	  //  
-	  //       // codes considered as "failure" for the operation
-	  //       MANAGE_OFFER_MALFORMED = -1,     // generated offer would be invalid
-	  //       MANAGE_OFFER_SELL_NO_TRUST = -2, // no trust line for what we're selling
-	  //       MANAGE_OFFER_BUY_NO_TRUST = -3,  // no trust line for what we're buying
-	  //       MANAGE_OFFER_SELL_NOT_AUTHORIZED = -4, // not authorized to sell
-	  //       MANAGE_OFFER_BUY_NOT_AUTHORIZED = -5,  // not authorized to buy
-	  //       MANAGE_OFFER_LINE_FULL = -6,      // can't receive more of what it's buying
-	  //       MANAGE_OFFER_UNDERFUNDED = -7,    // doesn't hold what it's trying to sell
-	  //       MANAGE_OFFER_CROSS_SELF = -8,     // would cross an offer from the same user
-	  //       MANAGE_OFFER_SELL_NO_ISSUER = -9, // no issuer for what we're selling
-	  //       MANAGE_OFFER_BUY_NO_ISSUER = -10, // no issuer for what we're buying
-	  //  
-	  //       // update errors
-	  //       MANAGE_OFFER_NOT_FOUND = -11, // offerID does not match an existing offer
-	  //  
-	  //       MANAGE_OFFER_LOW_RESERVE = -12 // not enough funds to create a new Offer
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr["enum"]("ManageOfferResultCode", {
-	    manageOfferSuccess: 0,
-	    manageOfferMalformed: -1,
-	    manageOfferSellNoTrust: -2,
-	    manageOfferBuyNoTrust: -3,
-	    manageOfferSellNotAuthorized: -4,
-	    manageOfferBuyNotAuthorized: -5,
-	    manageOfferLineFull: -6,
-	    manageOfferUnderfunded: -7,
-	    manageOfferCrossSelf: -8,
-	    manageOfferSellNoIssuer: -9,
-	    manageOfferBuyNoIssuer: -10,
-	    manageOfferNotFound: -11,
-	    manageOfferLowReserve: -12
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   enum ManageOfferEffect
-	  //   {
-	  //       MANAGE_OFFER_CREATED = 0,
-	  //       MANAGE_OFFER_UPDATED = 1,
-	  //       MANAGE_OFFER_DELETED = 2
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr["enum"]("ManageOfferEffect", {
-	    manageOfferCreated: 0,
-	    manageOfferUpdated: 1,
-	    manageOfferDeleted: 2
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   union switch (ManageOfferEffect effect)
-	  //       {
-	  //       case MANAGE_OFFER_CREATED:
-	  //       case MANAGE_OFFER_UPDATED:
-	  //           OfferEntry offer;
-	  //       default:
-	  //           void;
-	  //       }
-	  //
-	  // ===========================================================================
-	  xdr.union("ManageOfferSuccessResultOffer", {
-	    switchOn: xdr.lookup("ManageOfferEffect"),
-	    switchName: "effect",
-	    switches: [["manageOfferCreated", "offer"], ["manageOfferUpdated", "offer"]],
-	    arms: {
-	      offer: xdr.lookup("OfferEntry")
-	    },
-	    defaultArm: xdr["void"]()
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct ManageOfferSuccessResult
-	  //   {
-	  //       // offers that got claimed while creating this offer
-	  //       ClaimOfferAtom offersClaimed<>;
-	  //  
-	  //       union switch (ManageOfferEffect effect)
-	  //       {
-	  //       case MANAGE_OFFER_CREATED:
-	  //       case MANAGE_OFFER_UPDATED:
-	  //           OfferEntry offer;
-	  //       default:
-	  //           void;
-	  //       }
-	  //       offer;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.struct("ManageOfferSuccessResult", [["offersClaimed", xdr.varArray(xdr.lookup("ClaimOfferAtom"), 2147483647)], ["offer", xdr.lookup("ManageOfferSuccessResultOffer")]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   union ManageOfferResult switch (ManageOfferResultCode code)
-	  //   {
-	  //   case MANAGE_OFFER_SUCCESS:
-	  //       ManageOfferSuccessResult success;
-	  //   default:
-	  //       void;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.union("ManageOfferResult", {
-	    switchOn: xdr.lookup("ManageOfferResultCode"),
-	    switchName: "code",
-	    switches: [["manageOfferSuccess", "success"]],
-	    arms: {
-	      success: xdr.lookup("ManageOfferSuccessResult")
-	    },
-	    defaultArm: xdr["void"]()
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   enum SetOptionsResultCode
-	  //   {
-	  //       // codes considered as "success" for the operation
-	  //       SET_OPTIONS_SUCCESS = 0,
-	  //       // codes considered as "failure" for the operation
-	  //       SET_OPTIONS_LOW_RESERVE = -1,      // not enough funds to add a signer
-	  //       SET_OPTIONS_TOO_MANY_SIGNERS = -2, // max number of signers already reached
-	  //       SET_OPTIONS_BAD_FLAGS = -3,        // invalid combination of clear/set flags
-	  //       SET_OPTIONS_INVALID_INFLATION = -4,      // inflation account does not exist
-	  //       SET_OPTIONS_CANT_CHANGE = -5,            // can no longer change this option
-	  //       SET_OPTIONS_UNKNOWN_FLAG = -6,           // can't set an unknown flag
-	  //       SET_OPTIONS_THRESHOLD_OUT_OF_RANGE = -7, // bad value for weight/threshold
-	  //       SET_OPTIONS_BAD_SIGNER = -8,             // signer cannot be masterkey
-	  //       SET_OPTIONS_INVALID_HOME_DOMAIN = -9     // malformed home domain
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr["enum"]("SetOptionsResultCode", {
-	    setOptionsSuccess: 0,
-	    setOptionsLowReserve: -1,
-	    setOptionsTooManySigner: -2,
-	    setOptionsBadFlag: -3,
-	    setOptionsInvalidInflation: -4,
-	    setOptionsCantChange: -5,
-	    setOptionsUnknownFlag: -6,
-	    setOptionsThresholdOutOfRange: -7,
-	    setOptionsBadSigner: -8,
-	    setOptionsInvalidHomeDomain: -9
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   union SetOptionsResult switch (SetOptionsResultCode code)
-	  //   {
-	  //   case SET_OPTIONS_SUCCESS:
-	  //       void;
-	  //   default:
-	  //       void;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.union("SetOptionsResult", {
-	    switchOn: xdr.lookup("SetOptionsResultCode"),
-	    switchName: "code",
-	    switches: [["setOptionsSuccess", xdr["void"]()]],
-	    arms: {},
-	    defaultArm: xdr["void"]()
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   enum ChangeTrustResultCode
-	  //   {
-	  //       // codes considered as "success" for the operation
-	  //       CHANGE_TRUST_SUCCESS = 0,
-	  //       // codes considered as "failure" for the operation
-	  //       CHANGE_TRUST_MALFORMED = -1,     // bad input
-	  //       CHANGE_TRUST_NO_ISSUER = -2,     // could not find issuer
-	  //       CHANGE_TRUST_INVALID_LIMIT = -3, // cannot drop limit below balance
-	  //                                        // cannot create with a limit of 0
-	  //       CHANGE_TRUST_LOW_RESERVE = -4 // not enough funds to create a new trust line
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr["enum"]("ChangeTrustResultCode", {
-	    changeTrustSuccess: 0,
-	    changeTrustMalformed: -1,
-	    changeTrustNoIssuer: -2,
-	    changeTrustInvalidLimit: -3,
-	    changeTrustLowReserve: -4
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   union ChangeTrustResult switch (ChangeTrustResultCode code)
-	  //   {
-	  //   case CHANGE_TRUST_SUCCESS:
-	  //       void;
-	  //   default:
-	  //       void;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.union("ChangeTrustResult", {
-	    switchOn: xdr.lookup("ChangeTrustResultCode"),
-	    switchName: "code",
-	    switches: [["changeTrustSuccess", xdr["void"]()]],
-	    arms: {},
-	    defaultArm: xdr["void"]()
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   enum AllowTrustResultCode
-	  //   {
-	  //       // codes considered as "success" for the operation
-	  //       ALLOW_TRUST_SUCCESS = 0,
-	  //       // codes considered as "failure" for the operation
-	  //       ALLOW_TRUST_MALFORMED = -1,     // asset is not ASSET_TYPE_ALPHANUM
-	  //       ALLOW_TRUST_NO_TRUST_LINE = -2, // trustor does not have a trustline
-	  //                                       // source account does not require trust
-	  //       ALLOW_TRUST_TRUST_NOT_REQUIRED = -3,
-	  //       ALLOW_TRUST_CANT_REVOKE = -4 // source account can't revoke trust
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr["enum"]("AllowTrustResultCode", {
-	    allowTrustSuccess: 0,
-	    allowTrustMalformed: -1,
-	    allowTrustNoTrustLine: -2,
-	    allowTrustTrustNotRequired: -3,
-	    allowTrustCantRevoke: -4
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   union AllowTrustResult switch (AllowTrustResultCode code)
-	  //   {
-	  //   case ALLOW_TRUST_SUCCESS:
-	  //       void;
-	  //   default:
-	  //       void;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.union("AllowTrustResult", {
-	    switchOn: xdr.lookup("AllowTrustResultCode"),
-	    switchName: "code",
-	    switches: [["allowTrustSuccess", xdr["void"]()]],
-	    arms: {},
-	    defaultArm: xdr["void"]()
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   enum AccountMergeResultCode
-	  //   {
-	  //       // codes considered as "success" for the operation
-	  //       ACCOUNT_MERGE_SUCCESS = 0,
-	  //       // codes considered as "failure" for the operation
-	  //       ACCOUNT_MERGE_MALFORMED = -1,      // can't merge onto itself
-	  //       ACCOUNT_MERGE_NO_ACCOUNT = -2,     // destination does not exist
-	  //       ACCOUNT_MERGE_IMMUTABLE_SET = -3,  // source account has AUTH_IMMUTABLE set
-	  //       ACCOUNT_MERGE_HAS_SUB_ENTRIES = -4 // account has trust lines/offers
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr["enum"]("AccountMergeResultCode", {
-	    accountMergeSuccess: 0,
-	    accountMergeMalformed: -1,
-	    accountMergeNoAccount: -2,
-	    accountMergeImmutableSet: -3,
-	    accountMergeHasSubEntry: -4
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   union AccountMergeResult switch (AccountMergeResultCode code)
-	  //   {
-	  //   case ACCOUNT_MERGE_SUCCESS:
-	  //       int64 sourceAccountBalance; // how much got transfered from source account
-	  //   default:
-	  //       void;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.union("AccountMergeResult", {
-	    switchOn: xdr.lookup("AccountMergeResultCode"),
-	    switchName: "code",
-	    switches: [["accountMergeSuccess", "sourceAccountBalance"]],
-	    arms: {
-	      sourceAccountBalance: xdr.lookup("Int64")
-	    },
-	    defaultArm: xdr["void"]()
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   enum InflationResultCode
-	  //   {
-	  //       // codes considered as "success" for the operation
-	  //       INFLATION_SUCCESS = 0,
-	  //       // codes considered as "failure" for the operation
-	  //       INFLATION_NOT_TIME = -1
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr["enum"]("InflationResultCode", {
-	    inflationSuccess: 0,
-	    inflationNotTime: -1
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct InflationPayout // or use PaymentResultAtom to limit types?
-	  //   {
-	  //       AccountID destination;
-	  //       int64 amount;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.struct("InflationPayout", [["destination", xdr.lookup("AccountId")], ["amount", xdr.lookup("Int64")]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   union InflationResult switch (InflationResultCode code)
-	  //   {
-	  //   case INFLATION_SUCCESS:
-	  //       InflationPayout payouts<>;
-	  //   default:
-	  //       void;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.union("InflationResult", {
-	    switchOn: xdr.lookup("InflationResultCode"),
-	    switchName: "code",
-	    switches: [["inflationSuccess", "payouts"]],
-	    arms: {
-	      payouts: xdr.varArray(xdr.lookup("InflationPayout"), 2147483647)
-	    },
-	    defaultArm: xdr["void"]()
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   enum ManageDataResultCode
-	  //   {
-	  //       // codes considered as "success" for the operation
-	  //       MANAGE_DATA_SUCCESS = 0,
-	  //       // codes considered as "failure" for the operation
-	  //       MANAGE_DATA_NOT_SUPPORTED_YET = -1, // The network hasn't moved to this protocol change yet
-	  //       MANAGE_DATA_NAME_NOT_FOUND = -2,    // Trying to remove a Data Entry that isn't there
-	  //       MANAGE_DATA_LOW_RESERVE = -3,       // not enough funds to create a new Data Entry
-	  //       MANAGE_DATA_INVALID_NAME = -4       // Name not a valid string
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr["enum"]("ManageDataResultCode", {
-	    manageDataSuccess: 0,
-	    manageDataNotSupportedYet: -1,
-	    manageDataNameNotFound: -2,
-	    manageDataLowReserve: -3,
-	    manageDataInvalidName: -4
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   union ManageDataResult switch (ManageDataResultCode code)
-	  //   {
-	  //   case MANAGE_DATA_SUCCESS:
-	  //       void;
-	  //   default:
-	  //       void;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.union("ManageDataResult", {
-	    switchOn: xdr.lookup("ManageDataResultCode"),
-	    switchName: "code",
-	    switches: [["manageDataSuccess", xdr["void"]()]],
-	    arms: {},
-	    defaultArm: xdr["void"]()
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   enum OperationResultCode
-	  //   {
-	  //       opINNER = 0, // inner object result is valid
-	  //  
-	  //       opBAD_AUTH = -1,  // too few valid signatures / wrong network
-	  //       opNO_ACCOUNT = -2 // source account was not found
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr["enum"]("OperationResultCode", {
-	    opInner: 0,
-	    opBadAuth: -1,
-	    opNoAccount: -2
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   union switch (OperationType type)
-	  //       {
-	  //       case CREATE_ACCOUNT:
-	  //           CreateAccountResult createAccountResult;
-	  //       case PAYMENT:
-	  //           PaymentResult paymentResult;
-	  //       case PATH_PAYMENT:
-	  //           PathPaymentResult pathPaymentResult;
-	  //       case MANAGE_OFFER:
-	  //           ManageOfferResult manageOfferResult;
-	  //       case CREATE_PASSIVE_OFFER:
-	  //           ManageOfferResult createPassiveOfferResult;
-	  //       case SET_OPTIONS:
-	  //           SetOptionsResult setOptionsResult;
-	  //       case CHANGE_TRUST:
-	  //           ChangeTrustResult changeTrustResult;
-	  //       case ALLOW_TRUST:
-	  //           AllowTrustResult allowTrustResult;
-	  //       case ACCOUNT_MERGE:
-	  //           AccountMergeResult accountMergeResult;
-	  //       case INFLATION:
-	  //           InflationResult inflationResult;
-	  //       case MANAGE_DATA:
-	  //           ManageDataResult manageDataResult;
-	  //       }
-	  //
-	  // ===========================================================================
-	  xdr.union("OperationResultTr", {
-	    switchOn: xdr.lookup("OperationType"),
-	    switchName: "type",
-	    switches: [["createAccount", "createAccountResult"], ["payment", "paymentResult"], ["pathPayment", "pathPaymentResult"], ["manageOffer", "manageOfferResult"], ["createPassiveOffer", "createPassiveOfferResult"], ["setOption", "setOptionsResult"], ["changeTrust", "changeTrustResult"], ["allowTrust", "allowTrustResult"], ["accountMerge", "accountMergeResult"], ["inflation", "inflationResult"], ["manageDatum", "manageDataResult"]],
-	    arms: {
-	      createAccountResult: xdr.lookup("CreateAccountResult"),
-	      paymentResult: xdr.lookup("PaymentResult"),
-	      pathPaymentResult: xdr.lookup("PathPaymentResult"),
-	      manageOfferResult: xdr.lookup("ManageOfferResult"),
-	      createPassiveOfferResult: xdr.lookup("ManageOfferResult"),
-	      setOptionsResult: xdr.lookup("SetOptionsResult"),
-	      changeTrustResult: xdr.lookup("ChangeTrustResult"),
-	      allowTrustResult: xdr.lookup("AllowTrustResult"),
-	      accountMergeResult: xdr.lookup("AccountMergeResult"),
-	      inflationResult: xdr.lookup("InflationResult"),
-	      manageDataResult: xdr.lookup("ManageDataResult")
-	    }
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   union OperationResult switch (OperationResultCode code)
-	  //   {
-	  //   case opINNER:
-	  //       union switch (OperationType type)
-	  //       {
-	  //       case CREATE_ACCOUNT:
-	  //           CreateAccountResult createAccountResult;
-	  //       case PAYMENT:
-	  //           PaymentResult paymentResult;
-	  //       case PATH_PAYMENT:
-	  //           PathPaymentResult pathPaymentResult;
-	  //       case MANAGE_OFFER:
-	  //           ManageOfferResult manageOfferResult;
-	  //       case CREATE_PASSIVE_OFFER:
-	  //           ManageOfferResult createPassiveOfferResult;
-	  //       case SET_OPTIONS:
-	  //           SetOptionsResult setOptionsResult;
-	  //       case CHANGE_TRUST:
-	  //           ChangeTrustResult changeTrustResult;
-	  //       case ALLOW_TRUST:
-	  //           AllowTrustResult allowTrustResult;
-	  //       case ACCOUNT_MERGE:
-	  //           AccountMergeResult accountMergeResult;
-	  //       case INFLATION:
-	  //           InflationResult inflationResult;
-	  //       case MANAGE_DATA:
-	  //           ManageDataResult manageDataResult;
-	  //       }
-	  //       tr;
-	  //   default:
-	  //       void;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.union("OperationResult", {
-	    switchOn: xdr.lookup("OperationResultCode"),
-	    switchName: "code",
-	    switches: [["opInner", "tr"]],
-	    arms: {
-	      tr: xdr.lookup("OperationResultTr")
-	    },
-	    defaultArm: xdr["void"]()
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   enum TransactionResultCode
-	  //   {
-	  //       txSUCCESS = 0, // all operations succeeded
-	  //  
-	  //       txFAILED = -1, // one of the operations failed (none were applied)
-	  //  
-	  //       txTOO_EARLY = -2,         // ledger closeTime before minTime
-	  //       txTOO_LATE = -3,          // ledger closeTime after maxTime
-	  //       txMISSING_OPERATION = -4, // no operation was specified
-	  //       txBAD_SEQ = -5,           // sequence number does not match source account
-	  //  
-	  //       txBAD_AUTH = -6,             // too few valid signatures / wrong network
-	  //       txINSUFFICIENT_BALANCE = -7, // fee would bring account below reserve
-	  //       txNO_ACCOUNT = -8,           // source account not found
-	  //       txINSUFFICIENT_FEE = -9,     // fee is too small
-	  //       txBAD_AUTH_EXTRA = -10,      // unused signatures attached to transaction
-	  //       txINTERNAL_ERROR = -11       // an unknown error occured
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr["enum"]("TransactionResultCode", {
-	    txSuccess: 0,
-	    txFailed: -1,
-	    txTooEarly: -2,
-	    txTooLate: -3,
-	    txMissingOperation: -4,
-	    txBadSeq: -5,
-	    txBadAuth: -6,
-	    txInsufficientBalance: -7,
-	    txNoAccount: -8,
-	    txInsufficientFee: -9,
-	    txBadAuthExtra: -10,
-	    txInternalError: -11
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   union switch (TransactionResultCode code)
-	  //       {
-	  //       case txSUCCESS:
-	  //       case txFAILED:
-	  //           OperationResult results<>;
-	  //       default:
-	  //           void;
-	  //       }
-	  //
-	  // ===========================================================================
-	  xdr.union("TransactionResultResult", {
-	    switchOn: xdr.lookup("TransactionResultCode"),
-	    switchName: "code",
-	    switches: [["txSuccess", "results"], ["txFailed", "results"]],
-	    arms: {
-	      results: xdr.varArray(xdr.lookup("OperationResult"), 2147483647)
-	    },
-	    defaultArm: xdr["void"]()
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   union switch (int v)
-	  //       {
-	  //       case 0:
-	  //           void;
-	  //       }
-	  //
-	  // ===========================================================================
-	  xdr.union("TransactionResultExt", {
-	    switchOn: xdr.int(),
-	    switchName: "v",
-	    switches: [[0, xdr["void"]()]],
-	    arms: {}
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct TransactionResult
-	  //   {
-	  //       int64 feeCharged; // actual fee charged for the transaction
-	  //  
-	  //       union switch (TransactionResultCode code)
-	  //       {
-	  //       case txSUCCESS:
-	  //       case txFAILED:
-	  //           OperationResult results<>;
-	  //       default:
-	  //           void;
-	  //       }
-	  //       result;
-	  //  
-	  //       // reserved for future use
-	  //       union switch (int v)
-	  //       {
-	  //       case 0:
-	  //           void;
-	  //       }
-	  //       ext;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.struct("TransactionResult", [["feeCharged", xdr.lookup("Int64")], ["result", xdr.lookup("TransactionResultResult")], ["ext", xdr.lookup("TransactionResultExt")]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   typedef opaque Hash[32];
-	  //
-	  // ===========================================================================
-	  xdr.typedef("Hash", xdr.opaque(32));
-
-	  // === xdr source ============================================================
-	  //
-	  //   typedef opaque uint256[32];
-	  //
-	  // ===========================================================================
-	  xdr.typedef("Uint256", xdr.opaque(32));
-
-	  // === xdr source ============================================================
-	  //
-	  //   typedef unsigned int uint32;
-	  //
-	  // ===========================================================================
-	  xdr.typedef("Uint32", xdr.uint());
-
-	  // === xdr source ============================================================
-	  //
-	  //   typedef int int32;
-	  //
-	  // ===========================================================================
-	  xdr.typedef("Int32", xdr.int());
-
-	  // === xdr source ============================================================
-	  //
-	  //   typedef unsigned hyper uint64;
-	  //
-	  // ===========================================================================
-	  xdr.typedef("Uint64", xdr.uhyper());
-
-	  // === xdr source ============================================================
-	  //
-	  //   typedef hyper int64;
-	  //
-	  // ===========================================================================
-	  xdr.typedef("Int64", xdr.hyper());
-
-	  // === xdr source ============================================================
-	  //
-	  //   enum CryptoKeyType
-	  //   {
-	  //       KEY_TYPE_ED25519 = 0
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr["enum"]("CryptoKeyType", {
-	    keyTypeEd25519: 0
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   union PublicKey switch (CryptoKeyType type)
-	  //   {
-	  //   case KEY_TYPE_ED25519:
-	  //       uint256 ed25519;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.union("PublicKey", {
-	    switchOn: xdr.lookup("CryptoKeyType"),
-	    switchName: "type",
-	    switches: [["keyTypeEd25519", "ed25519"]],
-	    arms: {
-	      ed25519: xdr.lookup("Uint256")
-	    }
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   typedef opaque Signature<64>;
-	  //
-	  // ===========================================================================
-	  xdr.typedef("Signature", xdr.varOpaque(64));
-
-	  // === xdr source ============================================================
-	  //
-	  //   typedef opaque SignatureHint[4];
-	  //
-	  // ===========================================================================
-	  xdr.typedef("SignatureHint", xdr.opaque(4));
-
-	  // === xdr source ============================================================
-	  //
-	  //   typedef PublicKey NodeID;
-	  //
-	  // ===========================================================================
-	  xdr.typedef("NodeId", xdr.lookup("PublicKey"));
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct Curve25519Secret
-	  //   {
-	  //           opaque key[32];
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.struct("Curve25519Secret", [["key", xdr.opaque(32)]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct Curve25519Public
-	  //   {
-	  //           opaque key[32];
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.struct("Curve25519Public", [["key", xdr.opaque(32)]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct HmacSha256Key
-	  //   {
-	  //           opaque key[32];
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.struct("HmacSha256Key", [["key", xdr.opaque(32)]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct HmacSha256Mac
-	  //   {
-	  //           opaque mac[32];
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.struct("HmacSha256Mac", [["mac", xdr.opaque(32)]]);
-	});
-	exports["default"] = types;
-	module.exports = exports["default"];
+	/* jshint maxstatements:2147483647  */ /* jshint esnext:true  */"use strict";Object.defineProperty(exports,"__esModule",{value:true});function _interopRequireWildcard(obj){if(obj && obj.__esModule){return obj;}else {var newObj={};if(obj != null){for(var key in obj) {if(Object.prototype.hasOwnProperty.call(obj,key))newObj[key] = obj[key];}}newObj["default"] = obj;return newObj;}}var _jsXdr=__webpack_require__(3);var XDR=_interopRequireWildcard(_jsXdr);var types=XDR.config(function(xdr){ // === xdr source ============================================================
+	//
+	//   typedef opaque Value<>;
+	//
+	// ===========================================================================
+	xdr.typedef("Value",xdr.varOpaque()); // === xdr source ============================================================
+	//
+	//   struct SCPBallot
+	//   {
+	//       uint32 counter; // n
+	//       Value value;    // x
+	//   };
+	//
+	// ===========================================================================
+	xdr.struct("ScpBallot",[["counter",xdr.lookup("Uint32")],["value",xdr.lookup("Value")]]); // === xdr source ============================================================
+	//
+	//   enum SCPStatementType
+	//   {
+	//       SCP_ST_PREPARE = 0,
+	//       SCP_ST_CONFIRM = 1,
+	//       SCP_ST_EXTERNALIZE = 2,
+	//       SCP_ST_NOMINATE = 3
+	//   };
+	//
+	// ===========================================================================
+	xdr["enum"]("ScpStatementType",{scpStPrepare:0,scpStConfirm:1,scpStExternalize:2,scpStNominate:3}); // === xdr source ============================================================
+	//
+	//   struct SCPNomination
+	//   {
+	//       Hash quorumSetHash; // D
+	//       Value votes<>;      // X
+	//       Value accepted<>;   // Y
+	//   };
+	//
+	// ===========================================================================
+	xdr.struct("ScpNomination",[["quorumSetHash",xdr.lookup("Hash")],["votes",xdr.varArray(xdr.lookup("Value"),2147483647)],["accepted",xdr.varArray(xdr.lookup("Value"),2147483647)]]); // === xdr source ============================================================
+	//
+	//   struct
+	//           {
+	//               Hash quorumSetHash;       // D
+	//               SCPBallot ballot;         // b
+	//               SCPBallot* prepared;      // p
+	//               SCPBallot* preparedPrime; // p'
+	//               uint32 nC;                // c.n
+	//               uint32 nH;                // h.n
+	//           }
+	//
+	// ===========================================================================
+	xdr.struct("ScpStatementPrepare",[["quorumSetHash",xdr.lookup("Hash")],["ballot",xdr.lookup("ScpBallot")],["prepared",xdr.option(xdr.lookup("ScpBallot"))],["preparedPrime",xdr.option(xdr.lookup("ScpBallot"))],["nC",xdr.lookup("Uint32")],["nH",xdr.lookup("Uint32")]]); // === xdr source ============================================================
+	//
+	//   struct
+	//           {
+	//               SCPBallot ballot;   // b
+	//               uint32 nPrepared;   // p.n
+	//               uint32 nCommit;     // c.n
+	//               uint32 nH;          // h.n
+	//               Hash quorumSetHash; // D
+	//           }
+	//
+	// ===========================================================================
+	xdr.struct("ScpStatementConfirm",[["ballot",xdr.lookup("ScpBallot")],["nPrepared",xdr.lookup("Uint32")],["nCommit",xdr.lookup("Uint32")],["nH",xdr.lookup("Uint32")],["quorumSetHash",xdr.lookup("Hash")]]); // === xdr source ============================================================
+	//
+	//   struct
+	//           {
+	//               SCPBallot commit;         // c
+	//               uint32 nH;                // h.n
+	//               Hash commitQuorumSetHash; // D used before EXTERNALIZE
+	//           }
+	//
+	// ===========================================================================
+	xdr.struct("ScpStatementExternalize",[["commit",xdr.lookup("ScpBallot")],["nH",xdr.lookup("Uint32")],["commitQuorumSetHash",xdr.lookup("Hash")]]); // === xdr source ============================================================
+	//
+	//   union switch (SCPStatementType type)
+	//       {
+	//       case SCP_ST_PREPARE:
+	//           struct
+	//           {
+	//               Hash quorumSetHash;       // D
+	//               SCPBallot ballot;         // b
+	//               SCPBallot* prepared;      // p
+	//               SCPBallot* preparedPrime; // p'
+	//               uint32 nC;                // c.n
+	//               uint32 nH;                // h.n
+	//           } prepare;
+	//       case SCP_ST_CONFIRM:
+	//           struct
+	//           {
+	//               SCPBallot ballot;   // b
+	//               uint32 nPrepared;   // p.n
+	//               uint32 nCommit;     // c.n
+	//               uint32 nH;          // h.n
+	//               Hash quorumSetHash; // D
+	//           } confirm;
+	//       case SCP_ST_EXTERNALIZE:
+	//           struct
+	//           {
+	//               SCPBallot commit;         // c
+	//               uint32 nH;                // h.n
+	//               Hash commitQuorumSetHash; // D used before EXTERNALIZE
+	//           } externalize;
+	//       case SCP_ST_NOMINATE:
+	//           SCPNomination nominate;
+	//       }
+	//
+	// ===========================================================================
+	xdr.union("ScpStatementPledges",{switchOn:xdr.lookup("ScpStatementType"),switchName:"type",switches:[["scpStPrepare","prepare"],["scpStConfirm","confirm"],["scpStExternalize","externalize"],["scpStNominate","nominate"]],arms:{prepare:xdr.lookup("ScpStatementPrepare"),confirm:xdr.lookup("ScpStatementConfirm"),externalize:xdr.lookup("ScpStatementExternalize"),nominate:xdr.lookup("ScpNomination")}}); // === xdr source ============================================================
+	//
+	//   struct SCPStatement
+	//   {
+	//       NodeID nodeID;    // v
+	//       uint64 slotIndex; // i
+	//   
+	//       union switch (SCPStatementType type)
+	//       {
+	//       case SCP_ST_PREPARE:
+	//           struct
+	//           {
+	//               Hash quorumSetHash;       // D
+	//               SCPBallot ballot;         // b
+	//               SCPBallot* prepared;      // p
+	//               SCPBallot* preparedPrime; // p'
+	//               uint32 nC;                // c.n
+	//               uint32 nH;                // h.n
+	//           } prepare;
+	//       case SCP_ST_CONFIRM:
+	//           struct
+	//           {
+	//               SCPBallot ballot;   // b
+	//               uint32 nPrepared;   // p.n
+	//               uint32 nCommit;     // c.n
+	//               uint32 nH;          // h.n
+	//               Hash quorumSetHash; // D
+	//           } confirm;
+	//       case SCP_ST_EXTERNALIZE:
+	//           struct
+	//           {
+	//               SCPBallot commit;         // c
+	//               uint32 nH;                // h.n
+	//               Hash commitQuorumSetHash; // D used before EXTERNALIZE
+	//           } externalize;
+	//       case SCP_ST_NOMINATE:
+	//           SCPNomination nominate;
+	//       }
+	//       pledges;
+	//   };
+	//
+	// ===========================================================================
+	xdr.struct("ScpStatement",[["nodeId",xdr.lookup("NodeId")],["slotIndex",xdr.lookup("Uint64")],["pledges",xdr.lookup("ScpStatementPledges")]]); // === xdr source ============================================================
+	//
+	//   struct SCPEnvelope
+	//   {
+	//       SCPStatement statement;
+	//       Signature signature;
+	//   };
+	//
+	// ===========================================================================
+	xdr.struct("ScpEnvelope",[["statement",xdr.lookup("ScpStatement")],["signature",xdr.lookup("Signature")]]); // === xdr source ============================================================
+	//
+	//   struct SCPQuorumSet
+	//   {
+	//       uint32 threshold;
+	//       PublicKey validators<>;
+	//       SCPQuorumSet innerSets<>;
+	//   };
+	//
+	// ===========================================================================
+	xdr.struct("ScpQuorumSet",[["threshold",xdr.lookup("Uint32")],["validators",xdr.varArray(xdr.lookup("PublicKey"),2147483647)],["innerSets",xdr.varArray(xdr.lookup("ScpQuorumSet"),2147483647)]]); // === xdr source ============================================================
+	//
+	//   typedef PublicKey AccountID;
+	//
+	// ===========================================================================
+	xdr.typedef("AccountId",xdr.lookup("PublicKey")); // === xdr source ============================================================
+	//
+	//   typedef opaque Thresholds[4];
+	//
+	// ===========================================================================
+	xdr.typedef("Thresholds",xdr.opaque(4)); // === xdr source ============================================================
+	//
+	//   typedef string string32<32>;
+	//
+	// ===========================================================================
+	xdr.typedef("String32",xdr.string(32)); // === xdr source ============================================================
+	//
+	//   typedef string string64<64>;
+	//
+	// ===========================================================================
+	xdr.typedef("String64",xdr.string(64)); // === xdr source ============================================================
+	//
+	//   typedef uint64 SequenceNumber;
+	//
+	// ===========================================================================
+	xdr.typedef("SequenceNumber",xdr.lookup("Uint64")); // === xdr source ============================================================
+	//
+	//   typedef opaque DataValue<64>;
+	//
+	// ===========================================================================
+	xdr.typedef("DataValue",xdr.varOpaque(64)); // === xdr source ============================================================
+	//
+	//   enum AssetType
+	//   {
+	//       ASSET_TYPE_NATIVE = 0,
+	//       ASSET_TYPE_CREDIT_ALPHANUM4 = 1,
+	//       ASSET_TYPE_CREDIT_ALPHANUM12 = 2
+	//   };
+	//
+	// ===========================================================================
+	xdr["enum"]("AssetType",{assetTypeNative:0,assetTypeCreditAlphanum4:1,assetTypeCreditAlphanum12:2}); // === xdr source ============================================================
+	//
+	//   struct
+	//       {
+	//           opaque assetCode[4]; // 1 to 4 characters
+	//           AccountID issuer;
+	//       }
+	//
+	// ===========================================================================
+	xdr.struct("AssetAlphaNum4",[["assetCode",xdr.opaque(4)],["issuer",xdr.lookup("AccountId")]]); // === xdr source ============================================================
+	//
+	//   struct
+	//       {
+	//           opaque assetCode[12]; // 5 to 12 characters
+	//           AccountID issuer;
+	//       }
+	//
+	// ===========================================================================
+	xdr.struct("AssetAlphaNum12",[["assetCode",xdr.opaque(12)],["issuer",xdr.lookup("AccountId")]]); // === xdr source ============================================================
+	//
+	//   union Asset switch (AssetType type)
+	//   {
+	//   case ASSET_TYPE_NATIVE: // Not credit
+	//       void;
+	//   
+	//   case ASSET_TYPE_CREDIT_ALPHANUM4:
+	//       struct
+	//       {
+	//           opaque assetCode[4]; // 1 to 4 characters
+	//           AccountID issuer;
+	//       } alphaNum4;
+	//   
+	//   case ASSET_TYPE_CREDIT_ALPHANUM12:
+	//       struct
+	//       {
+	//           opaque assetCode[12]; // 5 to 12 characters
+	//           AccountID issuer;
+	//       } alphaNum12;
+	//   
+	//       // add other asset types here in the future
+	//   };
+	//
+	// ===========================================================================
+	xdr.union("Asset",{switchOn:xdr.lookup("AssetType"),switchName:"type",switches:[["assetTypeNative",xdr["void"]()],["assetTypeCreditAlphanum4","alphaNum4"],["assetTypeCreditAlphanum12","alphaNum12"]],arms:{alphaNum4:xdr.lookup("AssetAlphaNum4"),alphaNum12:xdr.lookup("AssetAlphaNum12")}}); // === xdr source ============================================================
+	//
+	//   struct Price
+	//   {
+	//       int32 n; // numerator
+	//       int32 d; // denominator
+	//   };
+	//
+	// ===========================================================================
+	xdr.struct("Price",[["n",xdr.lookup("Int32")],["d",xdr.lookup("Int32")]]); // === xdr source ============================================================
+	//
+	//   enum ThresholdIndexes
+	//   {
+	//       THRESHOLD_MASTER_WEIGHT = 0,
+	//       THRESHOLD_LOW = 1,
+	//       THRESHOLD_MED = 2,
+	//       THRESHOLD_HIGH = 3
+	//   };
+	//
+	// ===========================================================================
+	xdr["enum"]("ThresholdIndices",{thresholdMasterWeight:0,thresholdLow:1,thresholdMed:2,thresholdHigh:3}); // === xdr source ============================================================
+	//
+	//   enum LedgerEntryType
+	//   {
+	//       ACCOUNT = 0,
+	//       TRUSTLINE = 1,
+	//       OFFER = 2,
+	//       DATA = 3
+	//   };
+	//
+	// ===========================================================================
+	xdr["enum"]("LedgerEntryType",{account:0,trustline:1,offer:2,datum:3}); // === xdr source ============================================================
+	//
+	//   struct Signer
+	//   {
+	//       SignerKey key;
+	//       uint32 weight; // really only need 1byte
+	//   };
+	//
+	// ===========================================================================
+	xdr.struct("Signer",[["key",xdr.lookup("SignerKey")],["weight",xdr.lookup("Uint32")]]); // === xdr source ============================================================
+	//
+	//   enum AccountFlags
+	//   { // masks for each flag
+	//   
+	//       // Flags set on issuer accounts
+	//       // TrustLines are created with authorized set to "false" requiring
+	//       // the issuer to set it for each TrustLine
+	//       AUTH_REQUIRED_FLAG = 0x1,
+	//       // If set, the authorized flag in TrustLines can be cleared
+	//       // otherwise, authorization cannot be revoked
+	//       AUTH_REVOCABLE_FLAG = 0x2,
+	//       // Once set, causes all AUTH_* flags to be read-only
+	//       AUTH_IMMUTABLE_FLAG = 0x4
+	//   };
+	//
+	// ===========================================================================
+	xdr["enum"]("AccountFlags",{authRequiredFlag:1,authRevocableFlag:2,authImmutableFlag:4}); // === xdr source ============================================================
+	//
+	//   union switch (int v)
+	//       {
+	//       case 0:
+	//           void;
+	//       }
+	//
+	// ===========================================================================
+	xdr.union("AccountEntryExt",{switchOn:xdr.int(),switchName:"v",switches:[[0,xdr["void"]()]],arms:{}}); // === xdr source ============================================================
+	//
+	//   struct AccountEntry
+	//   {
+	//       AccountID accountID;      // master public key for this account
+	//       int64 balance;            // in stroops
+	//       SequenceNumber seqNum;    // last sequence number used for this account
+	//       uint32 numSubEntries;     // number of sub-entries this account has
+	//                                 // drives the reserve
+	//       AccountID* inflationDest; // Account to vote for during inflation
+	//       uint32 flags;             // see AccountFlags
+	//   
+	//       string32 homeDomain; // can be used for reverse federation and memo lookup
+	//   
+	//       // fields used for signatures
+	//       // thresholds stores unsigned bytes: [weight of master|low|medium|high]
+	//       Thresholds thresholds;
+	//   
+	//       Signer signers<20>; // possible signers for this account
+	//   
+	//       // reserved for future use
+	//       union switch (int v)
+	//       {
+	//       case 0:
+	//           void;
+	//       }
+	//       ext;
+	//   };
+	//
+	// ===========================================================================
+	xdr.struct("AccountEntry",[["accountId",xdr.lookup("AccountId")],["balance",xdr.lookup("Int64")],["seqNum",xdr.lookup("SequenceNumber")],["numSubEntries",xdr.lookup("Uint32")],["inflationDest",xdr.option(xdr.lookup("AccountId"))],["flags",xdr.lookup("Uint32")],["homeDomain",xdr.lookup("String32")],["thresholds",xdr.lookup("Thresholds")],["signers",xdr.varArray(xdr.lookup("Signer"),20)],["ext",xdr.lookup("AccountEntryExt")]]); // === xdr source ============================================================
+	//
+	//   enum TrustLineFlags
+	//   {
+	//       // issuer has authorized account to perform transactions with its credit
+	//       AUTHORIZED_FLAG = 1
+	//   };
+	//
+	// ===========================================================================
+	xdr["enum"]("TrustLineFlags",{authorizedFlag:1}); // === xdr source ============================================================
+	//
+	//   union switch (int v)
+	//       {
+	//       case 0:
+	//           void;
+	//       }
+	//
+	// ===========================================================================
+	xdr.union("TrustLineEntryExt",{switchOn:xdr.int(),switchName:"v",switches:[[0,xdr["void"]()]],arms:{}}); // === xdr source ============================================================
+	//
+	//   struct TrustLineEntry
+	//   {
+	//       AccountID accountID; // account this trustline belongs to
+	//       Asset asset;         // type of asset (with issuer)
+	//       int64 balance;       // how much of this asset the user has.
+	//                            // Asset defines the unit for this;
+	//   
+	//       int64 limit;  // balance cannot be above this
+	//       uint32 flags; // see TrustLineFlags
+	//   
+	//       // reserved for future use
+	//       union switch (int v)
+	//       {
+	//       case 0:
+	//           void;
+	//       }
+	//       ext;
+	//   };
+	//
+	// ===========================================================================
+	xdr.struct("TrustLineEntry",[["accountId",xdr.lookup("AccountId")],["asset",xdr.lookup("Asset")],["balance",xdr.lookup("Int64")],["limit",xdr.lookup("Int64")],["flags",xdr.lookup("Uint32")],["ext",xdr.lookup("TrustLineEntryExt")]]); // === xdr source ============================================================
+	//
+	//   enum OfferEntryFlags
+	//   {
+	//       // issuer has authorized account to perform transactions with its credit
+	//       PASSIVE_FLAG = 1
+	//   };
+	//
+	// ===========================================================================
+	xdr["enum"]("OfferEntryFlags",{passiveFlag:1}); // === xdr source ============================================================
+	//
+	//   union switch (int v)
+	//       {
+	//       case 0:
+	//           void;
+	//       }
+	//
+	// ===========================================================================
+	xdr.union("OfferEntryExt",{switchOn:xdr.int(),switchName:"v",switches:[[0,xdr["void"]()]],arms:{}}); // === xdr source ============================================================
+	//
+	//   struct OfferEntry
+	//   {
+	//       AccountID sellerID;
+	//       uint64 offerID;
+	//       Asset selling; // A
+	//       Asset buying;  // B
+	//       int64 amount;  // amount of A
+	//   
+	//       /* price for this offer:
+	//           price of A in terms of B
+	//           price=AmountB/AmountA=priceNumerator/priceDenominator
+	//           price is after fees
+	//       */
+	//       Price price;
+	//       uint32 flags; // see OfferEntryFlags
+	//   
+	//       // reserved for future use
+	//       union switch (int v)
+	//       {
+	//       case 0:
+	//           void;
+	//       }
+	//       ext;
+	//   };
+	//
+	// ===========================================================================
+	xdr.struct("OfferEntry",[["sellerId",xdr.lookup("AccountId")],["offerId",xdr.lookup("Uint64")],["selling",xdr.lookup("Asset")],["buying",xdr.lookup("Asset")],["amount",xdr.lookup("Int64")],["price",xdr.lookup("Price")],["flags",xdr.lookup("Uint32")],["ext",xdr.lookup("OfferEntryExt")]]); // === xdr source ============================================================
+	//
+	//   union switch (int v)
+	//       {
+	//       case 0:
+	//           void;
+	//       }
+	//
+	// ===========================================================================
+	xdr.union("DataEntryExt",{switchOn:xdr.int(),switchName:"v",switches:[[0,xdr["void"]()]],arms:{}}); // === xdr source ============================================================
+	//
+	//   struct DataEntry
+	//   {
+	//       AccountID accountID; // account this data belongs to
+	//       string64 dataName;
+	//       DataValue dataValue;
+	//   
+	//       // reserved for future use
+	//       union switch (int v)
+	//       {
+	//       case 0:
+	//           void;
+	//       }
+	//       ext;
+	//   };
+	//
+	// ===========================================================================
+	xdr.struct("DataEntry",[["accountId",xdr.lookup("AccountId")],["dataName",xdr.lookup("String64")],["dataValue",xdr.lookup("DataValue")],["ext",xdr.lookup("DataEntryExt")]]); // === xdr source ============================================================
+	//
+	//   union switch (LedgerEntryType type)
+	//       {
+	//       case ACCOUNT:
+	//           AccountEntry account;
+	//       case TRUSTLINE:
+	//           TrustLineEntry trustLine;
+	//       case OFFER:
+	//           OfferEntry offer;
+	//       case DATA:
+	//           DataEntry data;
+	//       }
+	//
+	// ===========================================================================
+	xdr.union("LedgerEntryData",{switchOn:xdr.lookup("LedgerEntryType"),switchName:"type",switches:[["account","account"],["trustline","trustLine"],["offer","offer"],["datum","data"]],arms:{account:xdr.lookup("AccountEntry"),trustLine:xdr.lookup("TrustLineEntry"),offer:xdr.lookup("OfferEntry"),data:xdr.lookup("DataEntry")}}); // === xdr source ============================================================
+	//
+	//   union switch (int v)
+	//       {
+	//       case 0:
+	//           void;
+	//       }
+	//
+	// ===========================================================================
+	xdr.union("LedgerEntryExt",{switchOn:xdr.int(),switchName:"v",switches:[[0,xdr["void"]()]],arms:{}}); // === xdr source ============================================================
+	//
+	//   struct LedgerEntry
+	//   {
+	//       uint32 lastModifiedLedgerSeq; // ledger the LedgerEntry was last changed
+	//   
+	//       union switch (LedgerEntryType type)
+	//       {
+	//       case ACCOUNT:
+	//           AccountEntry account;
+	//       case TRUSTLINE:
+	//           TrustLineEntry trustLine;
+	//       case OFFER:
+	//           OfferEntry offer;
+	//       case DATA:
+	//           DataEntry data;
+	//       }
+	//       data;
+	//   
+	//       // reserved for future use
+	//       union switch (int v)
+	//       {
+	//       case 0:
+	//           void;
+	//       }
+	//       ext;
+	//   };
+	//
+	// ===========================================================================
+	xdr.struct("LedgerEntry",[["lastModifiedLedgerSeq",xdr.lookup("Uint32")],["data",xdr.lookup("LedgerEntryData")],["ext",xdr.lookup("LedgerEntryExt")]]); // === xdr source ============================================================
+	//
+	//   enum EnvelopeType
+	//   {
+	//       ENVELOPE_TYPE_SCP = 1,
+	//       ENVELOPE_TYPE_TX = 2,
+	//       ENVELOPE_TYPE_AUTH = 3
+	//   };
+	//
+	// ===========================================================================
+	xdr["enum"]("EnvelopeType",{envelopeTypeScp:1,envelopeTypeTx:2,envelopeTypeAuth:3}); // === xdr source ============================================================
+	//
+	//   typedef opaque UpgradeType<128>;
+	//
+	// ===========================================================================
+	xdr.typedef("UpgradeType",xdr.varOpaque(128)); // === xdr source ============================================================
+	//
+	//   union switch (int v)
+	//       {
+	//       case 0:
+	//           void;
+	//       }
+	//
+	// ===========================================================================
+	xdr.union("StellarValueExt",{switchOn:xdr.int(),switchName:"v",switches:[[0,xdr["void"]()]],arms:{}}); // === xdr source ============================================================
+	//
+	//   struct StellarValue
+	//   {
+	//       Hash txSetHash;   // transaction set to apply to previous ledger
+	//       uint64 closeTime; // network close time
+	//   
+	//       // upgrades to apply to the previous ledger (usually empty)
+	//       // this is a vector of encoded 'LedgerUpgrade' so that nodes can drop
+	//       // unknown steps during consensus if needed.
+	//       // see notes below on 'LedgerUpgrade' for more detail
+	//       // max size is dictated by number of upgrade types (+ room for future)
+	//       UpgradeType upgrades<6>;
+	//   
+	//       // reserved for future use
+	//       union switch (int v)
+	//       {
+	//       case 0:
+	//           void;
+	//       }
+	//       ext;
+	//   };
+	//
+	// ===========================================================================
+	xdr.struct("StellarValue",[["txSetHash",xdr.lookup("Hash")],["closeTime",xdr.lookup("Uint64")],["upgrades",xdr.varArray(xdr.lookup("UpgradeType"),6)],["ext",xdr.lookup("StellarValueExt")]]); // === xdr source ============================================================
+	//
+	//   union switch (int v)
+	//       {
+	//       case 0:
+	//           void;
+	//       }
+	//
+	// ===========================================================================
+	xdr.union("LedgerHeaderExt",{switchOn:xdr.int(),switchName:"v",switches:[[0,xdr["void"]()]],arms:{}}); // === xdr source ============================================================
+	//
+	//   struct LedgerHeader
+	//   {
+	//       uint32 ledgerVersion;    // the protocol version of the ledger
+	//       Hash previousLedgerHash; // hash of the previous ledger header
+	//       StellarValue scpValue;   // what consensus agreed to
+	//       Hash txSetResultHash;    // the TransactionResultSet that led to this ledger
+	//       Hash bucketListHash;     // hash of the ledger state
+	//   
+	//       uint32 ledgerSeq; // sequence number of this ledger
+	//   
+	//       int64 totalCoins; // total number of stroops in existence.
+	//                         // 10,000,000 stroops in 1 XLM
+	//   
+	//       int64 feePool;       // fees burned since last inflation run
+	//       uint32 inflationSeq; // inflation sequence number
+	//   
+	//       uint64 idPool; // last used global ID, used for generating objects
+	//   
+	//       uint32 baseFee;     // base fee per operation in stroops
+	//       uint32 baseReserve; // account base reserve in stroops
+	//   
+	//       uint32 maxTxSetSize; // maximum size a transaction set can be
+	//   
+	//       Hash skipList[4]; // hashes of ledgers in the past. allows you to jump back
+	//                         // in time without walking the chain back ledger by ledger
+	//                         // each slot contains the oldest ledger that is mod of
+	//                         // either 50  5000  50000 or 500000 depending on index
+	//                         // skipList[0] mod(50), skipList[1] mod(5000), etc
+	//   
+	//       // reserved for future use
+	//       union switch (int v)
+	//       {
+	//       case 0:
+	//           void;
+	//       }
+	//       ext;
+	//   };
+	//
+	// ===========================================================================
+	xdr.struct("LedgerHeader",[["ledgerVersion",xdr.lookup("Uint32")],["previousLedgerHash",xdr.lookup("Hash")],["scpValue",xdr.lookup("StellarValue")],["txSetResultHash",xdr.lookup("Hash")],["bucketListHash",xdr.lookup("Hash")],["ledgerSeq",xdr.lookup("Uint32")],["totalCoins",xdr.lookup("Int64")],["feePool",xdr.lookup("Int64")],["inflationSeq",xdr.lookup("Uint32")],["idPool",xdr.lookup("Uint64")],["baseFee",xdr.lookup("Uint32")],["baseReserve",xdr.lookup("Uint32")],["maxTxSetSize",xdr.lookup("Uint32")],["skipList",xdr.array(xdr.lookup("Hash"),4)],["ext",xdr.lookup("LedgerHeaderExt")]]); // === xdr source ============================================================
+	//
+	//   enum LedgerUpgradeType
+	//   {
+	//       LEDGER_UPGRADE_VERSION = 1,
+	//       LEDGER_UPGRADE_BASE_FEE = 2,
+	//       LEDGER_UPGRADE_MAX_TX_SET_SIZE = 3
+	//   };
+	//
+	// ===========================================================================
+	xdr["enum"]("LedgerUpgradeType",{ledgerUpgradeVersion:1,ledgerUpgradeBaseFee:2,ledgerUpgradeMaxTxSetSize:3}); // === xdr source ============================================================
+	//
+	//   union LedgerUpgrade switch (LedgerUpgradeType type)
+	//   {
+	//   case LEDGER_UPGRADE_VERSION:
+	//       uint32 newLedgerVersion; // update ledgerVersion
+	//   case LEDGER_UPGRADE_BASE_FEE:
+	//       uint32 newBaseFee; // update baseFee
+	//   case LEDGER_UPGRADE_MAX_TX_SET_SIZE:
+	//       uint32 newMaxTxSetSize; // update maxTxSetSize
+	//   };
+	//
+	// ===========================================================================
+	xdr.union("LedgerUpgrade",{switchOn:xdr.lookup("LedgerUpgradeType"),switchName:"type",switches:[["ledgerUpgradeVersion","newLedgerVersion"],["ledgerUpgradeBaseFee","newBaseFee"],["ledgerUpgradeMaxTxSetSize","newMaxTxSetSize"]],arms:{newLedgerVersion:xdr.lookup("Uint32"),newBaseFee:xdr.lookup("Uint32"),newMaxTxSetSize:xdr.lookup("Uint32")}}); // === xdr source ============================================================
+	//
+	//   struct
+	//       {
+	//           AccountID accountID;
+	//       }
+	//
+	// ===========================================================================
+	xdr.struct("LedgerKeyAccount",[["accountId",xdr.lookup("AccountId")]]); // === xdr source ============================================================
+	//
+	//   struct
+	//       {
+	//           AccountID accountID;
+	//           Asset asset;
+	//       }
+	//
+	// ===========================================================================
+	xdr.struct("LedgerKeyTrustLine",[["accountId",xdr.lookup("AccountId")],["asset",xdr.lookup("Asset")]]); // === xdr source ============================================================
+	//
+	//   struct
+	//       {
+	//           AccountID sellerID;
+	//           uint64 offerID;
+	//       }
+	//
+	// ===========================================================================
+	xdr.struct("LedgerKeyOffer",[["sellerId",xdr.lookup("AccountId")],["offerId",xdr.lookup("Uint64")]]); // === xdr source ============================================================
+	//
+	//   struct
+	//       {
+	//           AccountID accountID;
+	//           string64 dataName;
+	//       }
+	//
+	// ===========================================================================
+	xdr.struct("LedgerKeyData",[["accountId",xdr.lookup("AccountId")],["dataName",xdr.lookup("String64")]]); // === xdr source ============================================================
+	//
+	//   union LedgerKey switch (LedgerEntryType type)
+	//   {
+	//   case ACCOUNT:
+	//       struct
+	//       {
+	//           AccountID accountID;
+	//       } account;
+	//   
+	//   case TRUSTLINE:
+	//       struct
+	//       {
+	//           AccountID accountID;
+	//           Asset asset;
+	//       } trustLine;
+	//   
+	//   case OFFER:
+	//       struct
+	//       {
+	//           AccountID sellerID;
+	//           uint64 offerID;
+	//       } offer;
+	//   
+	//   case DATA:
+	//       struct
+	//       {
+	//           AccountID accountID;
+	//           string64 dataName;
+	//       } data;
+	//   };
+	//
+	// ===========================================================================
+	xdr.union("LedgerKey",{switchOn:xdr.lookup("LedgerEntryType"),switchName:"type",switches:[["account","account"],["trustline","trustLine"],["offer","offer"],["datum","data"]],arms:{account:xdr.lookup("LedgerKeyAccount"),trustLine:xdr.lookup("LedgerKeyTrustLine"),offer:xdr.lookup("LedgerKeyOffer"),data:xdr.lookup("LedgerKeyData")}}); // === xdr source ============================================================
+	//
+	//   enum BucketEntryType
+	//   {
+	//       LIVEENTRY = 0,
+	//       DEADENTRY = 1
+	//   };
+	//
+	// ===========================================================================
+	xdr["enum"]("BucketEntryType",{liveentry:0,deadentry:1}); // === xdr source ============================================================
+	//
+	//   union BucketEntry switch (BucketEntryType type)
+	//   {
+	//   case LIVEENTRY:
+	//       LedgerEntry liveEntry;
+	//   
+	//   case DEADENTRY:
+	//       LedgerKey deadEntry;
+	//   };
+	//
+	// ===========================================================================
+	xdr.union("BucketEntry",{switchOn:xdr.lookup("BucketEntryType"),switchName:"type",switches:[["liveentry","liveEntry"],["deadentry","deadEntry"]],arms:{liveEntry:xdr.lookup("LedgerEntry"),deadEntry:xdr.lookup("LedgerKey")}}); // === xdr source ============================================================
+	//
+	//   struct TransactionSet
+	//   {
+	//       Hash previousLedgerHash;
+	//       TransactionEnvelope txs<>;
+	//   };
+	//
+	// ===========================================================================
+	xdr.struct("TransactionSet",[["previousLedgerHash",xdr.lookup("Hash")],["txes",xdr.varArray(xdr.lookup("TransactionEnvelope"),2147483647)]]); // === xdr source ============================================================
+	//
+	//   struct TransactionResultPair
+	//   {
+	//       Hash transactionHash;
+	//       TransactionResult result; // result for the transaction
+	//   };
+	//
+	// ===========================================================================
+	xdr.struct("TransactionResultPair",[["transactionHash",xdr.lookup("Hash")],["result",xdr.lookup("TransactionResult")]]); // === xdr source ============================================================
+	//
+	//   struct TransactionResultSet
+	//   {
+	//       TransactionResultPair results<>;
+	//   };
+	//
+	// ===========================================================================
+	xdr.struct("TransactionResultSet",[["results",xdr.varArray(xdr.lookup("TransactionResultPair"),2147483647)]]); // === xdr source ============================================================
+	//
+	//   union switch (int v)
+	//       {
+	//       case 0:
+	//           void;
+	//       }
+	//
+	// ===========================================================================
+	xdr.union("TransactionHistoryEntryExt",{switchOn:xdr.int(),switchName:"v",switches:[[0,xdr["void"]()]],arms:{}}); // === xdr source ============================================================
+	//
+	//   struct TransactionHistoryEntry
+	//   {
+	//       uint32 ledgerSeq;
+	//       TransactionSet txSet;
+	//   
+	//       // reserved for future use
+	//       union switch (int v)
+	//       {
+	//       case 0:
+	//           void;
+	//       }
+	//       ext;
+	//   };
+	//
+	// ===========================================================================
+	xdr.struct("TransactionHistoryEntry",[["ledgerSeq",xdr.lookup("Uint32")],["txSet",xdr.lookup("TransactionSet")],["ext",xdr.lookup("TransactionHistoryEntryExt")]]); // === xdr source ============================================================
+	//
+	//   union switch (int v)
+	//       {
+	//       case 0:
+	//           void;
+	//       }
+	//
+	// ===========================================================================
+	xdr.union("TransactionHistoryResultEntryExt",{switchOn:xdr.int(),switchName:"v",switches:[[0,xdr["void"]()]],arms:{}}); // === xdr source ============================================================
+	//
+	//   struct TransactionHistoryResultEntry
+	//   {
+	//       uint32 ledgerSeq;
+	//       TransactionResultSet txResultSet;
+	//   
+	//       // reserved for future use
+	//       union switch (int v)
+	//       {
+	//       case 0:
+	//           void;
+	//       }
+	//       ext;
+	//   };
+	//
+	// ===========================================================================
+	xdr.struct("TransactionHistoryResultEntry",[["ledgerSeq",xdr.lookup("Uint32")],["txResultSet",xdr.lookup("TransactionResultSet")],["ext",xdr.lookup("TransactionHistoryResultEntryExt")]]); // === xdr source ============================================================
+	//
+	//   union switch (int v)
+	//       {
+	//       case 0:
+	//           void;
+	//       }
+	//
+	// ===========================================================================
+	xdr.union("LedgerHeaderHistoryEntryExt",{switchOn:xdr.int(),switchName:"v",switches:[[0,xdr["void"]()]],arms:{}}); // === xdr source ============================================================
+	//
+	//   struct LedgerHeaderHistoryEntry
+	//   {
+	//       Hash hash;
+	//       LedgerHeader header;
+	//   
+	//       // reserved for future use
+	//       union switch (int v)
+	//       {
+	//       case 0:
+	//           void;
+	//       }
+	//       ext;
+	//   };
+	//
+	// ===========================================================================
+	xdr.struct("LedgerHeaderHistoryEntry",[["hash",xdr.lookup("Hash")],["header",xdr.lookup("LedgerHeader")],["ext",xdr.lookup("LedgerHeaderHistoryEntryExt")]]); // === xdr source ============================================================
+	//
+	//   struct LedgerSCPMessages
+	//   {
+	//       uint32 ledgerSeq;
+	//       SCPEnvelope messages<>;
+	//   };
+	//
+	// ===========================================================================
+	xdr.struct("LedgerScpMessages",[["ledgerSeq",xdr.lookup("Uint32")],["messages",xdr.varArray(xdr.lookup("ScpEnvelope"),2147483647)]]); // === xdr source ============================================================
+	//
+	//   struct SCPHistoryEntryV0
+	//   {
+	//       SCPQuorumSet quorumSets<>; // additional quorum sets used by ledgerMessages
+	//       LedgerSCPMessages ledgerMessages;
+	//   };
+	//
+	// ===========================================================================
+	xdr.struct("ScpHistoryEntryV0",[["quorumSets",xdr.varArray(xdr.lookup("ScpQuorumSet"),2147483647)],["ledgerMessages",xdr.lookup("LedgerScpMessages")]]); // === xdr source ============================================================
+	//
+	//   union SCPHistoryEntry switch (int v)
+	//   {
+	//   case 0:
+	//       SCPHistoryEntryV0 v0;
+	//   };
+	//
+	// ===========================================================================
+	xdr.union("ScpHistoryEntry",{switchOn:xdr.int(),switchName:"v",switches:[[0,"v0"]],arms:{v0:xdr.lookup("ScpHistoryEntryV0")}}); // === xdr source ============================================================
+	//
+	//   enum LedgerEntryChangeType
+	//   {
+	//       LEDGER_ENTRY_CREATED = 0, // entry was added to the ledger
+	//       LEDGER_ENTRY_UPDATED = 1, // entry was modified in the ledger
+	//       LEDGER_ENTRY_REMOVED = 2, // entry was removed from the ledger
+	//       LEDGER_ENTRY_STATE = 3    // value of the entry
+	//   };
+	//
+	// ===========================================================================
+	xdr["enum"]("LedgerEntryChangeType",{ledgerEntryCreated:0,ledgerEntryUpdated:1,ledgerEntryRemoved:2,ledgerEntryState:3}); // === xdr source ============================================================
+	//
+	//   union LedgerEntryChange switch (LedgerEntryChangeType type)
+	//   {
+	//   case LEDGER_ENTRY_CREATED:
+	//       LedgerEntry created;
+	//   case LEDGER_ENTRY_UPDATED:
+	//       LedgerEntry updated;
+	//   case LEDGER_ENTRY_REMOVED:
+	//       LedgerKey removed;
+	//   case LEDGER_ENTRY_STATE:
+	//       LedgerEntry state;
+	//   };
+	//
+	// ===========================================================================
+	xdr.union("LedgerEntryChange",{switchOn:xdr.lookup("LedgerEntryChangeType"),switchName:"type",switches:[["ledgerEntryCreated","created"],["ledgerEntryUpdated","updated"],["ledgerEntryRemoved","removed"],["ledgerEntryState","state"]],arms:{created:xdr.lookup("LedgerEntry"),updated:xdr.lookup("LedgerEntry"),removed:xdr.lookup("LedgerKey"),state:xdr.lookup("LedgerEntry")}}); // === xdr source ============================================================
+	//
+	//   typedef LedgerEntryChange LedgerEntryChanges<>;
+	//
+	// ===========================================================================
+	xdr.typedef("LedgerEntryChanges",xdr.varArray(xdr.lookup("LedgerEntryChange"),2147483647)); // === xdr source ============================================================
+	//
+	//   struct OperationMeta
+	//   {
+	//       LedgerEntryChanges changes;
+	//   };
+	//
+	// ===========================================================================
+	xdr.struct("OperationMeta",[["changes",xdr.lookup("LedgerEntryChanges")]]); // === xdr source ============================================================
+	//
+	//   union TransactionMeta switch (int v)
+	//   {
+	//   case 0:
+	//       OperationMeta operations<>;
+	//   };
+	//
+	// ===========================================================================
+	xdr.union("TransactionMeta",{switchOn:xdr.int(),switchName:"v",switches:[[0,"operations"]],arms:{operations:xdr.varArray(xdr.lookup("OperationMeta"),2147483647)}}); // === xdr source ============================================================
+	//
+	//   enum ErrorCode
+	//   {
+	//       ERR_MISC = 0, // Unspecific error
+	//       ERR_DATA = 1, // Malformed data
+	//       ERR_CONF = 2, // Misconfiguration error
+	//       ERR_AUTH = 3, // Authentication failure
+	//       ERR_LOAD = 4  // System overloaded
+	//   };
+	//
+	// ===========================================================================
+	xdr["enum"]("ErrorCode",{errMisc:0,errDatum:1,errConf:2,errAuth:3,errLoad:4}); // === xdr source ============================================================
+	//
+	//   struct Error
+	//   {
+	//       ErrorCode code;
+	//       string msg<100>;
+	//   };
+	//
+	// ===========================================================================
+	xdr.struct("Error",[["code",xdr.lookup("ErrorCode")],["msg",xdr.string(100)]]); // === xdr source ============================================================
+	//
+	//   struct AuthCert
+	//   {
+	//       Curve25519Public pubkey;
+	//       uint64 expiration;
+	//       Signature sig;
+	//   };
+	//
+	// ===========================================================================
+	xdr.struct("AuthCert",[["pubkey",xdr.lookup("Curve25519Public")],["expiration",xdr.lookup("Uint64")],["sig",xdr.lookup("Signature")]]); // === xdr source ============================================================
+	//
+	//   struct Hello
+	//   {
+	//       uint32 ledgerVersion;
+	//       uint32 overlayVersion;
+	//       uint32 overlayMinVersion;
+	//       Hash networkID;
+	//       string versionStr<100>;
+	//       int listeningPort;
+	//       NodeID peerID;
+	//       AuthCert cert;
+	//       uint256 nonce;
+	//   };
+	//
+	// ===========================================================================
+	xdr.struct("Hello",[["ledgerVersion",xdr.lookup("Uint32")],["overlayVersion",xdr.lookup("Uint32")],["overlayMinVersion",xdr.lookup("Uint32")],["networkId",xdr.lookup("Hash")],["versionStr",xdr.string(100)],["listeningPort",xdr.int()],["peerId",xdr.lookup("NodeId")],["cert",xdr.lookup("AuthCert")],["nonce",xdr.lookup("Uint256")]]); // === xdr source ============================================================
+	//
+	//   struct Auth
+	//   {
+	//       // Empty message, just to confirm
+	//       // establishment of MAC keys.
+	//       int unused;
+	//   };
+	//
+	// ===========================================================================
+	xdr.struct("Auth",[["unused",xdr.int()]]); // === xdr source ============================================================
+	//
+	//   enum IPAddrType
+	//   {
+	//       IPv4 = 0,
+	//       IPv6 = 1
+	//   };
+	//
+	// ===========================================================================
+	xdr["enum"]("IpAddrType",{iPv4:0,iPv6:1}); // === xdr source ============================================================
+	//
+	//   union switch (IPAddrType type)
+	//       {
+	//       case IPv4:
+	//           opaque ipv4[4];
+	//       case IPv6:
+	//           opaque ipv6[16];
+	//       }
+	//
+	// ===========================================================================
+	xdr.union("PeerAddressIp",{switchOn:xdr.lookup("IpAddrType"),switchName:"type",switches:[["iPv4","ipv4"],["iPv6","ipv6"]],arms:{ipv4:xdr.opaque(4),ipv6:xdr.opaque(16)}}); // === xdr source ============================================================
+	//
+	//   struct PeerAddress
+	//   {
+	//       union switch (IPAddrType type)
+	//       {
+	//       case IPv4:
+	//           opaque ipv4[4];
+	//       case IPv6:
+	//           opaque ipv6[16];
+	//       }
+	//       ip;
+	//       uint32 port;
+	//       uint32 numFailures;
+	//   };
+	//
+	// ===========================================================================
+	xdr.struct("PeerAddress",[["ip",xdr.lookup("PeerAddressIp")],["port",xdr.lookup("Uint32")],["numFailures",xdr.lookup("Uint32")]]); // === xdr source ============================================================
+	//
+	//   enum MessageType
+	//   {
+	//       ERROR_MSG = 0,
+	//       AUTH = 2,
+	//       DONT_HAVE = 3,
+	//   
+	//       GET_PEERS = 4, // gets a list of peers this guy knows about
+	//       PEERS = 5,
+	//   
+	//       GET_TX_SET = 6, // gets a particular txset by hash
+	//       TX_SET = 7,
+	//   
+	//       TRANSACTION = 8, // pass on a tx you have heard about
+	//   
+	//       // SCP
+	//       GET_SCP_QUORUMSET = 9,
+	//       SCP_QUORUMSET = 10,
+	//       SCP_MESSAGE = 11,
+	//       GET_SCP_STATE = 12,
+	//   
+	//       // new messages
+	//       HELLO = 13
+	//   };
+	//
+	// ===========================================================================
+	xdr["enum"]("MessageType",{errorMsg:0,auth:2,dontHave:3,getPeer:4,peer:5,getTxSet:6,txSet:7,transaction:8,getScpQuorumset:9,scpQuorumset:10,scpMessage:11,getScpState:12,hello:13}); // === xdr source ============================================================
+	//
+	//   struct DontHave
+	//   {
+	//       MessageType type;
+	//       uint256 reqHash;
+	//   };
+	//
+	// ===========================================================================
+	xdr.struct("DontHave",[["type",xdr.lookup("MessageType")],["reqHash",xdr.lookup("Uint256")]]); // === xdr source ============================================================
+	//
+	//   union StellarMessage switch (MessageType type)
+	//   {
+	//   case ERROR_MSG:
+	//       Error error;
+	//   case HELLO:
+	//       Hello hello;
+	//   case AUTH:
+	//       Auth auth;
+	//   case DONT_HAVE:
+	//       DontHave dontHave;
+	//   case GET_PEERS:
+	//       void;
+	//   case PEERS:
+	//       PeerAddress peers<>;
+	//   
+	//   case GET_TX_SET:
+	//       uint256 txSetHash;
+	//   case TX_SET:
+	//       TransactionSet txSet;
+	//   
+	//   case TRANSACTION:
+	//       TransactionEnvelope transaction;
+	//   
+	//   // SCP
+	//   case GET_SCP_QUORUMSET:
+	//       uint256 qSetHash;
+	//   case SCP_QUORUMSET:
+	//       SCPQuorumSet qSet;
+	//   case SCP_MESSAGE:
+	//       SCPEnvelope envelope;
+	//   case GET_SCP_STATE:
+	//       uint32 getSCPLedgerSeq; // ledger seq requested ; if 0, requests the latest
+	//   };
+	//
+	// ===========================================================================
+	xdr.union("StellarMessage",{switchOn:xdr.lookup("MessageType"),switchName:"type",switches:[["errorMsg","error"],["hello","hello"],["auth","auth"],["dontHave","dontHave"],["getPeer",xdr["void"]()],["peer","peers"],["getTxSet","txSetHash"],["txSet","txSet"],["transaction","transaction"],["getScpQuorumset","qSetHash"],["scpQuorumset","qSet"],["scpMessage","envelope"],["getScpState","getScpLedgerSeq"]],arms:{error:xdr.lookup("Error"),hello:xdr.lookup("Hello"),auth:xdr.lookup("Auth"),dontHave:xdr.lookup("DontHave"),peers:xdr.varArray(xdr.lookup("PeerAddress"),2147483647),txSetHash:xdr.lookup("Uint256"),txSet:xdr.lookup("TransactionSet"),transaction:xdr.lookup("TransactionEnvelope"),qSetHash:xdr.lookup("Uint256"),qSet:xdr.lookup("ScpQuorumSet"),envelope:xdr.lookup("ScpEnvelope"),getScpLedgerSeq:xdr.lookup("Uint32")}}); // === xdr source ============================================================
+	//
+	//   struct
+	//   {
+	//      uint64 sequence;
+	//      StellarMessage message;
+	//      HmacSha256Mac mac;
+	//       }
+	//
+	// ===========================================================================
+	xdr.struct("AuthenticatedMessageV0",[["sequence",xdr.lookup("Uint64")],["message",xdr.lookup("StellarMessage")],["mac",xdr.lookup("HmacSha256Mac")]]); // === xdr source ============================================================
+	//
+	//   union AuthenticatedMessage switch (uint32 v)
+	//   {
+	//   case 0:
+	//       struct
+	//   {
+	//      uint64 sequence;
+	//      StellarMessage message;
+	//      HmacSha256Mac mac;
+	//       } v0;
+	//   };
+	//
+	// ===========================================================================
+	xdr.union("AuthenticatedMessage",{switchOn:xdr.lookup("Uint32"),switchName:"v",switches:[[0,"v0"]],arms:{v0:xdr.lookup("AuthenticatedMessageV0")}}); // === xdr source ============================================================
+	//
+	//   struct DecoratedSignature
+	//   {
+	//       SignatureHint hint;  // last 4 bytes of the public key, used as a hint
+	//       Signature signature; // actual signature
+	//   };
+	//
+	// ===========================================================================
+	xdr.struct("DecoratedSignature",[["hint",xdr.lookup("SignatureHint")],["signature",xdr.lookup("Signature")]]); // === xdr source ============================================================
+	//
+	//   enum OperationType
+	//   {
+	//       CREATE_ACCOUNT = 0,
+	//       PAYMENT = 1,
+	//       PATH_PAYMENT = 2,
+	//       MANAGE_OFFER = 3,
+	//       CREATE_PASSIVE_OFFER = 4,
+	//       SET_OPTIONS = 5,
+	//       CHANGE_TRUST = 6,
+	//       ALLOW_TRUST = 7,
+	//       ACCOUNT_MERGE = 8,
+	//       INFLATION = 9,
+	//       MANAGE_DATA = 10
+	//   };
+	//
+	// ===========================================================================
+	xdr["enum"]("OperationType",{createAccount:0,payment:1,pathPayment:2,manageOffer:3,createPassiveOffer:4,setOption:5,changeTrust:6,allowTrust:7,accountMerge:8,inflation:9,manageDatum:10}); // === xdr source ============================================================
+	//
+	//   struct CreateAccountOp
+	//   {
+	//       AccountID destination; // account to create
+	//       int64 startingBalance; // amount they end up with
+	//   };
+	//
+	// ===========================================================================
+	xdr.struct("CreateAccountOp",[["destination",xdr.lookup("AccountId")],["startingBalance",xdr.lookup("Int64")]]); // === xdr source ============================================================
+	//
+	//   struct PaymentOp
+	//   {
+	//       AccountID destination; // recipient of the payment
+	//       Asset asset;           // what they end up with
+	//       int64 amount;          // amount they end up with
+	//   };
+	//
+	// ===========================================================================
+	xdr.struct("PaymentOp",[["destination",xdr.lookup("AccountId")],["asset",xdr.lookup("Asset")],["amount",xdr.lookup("Int64")]]); // === xdr source ============================================================
+	//
+	//   struct PathPaymentOp
+	//   {
+	//       Asset sendAsset; // asset we pay with
+	//       int64 sendMax;   // the maximum amount of sendAsset to
+	//                        // send (excluding fees).
+	//                        // The operation will fail if can't be met
+	//   
+	//       AccountID destination; // recipient of the payment
+	//       Asset destAsset;       // what they end up with
+	//       int64 destAmount;      // amount they end up with
+	//   
+	//       Asset path<5>; // additional hops it must go through to get there
+	//   };
+	//
+	// ===========================================================================
+	xdr.struct("PathPaymentOp",[["sendAsset",xdr.lookup("Asset")],["sendMax",xdr.lookup("Int64")],["destination",xdr.lookup("AccountId")],["destAsset",xdr.lookup("Asset")],["destAmount",xdr.lookup("Int64")],["path",xdr.varArray(xdr.lookup("Asset"),5)]]); // === xdr source ============================================================
+	//
+	//   struct ManageOfferOp
+	//   {
+	//       Asset selling;
+	//       Asset buying;
+	//       int64 amount; // amount being sold. if set to 0, delete the offer
+	//       Price price;  // price of thing being sold in terms of what you are buying
+	//   
+	//       // 0=create a new offer, otherwise edit an existing offer
+	//       uint64 offerID;
+	//   };
+	//
+	// ===========================================================================
+	xdr.struct("ManageOfferOp",[["selling",xdr.lookup("Asset")],["buying",xdr.lookup("Asset")],["amount",xdr.lookup("Int64")],["price",xdr.lookup("Price")],["offerId",xdr.lookup("Uint64")]]); // === xdr source ============================================================
+	//
+	//   struct CreatePassiveOfferOp
+	//   {
+	//       Asset selling; // A
+	//       Asset buying;  // B
+	//       int64 amount;  // amount taker gets. if set to 0, delete the offer
+	//       Price price;   // cost of A in terms of B
+	//   };
+	//
+	// ===========================================================================
+	xdr.struct("CreatePassiveOfferOp",[["selling",xdr.lookup("Asset")],["buying",xdr.lookup("Asset")],["amount",xdr.lookup("Int64")],["price",xdr.lookup("Price")]]); // === xdr source ============================================================
+	//
+	//   struct SetOptionsOp
+	//   {
+	//       AccountID* inflationDest; // sets the inflation destination
+	//   
+	//       uint32* clearFlags; // which flags to clear
+	//       uint32* setFlags;   // which flags to set
+	//   
+	//       // account threshold manipulation
+	//       uint32* masterWeight; // weight of the master account
+	//       uint32* lowThreshold;
+	//       uint32* medThreshold;
+	//       uint32* highThreshold;
+	//   
+	//       string32* homeDomain; // sets the home domain
+	//   
+	//       // Add, update or remove a signer for the account
+	//       // signer is deleted if the weight is 0
+	//       Signer* signer;
+	//   };
+	//
+	// ===========================================================================
+	xdr.struct("SetOptionsOp",[["inflationDest",xdr.option(xdr.lookup("AccountId"))],["clearFlags",xdr.option(xdr.lookup("Uint32"))],["setFlags",xdr.option(xdr.lookup("Uint32"))],["masterWeight",xdr.option(xdr.lookup("Uint32"))],["lowThreshold",xdr.option(xdr.lookup("Uint32"))],["medThreshold",xdr.option(xdr.lookup("Uint32"))],["highThreshold",xdr.option(xdr.lookup("Uint32"))],["homeDomain",xdr.option(xdr.lookup("String32"))],["signer",xdr.option(xdr.lookup("Signer"))]]); // === xdr source ============================================================
+	//
+	//   struct ChangeTrustOp
+	//   {
+	//       Asset line;
+	//   
+	//       // if limit is set to 0, deletes the trust line
+	//       int64 limit;
+	//   };
+	//
+	// ===========================================================================
+	xdr.struct("ChangeTrustOp",[["line",xdr.lookup("Asset")],["limit",xdr.lookup("Int64")]]); // === xdr source ============================================================
+	//
+	//   union switch (AssetType type)
+	//       {
+	//       // ASSET_TYPE_NATIVE is not allowed
+	//       case ASSET_TYPE_CREDIT_ALPHANUM4:
+	//           opaque assetCode4[4];
+	//   
+	//       case ASSET_TYPE_CREDIT_ALPHANUM12:
+	//           opaque assetCode12[12];
+	//   
+	//           // add other asset types here in the future
+	//       }
+	//
+	// ===========================================================================
+	xdr.union("AllowTrustOpAsset",{switchOn:xdr.lookup("AssetType"),switchName:"type",switches:[["assetTypeCreditAlphanum4","assetCode4"],["assetTypeCreditAlphanum12","assetCode12"]],arms:{assetCode4:xdr.opaque(4),assetCode12:xdr.opaque(12)}}); // === xdr source ============================================================
+	//
+	//   struct AllowTrustOp
+	//   {
+	//       AccountID trustor;
+	//       union switch (AssetType type)
+	//       {
+	//       // ASSET_TYPE_NATIVE is not allowed
+	//       case ASSET_TYPE_CREDIT_ALPHANUM4:
+	//           opaque assetCode4[4];
+	//   
+	//       case ASSET_TYPE_CREDIT_ALPHANUM12:
+	//           opaque assetCode12[12];
+	//   
+	//           // add other asset types here in the future
+	//       }
+	//       asset;
+	//   
+	//       bool authorize;
+	//   };
+	//
+	// ===========================================================================
+	xdr.struct("AllowTrustOp",[["trustor",xdr.lookup("AccountId")],["asset",xdr.lookup("AllowTrustOpAsset")],["authorize",xdr.bool()]]); // === xdr source ============================================================
+	//
+	//   struct ManageDataOp
+	//   {
+	//       string64 dataName; 
+	//       DataValue* dataValue;   // set to null to clear
+	//   };
+	//
+	// ===========================================================================
+	xdr.struct("ManageDataOp",[["dataName",xdr.lookup("String64")],["dataValue",xdr.option(xdr.lookup("DataValue"))]]); // === xdr source ============================================================
+	//
+	//   union switch (OperationType type)
+	//       {
+	//       case CREATE_ACCOUNT:
+	//           CreateAccountOp createAccountOp;
+	//       case PAYMENT:
+	//           PaymentOp paymentOp;
+	//       case PATH_PAYMENT:
+	//           PathPaymentOp pathPaymentOp;
+	//       case MANAGE_OFFER:
+	//           ManageOfferOp manageOfferOp;
+	//       case CREATE_PASSIVE_OFFER:
+	//           CreatePassiveOfferOp createPassiveOfferOp;
+	//       case SET_OPTIONS:
+	//           SetOptionsOp setOptionsOp;
+	//       case CHANGE_TRUST:
+	//           ChangeTrustOp changeTrustOp;
+	//       case ALLOW_TRUST:
+	//           AllowTrustOp allowTrustOp;
+	//       case ACCOUNT_MERGE:
+	//           AccountID destination;
+	//       case INFLATION:
+	//           void;
+	//       case MANAGE_DATA:
+	//           ManageDataOp manageDataOp;
+	//       }
+	//
+	// ===========================================================================
+	xdr.union("OperationBody",{switchOn:xdr.lookup("OperationType"),switchName:"type",switches:[["createAccount","createAccountOp"],["payment","paymentOp"],["pathPayment","pathPaymentOp"],["manageOffer","manageOfferOp"],["createPassiveOffer","createPassiveOfferOp"],["setOption","setOptionsOp"],["changeTrust","changeTrustOp"],["allowTrust","allowTrustOp"],["accountMerge","destination"],["inflation",xdr["void"]()],["manageDatum","manageDataOp"]],arms:{createAccountOp:xdr.lookup("CreateAccountOp"),paymentOp:xdr.lookup("PaymentOp"),pathPaymentOp:xdr.lookup("PathPaymentOp"),manageOfferOp:xdr.lookup("ManageOfferOp"),createPassiveOfferOp:xdr.lookup("CreatePassiveOfferOp"),setOptionsOp:xdr.lookup("SetOptionsOp"),changeTrustOp:xdr.lookup("ChangeTrustOp"),allowTrustOp:xdr.lookup("AllowTrustOp"),destination:xdr.lookup("AccountId"),manageDataOp:xdr.lookup("ManageDataOp")}}); // === xdr source ============================================================
+	//
+	//   struct Operation
+	//   {
+	//       // sourceAccount is the account used to run the operation
+	//       // if not set, the runtime defaults to "sourceAccount" specified at
+	//       // the transaction level
+	//       AccountID* sourceAccount;
+	//   
+	//       union switch (OperationType type)
+	//       {
+	//       case CREATE_ACCOUNT:
+	//           CreateAccountOp createAccountOp;
+	//       case PAYMENT:
+	//           PaymentOp paymentOp;
+	//       case PATH_PAYMENT:
+	//           PathPaymentOp pathPaymentOp;
+	//       case MANAGE_OFFER:
+	//           ManageOfferOp manageOfferOp;
+	//       case CREATE_PASSIVE_OFFER:
+	//           CreatePassiveOfferOp createPassiveOfferOp;
+	//       case SET_OPTIONS:
+	//           SetOptionsOp setOptionsOp;
+	//       case CHANGE_TRUST:
+	//           ChangeTrustOp changeTrustOp;
+	//       case ALLOW_TRUST:
+	//           AllowTrustOp allowTrustOp;
+	//       case ACCOUNT_MERGE:
+	//           AccountID destination;
+	//       case INFLATION:
+	//           void;
+	//       case MANAGE_DATA:
+	//           ManageDataOp manageDataOp;
+	//       }
+	//       body;
+	//   };
+	//
+	// ===========================================================================
+	xdr.struct("Operation",[["sourceAccount",xdr.option(xdr.lookup("AccountId"))],["body",xdr.lookup("OperationBody")]]); // === xdr source ============================================================
+	//
+	//   enum MemoType
+	//   {
+	//       MEMO_NONE = 0,
+	//       MEMO_TEXT = 1,
+	//       MEMO_ID = 2,
+	//       MEMO_HASH = 3,
+	//       MEMO_RETURN = 4
+	//   };
+	//
+	// ===========================================================================
+	xdr["enum"]("MemoType",{memoNone:0,memoText:1,memoId:2,memoHash:3,memoReturn:4}); // === xdr source ============================================================
+	//
+	//   union Memo switch (MemoType type)
+	//   {
+	//   case MEMO_NONE:
+	//       void;
+	//   case MEMO_TEXT:
+	//       string text<28>;
+	//   case MEMO_ID:
+	//       uint64 id;
+	//   case MEMO_HASH:
+	//       Hash hash; // the hash of what to pull from the content server
+	//   case MEMO_RETURN:
+	//       Hash retHash; // the hash of the tx you are rejecting
+	//   };
+	//
+	// ===========================================================================
+	xdr.union("Memo",{switchOn:xdr.lookup("MemoType"),switchName:"type",switches:[["memoNone",xdr["void"]()],["memoText","text"],["memoId","id"],["memoHash","hash"],["memoReturn","retHash"]],arms:{text:xdr.string(28),id:xdr.lookup("Uint64"),hash:xdr.lookup("Hash"),retHash:xdr.lookup("Hash")}}); // === xdr source ============================================================
+	//
+	//   struct TimeBounds
+	//   {
+	//       uint64 minTime;
+	//       uint64 maxTime; // 0 here means no maxTime
+	//   };
+	//
+	// ===========================================================================
+	xdr.struct("TimeBounds",[["minTime",xdr.lookup("Uint64")],["maxTime",xdr.lookup("Uint64")]]); // === xdr source ============================================================
+	//
+	//   union switch (int v)
+	//       {
+	//       case 0:
+	//           void;
+	//       }
+	//
+	// ===========================================================================
+	xdr.union("TransactionExt",{switchOn:xdr.int(),switchName:"v",switches:[[0,xdr["void"]()]],arms:{}}); // === xdr source ============================================================
+	//
+	//   struct Transaction
+	//   {
+	//       // account used to run the transaction
+	//       AccountID sourceAccount;
+	//   
+	//       // the fee the sourceAccount will pay
+	//       uint32 fee;
+	//   
+	//       // sequence number to consume in the account
+	//       SequenceNumber seqNum;
+	//   
+	//       // validity range (inclusive) for the last ledger close time
+	//       TimeBounds* timeBounds;
+	//   
+	//       Memo memo;
+	//   
+	//       Operation operations<100>;
+	//   
+	//       // reserved for future use
+	//       union switch (int v)
+	//       {
+	//       case 0:
+	//           void;
+	//       }
+	//       ext;
+	//   };
+	//
+	// ===========================================================================
+	xdr.struct("Transaction",[["sourceAccount",xdr.lookup("AccountId")],["fee",xdr.lookup("Uint32")],["seqNum",xdr.lookup("SequenceNumber")],["timeBounds",xdr.option(xdr.lookup("TimeBounds"))],["memo",xdr.lookup("Memo")],["operations",xdr.varArray(xdr.lookup("Operation"),100)],["ext",xdr.lookup("TransactionExt")]]); // === xdr source ============================================================
+	//
+	//   union switch (EnvelopeType type)
+	//       {
+	//       case ENVELOPE_TYPE_TX:
+	//             Transaction tx;
+	//       /* All other values of type are invalid */
+	//       }
+	//
+	// ===========================================================================
+	xdr.union("TransactionSignaturePayloadTaggedTransaction",{switchOn:xdr.lookup("EnvelopeType"),switchName:"type",switches:[["envelopeTypeTx","tx"]],arms:{tx:xdr.lookup("Transaction")}}); // === xdr source ============================================================
+	//
+	//   struct TransactionSignaturePayload {
+	//       Hash networkId;
+	//       union switch (EnvelopeType type)
+	//       {
+	//       case ENVELOPE_TYPE_TX:
+	//             Transaction tx;
+	//       /* All other values of type are invalid */
+	//       } taggedTransaction;
+	//   };
+	//
+	// ===========================================================================
+	xdr.struct("TransactionSignaturePayload",[["networkId",xdr.lookup("Hash")],["taggedTransaction",xdr.lookup("TransactionSignaturePayloadTaggedTransaction")]]); // === xdr source ============================================================
+	//
+	//   struct TransactionEnvelope
+	//   {
+	//       Transaction tx;
+	//       /* Each decorated signature is a signature over the SHA256 hash of
+	//        * a TransactionSignaturePayload */
+	//       DecoratedSignature
+	//       signatures<20>;
+	//   };
+	//
+	// ===========================================================================
+	xdr.struct("TransactionEnvelope",[["tx",xdr.lookup("Transaction")],["signatures",xdr.varArray(xdr.lookup("DecoratedSignature"),20)]]); // === xdr source ============================================================
+	//
+	//   struct ClaimOfferAtom
+	//   {
+	//       // emitted to identify the offer
+	//       AccountID sellerID; // Account that owns the offer
+	//       uint64 offerID;
+	//   
+	//       // amount and asset taken from the owner
+	//       Asset assetSold;
+	//       int64 amountSold;
+	//   
+	//       // amount and asset sent to the owner
+	//       Asset assetBought;
+	//       int64 amountBought;
+	//   };
+	//
+	// ===========================================================================
+	xdr.struct("ClaimOfferAtom",[["sellerId",xdr.lookup("AccountId")],["offerId",xdr.lookup("Uint64")],["assetSold",xdr.lookup("Asset")],["amountSold",xdr.lookup("Int64")],["assetBought",xdr.lookup("Asset")],["amountBought",xdr.lookup("Int64")]]); // === xdr source ============================================================
+	//
+	//   enum CreateAccountResultCode
+	//   {
+	//       // codes considered as "success" for the operation
+	//       CREATE_ACCOUNT_SUCCESS = 0, // account was created
+	//   
+	//       // codes considered as "failure" for the operation
+	//       CREATE_ACCOUNT_MALFORMED = -1,   // invalid destination
+	//       CREATE_ACCOUNT_UNDERFUNDED = -2, // not enough funds in source account
+	//       CREATE_ACCOUNT_LOW_RESERVE =
+	//           -3, // would create an account below the min reserve
+	//       CREATE_ACCOUNT_ALREADY_EXIST = -4 // account already exists
+	//   };
+	//
+	// ===========================================================================
+	xdr["enum"]("CreateAccountResultCode",{createAccountSuccess:0,createAccountMalformed:-1,createAccountUnderfunded:-2,createAccountLowReserve:-3,createAccountAlreadyExist:-4}); // === xdr source ============================================================
+	//
+	//   union CreateAccountResult switch (CreateAccountResultCode code)
+	//   {
+	//   case CREATE_ACCOUNT_SUCCESS:
+	//       void;
+	//   default:
+	//       void;
+	//   };
+	//
+	// ===========================================================================
+	xdr.union("CreateAccountResult",{switchOn:xdr.lookup("CreateAccountResultCode"),switchName:"code",switches:[["createAccountSuccess",xdr["void"]()]],arms:{},defaultArm:xdr["void"]()}); // === xdr source ============================================================
+	//
+	//   enum PaymentResultCode
+	//   {
+	//       // codes considered as "success" for the operation
+	//       PAYMENT_SUCCESS = 0, // payment successfuly completed
+	//   
+	//       // codes considered as "failure" for the operation
+	//       PAYMENT_MALFORMED = -1,          // bad input
+	//       PAYMENT_UNDERFUNDED = -2,        // not enough funds in source account
+	//       PAYMENT_SRC_NO_TRUST = -3,       // no trust line on source account
+	//       PAYMENT_SRC_NOT_AUTHORIZED = -4, // source not authorized to transfer
+	//       PAYMENT_NO_DESTINATION = -5,     // destination account does not exist
+	//       PAYMENT_NO_TRUST = -6,       // destination missing a trust line for asset
+	//       PAYMENT_NOT_AUTHORIZED = -7, // destination not authorized to hold asset
+	//       PAYMENT_LINE_FULL = -8,      // destination would go above their limit
+	//       PAYMENT_NO_ISSUER = -9       // missing issuer on asset
+	//   };
+	//
+	// ===========================================================================
+	xdr["enum"]("PaymentResultCode",{paymentSuccess:0,paymentMalformed:-1,paymentUnderfunded:-2,paymentSrcNoTrust:-3,paymentSrcNotAuthorized:-4,paymentNoDestination:-5,paymentNoTrust:-6,paymentNotAuthorized:-7,paymentLineFull:-8,paymentNoIssuer:-9}); // === xdr source ============================================================
+	//
+	//   union PaymentResult switch (PaymentResultCode code)
+	//   {
+	//   case PAYMENT_SUCCESS:
+	//       void;
+	//   default:
+	//       void;
+	//   };
+	//
+	// ===========================================================================
+	xdr.union("PaymentResult",{switchOn:xdr.lookup("PaymentResultCode"),switchName:"code",switches:[["paymentSuccess",xdr["void"]()]],arms:{},defaultArm:xdr["void"]()}); // === xdr source ============================================================
+	//
+	//   enum PathPaymentResultCode
+	//   {
+	//       // codes considered as "success" for the operation
+	//       PATH_PAYMENT_SUCCESS = 0, // success
+	//   
+	//       // codes considered as "failure" for the operation
+	//       PATH_PAYMENT_MALFORMED = -1,          // bad input
+	//       PATH_PAYMENT_UNDERFUNDED = -2,        // not enough funds in source account
+	//       PATH_PAYMENT_SRC_NO_TRUST = -3,       // no trust line on source account
+	//       PATH_PAYMENT_SRC_NOT_AUTHORIZED = -4, // source not authorized to transfer
+	//       PATH_PAYMENT_NO_DESTINATION = -5,     // destination account does not exist
+	//       PATH_PAYMENT_NO_TRUST = -6,           // dest missing a trust line for asset
+	//       PATH_PAYMENT_NOT_AUTHORIZED = -7,     // dest not authorized to hold asset
+	//       PATH_PAYMENT_LINE_FULL = -8,          // dest would go above their limit
+	//       PATH_PAYMENT_NO_ISSUER = -9,          // missing issuer on one asset
+	//       PATH_PAYMENT_TOO_FEW_OFFERS = -10,    // not enough offers to satisfy path
+	//       PATH_PAYMENT_OFFER_CROSS_SELF = -11,  // would cross one of its own offers
+	//       PATH_PAYMENT_OVER_SENDMAX = -12       // could not satisfy sendmax
+	//   };
+	//
+	// ===========================================================================
+	xdr["enum"]("PathPaymentResultCode",{pathPaymentSuccess:0,pathPaymentMalformed:-1,pathPaymentUnderfunded:-2,pathPaymentSrcNoTrust:-3,pathPaymentSrcNotAuthorized:-4,pathPaymentNoDestination:-5,pathPaymentNoTrust:-6,pathPaymentNotAuthorized:-7,pathPaymentLineFull:-8,pathPaymentNoIssuer:-9,pathPaymentTooFewOffer:-10,pathPaymentOfferCrossSelf:-11,pathPaymentOverSendmax:-12}); // === xdr source ============================================================
+	//
+	//   struct SimplePaymentResult
+	//   {
+	//       AccountID destination;
+	//       Asset asset;
+	//       int64 amount;
+	//   };
+	//
+	// ===========================================================================
+	xdr.struct("SimplePaymentResult",[["destination",xdr.lookup("AccountId")],["asset",xdr.lookup("Asset")],["amount",xdr.lookup("Int64")]]); // === xdr source ============================================================
+	//
+	//   struct
+	//       {
+	//           ClaimOfferAtom offers<>;
+	//           SimplePaymentResult last;
+	//       }
+	//
+	// ===========================================================================
+	xdr.struct("PathPaymentResultSuccess",[["offers",xdr.varArray(xdr.lookup("ClaimOfferAtom"),2147483647)],["last",xdr.lookup("SimplePaymentResult")]]); // === xdr source ============================================================
+	//
+	//   union PathPaymentResult switch (PathPaymentResultCode code)
+	//   {
+	//   case PATH_PAYMENT_SUCCESS:
+	//       struct
+	//       {
+	//           ClaimOfferAtom offers<>;
+	//           SimplePaymentResult last;
+	//       } success;
+	//   case PATH_PAYMENT_NO_ISSUER:
+	//       Asset noIssuer; // the asset that caused the error
+	//   default:
+	//       void;
+	//   };
+	//
+	// ===========================================================================
+	xdr.union("PathPaymentResult",{switchOn:xdr.lookup("PathPaymentResultCode"),switchName:"code",switches:[["pathPaymentSuccess","success"],["pathPaymentNoIssuer","noIssuer"]],arms:{success:xdr.lookup("PathPaymentResultSuccess"),noIssuer:xdr.lookup("Asset")},defaultArm:xdr["void"]()}); // === xdr source ============================================================
+	//
+	//   enum ManageOfferResultCode
+	//   {
+	//       // codes considered as "success" for the operation
+	//       MANAGE_OFFER_SUCCESS = 0,
+	//   
+	//       // codes considered as "failure" for the operation
+	//       MANAGE_OFFER_MALFORMED = -1,     // generated offer would be invalid
+	//       MANAGE_OFFER_SELL_NO_TRUST = -2, // no trust line for what we're selling
+	//       MANAGE_OFFER_BUY_NO_TRUST = -3,  // no trust line for what we're buying
+	//       MANAGE_OFFER_SELL_NOT_AUTHORIZED = -4, // not authorized to sell
+	//       MANAGE_OFFER_BUY_NOT_AUTHORIZED = -5,  // not authorized to buy
+	//       MANAGE_OFFER_LINE_FULL = -6,      // can't receive more of what it's buying
+	//       MANAGE_OFFER_UNDERFUNDED = -7,    // doesn't hold what it's trying to sell
+	//       MANAGE_OFFER_CROSS_SELF = -8,     // would cross an offer from the same user
+	//       MANAGE_OFFER_SELL_NO_ISSUER = -9, // no issuer for what we're selling
+	//       MANAGE_OFFER_BUY_NO_ISSUER = -10, // no issuer for what we're buying
+	//   
+	//       // update errors
+	//       MANAGE_OFFER_NOT_FOUND = -11, // offerID does not match an existing offer
+	//   
+	//       MANAGE_OFFER_LOW_RESERVE = -12 // not enough funds to create a new Offer
+	//   };
+	//
+	// ===========================================================================
+	xdr["enum"]("ManageOfferResultCode",{manageOfferSuccess:0,manageOfferMalformed:-1,manageOfferSellNoTrust:-2,manageOfferBuyNoTrust:-3,manageOfferSellNotAuthorized:-4,manageOfferBuyNotAuthorized:-5,manageOfferLineFull:-6,manageOfferUnderfunded:-7,manageOfferCrossSelf:-8,manageOfferSellNoIssuer:-9,manageOfferBuyNoIssuer:-10,manageOfferNotFound:-11,manageOfferLowReserve:-12}); // === xdr source ============================================================
+	//
+	//   enum ManageOfferEffect
+	//   {
+	//       MANAGE_OFFER_CREATED = 0,
+	//       MANAGE_OFFER_UPDATED = 1,
+	//       MANAGE_OFFER_DELETED = 2
+	//   };
+	//
+	// ===========================================================================
+	xdr["enum"]("ManageOfferEffect",{manageOfferCreated:0,manageOfferUpdated:1,manageOfferDeleted:2}); // === xdr source ============================================================
+	//
+	//   union switch (ManageOfferEffect effect)
+	//       {
+	//       case MANAGE_OFFER_CREATED:
+	//       case MANAGE_OFFER_UPDATED:
+	//           OfferEntry offer;
+	//       default:
+	//           void;
+	//       }
+	//
+	// ===========================================================================
+	xdr.union("ManageOfferSuccessResultOffer",{switchOn:xdr.lookup("ManageOfferEffect"),switchName:"effect",switches:[["manageOfferCreated","offer"],["manageOfferUpdated","offer"]],arms:{offer:xdr.lookup("OfferEntry")},defaultArm:xdr["void"]()}); // === xdr source ============================================================
+	//
+	//   struct ManageOfferSuccessResult
+	//   {
+	//       // offers that got claimed while creating this offer
+	//       ClaimOfferAtom offersClaimed<>;
+	//   
+	//       union switch (ManageOfferEffect effect)
+	//       {
+	//       case MANAGE_OFFER_CREATED:
+	//       case MANAGE_OFFER_UPDATED:
+	//           OfferEntry offer;
+	//       default:
+	//           void;
+	//       }
+	//       offer;
+	//   };
+	//
+	// ===========================================================================
+	xdr.struct("ManageOfferSuccessResult",[["offersClaimed",xdr.varArray(xdr.lookup("ClaimOfferAtom"),2147483647)],["offer",xdr.lookup("ManageOfferSuccessResultOffer")]]); // === xdr source ============================================================
+	//
+	//   union ManageOfferResult switch (ManageOfferResultCode code)
+	//   {
+	//   case MANAGE_OFFER_SUCCESS:
+	//       ManageOfferSuccessResult success;
+	//   default:
+	//       void;
+	//   };
+	//
+	// ===========================================================================
+	xdr.union("ManageOfferResult",{switchOn:xdr.lookup("ManageOfferResultCode"),switchName:"code",switches:[["manageOfferSuccess","success"]],arms:{success:xdr.lookup("ManageOfferSuccessResult")},defaultArm:xdr["void"]()}); // === xdr source ============================================================
+	//
+	//   enum SetOptionsResultCode
+	//   {
+	//       // codes considered as "success" for the operation
+	//       SET_OPTIONS_SUCCESS = 0,
+	//       // codes considered as "failure" for the operation
+	//       SET_OPTIONS_LOW_RESERVE = -1,      // not enough funds to add a signer
+	//       SET_OPTIONS_TOO_MANY_SIGNERS = -2, // max number of signers already reached
+	//       SET_OPTIONS_BAD_FLAGS = -3,        // invalid combination of clear/set flags
+	//       SET_OPTIONS_INVALID_INFLATION = -4,      // inflation account does not exist
+	//       SET_OPTIONS_CANT_CHANGE = -5,            // can no longer change this option
+	//       SET_OPTIONS_UNKNOWN_FLAG = -6,           // can't set an unknown flag
+	//       SET_OPTIONS_THRESHOLD_OUT_OF_RANGE = -7, // bad value for weight/threshold
+	//       SET_OPTIONS_BAD_SIGNER = -8,             // signer cannot be masterkey
+	//       SET_OPTIONS_INVALID_HOME_DOMAIN = -9     // malformed home domain
+	//   };
+	//
+	// ===========================================================================
+	xdr["enum"]("SetOptionsResultCode",{setOptionsSuccess:0,setOptionsLowReserve:-1,setOptionsTooManySigner:-2,setOptionsBadFlag:-3,setOptionsInvalidInflation:-4,setOptionsCantChange:-5,setOptionsUnknownFlag:-6,setOptionsThresholdOutOfRange:-7,setOptionsBadSigner:-8,setOptionsInvalidHomeDomain:-9}); // === xdr source ============================================================
+	//
+	//   union SetOptionsResult switch (SetOptionsResultCode code)
+	//   {
+	//   case SET_OPTIONS_SUCCESS:
+	//       void;
+	//   default:
+	//       void;
+	//   };
+	//
+	// ===========================================================================
+	xdr.union("SetOptionsResult",{switchOn:xdr.lookup("SetOptionsResultCode"),switchName:"code",switches:[["setOptionsSuccess",xdr["void"]()]],arms:{},defaultArm:xdr["void"]()}); // === xdr source ============================================================
+	//
+	//   enum ChangeTrustResultCode
+	//   {
+	//       // codes considered as "success" for the operation
+	//       CHANGE_TRUST_SUCCESS = 0,
+	//       // codes considered as "failure" for the operation
+	//       CHANGE_TRUST_MALFORMED = -1,     // bad input
+	//       CHANGE_TRUST_NO_ISSUER = -2,     // could not find issuer
+	//       CHANGE_TRUST_INVALID_LIMIT = -3, // cannot drop limit below balance
+	//                                        // cannot create with a limit of 0
+	//       CHANGE_TRUST_LOW_RESERVE = -4, // not enough funds to create a new trust line,
+	//       CHANGE_TRUST_SELF_NOT_ALLOWED = -5 // trusting self is not allowed
+	//   };
+	//
+	// ===========================================================================
+	xdr["enum"]("ChangeTrustResultCode",{changeTrustSuccess:0,changeTrustMalformed:-1,changeTrustNoIssuer:-2,changeTrustInvalidLimit:-3,changeTrustLowReserve:-4,changeTrustSelfNotAllowed:-5}); // === xdr source ============================================================
+	//
+	//   union ChangeTrustResult switch (ChangeTrustResultCode code)
+	//   {
+	//   case CHANGE_TRUST_SUCCESS:
+	//       void;
+	//   default:
+	//       void;
+	//   };
+	//
+	// ===========================================================================
+	xdr.union("ChangeTrustResult",{switchOn:xdr.lookup("ChangeTrustResultCode"),switchName:"code",switches:[["changeTrustSuccess",xdr["void"]()]],arms:{},defaultArm:xdr["void"]()}); // === xdr source ============================================================
+	//
+	//   enum AllowTrustResultCode
+	//   {
+	//       // codes considered as "success" for the operation
+	//       ALLOW_TRUST_SUCCESS = 0,
+	//       // codes considered as "failure" for the operation
+	//       ALLOW_TRUST_MALFORMED = -1,     // asset is not ASSET_TYPE_ALPHANUM
+	//       ALLOW_TRUST_NO_TRUST_LINE = -2, // trustor does not have a trustline
+	//                                       // source account does not require trust
+	//       ALLOW_TRUST_TRUST_NOT_REQUIRED = -3,
+	//       ALLOW_TRUST_CANT_REVOKE = -4, // source account can't revoke trust,
+	//       ALLOW_TRUST_SELF_NOT_ALLOWED = -5 // trusting self is not allowed
+	//   };
+	//
+	// ===========================================================================
+	xdr["enum"]("AllowTrustResultCode",{allowTrustSuccess:0,allowTrustMalformed:-1,allowTrustNoTrustLine:-2,allowTrustTrustNotRequired:-3,allowTrustCantRevoke:-4,allowTrustSelfNotAllowed:-5}); // === xdr source ============================================================
+	//
+	//   union AllowTrustResult switch (AllowTrustResultCode code)
+	//   {
+	//   case ALLOW_TRUST_SUCCESS:
+	//       void;
+	//   default:
+	//       void;
+	//   };
+	//
+	// ===========================================================================
+	xdr.union("AllowTrustResult",{switchOn:xdr.lookup("AllowTrustResultCode"),switchName:"code",switches:[["allowTrustSuccess",xdr["void"]()]],arms:{},defaultArm:xdr["void"]()}); // === xdr source ============================================================
+	//
+	//   enum AccountMergeResultCode
+	//   {
+	//       // codes considered as "success" for the operation
+	//       ACCOUNT_MERGE_SUCCESS = 0,
+	//       // codes considered as "failure" for the operation
+	//       ACCOUNT_MERGE_MALFORMED = -1,      // can't merge onto itself
+	//       ACCOUNT_MERGE_NO_ACCOUNT = -2,     // destination does not exist
+	//       ACCOUNT_MERGE_IMMUTABLE_SET = -3,  // source account has AUTH_IMMUTABLE set
+	//       ACCOUNT_MERGE_HAS_SUB_ENTRIES = -4 // account has trust lines/offers
+	//   };
+	//
+	// ===========================================================================
+	xdr["enum"]("AccountMergeResultCode",{accountMergeSuccess:0,accountMergeMalformed:-1,accountMergeNoAccount:-2,accountMergeImmutableSet:-3,accountMergeHasSubEntry:-4}); // === xdr source ============================================================
+	//
+	//   union AccountMergeResult switch (AccountMergeResultCode code)
+	//   {
+	//   case ACCOUNT_MERGE_SUCCESS:
+	//       int64 sourceAccountBalance; // how much got transfered from source account
+	//   default:
+	//       void;
+	//   };
+	//
+	// ===========================================================================
+	xdr.union("AccountMergeResult",{switchOn:xdr.lookup("AccountMergeResultCode"),switchName:"code",switches:[["accountMergeSuccess","sourceAccountBalance"]],arms:{sourceAccountBalance:xdr.lookup("Int64")},defaultArm:xdr["void"]()}); // === xdr source ============================================================
+	//
+	//   enum InflationResultCode
+	//   {
+	//       // codes considered as "success" for the operation
+	//       INFLATION_SUCCESS = 0,
+	//       // codes considered as "failure" for the operation
+	//       INFLATION_NOT_TIME = -1
+	//   };
+	//
+	// ===========================================================================
+	xdr["enum"]("InflationResultCode",{inflationSuccess:0,inflationNotTime:-1}); // === xdr source ============================================================
+	//
+	//   struct InflationPayout // or use PaymentResultAtom to limit types?
+	//   {
+	//       AccountID destination;
+	//       int64 amount;
+	//   };
+	//
+	// ===========================================================================
+	xdr.struct("InflationPayout",[["destination",xdr.lookup("AccountId")],["amount",xdr.lookup("Int64")]]); // === xdr source ============================================================
+	//
+	//   union InflationResult switch (InflationResultCode code)
+	//   {
+	//   case INFLATION_SUCCESS:
+	//       InflationPayout payouts<>;
+	//   default:
+	//       void;
+	//   };
+	//
+	// ===========================================================================
+	xdr.union("InflationResult",{switchOn:xdr.lookup("InflationResultCode"),switchName:"code",switches:[["inflationSuccess","payouts"]],arms:{payouts:xdr.varArray(xdr.lookup("InflationPayout"),2147483647)},defaultArm:xdr["void"]()}); // === xdr source ============================================================
+	//
+	//   enum ManageDataResultCode
+	//   {
+	//       // codes considered as "success" for the operation
+	//       MANAGE_DATA_SUCCESS = 0,
+	//       // codes considered as "failure" for the operation
+	//       MANAGE_DATA_NOT_SUPPORTED_YET = -1, // The network hasn't moved to this protocol change yet
+	//       MANAGE_DATA_NAME_NOT_FOUND = -2,    // Trying to remove a Data Entry that isn't there
+	//       MANAGE_DATA_LOW_RESERVE = -3,       // not enough funds to create a new Data Entry
+	//       MANAGE_DATA_INVALID_NAME = -4       // Name not a valid string
+	//   };
+	//
+	// ===========================================================================
+	xdr["enum"]("ManageDataResultCode",{manageDataSuccess:0,manageDataNotSupportedYet:-1,manageDataNameNotFound:-2,manageDataLowReserve:-3,manageDataInvalidName:-4}); // === xdr source ============================================================
+	//
+	//   union ManageDataResult switch (ManageDataResultCode code)
+	//   {
+	//   case MANAGE_DATA_SUCCESS:
+	//       void;
+	//   default:
+	//       void;
+	//   };
+	//
+	// ===========================================================================
+	xdr.union("ManageDataResult",{switchOn:xdr.lookup("ManageDataResultCode"),switchName:"code",switches:[["manageDataSuccess",xdr["void"]()]],arms:{},defaultArm:xdr["void"]()}); // === xdr source ============================================================
+	//
+	//   enum OperationResultCode
+	//   {
+	//       opINNER = 0, // inner object result is valid
+	//   
+	//       opBAD_AUTH = -1,  // too few valid signatures / wrong network
+	//       opNO_ACCOUNT = -2 // source account was not found
+	//   };
+	//
+	// ===========================================================================
+	xdr["enum"]("OperationResultCode",{opInner:0,opBadAuth:-1,opNoAccount:-2}); // === xdr source ============================================================
+	//
+	//   union switch (OperationType type)
+	//       {
+	//       case CREATE_ACCOUNT:
+	//           CreateAccountResult createAccountResult;
+	//       case PAYMENT:
+	//           PaymentResult paymentResult;
+	//       case PATH_PAYMENT:
+	//           PathPaymentResult pathPaymentResult;
+	//       case MANAGE_OFFER:
+	//           ManageOfferResult manageOfferResult;
+	//       case CREATE_PASSIVE_OFFER:
+	//           ManageOfferResult createPassiveOfferResult;
+	//       case SET_OPTIONS:
+	//           SetOptionsResult setOptionsResult;
+	//       case CHANGE_TRUST:
+	//           ChangeTrustResult changeTrustResult;
+	//       case ALLOW_TRUST:
+	//           AllowTrustResult allowTrustResult;
+	//       case ACCOUNT_MERGE:
+	//           AccountMergeResult accountMergeResult;
+	//       case INFLATION:
+	//           InflationResult inflationResult;
+	//       case MANAGE_DATA:
+	//           ManageDataResult manageDataResult;
+	//       }
+	//
+	// ===========================================================================
+	xdr.union("OperationResultTr",{switchOn:xdr.lookup("OperationType"),switchName:"type",switches:[["createAccount","createAccountResult"],["payment","paymentResult"],["pathPayment","pathPaymentResult"],["manageOffer","manageOfferResult"],["createPassiveOffer","createPassiveOfferResult"],["setOption","setOptionsResult"],["changeTrust","changeTrustResult"],["allowTrust","allowTrustResult"],["accountMerge","accountMergeResult"],["inflation","inflationResult"],["manageDatum","manageDataResult"]],arms:{createAccountResult:xdr.lookup("CreateAccountResult"),paymentResult:xdr.lookup("PaymentResult"),pathPaymentResult:xdr.lookup("PathPaymentResult"),manageOfferResult:xdr.lookup("ManageOfferResult"),createPassiveOfferResult:xdr.lookup("ManageOfferResult"),setOptionsResult:xdr.lookup("SetOptionsResult"),changeTrustResult:xdr.lookup("ChangeTrustResult"),allowTrustResult:xdr.lookup("AllowTrustResult"),accountMergeResult:xdr.lookup("AccountMergeResult"),inflationResult:xdr.lookup("InflationResult"),manageDataResult:xdr.lookup("ManageDataResult")}}); // === xdr source ============================================================
+	//
+	//   union OperationResult switch (OperationResultCode code)
+	//   {
+	//   case opINNER:
+	//       union switch (OperationType type)
+	//       {
+	//       case CREATE_ACCOUNT:
+	//           CreateAccountResult createAccountResult;
+	//       case PAYMENT:
+	//           PaymentResult paymentResult;
+	//       case PATH_PAYMENT:
+	//           PathPaymentResult pathPaymentResult;
+	//       case MANAGE_OFFER:
+	//           ManageOfferResult manageOfferResult;
+	//       case CREATE_PASSIVE_OFFER:
+	//           ManageOfferResult createPassiveOfferResult;
+	//       case SET_OPTIONS:
+	//           SetOptionsResult setOptionsResult;
+	//       case CHANGE_TRUST:
+	//           ChangeTrustResult changeTrustResult;
+	//       case ALLOW_TRUST:
+	//           AllowTrustResult allowTrustResult;
+	//       case ACCOUNT_MERGE:
+	//           AccountMergeResult accountMergeResult;
+	//       case INFLATION:
+	//           InflationResult inflationResult;
+	//       case MANAGE_DATA:
+	//           ManageDataResult manageDataResult;
+	//       }
+	//       tr;
+	//   default:
+	//       void;
+	//   };
+	//
+	// ===========================================================================
+	xdr.union("OperationResult",{switchOn:xdr.lookup("OperationResultCode"),switchName:"code",switches:[["opInner","tr"]],arms:{tr:xdr.lookup("OperationResultTr")},defaultArm:xdr["void"]()}); // === xdr source ============================================================
+	//
+	//   enum TransactionResultCode
+	//   {
+	//       txSUCCESS = 0, // all operations succeeded
+	//   
+	//       txFAILED = -1, // one of the operations failed (none were applied)
+	//   
+	//       txTOO_EARLY = -2,         // ledger closeTime before minTime
+	//       txTOO_LATE = -3,          // ledger closeTime after maxTime
+	//       txMISSING_OPERATION = -4, // no operation was specified
+	//       txBAD_SEQ = -5,           // sequence number does not match source account
+	//   
+	//       txBAD_AUTH = -6,             // too few valid signatures / wrong network
+	//       txINSUFFICIENT_BALANCE = -7, // fee would bring account below reserve
+	//       txNO_ACCOUNT = -8,           // source account not found
+	//       txINSUFFICIENT_FEE = -9,     // fee is too small
+	//       txBAD_AUTH_EXTRA = -10,      // unused signatures attached to transaction
+	//       txINTERNAL_ERROR = -11       // an unknown error occured
+	//   };
+	//
+	// ===========================================================================
+	xdr["enum"]("TransactionResultCode",{txSuccess:0,txFailed:-1,txTooEarly:-2,txTooLate:-3,txMissingOperation:-4,txBadSeq:-5,txBadAuth:-6,txInsufficientBalance:-7,txNoAccount:-8,txInsufficientFee:-9,txBadAuthExtra:-10,txInternalError:-11}); // === xdr source ============================================================
+	//
+	//   union switch (TransactionResultCode code)
+	//       {
+	//       case txSUCCESS:
+	//       case txFAILED:
+	//           OperationResult results<>;
+	//       default:
+	//           void;
+	//       }
+	//
+	// ===========================================================================
+	xdr.union("TransactionResultResult",{switchOn:xdr.lookup("TransactionResultCode"),switchName:"code",switches:[["txSuccess","results"],["txFailed","results"]],arms:{results:xdr.varArray(xdr.lookup("OperationResult"),2147483647)},defaultArm:xdr["void"]()}); // === xdr source ============================================================
+	//
+	//   union switch (int v)
+	//       {
+	//       case 0:
+	//           void;
+	//       }
+	//
+	// ===========================================================================
+	xdr.union("TransactionResultExt",{switchOn:xdr.int(),switchName:"v",switches:[[0,xdr["void"]()]],arms:{}}); // === xdr source ============================================================
+	//
+	//   struct TransactionResult
+	//   {
+	//       int64 feeCharged; // actual fee charged for the transaction
+	//   
+	//       union switch (TransactionResultCode code)
+	//       {
+	//       case txSUCCESS:
+	//       case txFAILED:
+	//           OperationResult results<>;
+	//       default:
+	//           void;
+	//       }
+	//       result;
+	//   
+	//       // reserved for future use
+	//       union switch (int v)
+	//       {
+	//       case 0:
+	//           void;
+	//       }
+	//       ext;
+	//   };
+	//
+	// ===========================================================================
+	xdr.struct("TransactionResult",[["feeCharged",xdr.lookup("Int64")],["result",xdr.lookup("TransactionResultResult")],["ext",xdr.lookup("TransactionResultExt")]]); // === xdr source ============================================================
+	//
+	//   typedef opaque Hash[32];
+	//
+	// ===========================================================================
+	xdr.typedef("Hash",xdr.opaque(32)); // === xdr source ============================================================
+	//
+	//   typedef opaque uint256[32];
+	//
+	// ===========================================================================
+	xdr.typedef("Uint256",xdr.opaque(32)); // === xdr source ============================================================
+	//
+	//   typedef unsigned int uint32;
+	//
+	// ===========================================================================
+	xdr.typedef("Uint32",xdr.uint()); // === xdr source ============================================================
+	//
+	//   typedef int int32;
+	//
+	// ===========================================================================
+	xdr.typedef("Int32",xdr.int()); // === xdr source ============================================================
+	//
+	//   typedef unsigned hyper uint64;
+	//
+	// ===========================================================================
+	xdr.typedef("Uint64",xdr.uhyper()); // === xdr source ============================================================
+	//
+	//   typedef hyper int64;
+	//
+	// ===========================================================================
+	xdr.typedef("Int64",xdr.hyper()); // === xdr source ============================================================
+	//
+	//   enum CryptoKeyType
+	//   {
+	//       KEY_TYPE_ED25519 = 0,
+	//       KEY_TYPE_HASH_TX = 1,
+	//       KEY_TYPE_HASH_X = 2
+	//   };
+	//
+	// ===========================================================================
+	xdr["enum"]("CryptoKeyType",{keyTypeEd25519:0,keyTypeHashTx:1,keyTypeHashX:2}); // === xdr source ============================================================
+	//
+	//   enum PublicKeyType
+	//   {
+	//       PUBLIC_KEY_TYPE_ED25519 = KEY_TYPE_ED25519
+	//   };
+	//
+	// ===========================================================================
+	xdr["enum"]("PublicKeyType",{publicKeyTypeEd25519:0}); // === xdr source ============================================================
+	//
+	//   enum SignerKeyType
+	//   {
+	//       SIGNER_KEY_TYPE_ED25519 = KEY_TYPE_ED25519,
+	//       SIGNER_KEY_TYPE_HASH_TX = KEY_TYPE_HASH_TX,
+	//       SIGNER_KEY_TYPE_HASH_X = KEY_TYPE_HASH_X
+	//   };
+	//
+	// ===========================================================================
+	xdr["enum"]("SignerKeyType",{signerKeyTypeEd25519:0,signerKeyTypeHashTx:1,signerKeyTypeHashX:2}); // === xdr source ============================================================
+	//
+	//   union PublicKey switch (PublicKeyType type)
+	//   {
+	//   case PUBLIC_KEY_TYPE_ED25519:
+	//       uint256 ed25519;
+	//   };
+	//
+	// ===========================================================================
+	xdr.union("PublicKey",{switchOn:xdr.lookup("PublicKeyType"),switchName:"type",switches:[["publicKeyTypeEd25519","ed25519"]],arms:{ed25519:xdr.lookup("Uint256")}}); // === xdr source ============================================================
+	//
+	//   union SignerKey switch (SignerKeyType type)
+	//   {
+	//   case SIGNER_KEY_TYPE_ED25519:
+	//       uint256 ed25519;
+	//   case SIGNER_KEY_TYPE_HASH_TX:
+	//       /* Hash of Transaction structure */
+	//       uint256 hashTx;
+	//   case SIGNER_KEY_TYPE_HASH_X:
+	//       /* Hash of random 256 bit preimage X */
+	//       uint256 hashX;
+	//   };
+	//
+	// ===========================================================================
+	xdr.union("SignerKey",{switchOn:xdr.lookup("SignerKeyType"),switchName:"type",switches:[["signerKeyTypeEd25519","ed25519"],["signerKeyTypeHashTx","hashTx"],["signerKeyTypeHashX","hashX"]],arms:{ed25519:xdr.lookup("Uint256"),hashTx:xdr.lookup("Uint256"),hashX:xdr.lookup("Uint256")}}); // === xdr source ============================================================
+	//
+	//   typedef opaque Signature<64>;
+	//
+	// ===========================================================================
+	xdr.typedef("Signature",xdr.varOpaque(64)); // === xdr source ============================================================
+	//
+	//   typedef opaque SignatureHint[4];
+	//
+	// ===========================================================================
+	xdr.typedef("SignatureHint",xdr.opaque(4)); // === xdr source ============================================================
+	//
+	//   typedef PublicKey NodeID;
+	//
+	// ===========================================================================
+	xdr.typedef("NodeId",xdr.lookup("PublicKey")); // === xdr source ============================================================
+	//
+	//   struct Curve25519Secret
+	//   {
+	//           opaque key[32];
+	//   };
+	//
+	// ===========================================================================
+	xdr.struct("Curve25519Secret",[["key",xdr.opaque(32)]]); // === xdr source ============================================================
+	//
+	//   struct Curve25519Public
+	//   {
+	//           opaque key[32];
+	//   };
+	//
+	// ===========================================================================
+	xdr.struct("Curve25519Public",[["key",xdr.opaque(32)]]); // === xdr source ============================================================
+	//
+	//   struct HmacSha256Key
+	//   {
+	//           opaque key[32];
+	//   };
+	//
+	// ===========================================================================
+	xdr.struct("HmacSha256Key",[["key",xdr.opaque(32)]]); // === xdr source ============================================================
+	//
+	//   struct HmacSha256Mac
+	//   {
+	//           opaque mac[32];
+	//   };
+	//
+	// ===========================================================================
+	xdr.struct("HmacSha256Mac",[["mac",xdr.opaque(32)]]);});exports["default"] = types;module.exports = exports["default"];
 
 /***/ },
 /* 3 */
@@ -18078,7 +17296,7 @@ var StellarBase =
 /* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(Buffer, global) {/*!
+	/* WEBPACK VAR INJECTION */(function(global) {/*!
 	 * The buffer module from node.js, for the browser.
 	 *
 	 * @author   Feross Aboukhadijeh <feross@feross.org> <http://feross.org>
@@ -19868,7 +19086,7 @@ var StellarBase =
 	  return val !== val // eslint-disable-line no-self-compare
 	}
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(13).Buffer, (function() { return this; }())))
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
 /* 14 */
@@ -19876,6 +19094,7 @@ var StellarBase =
 
 	'use strict'
 
+	exports.byteLength = byteLength
 	exports.toByteArray = toByteArray
 	exports.fromByteArray = fromByteArray
 
@@ -19883,23 +19102,17 @@ var StellarBase =
 	var revLookup = []
 	var Arr = typeof Uint8Array !== 'undefined' ? Uint8Array : Array
 
-	function init () {
-	  var code = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
-	  for (var i = 0, len = code.length; i < len; ++i) {
-	    lookup[i] = code[i]
-	    revLookup[code.charCodeAt(i)] = i
-	  }
-
-	  revLookup['-'.charCodeAt(0)] = 62
-	  revLookup['_'.charCodeAt(0)] = 63
+	var code = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
+	for (var i = 0, len = code.length; i < len; ++i) {
+	  lookup[i] = code[i]
+	  revLookup[code.charCodeAt(i)] = i
 	}
 
-	init()
+	revLookup['-'.charCodeAt(0)] = 62
+	revLookup['_'.charCodeAt(0)] = 63
 
-	function toByteArray (b64) {
-	  var i, j, l, tmp, placeHolders, arr
+	function placeHoldersCount (b64) {
 	  var len = b64.length
-
 	  if (len % 4 > 0) {
 	    throw new Error('Invalid string. Length must be a multiple of 4')
 	  }
@@ -19909,9 +19122,19 @@ var StellarBase =
 	  // represent one byte
 	  // if there is only one, then the three characters before it represent 2 bytes
 	  // this is just a cheap hack to not do indexOf twice
-	  placeHolders = b64[len - 2] === '=' ? 2 : b64[len - 1] === '=' ? 1 : 0
+	  return b64[len - 2] === '=' ? 2 : b64[len - 1] === '=' ? 1 : 0
+	}
 
+	function byteLength (b64) {
 	  // base64 is 4/3 + up to two characters of the original data
+	  return b64.length * 3 / 4 - placeHoldersCount(b64)
+	}
+
+	function toByteArray (b64) {
+	  var i, j, l, tmp, placeHolders, arr
+	  var len = b64.length
+	  placeHolders = placeHoldersCount(b64)
+
 	  arr = new Arr(len * 3 / 4 - placeHolders)
 
 	  // if there are placeholders, only get up to the last complete 4 chars
@@ -27708,8 +26931,6 @@ var StellarBase =
 
 	var _strkey = __webpack_require__(69);
 
-	var strkey = _interopRequireWildcard(_strkey);
-
 	var _generatedStellarXdr_generated = __webpack_require__(2);
 
 	var _generatedStellarXdr_generated2 = _interopRequireDefault(_generatedStellarXdr_generated);
@@ -27721,8 +26942,8 @@ var StellarBase =
 	   * `Keypair` represents public (and secret) keys of the account.
 	   *
 	   * Use more convenient methods to create `Keypair` object:
-	   * * `{@link Keypair.fromAccountId}`
-	   * * `{@link Keypair.fromSeed}`
+	   * * `{@link Keypair.fromPublicKey}`
+	   * * `{@link Keypair.fromSecret}`
 	   * * `{@link Keypair.random}`
 	   *
 	   * @constructor
@@ -27743,20 +26964,20 @@ var StellarBase =
 	  }
 
 	  /**
-	   * Creates a new `Keypair` instance from secret key seed.
-	   * @param {string} seed Secret key seed
+	   * Creates a new `Keypair` instance from secret key.
+	   * @param {string} secretKey Secret key
 	   * @returns {Keypair}
 	   */
 
 	  _createClass(Keypair, [{
 	    key: "xdrAccountId",
 	    value: function xdrAccountId() {
-	      return new _generatedStellarXdr_generated2["default"].AccountId.keyTypeEd25519(this._publicKey);
+	      return new _generatedStellarXdr_generated2["default"].AccountId.publicKeyTypeEd25519(this._publicKey);
 	    }
 	  }, {
 	    key: "xdrPublicKey",
 	    value: function xdrPublicKey() {
-	      return new _generatedStellarXdr_generated2["default"].PublicKey.keyTypeEd25519(this._publicKey);
+	      return new _generatedStellarXdr_generated2["default"].PublicKey.publicKeyTypeEd25519(this._publicKey);
 	    }
 
 	    /**
@@ -27777,33 +26998,23 @@ var StellarBase =
 	    }
 
 	    /**
-	     * Returns account ID associated with this `Keypair` object.
+	     * Returns public key associated with this `Keypair` object.
 	     * @returns {string}
 	     */
 	  }, {
-	    key: "accountId",
-	    value: function accountId() {
-	      return strkey.encodeCheck("accountId", this._publicKey);
+	    key: "publicKey",
+	    value: function publicKey() {
+	      return _strkey.StrKey.encodeEd25519PublicKey(this._publicKey);
 	    }
 
 	    /**
-	     * Returns seed associated with this `Keypair` object
+	     * Returns secret key associated with this `Keypair` object
 	     * @returns {string}
 	     */
 	  }, {
-	    key: "seed",
-	    value: function seed() {
-	      return strkey.encodeCheck("seed", this._secretSeed);
-	    }
-
-	    /**
-	     * Returns raw secret key seed.
-	     * @returns {Buffer}
-	     */
-	  }, {
-	    key: "rawSeed",
-	    value: function rawSeed() {
-	      return this._secretSeed;
+	    key: "secret",
+	    value: function secret() {
+	      return _strkey.StrKey.encodeEd25519SecretSeed(this._secretSeed);
 	    }
 
 	    /**
@@ -27861,16 +27072,16 @@ var StellarBase =
 	      return new _generatedStellarXdr_generated2["default"].DecoratedSignature({ hint: hint, signature: signature });
 	    }
 	  }], [{
-	    key: "fromSeed",
-	    value: function fromSeed(seed) {
-	      var rawSeed = strkey.decodeCheck("seed", seed);
+	    key: "fromSecret",
+	    value: function fromSecret(secretKey) {
+	      var rawSeed = _strkey.StrKey.decodeEd25519SecretSeed(secretKey);
 	      return this.fromRawSeed(rawSeed);
 	    }
 
 	    /**
 	     * Base58 address encoding is **DEPRECATED**! Use this method only for transition to strkey encoding.
 	     * @param {string} seed Base58 secret seed
-	     * @deprecated Use {@link Keypair.fromSeed}
+	     * @deprecated Use {@link Keypair.fromSecret}
 	     * @returns {Keypair}
 	     */
 	  }, {
@@ -27904,20 +27115,23 @@ var StellarBase =
 	  }, {
 	    key: "master",
 	    value: function master() {
+	      if (_network.Network.current() === null) {
+	        throw new Error("No network selected. Use `Network.use`, `Network.usePublicNetwork` or `Network.useTestNetwork` helper methods to select network.");
+	      }
 	      return this.fromRawSeed(_network.Network.current().networkId());
 	    }
 
 	    /**
-	     * Creates a new `Keypair` object from account ID.
-	     * @param {string} accountId account ID (ex. `GB3KJPLFUYN5VL6R3GU3EGCGVCKFDSD7BEDX42HWG5BWFKB3KQGJJRMA`)
+	     * Creates a new `Keypair` object from public key.
+	     * @param {string} publicKey public key (ex. `GB3KJPLFUYN5VL6R3GU3EGCGVCKFDSD7BEDX42HWG5BWFKB3KQGJJRMA`)
 	     * @returns {Keypair}
 	     */
 	  }, {
-	    key: "fromAccountId",
-	    value: function fromAccountId(accountId) {
-	      var publicKey = strkey.decodeCheck("accountId", accountId);
+	    key: "fromPublicKey",
+	    value: function fromPublicKey(publicKey) {
+	      publicKey = _strkey.StrKey.decodeEd25519PublicKey(publicKey);
 	      if (publicKey.length !== 32) {
-	        throw new Error('Invalid Stellar accountId');
+	        throw new Error('Invalid Stellar public key');
 	      }
 	      return new this({ publicKey: publicKey });
 	    }
@@ -27931,25 +27145,6 @@ var StellarBase =
 	    value: function random() {
 	      var seed = nacl.randomBytes(32);
 	      return this.fromRawSeed(seed);
-	    }
-
-	    /**
-	     * Returns true if the given Stellar public key is valid.
-	     * @param {string} publicKey public key to check
-	     * @returns {boolean}
-	     */
-	  }, {
-	    key: "isValidPublicKey",
-	    value: function isValidPublicKey(publicKey) {
-	      try {
-	        var decoded = strkey.decodeCheck("accountId", publicKey);
-	        if (decoded.length !== 32) {
-	          return false;
-	        }
-	      } catch (err) {
-	        return false;
-	      }
-	      return true;
 	    }
 	  }]);
 
@@ -27987,7 +27182,7 @@ var StellarBase =
 	};
 
 	exports.Networks = Networks;
-	var _current;
+	var _current = null;
 
 	var Network = (function () {
 		/**
@@ -27995,7 +27190,7 @@ var StellarBase =
 	   * stellar networks.  It also provides the {@link Network.current} class method that returns the network
 	   * that will be used by this process for the purposes of generating signatures.
 	   *
-	   * The test network is the default, but you can also override the default by using the `use`,
+	   * You should select network your app will use before adding the first signature. You can use the `use`,
 	   * `usePublicNetwork` and `useTestNetwork` helper methods.
 	   *
 	  * Creates a new `Network` object.
@@ -28010,7 +27205,7 @@ var StellarBase =
 		}
 
 		/**
-	  * Use default network (right now default network is `testnet`).
+	  * Use Stellar Public Network
 	  */
 
 		_createClass(Network, [{
@@ -28034,15 +27229,6 @@ var StellarBase =
 				return (0, _hashing.hash)(this.networkPassphrase());
 			}
 		}], [{
-			key: "useDefault",
-			value: function useDefault() {
-				this.useTestNetwork();
-			}
-
-			/**
-	   * Use Stellar Public Network
-	   */
-		}, {
 			key: "usePublicNetwork",
 			value: function usePublicNetwork() {
 				this.use(new Network(Networks.PUBLIC));
@@ -28082,8 +27268,6 @@ var StellarBase =
 	})();
 
 	exports.Network = Network;
-
-	Network.useDefault();
 
 /***/ },
 /* 65 */
@@ -28373,10 +27557,15 @@ var StellarBase =
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
 	exports.decodeCheck = decodeCheck;
 	exports.encodeCheck = encodeCheck;
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	var _base32Js = __webpack_require__(70);
 
@@ -28403,9 +27592,153 @@ var StellarBase =
 	var _lodashIsString2 = _interopRequireDefault(_lodashIsString);
 
 	var versionBytes = {
-	  accountId: 0x30,
-	  seed: 0x90
+	  ed25519PublicKey: 6 << 3, // G
+	  ed25519SecretSeed: 18 << 3, // S
+	  preAuthTx: 19 << 3, // T
+	  sha256Hash: 23 << 3 // X
 	};
+
+	/**
+	 * StrKey is a helper class that allows encoding and decoding strkey.
+	 */
+
+	var StrKey = (function () {
+	  function StrKey() {
+	    _classCallCheck(this, StrKey);
+	  }
+
+	  _createClass(StrKey, null, [{
+	    key: "encodeEd25519PublicKey",
+
+	    /**
+	     * Encodes data to strkey ed25519 public key.
+	     * @param {Buffer} data data to encode
+	     * @returns {string}
+	     */
+	    value: function encodeEd25519PublicKey(data) {
+	      return encodeCheck("ed25519PublicKey", data);
+	    }
+
+	    /**
+	     * Decodes strkey ed25519 public key to raw data.
+	     * @param {string} data data to decode
+	     * @returns {Buffer}
+	     */
+	  }, {
+	    key: "decodeEd25519PublicKey",
+	    value: function decodeEd25519PublicKey(data) {
+	      return decodeCheck("ed25519PublicKey", data);
+	    }
+
+	    /**
+	     * Returns true if the given Stellar public key is a valid ed25519 public key.
+	     * @param {string} publicKey public key to check
+	     * @returns {boolean}
+	     */
+	  }, {
+	    key: "isValidEd25519PublicKey",
+	    value: function isValidEd25519PublicKey(publicKey) {
+	      return isValid("ed25519PublicKey", publicKey);
+	    }
+
+	    /**
+	     * Encodes data to strkey ed25519 seed.
+	     * @param {Buffer} data data to encode
+	     * @returns {string}
+	     */
+	  }, {
+	    key: "encodeEd25519SecretSeed",
+	    value: function encodeEd25519SecretSeed(data) {
+	      return encodeCheck("ed25519SecretSeed", data);
+	    }
+
+	    /**
+	     * Decodes strkey ed25519 seed to raw data.
+	     * @param {string} data data to decode
+	     * @returns {Buffer}
+	     */
+	  }, {
+	    key: "decodeEd25519SecretSeed",
+	    value: function decodeEd25519SecretSeed(data) {
+	      return decodeCheck("ed25519SecretSeed", data);
+	    }
+
+	    /**
+	     * Returns true if the given Stellar secret key is a valid ed25519 secret seed.
+	     * @param {string} seed seed to check
+	     * @returns {boolean}
+	     */
+	  }, {
+	    key: "isValidEd25519SecretSeed",
+	    value: function isValidEd25519SecretSeed(seed) {
+	      return isValid("ed25519SecretSeed", seed);
+	    }
+
+	    /**
+	     * Encodes data to strkey preAuthTx.
+	     * @param {Buffer} data data to encode
+	     * @returns {string}
+	     */
+	  }, {
+	    key: "encodePreAuthTx",
+	    value: function encodePreAuthTx(data) {
+	      return encodeCheck("preAuthTx", data);
+	    }
+
+	    /**
+	     * Decodes strkey PreAuthTx to raw data.
+	     * @param {string} data data to decode
+	     * @returns {Buffer}
+	     */
+	  }, {
+	    key: "decodePreAuthTx",
+	    value: function decodePreAuthTx(data) {
+	      return decodeCheck("preAuthTx", data);
+	    }
+
+	    /**
+	     * Encodes data to strkey sha256 hash.
+	     * @param {Buffer} data data to encode
+	     * @returns {string}
+	     */
+	  }, {
+	    key: "encodeSha256Hash",
+	    value: function encodeSha256Hash(data) {
+	      return encodeCheck("sha256Hash", data);
+	    }
+
+	    /**
+	     * Decodes strkey sha256 hash to raw data.
+	     * @param {string} data data to decode
+	     * @returns {Buffer}
+	     */
+	  }, {
+	    key: "decodeSha256Hash",
+	    value: function decodeSha256Hash(data) {
+	      return decodeCheck("sha256Hash", data);
+	    }
+	  }]);
+
+	  return StrKey;
+	})();
+
+	exports.StrKey = StrKey;
+
+	function isValid(versionByteName, encoded) {
+	  if (encoded && encoded.length != 56) {
+	    return false;
+	  }
+
+	  try {
+	    var decoded = decodeCheck(versionByteName, encoded);
+	    if (decoded.length !== 32) {
+	      return false;
+	    }
+	  } catch (err) {
+	    return false;
+	  }
+	  return true;
+	}
 
 	function decodeCheck(versionByteName, encoded) {
 	  if (!(0, _lodashIsString2["default"])(encoded)) {
@@ -28449,7 +27782,7 @@ var StellarBase =
 	  var versionByte = versionBytes[versionByteName];
 
 	  if ((0, _lodashIsUndefined2["default"])(versionByte)) {
-	    throw new Error(versionByteName + " is not a valid version byte name.  expected one of \"accountId\" or \"seed\"");
+	    throw new Error(versionByteName + " is not a valid version byte name.  expected one of \"ed25519PublicKey\", \"ed25519SecretSeed\", \"preAuthTx\", \"sha256Hash\"");
 	  }
 
 	  data = new Buffer(data);
@@ -30149,6 +29482,10 @@ var StellarBase =
 
 	var _lodashEach2 = _interopRequireDefault(_lodashEach);
 
+	var _crypto = __webpack_require__(224);
+
+	var _crypto2 = _interopRequireDefault(_crypto);
+
 	var MIN_LEDGER = 0;
 	var MAX_LEDGER = 0xFFFFFFFF; // max uint32
 
@@ -30171,7 +29508,7 @@ var StellarBase =
 	        }
 	        // since this transaction is immutable, save the tx
 	        this.tx = envelope.tx();
-	        this.source = (0, _strkey.encodeCheck)("accountId", envelope.tx().sourceAccount().ed25519());
+	        this.source = _strkey.StrKey.encodeEd25519PublicKey(envelope.tx().sourceAccount().ed25519());
 	        this.fee = this.tx.fee();
 	        this.memo = this.tx.memo();
 	        this.sequence = this.tx.seqNum().toString();
@@ -30219,6 +29556,20 @@ var StellarBase =
 	        }
 
 	        /**
+	         * Add `hashX` signer preimage as signature.
+	         * @param {Buffer|String} preimage Preimage of hash used as signer
+	         * @returns {void}
+	         */
+	    }, {
+	        key: "signHashX",
+	        value: function signHashX(preimage) {
+	            var signature = preimage;
+	            var hash = _crypto2["default"].createHash('sha256').update(preimage).digest();
+	            var hint = hash.slice(hash.length - 4);
+	            this.signatures.push(new _index.xdr.DecoratedSignature({ hint: hint, signature: signature }));
+	        }
+
+	        /**
 	         * Returns a hash for this transaction, suitable for signing.
 	         * @returns {Buffer}
 	         */
@@ -30240,6 +29591,10 @@ var StellarBase =
 	    }, {
 	        key: "signatureBase",
 	        value: function signatureBase() {
+	            if (_network.Network.current() === null) {
+	                throw new Error("No network selected. Use `Network.use`, `Network.usePublicNetwork` or `Network.useTestNetwork` helper methods to select network.");
+	            }
+
 	            return Buffer.concat([_network.Network.current().networkId(), _index.xdr.EnvelopeType.envelopeTypeTx().toXDR(), this.tx.toXDR()]);
 	        }
 
@@ -30392,14 +29747,14 @@ var StellarBase =
 	        * @returns {xdr.CreateAccountOp}
 	        */
 	        value: function createAccount(opts) {
-	            if (!_keypair.Keypair.isValidPublicKey(opts.destination)) {
+	            if (!_strkey.StrKey.isValidEd25519PublicKey(opts.destination)) {
 	                throw new Error("destination is invalid");
 	            }
 	            if (!this.isValidAmount(opts.startingBalance)) {
-	                throw new TypeError('startingBalance argument must be of type String and represent a positive number');
+	                throw new TypeError(Operation.constructAmountRequirementsError('startingBalance'));
 	            }
 	            var attributes = {};
-	            attributes.destination = _keypair.Keypair.fromAccountId(opts.destination).xdrAccountId();
+	            attributes.destination = _keypair.Keypair.fromPublicKey(opts.destination).xdrAccountId();
 	            attributes.startingBalance = this._toXDRAmount(opts.startingBalance);
 	            var createAccount = new _generatedStellarXdr_generated2["default"].CreateAccountOp(attributes);
 
@@ -30422,18 +29777,18 @@ var StellarBase =
 	    }, {
 	        key: "payment",
 	        value: function payment(opts) {
-	            if (!_keypair.Keypair.isValidPublicKey(opts.destination)) {
+	            if (!_strkey.StrKey.isValidEd25519PublicKey(opts.destination)) {
 	                throw new Error("destination is invalid");
 	            }
 	            if (!opts.asset) {
 	                throw new Error("Must provide an asset for a payment operation");
 	            }
 	            if (!this.isValidAmount(opts.amount)) {
-	                throw new TypeError('amount argument must be of type String and represent a positive number');
+	                throw new TypeError(Operation.constructAmountRequirementsError('amount'));
 	            }
 
 	            var attributes = {};
-	            attributes.destination = _keypair.Keypair.fromAccountId(opts.destination).xdrAccountId();
+	            attributes.destination = _keypair.Keypair.fromPublicKey(opts.destination).xdrAccountId();
 	            attributes.asset = opts.asset.toXdrObject();
 	            attributes.amount = this._toXDRAmount(opts.amount);
 	            var payment = new _generatedStellarXdr_generated2["default"].PaymentOp(attributes);
@@ -30466,22 +29821,22 @@ var StellarBase =
 	                throw new Error("Must specify a send asset");
 	            }
 	            if (!this.isValidAmount(opts.sendMax)) {
-	                throw new TypeError('sendMax argument must be of type String and represent a positive number');
+	                throw new TypeError(Operation.constructAmountRequirementsError('sendMax'));
 	            }
-	            if (!_keypair.Keypair.isValidPublicKey(opts.destination)) {
+	            if (!_strkey.StrKey.isValidEd25519PublicKey(opts.destination)) {
 	                throw new Error("destination is invalid");
 	            }
 	            if (!opts.destAsset) {
 	                throw new Error("Must provide a destAsset for a payment operation");
 	            }
 	            if (!this.isValidAmount(opts.destAmount)) {
-	                throw new TypeError('destAmount argument must be of type String and represent a positive number');
+	                throw new TypeError(Operation.constructAmountRequirementsError('destAmount'));
 	            }
 
 	            var attributes = {};
 	            attributes.sendAsset = opts.sendAsset.toXdrObject();
 	            attributes.sendMax = this._toXDRAmount(opts.sendMax);
-	            attributes.destination = _keypair.Keypair.fromAccountId(opts.destination).xdrAccountId();
+	            attributes.destination = _keypair.Keypair.fromPublicKey(opts.destination).xdrAccountId();
 	            attributes.destAsset = opts.destAsset.toXdrObject();
 	            attributes.destAmount = this._toXDRAmount(opts.destAmount);
 
@@ -30517,7 +29872,7 @@ var StellarBase =
 	            var attributes = {};
 	            attributes.line = opts.asset.toXdrObject();
 	            if (!(0, _lodashIsUndefined2["default"])(opts.limit) && !this.isValidAmount(opts.limit, true)) {
-	                throw new TypeError('limit argument must be of type String and represent a number');
+	                throw new TypeError(Operation.constructAmountRequirementsError('limit'));
 	            }
 
 	            if (opts.limit) {
@@ -30551,11 +29906,11 @@ var StellarBase =
 	    }, {
 	        key: "allowTrust",
 	        value: function allowTrust(opts) {
-	            if (!_keypair.Keypair.isValidPublicKey(opts.trustor)) {
+	            if (!_strkey.StrKey.isValidEd25519PublicKey(opts.trustor)) {
 	                throw new Error("trustor is invalid");
 	            }
 	            var attributes = {};
-	            attributes.trustor = _keypair.Keypair.fromAccountId(opts.trustor).xdrAccountId();
+	            attributes.trustor = _keypair.Keypair.fromPublicKey(opts.trustor).xdrAccountId();
 	            if (opts.assetCode.length <= 4) {
 	                var code = (0, _lodashPadEnd2["default"])(opts.assetCode, 4, '\0');
 	                attributes.asset = _generatedStellarXdr_generated2["default"].AllowTrustOpAsset.assetTypeCreditAlphanum4(code);
@@ -30593,8 +29948,10 @@ var StellarBase =
 	        * @param {number|string} [opts.medThreshold] - The sum weight for the medium threshold.
 	        * @param {number|string} [opts.highThreshold] - The sum weight for the high threshold.
 	        * @param {object} [opts.signer] - Add or remove a signer from the account. The signer is
-	        *                                 deleted if the weight is 0.
-	        * @param {string} [opts.signer.pubKey] - The public key of the new signer (old `address` field name is deprecated).
+	        *                                 deleted if the weight is 0. Only one of `ed25519PublicKey`, `sha256Hash`, `preAuthTx` should be defined.
+	        * @param {string} [opts.signer.ed25519PublicKey] - The ed25519 public key of the signer.
+	        * @param {Buffer} [opts.signer.sha256Hash] - sha256 hash of preimage that will unlock funds. Preimage should be used as signature of future transaction.
+	        * @param {Buffer} [opts.signer.preAuthTx] - Hash of transaction that will unlock funds.
 	        * @param {number|string} [opts.signer.weight] - The weight of the new signer (0 to delete or 1-255)
 	        * @param {string} [opts.homeDomain] - sets the home domain used for reverse federation lookup.
 	        * @param {string} [opts.source] - The source account (defaults to transaction source).
@@ -30607,10 +29964,10 @@ var StellarBase =
 	            var attributes = {};
 
 	            if (opts.inflationDest) {
-	                if (!_keypair.Keypair.isValidPublicKey(opts.inflationDest)) {
+	                if (!_strkey.StrKey.isValidEd25519PublicKey(opts.inflationDest)) {
 	                    throw new Error("inflationDest is invalid");
 	                }
-	                attributes.inflationDest = _keypair.Keypair.fromAccountId(opts.inflationDest).xdrAccountId();
+	                attributes.inflationDest = _keypair.Keypair.fromPublicKey(opts.inflationDest).xdrAccountId();
 	            }
 
 	            var weightCheckFunction = function weightCheckFunction(value, name) {
@@ -30634,21 +29991,41 @@ var StellarBase =
 	            attributes.homeDomain = opts.homeDomain;
 
 	            if (opts.signer) {
-	                if (opts.signer.address) {
-	                    console.warn("signer.address is deprecated. Use signer.pubKey instead.");
-	                    opts.signer.pubKey = opts.signer.address;
+	                var weight = this._checkUnsignedIntValue("signer.weight", opts.signer.weight, weightCheckFunction);
+	                var key = undefined;
+
+	                var setValues = 0;
+
+	                if (opts.signer.ed25519PublicKey) {
+	                    if (!_strkey.StrKey.isValidEd25519PublicKey(opts.signer.ed25519PublicKey)) {
+	                        throw new Error("signer.ed25519PublicKey is invalid.");
+	                    }
+	                    var rawKey = _strkey.StrKey.decodeEd25519PublicKey(opts.signer.ed25519PublicKey);
+	                    key = new _generatedStellarXdr_generated2["default"].SignerKey.signerKeyTypeEd25519(rawKey);
+	                    setValues++;
 	                }
 
-	                if (!_keypair.Keypair.isValidPublicKey(opts.signer.pubKey)) {
-	                    throw new Error("signer.pubKey is invalid");
+	                if (opts.signer.preAuthTx) {
+	                    if (!(Buffer.isBuffer(opts.signer.preAuthTx) && opts.signer.preAuthTx.length == 32)) {
+	                        throw new Error("signer.preAuthTx must be 32 bytes Buffer.");
+	                    }
+	                    key = new _generatedStellarXdr_generated2["default"].SignerKey.signerKeyTypeHashTx(opts.signer.preAuthTx);
+	                    setValues++;
 	                }
 
-	                opts.signer.weight = this._checkUnsignedIntValue("signer.weight", opts.signer.weight, weightCheckFunction);
+	                if (opts.signer.sha256Hash) {
+	                    if (!(Buffer.isBuffer(opts.signer.sha256Hash) && opts.signer.sha256Hash.length == 32)) {
+	                        throw new Error("signer.sha256Hash must be 32 bytes Buffer.");
+	                    }
+	                    key = new _generatedStellarXdr_generated2["default"].SignerKey.signerKeyTypeHashX(opts.signer.sha256Hash);
+	                    setValues++;
+	                }
 
-	                attributes.signer = new _generatedStellarXdr_generated2["default"].Signer({
-	                    pubKey: _keypair.Keypair.fromAccountId(opts.signer.pubKey).xdrAccountId(),
-	                    weight: opts.signer.weight
-	                });
+	                if (setValues != 1) {
+	                    throw new Error("Signer object must contain exactly one of signer.ed25519PublicKey, signer.sha256Hash, signer.preAuthTx.");
+	                }
+
+	                attributes.signer = new _generatedStellarXdr_generated2["default"].Signer({ key: key, weight: weight });
 	            }
 
 	            var setOptionsOp = new _generatedStellarXdr_generated2["default"].SetOptionsOp(attributes);
@@ -30682,7 +30059,7 @@ var StellarBase =
 	            attributes.selling = opts.selling.toXdrObject();
 	            attributes.buying = opts.buying.toXdrObject();
 	            if (!this.isValidAmount(opts.amount, true)) {
-	                throw new TypeError('amount argument must be of type String and represent a positive number or zero');
+	                throw new TypeError(Operation.constructAmountRequirementsError('amount'));
 	            }
 	            attributes.amount = this._toXDRAmount(opts.amount);
 	            if ((0, _lodashIsUndefined2["default"])(opts.price)) {
@@ -30728,7 +30105,7 @@ var StellarBase =
 	            attributes.selling = opts.selling.toXdrObject();
 	            attributes.buying = opts.buying.toXdrObject();
 	            if (!this.isValidAmount(opts.amount)) {
-	                throw new TypeError('amount argument must be of type String and represent a positive number');
+	                throw new TypeError(Operation.constructAmountRequirementsError('amount'));
 	            }
 	            attributes.amount = this._toXDRAmount(opts.amount);
 	            if ((0, _lodashIsUndefined2["default"])(opts.price)) {
@@ -30755,10 +30132,10 @@ var StellarBase =
 	        key: "accountMerge",
 	        value: function accountMerge(opts) {
 	            var opAttributes = {};
-	            if (!_keypair.Keypair.isValidPublicKey(opts.destination)) {
+	            if (!_strkey.StrKey.isValidEd25519PublicKey(opts.destination)) {
 	                throw new Error("destination is invalid");
 	            }
-	            opAttributes.body = _generatedStellarXdr_generated2["default"].OperationBody.accountMerge(_keypair.Keypair.fromAccountId(opts.destination).xdrAccountId());
+	            opAttributes.body = _generatedStellarXdr_generated2["default"].OperationBody.accountMerge(_keypair.Keypair.fromPublicKey(opts.destination).xdrAccountId());
 	            this.setSourceAccount(opAttributes, opts);
 
 	            return new _generatedStellarXdr_generated2["default"].Operation(opAttributes);
@@ -30825,10 +30202,10 @@ var StellarBase =
 	        key: "setSourceAccount",
 	        value: function setSourceAccount(opAttributes, opts) {
 	            if (opts.source) {
-	                if (!_keypair.Keypair.isValidPublicKey(opts.source)) {
+	                if (!_strkey.StrKey.isValidEd25519PublicKey(opts.source)) {
 	                    throw new Error("Source address is invalid");
 	                }
-	                opAttributes.sourceAccount = _keypair.Keypair.fromAccountId(opts.source).xdrAccountId();
+	                opAttributes.sourceAccount = _keypair.Keypair.fromPublicKey(opts.source).xdrAccountId();
 	            }
 	        }
 
@@ -30842,7 +30219,7 @@ var StellarBase =
 	        key: "operationToObject",
 	        value: function operationToObject(operation) {
 	            function accountIdtoAddress(accountId) {
-	                return (0, _strkey.encodeCheck)("accountId", accountId.ed25519());
+	                return _strkey.StrKey.encodeEd25519PublicKey(accountId.ed25519());
 	            }
 
 	            var result = {};
@@ -30904,7 +30281,15 @@ var StellarBase =
 
 	                    if (attrs.signer()) {
 	                        var signer = {};
-	                        signer.pubKey = accountIdtoAddress(attrs.signer().pubKey());
+	                        var arm = attrs.signer().key().arm();
+	                        if (arm == "ed25519") {
+	                            signer.ed25519PublicKey = accountIdtoAddress(attrs.signer().key());
+	                        } else if (arm == "hashTx") {
+	                            signer.preAuthTx = attrs.signer().key().hashTx();
+	                        } else if (arm == "hashX") {
+	                            signer.sha256Hash = attrs.signer().key().hashX();
+	                        }
+
 	                        signer.weight = attrs.signer().weight();
 	                        result.signer = signer;
 	                    }
@@ -30988,6 +30373,11 @@ var StellarBase =
 	            }
 
 	            return true;
+	        }
+	    }, {
+	        key: "constructAmountRequirementsError",
+	        value: function constructAmountRequirementsError(arg) {
+	            return arg + " argument must be of type String, represent a positive number and have at most 7 digits after the decimal";
 	        }
 
 	        /**
@@ -31142,13 +30532,13 @@ var StellarBase =
 	  function Asset(code, issuer) {
 	    _classCallCheck(this, Asset);
 
-	    if (code.length > 12) {
-	      throw new Error("Asset code must be 12 characters at max");
+	    if (!/^[a-zA-Z0-9]{1,12}$/.test(code)) {
+	      throw new Error("Asset code is invalid (maximum alphanumeric, 12 characters at max)");
 	    }
 	    if (String(code).toLowerCase() !== "xlm" && !issuer) {
 	      throw new Error("Issuer cannot be null");
 	    }
-	    if (issuer && !_keypair.Keypair.isValidPublicKey(issuer)) {
+	    if (issuer && !_strkey.StrKey.isValidEd25519PublicKey(issuer)) {
 	      throw new Error("Issuer is invalid");
 	    }
 
@@ -31188,7 +30578,7 @@ var StellarBase =
 
 	        var assetType = new xdrType({
 	          assetCode: paddedCode,
-	          issuer: _keypair.Keypair.fromAccountId(this.issuer).xdrAccountId()
+	          issuer: _keypair.Keypair.fromPublicKey(this.issuer).xdrAccountId()
 	        });
 
 	        return new _generatedStellarXdr_generated2["default"].Asset(xdrTypeString, assetType);
@@ -31281,12 +30671,12 @@ var StellarBase =
 	          return this.native();
 	        case _generatedStellarXdr_generated2["default"].AssetType.assetTypeCreditAlphanum4():
 	          anum = assetXdr.alphaNum4();
-	          issuer = (0, _strkey.encodeCheck)("accountId", anum.issuer().ed25519());
+	          issuer = _strkey.StrKey.encodeEd25519PublicKey(anum.issuer().ed25519());
 	          code = (0, _lodashTrimEnd2["default"])(anum.assetCode(), '\0');
 	          return new this(code, issuer);
 	        case _generatedStellarXdr_generated2["default"].AssetType.assetTypeCreditAlphanum12():
 	          anum = assetXdr.alphaNum12();
-	          issuer = (0, _strkey.encodeCheck)("accountId", anum.issuer().ed25519());
+	          issuer = _strkey.StrKey.encodeEd25519PublicKey(anum.issuer().ed25519());
 	          code = (0, _lodashTrimEnd2["default"])(anum.assetCode(), '\0');
 	          return new this(code, issuer);
 	        default:
@@ -37863,6 +37253,5430 @@ var StellarBase =
 /* 224 */
 /***/ function(module, exports, __webpack_require__) {
 
+	/* WEBPACK VAR INJECTION */(function(Buffer) {var rng = __webpack_require__(225)
+
+	function error () {
+	  var m = [].slice.call(arguments).join(' ')
+	  throw new Error([
+	    m,
+	    'we accept pull requests',
+	    'http://github.com/dominictarr/crypto-browserify'
+	    ].join('\n'))
+	}
+
+	exports.createHash = __webpack_require__(227)
+
+	exports.createHmac = __webpack_require__(236)
+
+	exports.randomBytes = function(size, callback) {
+	  if (callback && callback.call) {
+	    try {
+	      callback.call(this, undefined, new Buffer(rng(size)))
+	    } catch (err) { callback(err) }
+	  } else {
+	    return new Buffer(rng(size))
+	  }
+	}
+
+	function each(a, f) {
+	  for(var i in a)
+	    f(a[i], i)
+	}
+
+	exports.getHashes = function () {
+	  return ['sha1', 'sha256', 'sha512', 'md5', 'rmd160']
+	}
+
+	var p = __webpack_require__(237)(exports)
+	exports.pbkdf2 = p.pbkdf2
+	exports.pbkdf2Sync = p.pbkdf2Sync
+	__webpack_require__(239)(exports, module.exports);
+
+	// the least I can do is make error messages for the rest of the node.js/crypto api.
+	each(['createCredentials'
+	, 'createSign'
+	, 'createVerify'
+	, 'createDiffieHellman'
+	], function (name) {
+	  exports[name] = function () {
+	    error('sorry,', name, 'is not implemented yet')
+	  }
+	})
+
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(13).Buffer))
+
+/***/ },
+/* 225 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(global, Buffer) {(function() {
+	  var g = ('undefined' === typeof window ? global : window) || {}
+	  _crypto = (
+	    g.crypto || g.msCrypto || __webpack_require__(226)
+	  )
+	  module.exports = function(size) {
+	    // Modern Browsers
+	    if(_crypto.getRandomValues) {
+	      var bytes = new Buffer(size); //in browserify, this is an extended Uint8Array
+	      /* This will not work in older browsers.
+	       * See https://developer.mozilla.org/en-US/docs/Web/API/window.crypto.getRandomValues
+	       */
+	    
+	      _crypto.getRandomValues(bytes);
+	      return bytes;
+	    }
+	    else if (_crypto.randomBytes) {
+	      return _crypto.randomBytes(size)
+	    }
+	    else
+	      throw new Error(
+	        'secure random number generation not supported by this browser\n'+
+	        'use chrome, FireFox or Internet Explorer 11'
+	      )
+	  }
+	}())
+
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(13).Buffer))
+
+/***/ },
+/* 226 */
+/***/ function(module, exports) {
+
+	/* (ignored) */
+
+/***/ },
+/* 227 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(Buffer) {var createHash = __webpack_require__(228)
+
+	var md5 = toConstructor(__webpack_require__(233))
+	var rmd160 = toConstructor(__webpack_require__(235))
+
+	function toConstructor (fn) {
+	  return function () {
+	    var buffers = []
+	    var m= {
+	      update: function (data, enc) {
+	        if(!Buffer.isBuffer(data)) data = new Buffer(data, enc)
+	        buffers.push(data)
+	        return this
+	      },
+	      digest: function (enc) {
+	        var buf = Buffer.concat(buffers)
+	        var r = fn(buf)
+	        buffers = null
+	        return enc ? r.toString(enc) : r
+	      }
+	    }
+	    return m
+	  }
+	}
+
+	module.exports = function (alg) {
+	  if('md5' === alg) return new md5()
+	  if('rmd160' === alg) return new rmd160()
+	  return createHash(alg)
+	}
+
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(13).Buffer))
+
+/***/ },
+/* 228 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var exports = module.exports = function (alg) {
+	  var Alg = exports[alg]
+	  if(!Alg) throw new Error(alg + ' is not supported (we accept pull requests)')
+	  return new Alg()
+	}
+
+	var Buffer = __webpack_require__(13).Buffer
+	var Hash   = __webpack_require__(229)(Buffer)
+
+	exports.sha1 = __webpack_require__(230)(Buffer, Hash)
+	exports.sha256 = __webpack_require__(231)(Buffer, Hash)
+	exports.sha512 = __webpack_require__(232)(Buffer, Hash)
+
+
+/***/ },
+/* 229 */
+/***/ function(module, exports) {
+
+	module.exports = function (Buffer) {
+
+	  //prototype class for hash functions
+	  function Hash (blockSize, finalSize) {
+	    this._block = new Buffer(blockSize) //new Uint32Array(blockSize/4)
+	    this._finalSize = finalSize
+	    this._blockSize = blockSize
+	    this._len = 0
+	    this._s = 0
+	  }
+
+	  Hash.prototype.init = function () {
+	    this._s = 0
+	    this._len = 0
+	  }
+
+	  Hash.prototype.update = function (data, enc) {
+	    if ("string" === typeof data) {
+	      enc = enc || "utf8"
+	      data = new Buffer(data, enc)
+	    }
+
+	    var l = this._len += data.length
+	    var s = this._s = (this._s || 0)
+	    var f = 0
+	    var buffer = this._block
+
+	    while (s < l) {
+	      var t = Math.min(data.length, f + this._blockSize - (s % this._blockSize))
+	      var ch = (t - f)
+
+	      for (var i = 0; i < ch; i++) {
+	        buffer[(s % this._blockSize) + i] = data[i + f]
+	      }
+
+	      s += ch
+	      f += ch
+
+	      if ((s % this._blockSize) === 0) {
+	        this._update(buffer)
+	      }
+	    }
+	    this._s = s
+
+	    return this
+	  }
+
+	  Hash.prototype.digest = function (enc) {
+	    // Suppose the length of the message M, in bits, is l
+	    var l = this._len * 8
+
+	    // Append the bit 1 to the end of the message
+	    this._block[this._len % this._blockSize] = 0x80
+
+	    // and then k zero bits, where k is the smallest non-negative solution to the equation (l + 1 + k) === finalSize mod blockSize
+	    this._block.fill(0, this._len % this._blockSize + 1)
+
+	    if (l % (this._blockSize * 8) >= this._finalSize * 8) {
+	      this._update(this._block)
+	      this._block.fill(0)
+	    }
+
+	    // to this append the block which is equal to the number l written in binary
+	    // TODO: handle case where l is > Math.pow(2, 29)
+	    this._block.writeInt32BE(l, this._blockSize - 4)
+
+	    var hash = this._update(this._block) || this._hash()
+
+	    return enc ? hash.toString(enc) : hash
+	  }
+
+	  Hash.prototype._update = function () {
+	    throw new Error('_update must be implemented by subclass')
+	  }
+
+	  return Hash
+	}
+
+
+/***/ },
+/* 230 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/*
+	 * A JavaScript implementation of the Secure Hash Algorithm, SHA-1, as defined
+	 * in FIPS PUB 180-1
+	 * Version 2.1a Copyright Paul Johnston 2000 - 2002.
+	 * Other contributors: Greg Holt, Andrew Kepert, Ydnar, Lostinet
+	 * Distributed under the BSD License
+	 * See http://pajhome.org.uk/crypt/md5 for details.
+	 */
+
+	var inherits = __webpack_require__(22).inherits
+
+	module.exports = function (Buffer, Hash) {
+
+	  var A = 0|0
+	  var B = 4|0
+	  var C = 8|0
+	  var D = 12|0
+	  var E = 16|0
+
+	  var W = new (typeof Int32Array === 'undefined' ? Array : Int32Array)(80)
+
+	  var POOL = []
+
+	  function Sha1 () {
+	    if(POOL.length)
+	      return POOL.pop().init()
+
+	    if(!(this instanceof Sha1)) return new Sha1()
+	    this._w = W
+	    Hash.call(this, 16*4, 14*4)
+
+	    this._h = null
+	    this.init()
+	  }
+
+	  inherits(Sha1, Hash)
+
+	  Sha1.prototype.init = function () {
+	    this._a = 0x67452301
+	    this._b = 0xefcdab89
+	    this._c = 0x98badcfe
+	    this._d = 0x10325476
+	    this._e = 0xc3d2e1f0
+
+	    Hash.prototype.init.call(this)
+	    return this
+	  }
+
+	  Sha1.prototype._POOL = POOL
+	  Sha1.prototype._update = function (X) {
+
+	    var a, b, c, d, e, _a, _b, _c, _d, _e
+
+	    a = _a = this._a
+	    b = _b = this._b
+	    c = _c = this._c
+	    d = _d = this._d
+	    e = _e = this._e
+
+	    var w = this._w
+
+	    for(var j = 0; j < 80; j++) {
+	      var W = w[j] = j < 16 ? X.readInt32BE(j*4)
+	        : rol(w[j - 3] ^ w[j -  8] ^ w[j - 14] ^ w[j - 16], 1)
+
+	      var t = add(
+	        add(rol(a, 5), sha1_ft(j, b, c, d)),
+	        add(add(e, W), sha1_kt(j))
+	      )
+
+	      e = d
+	      d = c
+	      c = rol(b, 30)
+	      b = a
+	      a = t
+	    }
+
+	    this._a = add(a, _a)
+	    this._b = add(b, _b)
+	    this._c = add(c, _c)
+	    this._d = add(d, _d)
+	    this._e = add(e, _e)
+	  }
+
+	  Sha1.prototype._hash = function () {
+	    if(POOL.length < 100) POOL.push(this)
+	    var H = new Buffer(20)
+	    //console.log(this._a|0, this._b|0, this._c|0, this._d|0, this._e|0)
+	    H.writeInt32BE(this._a|0, A)
+	    H.writeInt32BE(this._b|0, B)
+	    H.writeInt32BE(this._c|0, C)
+	    H.writeInt32BE(this._d|0, D)
+	    H.writeInt32BE(this._e|0, E)
+	    return H
+	  }
+
+	  /*
+	   * Perform the appropriate triplet combination function for the current
+	   * iteration
+	   */
+	  function sha1_ft(t, b, c, d) {
+	    if(t < 20) return (b & c) | ((~b) & d);
+	    if(t < 40) return b ^ c ^ d;
+	    if(t < 60) return (b & c) | (b & d) | (c & d);
+	    return b ^ c ^ d;
+	  }
+
+	  /*
+	   * Determine the appropriate additive constant for the current iteration
+	   */
+	  function sha1_kt(t) {
+	    return (t < 20) ?  1518500249 : (t < 40) ?  1859775393 :
+	           (t < 60) ? -1894007588 : -899497514;
+	  }
+
+	  /*
+	   * Add integers, wrapping at 2^32. This uses 16-bit operations internally
+	   * to work around bugs in some JS interpreters.
+	   * //dominictarr: this is 10 years old, so maybe this can be dropped?)
+	   *
+	   */
+	  function add(x, y) {
+	    return (x + y ) | 0
+	  //lets see how this goes on testling.
+	  //  var lsw = (x & 0xFFFF) + (y & 0xFFFF);
+	  //  var msw = (x >> 16) + (y >> 16) + (lsw >> 16);
+	  //  return (msw << 16) | (lsw & 0xFFFF);
+	  }
+
+	  /*
+	   * Bitwise rotate a 32-bit number to the left.
+	   */
+	  function rol(num, cnt) {
+	    return (num << cnt) | (num >>> (32 - cnt));
+	  }
+
+	  return Sha1
+	}
+
+
+/***/ },
+/* 231 */
+/***/ function(module, exports, __webpack_require__) {
+
+	
+	/**
+	 * A JavaScript implementation of the Secure Hash Algorithm, SHA-256, as defined
+	 * in FIPS 180-2
+	 * Version 2.2-beta Copyright Angel Marin, Paul Johnston 2000 - 2009.
+	 * Other contributors: Greg Holt, Andrew Kepert, Ydnar, Lostinet
+	 *
+	 */
+
+	var inherits = __webpack_require__(22).inherits
+
+	module.exports = function (Buffer, Hash) {
+
+	  var K = [
+	      0x428A2F98, 0x71374491, 0xB5C0FBCF, 0xE9B5DBA5,
+	      0x3956C25B, 0x59F111F1, 0x923F82A4, 0xAB1C5ED5,
+	      0xD807AA98, 0x12835B01, 0x243185BE, 0x550C7DC3,
+	      0x72BE5D74, 0x80DEB1FE, 0x9BDC06A7, 0xC19BF174,
+	      0xE49B69C1, 0xEFBE4786, 0x0FC19DC6, 0x240CA1CC,
+	      0x2DE92C6F, 0x4A7484AA, 0x5CB0A9DC, 0x76F988DA,
+	      0x983E5152, 0xA831C66D, 0xB00327C8, 0xBF597FC7,
+	      0xC6E00BF3, 0xD5A79147, 0x06CA6351, 0x14292967,
+	      0x27B70A85, 0x2E1B2138, 0x4D2C6DFC, 0x53380D13,
+	      0x650A7354, 0x766A0ABB, 0x81C2C92E, 0x92722C85,
+	      0xA2BFE8A1, 0xA81A664B, 0xC24B8B70, 0xC76C51A3,
+	      0xD192E819, 0xD6990624, 0xF40E3585, 0x106AA070,
+	      0x19A4C116, 0x1E376C08, 0x2748774C, 0x34B0BCB5,
+	      0x391C0CB3, 0x4ED8AA4A, 0x5B9CCA4F, 0x682E6FF3,
+	      0x748F82EE, 0x78A5636F, 0x84C87814, 0x8CC70208,
+	      0x90BEFFFA, 0xA4506CEB, 0xBEF9A3F7, 0xC67178F2
+	    ]
+
+	  var W = new Array(64)
+
+	  function Sha256() {
+	    this.init()
+
+	    this._w = W //new Array(64)
+
+	    Hash.call(this, 16*4, 14*4)
+	  }
+
+	  inherits(Sha256, Hash)
+
+	  Sha256.prototype.init = function () {
+
+	    this._a = 0x6a09e667|0
+	    this._b = 0xbb67ae85|0
+	    this._c = 0x3c6ef372|0
+	    this._d = 0xa54ff53a|0
+	    this._e = 0x510e527f|0
+	    this._f = 0x9b05688c|0
+	    this._g = 0x1f83d9ab|0
+	    this._h = 0x5be0cd19|0
+
+	    this._len = this._s = 0
+
+	    return this
+	  }
+
+	  function S (X, n) {
+	    return (X >>> n) | (X << (32 - n));
+	  }
+
+	  function R (X, n) {
+	    return (X >>> n);
+	  }
+
+	  function Ch (x, y, z) {
+	    return ((x & y) ^ ((~x) & z));
+	  }
+
+	  function Maj (x, y, z) {
+	    return ((x & y) ^ (x & z) ^ (y & z));
+	  }
+
+	  function Sigma0256 (x) {
+	    return (S(x, 2) ^ S(x, 13) ^ S(x, 22));
+	  }
+
+	  function Sigma1256 (x) {
+	    return (S(x, 6) ^ S(x, 11) ^ S(x, 25));
+	  }
+
+	  function Gamma0256 (x) {
+	    return (S(x, 7) ^ S(x, 18) ^ R(x, 3));
+	  }
+
+	  function Gamma1256 (x) {
+	    return (S(x, 17) ^ S(x, 19) ^ R(x, 10));
+	  }
+
+	  Sha256.prototype._update = function(M) {
+
+	    var W = this._w
+	    var a, b, c, d, e, f, g, h
+	    var T1, T2
+
+	    a = this._a | 0
+	    b = this._b | 0
+	    c = this._c | 0
+	    d = this._d | 0
+	    e = this._e | 0
+	    f = this._f | 0
+	    g = this._g | 0
+	    h = this._h | 0
+
+	    for (var j = 0; j < 64; j++) {
+	      var w = W[j] = j < 16
+	        ? M.readInt32BE(j * 4)
+	        : Gamma1256(W[j - 2]) + W[j - 7] + Gamma0256(W[j - 15]) + W[j - 16]
+
+	      T1 = h + Sigma1256(e) + Ch(e, f, g) + K[j] + w
+
+	      T2 = Sigma0256(a) + Maj(a, b, c);
+	      h = g; g = f; f = e; e = d + T1; d = c; c = b; b = a; a = T1 + T2;
+	    }
+
+	    this._a = (a + this._a) | 0
+	    this._b = (b + this._b) | 0
+	    this._c = (c + this._c) | 0
+	    this._d = (d + this._d) | 0
+	    this._e = (e + this._e) | 0
+	    this._f = (f + this._f) | 0
+	    this._g = (g + this._g) | 0
+	    this._h = (h + this._h) | 0
+
+	  };
+
+	  Sha256.prototype._hash = function () {
+	    var H = new Buffer(32)
+
+	    H.writeInt32BE(this._a,  0)
+	    H.writeInt32BE(this._b,  4)
+	    H.writeInt32BE(this._c,  8)
+	    H.writeInt32BE(this._d, 12)
+	    H.writeInt32BE(this._e, 16)
+	    H.writeInt32BE(this._f, 20)
+	    H.writeInt32BE(this._g, 24)
+	    H.writeInt32BE(this._h, 28)
+
+	    return H
+	  }
+
+	  return Sha256
+
+	}
+
+
+/***/ },
+/* 232 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var inherits = __webpack_require__(22).inherits
+
+	module.exports = function (Buffer, Hash) {
+	  var K = [
+	    0x428a2f98, 0xd728ae22, 0x71374491, 0x23ef65cd,
+	    0xb5c0fbcf, 0xec4d3b2f, 0xe9b5dba5, 0x8189dbbc,
+	    0x3956c25b, 0xf348b538, 0x59f111f1, 0xb605d019,
+	    0x923f82a4, 0xaf194f9b, 0xab1c5ed5, 0xda6d8118,
+	    0xd807aa98, 0xa3030242, 0x12835b01, 0x45706fbe,
+	    0x243185be, 0x4ee4b28c, 0x550c7dc3, 0xd5ffb4e2,
+	    0x72be5d74, 0xf27b896f, 0x80deb1fe, 0x3b1696b1,
+	    0x9bdc06a7, 0x25c71235, 0xc19bf174, 0xcf692694,
+	    0xe49b69c1, 0x9ef14ad2, 0xefbe4786, 0x384f25e3,
+	    0x0fc19dc6, 0x8b8cd5b5, 0x240ca1cc, 0x77ac9c65,
+	    0x2de92c6f, 0x592b0275, 0x4a7484aa, 0x6ea6e483,
+	    0x5cb0a9dc, 0xbd41fbd4, 0x76f988da, 0x831153b5,
+	    0x983e5152, 0xee66dfab, 0xa831c66d, 0x2db43210,
+	    0xb00327c8, 0x98fb213f, 0xbf597fc7, 0xbeef0ee4,
+	    0xc6e00bf3, 0x3da88fc2, 0xd5a79147, 0x930aa725,
+	    0x06ca6351, 0xe003826f, 0x14292967, 0x0a0e6e70,
+	    0x27b70a85, 0x46d22ffc, 0x2e1b2138, 0x5c26c926,
+	    0x4d2c6dfc, 0x5ac42aed, 0x53380d13, 0x9d95b3df,
+	    0x650a7354, 0x8baf63de, 0x766a0abb, 0x3c77b2a8,
+	    0x81c2c92e, 0x47edaee6, 0x92722c85, 0x1482353b,
+	    0xa2bfe8a1, 0x4cf10364, 0xa81a664b, 0xbc423001,
+	    0xc24b8b70, 0xd0f89791, 0xc76c51a3, 0x0654be30,
+	    0xd192e819, 0xd6ef5218, 0xd6990624, 0x5565a910,
+	    0xf40e3585, 0x5771202a, 0x106aa070, 0x32bbd1b8,
+	    0x19a4c116, 0xb8d2d0c8, 0x1e376c08, 0x5141ab53,
+	    0x2748774c, 0xdf8eeb99, 0x34b0bcb5, 0xe19b48a8,
+	    0x391c0cb3, 0xc5c95a63, 0x4ed8aa4a, 0xe3418acb,
+	    0x5b9cca4f, 0x7763e373, 0x682e6ff3, 0xd6b2b8a3,
+	    0x748f82ee, 0x5defb2fc, 0x78a5636f, 0x43172f60,
+	    0x84c87814, 0xa1f0ab72, 0x8cc70208, 0x1a6439ec,
+	    0x90befffa, 0x23631e28, 0xa4506ceb, 0xde82bde9,
+	    0xbef9a3f7, 0xb2c67915, 0xc67178f2, 0xe372532b,
+	    0xca273ece, 0xea26619c, 0xd186b8c7, 0x21c0c207,
+	    0xeada7dd6, 0xcde0eb1e, 0xf57d4f7f, 0xee6ed178,
+	    0x06f067aa, 0x72176fba, 0x0a637dc5, 0xa2c898a6,
+	    0x113f9804, 0xbef90dae, 0x1b710b35, 0x131c471b,
+	    0x28db77f5, 0x23047d84, 0x32caab7b, 0x40c72493,
+	    0x3c9ebe0a, 0x15c9bebc, 0x431d67c4, 0x9c100d4c,
+	    0x4cc5d4be, 0xcb3e42b6, 0x597f299c, 0xfc657e2a,
+	    0x5fcb6fab, 0x3ad6faec, 0x6c44198c, 0x4a475817
+	  ]
+
+	  var W = new Array(160)
+
+	  function Sha512() {
+	    this.init()
+	    this._w = W
+
+	    Hash.call(this, 128, 112)
+	  }
+
+	  inherits(Sha512, Hash)
+
+	  Sha512.prototype.init = function () {
+
+	    this._a = 0x6a09e667|0
+	    this._b = 0xbb67ae85|0
+	    this._c = 0x3c6ef372|0
+	    this._d = 0xa54ff53a|0
+	    this._e = 0x510e527f|0
+	    this._f = 0x9b05688c|0
+	    this._g = 0x1f83d9ab|0
+	    this._h = 0x5be0cd19|0
+
+	    this._al = 0xf3bcc908|0
+	    this._bl = 0x84caa73b|0
+	    this._cl = 0xfe94f82b|0
+	    this._dl = 0x5f1d36f1|0
+	    this._el = 0xade682d1|0
+	    this._fl = 0x2b3e6c1f|0
+	    this._gl = 0xfb41bd6b|0
+	    this._hl = 0x137e2179|0
+
+	    this._len = this._s = 0
+
+	    return this
+	  }
+
+	  function S (X, Xl, n) {
+	    return (X >>> n) | (Xl << (32 - n))
+	  }
+
+	  function Ch (x, y, z) {
+	    return ((x & y) ^ ((~x) & z));
+	  }
+
+	  function Maj (x, y, z) {
+	    return ((x & y) ^ (x & z) ^ (y & z));
+	  }
+
+	  Sha512.prototype._update = function(M) {
+
+	    var W = this._w
+	    var a, b, c, d, e, f, g, h
+	    var al, bl, cl, dl, el, fl, gl, hl
+
+	    a = this._a | 0
+	    b = this._b | 0
+	    c = this._c | 0
+	    d = this._d | 0
+	    e = this._e | 0
+	    f = this._f | 0
+	    g = this._g | 0
+	    h = this._h | 0
+
+	    al = this._al | 0
+	    bl = this._bl | 0
+	    cl = this._cl | 0
+	    dl = this._dl | 0
+	    el = this._el | 0
+	    fl = this._fl | 0
+	    gl = this._gl | 0
+	    hl = this._hl | 0
+
+	    for (var i = 0; i < 80; i++) {
+	      var j = i * 2
+
+	      var Wi, Wil
+
+	      if (i < 16) {
+	        Wi = W[j] = M.readInt32BE(j * 4)
+	        Wil = W[j + 1] = M.readInt32BE(j * 4 + 4)
+
+	      } else {
+	        var x  = W[j - 15*2]
+	        var xl = W[j - 15*2 + 1]
+	        var gamma0  = S(x, xl, 1) ^ S(x, xl, 8) ^ (x >>> 7)
+	        var gamma0l = S(xl, x, 1) ^ S(xl, x, 8) ^ S(xl, x, 7)
+
+	        x  = W[j - 2*2]
+	        xl = W[j - 2*2 + 1]
+	        var gamma1  = S(x, xl, 19) ^ S(xl, x, 29) ^ (x >>> 6)
+	        var gamma1l = S(xl, x, 19) ^ S(x, xl, 29) ^ S(xl, x, 6)
+
+	        // W[i] = gamma0 + W[i - 7] + gamma1 + W[i - 16]
+	        var Wi7  = W[j - 7*2]
+	        var Wi7l = W[j - 7*2 + 1]
+
+	        var Wi16  = W[j - 16*2]
+	        var Wi16l = W[j - 16*2 + 1]
+
+	        Wil = gamma0l + Wi7l
+	        Wi  = gamma0  + Wi7 + ((Wil >>> 0) < (gamma0l >>> 0) ? 1 : 0)
+	        Wil = Wil + gamma1l
+	        Wi  = Wi  + gamma1  + ((Wil >>> 0) < (gamma1l >>> 0) ? 1 : 0)
+	        Wil = Wil + Wi16l
+	        Wi  = Wi  + Wi16 + ((Wil >>> 0) < (Wi16l >>> 0) ? 1 : 0)
+
+	        W[j] = Wi
+	        W[j + 1] = Wil
+	      }
+
+	      var maj = Maj(a, b, c)
+	      var majl = Maj(al, bl, cl)
+
+	      var sigma0h = S(a, al, 28) ^ S(al, a, 2) ^ S(al, a, 7)
+	      var sigma0l = S(al, a, 28) ^ S(a, al, 2) ^ S(a, al, 7)
+	      var sigma1h = S(e, el, 14) ^ S(e, el, 18) ^ S(el, e, 9)
+	      var sigma1l = S(el, e, 14) ^ S(el, e, 18) ^ S(e, el, 9)
+
+	      // t1 = h + sigma1 + ch + K[i] + W[i]
+	      var Ki = K[j]
+	      var Kil = K[j + 1]
+
+	      var ch = Ch(e, f, g)
+	      var chl = Ch(el, fl, gl)
+
+	      var t1l = hl + sigma1l
+	      var t1 = h + sigma1h + ((t1l >>> 0) < (hl >>> 0) ? 1 : 0)
+	      t1l = t1l + chl
+	      t1 = t1 + ch + ((t1l >>> 0) < (chl >>> 0) ? 1 : 0)
+	      t1l = t1l + Kil
+	      t1 = t1 + Ki + ((t1l >>> 0) < (Kil >>> 0) ? 1 : 0)
+	      t1l = t1l + Wil
+	      t1 = t1 + Wi + ((t1l >>> 0) < (Wil >>> 0) ? 1 : 0)
+
+	      // t2 = sigma0 + maj
+	      var t2l = sigma0l + majl
+	      var t2 = sigma0h + maj + ((t2l >>> 0) < (sigma0l >>> 0) ? 1 : 0)
+
+	      h  = g
+	      hl = gl
+	      g  = f
+	      gl = fl
+	      f  = e
+	      fl = el
+	      el = (dl + t1l) | 0
+	      e  = (d + t1 + ((el >>> 0) < (dl >>> 0) ? 1 : 0)) | 0
+	      d  = c
+	      dl = cl
+	      c  = b
+	      cl = bl
+	      b  = a
+	      bl = al
+	      al = (t1l + t2l) | 0
+	      a  = (t1 + t2 + ((al >>> 0) < (t1l >>> 0) ? 1 : 0)) | 0
+	    }
+
+	    this._al = (this._al + al) | 0
+	    this._bl = (this._bl + bl) | 0
+	    this._cl = (this._cl + cl) | 0
+	    this._dl = (this._dl + dl) | 0
+	    this._el = (this._el + el) | 0
+	    this._fl = (this._fl + fl) | 0
+	    this._gl = (this._gl + gl) | 0
+	    this._hl = (this._hl + hl) | 0
+
+	    this._a = (this._a + a + ((this._al >>> 0) < (al >>> 0) ? 1 : 0)) | 0
+	    this._b = (this._b + b + ((this._bl >>> 0) < (bl >>> 0) ? 1 : 0)) | 0
+	    this._c = (this._c + c + ((this._cl >>> 0) < (cl >>> 0) ? 1 : 0)) | 0
+	    this._d = (this._d + d + ((this._dl >>> 0) < (dl >>> 0) ? 1 : 0)) | 0
+	    this._e = (this._e + e + ((this._el >>> 0) < (el >>> 0) ? 1 : 0)) | 0
+	    this._f = (this._f + f + ((this._fl >>> 0) < (fl >>> 0) ? 1 : 0)) | 0
+	    this._g = (this._g + g + ((this._gl >>> 0) < (gl >>> 0) ? 1 : 0)) | 0
+	    this._h = (this._h + h + ((this._hl >>> 0) < (hl >>> 0) ? 1 : 0)) | 0
+	  }
+
+	  Sha512.prototype._hash = function () {
+	    var H = new Buffer(64)
+
+	    function writeInt64BE(h, l, offset) {
+	      H.writeInt32BE(h, offset)
+	      H.writeInt32BE(l, offset + 4)
+	    }
+
+	    writeInt64BE(this._a, this._al, 0)
+	    writeInt64BE(this._b, this._bl, 8)
+	    writeInt64BE(this._c, this._cl, 16)
+	    writeInt64BE(this._d, this._dl, 24)
+	    writeInt64BE(this._e, this._el, 32)
+	    writeInt64BE(this._f, this._fl, 40)
+	    writeInt64BE(this._g, this._gl, 48)
+	    writeInt64BE(this._h, this._hl, 56)
+
+	    return H
+	  }
+
+	  return Sha512
+
+	}
+
+
+/***/ },
+/* 233 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/*
+	 * A JavaScript implementation of the RSA Data Security, Inc. MD5 Message
+	 * Digest Algorithm, as defined in RFC 1321.
+	 * Version 2.1 Copyright (C) Paul Johnston 1999 - 2002.
+	 * Other contributors: Greg Holt, Andrew Kepert, Ydnar, Lostinet
+	 * Distributed under the BSD License
+	 * See http://pajhome.org.uk/crypt/md5 for more info.
+	 */
+
+	var helpers = __webpack_require__(234);
+
+	/*
+	 * Calculate the MD5 of an array of little-endian words, and a bit length
+	 */
+	function core_md5(x, len)
+	{
+	  /* append padding */
+	  x[len >> 5] |= 0x80 << ((len) % 32);
+	  x[(((len + 64) >>> 9) << 4) + 14] = len;
+
+	  var a =  1732584193;
+	  var b = -271733879;
+	  var c = -1732584194;
+	  var d =  271733878;
+
+	  for(var i = 0; i < x.length; i += 16)
+	  {
+	    var olda = a;
+	    var oldb = b;
+	    var oldc = c;
+	    var oldd = d;
+
+	    a = md5_ff(a, b, c, d, x[i+ 0], 7 , -680876936);
+	    d = md5_ff(d, a, b, c, x[i+ 1], 12, -389564586);
+	    c = md5_ff(c, d, a, b, x[i+ 2], 17,  606105819);
+	    b = md5_ff(b, c, d, a, x[i+ 3], 22, -1044525330);
+	    a = md5_ff(a, b, c, d, x[i+ 4], 7 , -176418897);
+	    d = md5_ff(d, a, b, c, x[i+ 5], 12,  1200080426);
+	    c = md5_ff(c, d, a, b, x[i+ 6], 17, -1473231341);
+	    b = md5_ff(b, c, d, a, x[i+ 7], 22, -45705983);
+	    a = md5_ff(a, b, c, d, x[i+ 8], 7 ,  1770035416);
+	    d = md5_ff(d, a, b, c, x[i+ 9], 12, -1958414417);
+	    c = md5_ff(c, d, a, b, x[i+10], 17, -42063);
+	    b = md5_ff(b, c, d, a, x[i+11], 22, -1990404162);
+	    a = md5_ff(a, b, c, d, x[i+12], 7 ,  1804603682);
+	    d = md5_ff(d, a, b, c, x[i+13], 12, -40341101);
+	    c = md5_ff(c, d, a, b, x[i+14], 17, -1502002290);
+	    b = md5_ff(b, c, d, a, x[i+15], 22,  1236535329);
+
+	    a = md5_gg(a, b, c, d, x[i+ 1], 5 , -165796510);
+	    d = md5_gg(d, a, b, c, x[i+ 6], 9 , -1069501632);
+	    c = md5_gg(c, d, a, b, x[i+11], 14,  643717713);
+	    b = md5_gg(b, c, d, a, x[i+ 0], 20, -373897302);
+	    a = md5_gg(a, b, c, d, x[i+ 5], 5 , -701558691);
+	    d = md5_gg(d, a, b, c, x[i+10], 9 ,  38016083);
+	    c = md5_gg(c, d, a, b, x[i+15], 14, -660478335);
+	    b = md5_gg(b, c, d, a, x[i+ 4], 20, -405537848);
+	    a = md5_gg(a, b, c, d, x[i+ 9], 5 ,  568446438);
+	    d = md5_gg(d, a, b, c, x[i+14], 9 , -1019803690);
+	    c = md5_gg(c, d, a, b, x[i+ 3], 14, -187363961);
+	    b = md5_gg(b, c, d, a, x[i+ 8], 20,  1163531501);
+	    a = md5_gg(a, b, c, d, x[i+13], 5 , -1444681467);
+	    d = md5_gg(d, a, b, c, x[i+ 2], 9 , -51403784);
+	    c = md5_gg(c, d, a, b, x[i+ 7], 14,  1735328473);
+	    b = md5_gg(b, c, d, a, x[i+12], 20, -1926607734);
+
+	    a = md5_hh(a, b, c, d, x[i+ 5], 4 , -378558);
+	    d = md5_hh(d, a, b, c, x[i+ 8], 11, -2022574463);
+	    c = md5_hh(c, d, a, b, x[i+11], 16,  1839030562);
+	    b = md5_hh(b, c, d, a, x[i+14], 23, -35309556);
+	    a = md5_hh(a, b, c, d, x[i+ 1], 4 , -1530992060);
+	    d = md5_hh(d, a, b, c, x[i+ 4], 11,  1272893353);
+	    c = md5_hh(c, d, a, b, x[i+ 7], 16, -155497632);
+	    b = md5_hh(b, c, d, a, x[i+10], 23, -1094730640);
+	    a = md5_hh(a, b, c, d, x[i+13], 4 ,  681279174);
+	    d = md5_hh(d, a, b, c, x[i+ 0], 11, -358537222);
+	    c = md5_hh(c, d, a, b, x[i+ 3], 16, -722521979);
+	    b = md5_hh(b, c, d, a, x[i+ 6], 23,  76029189);
+	    a = md5_hh(a, b, c, d, x[i+ 9], 4 , -640364487);
+	    d = md5_hh(d, a, b, c, x[i+12], 11, -421815835);
+	    c = md5_hh(c, d, a, b, x[i+15], 16,  530742520);
+	    b = md5_hh(b, c, d, a, x[i+ 2], 23, -995338651);
+
+	    a = md5_ii(a, b, c, d, x[i+ 0], 6 , -198630844);
+	    d = md5_ii(d, a, b, c, x[i+ 7], 10,  1126891415);
+	    c = md5_ii(c, d, a, b, x[i+14], 15, -1416354905);
+	    b = md5_ii(b, c, d, a, x[i+ 5], 21, -57434055);
+	    a = md5_ii(a, b, c, d, x[i+12], 6 ,  1700485571);
+	    d = md5_ii(d, a, b, c, x[i+ 3], 10, -1894986606);
+	    c = md5_ii(c, d, a, b, x[i+10], 15, -1051523);
+	    b = md5_ii(b, c, d, a, x[i+ 1], 21, -2054922799);
+	    a = md5_ii(a, b, c, d, x[i+ 8], 6 ,  1873313359);
+	    d = md5_ii(d, a, b, c, x[i+15], 10, -30611744);
+	    c = md5_ii(c, d, a, b, x[i+ 6], 15, -1560198380);
+	    b = md5_ii(b, c, d, a, x[i+13], 21,  1309151649);
+	    a = md5_ii(a, b, c, d, x[i+ 4], 6 , -145523070);
+	    d = md5_ii(d, a, b, c, x[i+11], 10, -1120210379);
+	    c = md5_ii(c, d, a, b, x[i+ 2], 15,  718787259);
+	    b = md5_ii(b, c, d, a, x[i+ 9], 21, -343485551);
+
+	    a = safe_add(a, olda);
+	    b = safe_add(b, oldb);
+	    c = safe_add(c, oldc);
+	    d = safe_add(d, oldd);
+	  }
+	  return Array(a, b, c, d);
+
+	}
+
+	/*
+	 * These functions implement the four basic operations the algorithm uses.
+	 */
+	function md5_cmn(q, a, b, x, s, t)
+	{
+	  return safe_add(bit_rol(safe_add(safe_add(a, q), safe_add(x, t)), s),b);
+	}
+	function md5_ff(a, b, c, d, x, s, t)
+	{
+	  return md5_cmn((b & c) | ((~b) & d), a, b, x, s, t);
+	}
+	function md5_gg(a, b, c, d, x, s, t)
+	{
+	  return md5_cmn((b & d) | (c & (~d)), a, b, x, s, t);
+	}
+	function md5_hh(a, b, c, d, x, s, t)
+	{
+	  return md5_cmn(b ^ c ^ d, a, b, x, s, t);
+	}
+	function md5_ii(a, b, c, d, x, s, t)
+	{
+	  return md5_cmn(c ^ (b | (~d)), a, b, x, s, t);
+	}
+
+	/*
+	 * Add integers, wrapping at 2^32. This uses 16-bit operations internally
+	 * to work around bugs in some JS interpreters.
+	 */
+	function safe_add(x, y)
+	{
+	  var lsw = (x & 0xFFFF) + (y & 0xFFFF);
+	  var msw = (x >> 16) + (y >> 16) + (lsw >> 16);
+	  return (msw << 16) | (lsw & 0xFFFF);
+	}
+
+	/*
+	 * Bitwise rotate a 32-bit number to the left.
+	 */
+	function bit_rol(num, cnt)
+	{
+	  return (num << cnt) | (num >>> (32 - cnt));
+	}
+
+	module.exports = function md5(buf) {
+	  return helpers.hash(buf, core_md5, 16);
+	};
+
+
+/***/ },
+/* 234 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(Buffer) {var intSize = 4;
+	var zeroBuffer = new Buffer(intSize); zeroBuffer.fill(0);
+	var chrsz = 8;
+
+	function toArray(buf, bigEndian) {
+	  if ((buf.length % intSize) !== 0) {
+	    var len = buf.length + (intSize - (buf.length % intSize));
+	    buf = Buffer.concat([buf, zeroBuffer], len);
+	  }
+
+	  var arr = [];
+	  var fn = bigEndian ? buf.readInt32BE : buf.readInt32LE;
+	  for (var i = 0; i < buf.length; i += intSize) {
+	    arr.push(fn.call(buf, i));
+	  }
+	  return arr;
+	}
+
+	function toBuffer(arr, size, bigEndian) {
+	  var buf = new Buffer(size);
+	  var fn = bigEndian ? buf.writeInt32BE : buf.writeInt32LE;
+	  for (var i = 0; i < arr.length; i++) {
+	    fn.call(buf, arr[i], i * 4, true);
+	  }
+	  return buf;
+	}
+
+	function hash(buf, fn, hashSize, bigEndian) {
+	  if (!Buffer.isBuffer(buf)) buf = new Buffer(buf);
+	  var arr = fn(toArray(buf, bigEndian), buf.length * chrsz);
+	  return toBuffer(arr, hashSize, bigEndian);
+	}
+
+	module.exports = { hash: hash };
+
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(13).Buffer))
+
+/***/ },
+/* 235 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(Buffer) {
+	module.exports = ripemd160
+
+
+
+	/*
+	CryptoJS v3.1.2
+	code.google.com/p/crypto-js
+	(c) 2009-2013 by Jeff Mott. All rights reserved.
+	code.google.com/p/crypto-js/wiki/License
+	*/
+	/** @preserve
+	(c) 2012 by Cédric Mesnil. All rights reserved.
+
+	Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+
+	    - Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+	    - Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+
+	THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+	*/
+
+	// Constants table
+	var zl = [
+	    0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15,
+	    7,  4, 13,  1, 10,  6, 15,  3, 12,  0,  9,  5,  2, 14, 11,  8,
+	    3, 10, 14,  4,  9, 15,  8,  1,  2,  7,  0,  6, 13, 11,  5, 12,
+	    1,  9, 11, 10,  0,  8, 12,  4, 13,  3,  7, 15, 14,  5,  6,  2,
+	    4,  0,  5,  9,  7, 12,  2, 10, 14,  1,  3,  8, 11,  6, 15, 13];
+	var zr = [
+	    5, 14,  7,  0,  9,  2, 11,  4, 13,  6, 15,  8,  1, 10,  3, 12,
+	    6, 11,  3,  7,  0, 13,  5, 10, 14, 15,  8, 12,  4,  9,  1,  2,
+	    15,  5,  1,  3,  7, 14,  6,  9, 11,  8, 12,  2, 10,  0,  4, 13,
+	    8,  6,  4,  1,  3, 11, 15,  0,  5, 12,  2, 13,  9,  7, 10, 14,
+	    12, 15, 10,  4,  1,  5,  8,  7,  6,  2, 13, 14,  0,  3,  9, 11];
+	var sl = [
+	     11, 14, 15, 12,  5,  8,  7,  9, 11, 13, 14, 15,  6,  7,  9,  8,
+	    7, 6,   8, 13, 11,  9,  7, 15,  7, 12, 15,  9, 11,  7, 13, 12,
+	    11, 13,  6,  7, 14,  9, 13, 15, 14,  8, 13,  6,  5, 12,  7,  5,
+	      11, 12, 14, 15, 14, 15,  9,  8,  9, 14,  5,  6,  8,  6,  5, 12,
+	    9, 15,  5, 11,  6,  8, 13, 12,  5, 12, 13, 14, 11,  8,  5,  6 ];
+	var sr = [
+	    8,  9,  9, 11, 13, 15, 15,  5,  7,  7,  8, 11, 14, 14, 12,  6,
+	    9, 13, 15,  7, 12,  8,  9, 11,  7,  7, 12,  7,  6, 15, 13, 11,
+	    9,  7, 15, 11,  8,  6,  6, 14, 12, 13,  5, 14, 13, 13,  7,  5,
+	    15,  5,  8, 11, 14, 14,  6, 14,  6,  9, 12,  9, 12,  5, 15,  8,
+	    8,  5, 12,  9, 12,  5, 14,  6,  8, 13,  6,  5, 15, 13, 11, 11 ];
+
+	var hl =  [ 0x00000000, 0x5A827999, 0x6ED9EBA1, 0x8F1BBCDC, 0xA953FD4E];
+	var hr =  [ 0x50A28BE6, 0x5C4DD124, 0x6D703EF3, 0x7A6D76E9, 0x00000000];
+
+	var bytesToWords = function (bytes) {
+	  var words = [];
+	  for (var i = 0, b = 0; i < bytes.length; i++, b += 8) {
+	    words[b >>> 5] |= bytes[i] << (24 - b % 32);
+	  }
+	  return words;
+	};
+
+	var wordsToBytes = function (words) {
+	  var bytes = [];
+	  for (var b = 0; b < words.length * 32; b += 8) {
+	    bytes.push((words[b >>> 5] >>> (24 - b % 32)) & 0xFF);
+	  }
+	  return bytes;
+	};
+
+	var processBlock = function (H, M, offset) {
+
+	  // Swap endian
+	  for (var i = 0; i < 16; i++) {
+	    var offset_i = offset + i;
+	    var M_offset_i = M[offset_i];
+
+	    // Swap
+	    M[offset_i] = (
+	        (((M_offset_i << 8)  | (M_offset_i >>> 24)) & 0x00ff00ff) |
+	        (((M_offset_i << 24) | (M_offset_i >>> 8))  & 0xff00ff00)
+	    );
+	  }
+
+	  // Working variables
+	  var al, bl, cl, dl, el;
+	  var ar, br, cr, dr, er;
+
+	  ar = al = H[0];
+	  br = bl = H[1];
+	  cr = cl = H[2];
+	  dr = dl = H[3];
+	  er = el = H[4];
+	  // Computation
+	  var t;
+	  for (var i = 0; i < 80; i += 1) {
+	    t = (al +  M[offset+zl[i]])|0;
+	    if (i<16){
+	        t +=  f1(bl,cl,dl) + hl[0];
+	    } else if (i<32) {
+	        t +=  f2(bl,cl,dl) + hl[1];
+	    } else if (i<48) {
+	        t +=  f3(bl,cl,dl) + hl[2];
+	    } else if (i<64) {
+	        t +=  f4(bl,cl,dl) + hl[3];
+	    } else {// if (i<80) {
+	        t +=  f5(bl,cl,dl) + hl[4];
+	    }
+	    t = t|0;
+	    t =  rotl(t,sl[i]);
+	    t = (t+el)|0;
+	    al = el;
+	    el = dl;
+	    dl = rotl(cl, 10);
+	    cl = bl;
+	    bl = t;
+
+	    t = (ar + M[offset+zr[i]])|0;
+	    if (i<16){
+	        t +=  f5(br,cr,dr) + hr[0];
+	    } else if (i<32) {
+	        t +=  f4(br,cr,dr) + hr[1];
+	    } else if (i<48) {
+	        t +=  f3(br,cr,dr) + hr[2];
+	    } else if (i<64) {
+	        t +=  f2(br,cr,dr) + hr[3];
+	    } else {// if (i<80) {
+	        t +=  f1(br,cr,dr) + hr[4];
+	    }
+	    t = t|0;
+	    t =  rotl(t,sr[i]) ;
+	    t = (t+er)|0;
+	    ar = er;
+	    er = dr;
+	    dr = rotl(cr, 10);
+	    cr = br;
+	    br = t;
+	  }
+	  // Intermediate hash value
+	  t    = (H[1] + cl + dr)|0;
+	  H[1] = (H[2] + dl + er)|0;
+	  H[2] = (H[3] + el + ar)|0;
+	  H[3] = (H[4] + al + br)|0;
+	  H[4] = (H[0] + bl + cr)|0;
+	  H[0] =  t;
+	};
+
+	function f1(x, y, z) {
+	  return ((x) ^ (y) ^ (z));
+	}
+
+	function f2(x, y, z) {
+	  return (((x)&(y)) | ((~x)&(z)));
+	}
+
+	function f3(x, y, z) {
+	  return (((x) | (~(y))) ^ (z));
+	}
+
+	function f4(x, y, z) {
+	  return (((x) & (z)) | ((y)&(~(z))));
+	}
+
+	function f5(x, y, z) {
+	  return ((x) ^ ((y) |(~(z))));
+	}
+
+	function rotl(x,n) {
+	  return (x<<n) | (x>>>(32-n));
+	}
+
+	function ripemd160(message) {
+	  var H = [0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476, 0xC3D2E1F0];
+
+	  if (typeof message == 'string')
+	    message = new Buffer(message, 'utf8');
+
+	  var m = bytesToWords(message);
+
+	  var nBitsLeft = message.length * 8;
+	  var nBitsTotal = message.length * 8;
+
+	  // Add padding
+	  m[nBitsLeft >>> 5] |= 0x80 << (24 - nBitsLeft % 32);
+	  m[(((nBitsLeft + 64) >>> 9) << 4) + 14] = (
+	      (((nBitsTotal << 8)  | (nBitsTotal >>> 24)) & 0x00ff00ff) |
+	      (((nBitsTotal << 24) | (nBitsTotal >>> 8))  & 0xff00ff00)
+	  );
+
+	  for (var i=0 ; i<m.length; i += 16) {
+	    processBlock(H, m, i);
+	  }
+
+	  // Swap endian
+	  for (var i = 0; i < 5; i++) {
+	      // Shortcut
+	    var H_i = H[i];
+
+	    // Swap
+	    H[i] = (((H_i << 8)  | (H_i >>> 24)) & 0x00ff00ff) |
+	          (((H_i << 24) | (H_i >>> 8))  & 0xff00ff00);
+	  }
+
+	  var digestbytes = wordsToBytes(H);
+	  return new Buffer(digestbytes);
+	}
+
+
+
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(13).Buffer))
+
+/***/ },
+/* 236 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(Buffer) {var createHash = __webpack_require__(227)
+
+	var zeroBuffer = new Buffer(128)
+	zeroBuffer.fill(0)
+
+	module.exports = Hmac
+
+	function Hmac (alg, key) {
+	  if(!(this instanceof Hmac)) return new Hmac(alg, key)
+	  this._opad = opad
+	  this._alg = alg
+
+	  var blocksize = (alg === 'sha512') ? 128 : 64
+
+	  key = this._key = !Buffer.isBuffer(key) ? new Buffer(key) : key
+
+	  if(key.length > blocksize) {
+	    key = createHash(alg).update(key).digest()
+	  } else if(key.length < blocksize) {
+	    key = Buffer.concat([key, zeroBuffer], blocksize)
+	  }
+
+	  var ipad = this._ipad = new Buffer(blocksize)
+	  var opad = this._opad = new Buffer(blocksize)
+
+	  for(var i = 0; i < blocksize; i++) {
+	    ipad[i] = key[i] ^ 0x36
+	    opad[i] = key[i] ^ 0x5C
+	  }
+
+	  this._hash = createHash(alg).update(ipad)
+	}
+
+	Hmac.prototype.update = function (data, enc) {
+	  this._hash.update(data, enc)
+	  return this
+	}
+
+	Hmac.prototype.digest = function (enc) {
+	  var h = this._hash.digest()
+	  return createHash(this._alg).update(this._opad).update(h).digest(enc)
+	}
+
+
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(13).Buffer))
+
+/***/ },
+/* 237 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var pbkdf2Export = __webpack_require__(238)
+
+	module.exports = function (crypto, exports) {
+	  exports = exports || {}
+
+	  var exported = pbkdf2Export(crypto)
+
+	  exports.pbkdf2 = exported.pbkdf2
+	  exports.pbkdf2Sync = exported.pbkdf2Sync
+
+	  return exports
+	}
+
+
+/***/ },
+/* 238 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(Buffer) {module.exports = function(crypto) {
+	  function pbkdf2(password, salt, iterations, keylen, digest, callback) {
+	    if ('function' === typeof digest) {
+	      callback = digest
+	      digest = undefined
+	    }
+
+	    if ('function' !== typeof callback)
+	      throw new Error('No callback provided to pbkdf2')
+
+	    setTimeout(function() {
+	      var result
+
+	      try {
+	        result = pbkdf2Sync(password, salt, iterations, keylen, digest)
+	      } catch (e) {
+	        return callback(e)
+	      }
+
+	      callback(undefined, result)
+	    })
+	  }
+
+	  function pbkdf2Sync(password, salt, iterations, keylen, digest) {
+	    if ('number' !== typeof iterations)
+	      throw new TypeError('Iterations not a number')
+
+	    if (iterations < 0)
+	      throw new TypeError('Bad iterations')
+
+	    if ('number' !== typeof keylen)
+	      throw new TypeError('Key length not a number')
+
+	    if (keylen < 0)
+	      throw new TypeError('Bad key length')
+
+	    digest = digest || 'sha1'
+
+	    if (!Buffer.isBuffer(password)) password = new Buffer(password)
+	    if (!Buffer.isBuffer(salt)) salt = new Buffer(salt)
+
+	    var hLen, l = 1, r, T
+	    var DK = new Buffer(keylen)
+	    var block1 = new Buffer(salt.length + 4)
+	    salt.copy(block1, 0, 0, salt.length)
+
+	    for (var i = 1; i <= l; i++) {
+	      block1.writeUInt32BE(i, salt.length)
+
+	      var U = crypto.createHmac(digest, password).update(block1).digest()
+
+	      if (!hLen) {
+	        hLen = U.length
+	        T = new Buffer(hLen)
+	        l = Math.ceil(keylen / hLen)
+	        r = keylen - (l - 1) * hLen
+
+	        if (keylen > (Math.pow(2, 32) - 1) * hLen)
+	          throw new TypeError('keylen exceeds maximum length')
+	      }
+
+	      U.copy(T, 0, 0, hLen)
+
+	      for (var j = 1; j < iterations; j++) {
+	        U = crypto.createHmac(digest, password).update(U).digest()
+
+	        for (var k = 0; k < hLen; k++) {
+	          T[k] ^= U[k]
+	        }
+	      }
+
+	      var destPos = (i - 1) * hLen
+	      var len = (i == l ? r : hLen)
+	      T.copy(DK, destPos, 0, len)
+	    }
+
+	    return DK
+	  }
+
+	  return {
+	    pbkdf2: pbkdf2,
+	    pbkdf2Sync: pbkdf2Sync
+	  }
+	}
+
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(13).Buffer))
+
+/***/ },
+/* 239 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = function (crypto, exports) {
+	  exports = exports || {};
+	  var ciphers = __webpack_require__(240)(crypto);
+	  exports.createCipher = ciphers.createCipher;
+	  exports.createCipheriv = ciphers.createCipheriv;
+	  var deciphers = __webpack_require__(274)(crypto);
+	  exports.createDecipher = deciphers.createDecipher;
+	  exports.createDecipheriv = deciphers.createDecipheriv;
+	  var modes = __webpack_require__(265);
+	  function listCiphers () {
+	    return Object.keys(modes);
+	  }
+	  exports.listCiphers = listCiphers;
+	};
+
+
+
+/***/ },
+/* 240 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(Buffer) {var aes = __webpack_require__(241);
+	var Transform = __webpack_require__(242);
+	var inherits = __webpack_require__(245);
+	var modes = __webpack_require__(265);
+	var ebtk = __webpack_require__(266);
+	var StreamCipher = __webpack_require__(267);
+	inherits(Cipher, Transform);
+	function Cipher(mode, key, iv) {
+	  if (!(this instanceof Cipher)) {
+	    return new Cipher(mode, key, iv);
+	  }
+	  Transform.call(this);
+	  this._cache = new Splitter();
+	  this._cipher = new aes.AES(key);
+	  this._prev = new Buffer(iv.length);
+	  iv.copy(this._prev);
+	  this._mode = mode;
+	}
+	Cipher.prototype._transform = function (data, _, next) {
+	  this._cache.add(data);
+	  var chunk;
+	  var thing;
+	  while ((chunk = this._cache.get())) {
+	    thing = this._mode.encrypt(this, chunk);
+	    this.push(thing);
+	  }
+	  next();
+	};
+	Cipher.prototype._flush = function (next) {
+	  var chunk = this._cache.flush();
+	  this.push(this._mode.encrypt(this, chunk));
+	  this._cipher.scrub();
+	  next();
+	};
+
+
+	function Splitter() {
+	   if (!(this instanceof Splitter)) {
+	    return new Splitter();
+	  }
+	  this.cache = new Buffer('');
+	}
+	Splitter.prototype.add = function (data) {
+	  this.cache = Buffer.concat([this.cache, data]);
+	};
+
+	Splitter.prototype.get = function () {
+	  if (this.cache.length > 15) {
+	    var out = this.cache.slice(0, 16);
+	    this.cache = this.cache.slice(16);
+	    return out;
+	  }
+	  return null;
+	};
+	Splitter.prototype.flush = function () {
+	  var len = 16 - this.cache.length;
+	  var padBuff = new Buffer(len);
+
+	  var i = -1;
+	  while (++i < len) {
+	    padBuff.writeUInt8(len, i);
+	  }
+	  var out = Buffer.concat([this.cache, padBuff]);
+	  return out;
+	};
+	var modelist = {
+	  ECB: __webpack_require__(268),
+	  CBC: __webpack_require__(269),
+	  CFB: __webpack_require__(271),
+	  OFB: __webpack_require__(272),
+	  CTR: __webpack_require__(273)
+	};
+	module.exports = function (crypto) {
+	  function createCipheriv(suite, password, iv) {
+	    var config = modes[suite];
+	    if (!config) {
+	      throw new TypeError('invalid suite type');
+	    }
+	    if (typeof iv === 'string') {
+	      iv = new Buffer(iv);
+	    }
+	    if (typeof password === 'string') {
+	      password = new Buffer(password);
+	    }
+	    if (password.length !== config.key/8) {
+	      throw new TypeError('invalid key length ' + password.length);
+	    }
+	    if (iv.length !== config.iv) {
+	      throw new TypeError('invalid iv length ' + iv.length);
+	    }
+	    if (config.type === 'stream') {
+	      return new StreamCipher(modelist[config.mode], password, iv);
+	    }
+	    return new Cipher(modelist[config.mode], password, iv);
+	  }
+	  function createCipher (suite, password) {
+	    var config = modes[suite];
+	    if (!config) {
+	      throw new TypeError('invalid suite type');
+	    }
+	    var keys = ebtk(crypto, password, config.key, config.iv);
+	    return createCipheriv(suite, keys.key, keys.iv);
+	  }
+	  return {
+	    createCipher: createCipher,
+	    createCipheriv: createCipheriv
+	  };
+	};
+
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(13).Buffer))
+
+/***/ },
+/* 241 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(Buffer) {var uint_max = Math.pow(2, 32);
+	function fixup_uint32(x) {
+	    var ret, x_pos;
+	    ret = x > uint_max || x < 0 ? (x_pos = Math.abs(x) % uint_max, x < 0 ? uint_max - x_pos : x_pos) : x;
+	    return ret;
+	}
+	function scrub_vec(v) {
+	  var i, _i, _ref;
+	  for (i = _i = 0, _ref = v.length; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
+	    v[i] = 0;
+	  }
+	  return false;
+	}
+
+	function Global() {
+	  var i;
+	  this.SBOX = [];
+	  this.INV_SBOX = [];
+	  this.SUB_MIX = (function() {
+	    var _i, _results;
+	    _results = [];
+	    for (i = _i = 0; _i < 4; i = ++_i) {
+	      _results.push([]);
+	    }
+	    return _results;
+	  })();
+	  this.INV_SUB_MIX = (function() {
+	    var _i, _results;
+	    _results = [];
+	    for (i = _i = 0; _i < 4; i = ++_i) {
+	      _results.push([]);
+	    }
+	    return _results;
+	  })();
+	  this.init();
+	  this.RCON = [0x00, 0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80, 0x1b, 0x36];
+	}
+
+	Global.prototype.init = function() {
+	  var d, i, sx, t, x, x2, x4, x8, xi, _i;
+	  d = (function() {
+	    var _i, _results;
+	    _results = [];
+	    for (i = _i = 0; _i < 256; i = ++_i) {
+	      if (i < 128) {
+	        _results.push(i << 1);
+	      } else {
+	        _results.push((i << 1) ^ 0x11b);
+	      }
+	    }
+	    return _results;
+	  })();
+	  x = 0;
+	  xi = 0;
+	  for (i = _i = 0; _i < 256; i = ++_i) {
+	    sx = xi ^ (xi << 1) ^ (xi << 2) ^ (xi << 3) ^ (xi << 4);
+	    sx = (sx >>> 8) ^ (sx & 0xff) ^ 0x63;
+	    this.SBOX[x] = sx;
+	    this.INV_SBOX[sx] = x;
+	    x2 = d[x];
+	    x4 = d[x2];
+	    x8 = d[x4];
+	    t = (d[sx] * 0x101) ^ (sx * 0x1010100);
+	    this.SUB_MIX[0][x] = (t << 24) | (t >>> 8);
+	    this.SUB_MIX[1][x] = (t << 16) | (t >>> 16);
+	    this.SUB_MIX[2][x] = (t << 8) | (t >>> 24);
+	    this.SUB_MIX[3][x] = t;
+	    t = (x8 * 0x1010101) ^ (x4 * 0x10001) ^ (x2 * 0x101) ^ (x * 0x1010100);
+	    this.INV_SUB_MIX[0][sx] = (t << 24) | (t >>> 8);
+	    this.INV_SUB_MIX[1][sx] = (t << 16) | (t >>> 16);
+	    this.INV_SUB_MIX[2][sx] = (t << 8) | (t >>> 24);
+	    this.INV_SUB_MIX[3][sx] = t;
+	    if (x === 0) {
+	      x = xi = 1;
+	    } else {
+	      x = x2 ^ d[d[d[x8 ^ x2]]];
+	      xi ^= d[d[xi]];
+	    }
+	  }
+	  return true;
+	};
+
+	var G = new Global();
+
+
+	AES.blockSize = 4 * 4;
+
+	AES.prototype.blockSize = AES.blockSize;
+
+	AES.keySize = 256 / 8;
+
+	AES.prototype.keySize = AES.keySize;
+
+	AES.ivSize = AES.blockSize;
+
+	AES.prototype.ivSize = AES.ivSize;
+
+	 function bufferToArray(buf) {
+	  var len = buf.length/4;
+	  var out = new Array(len);
+	  var i = -1;
+	  while (++i < len) {
+	    out[i] = buf.readUInt32BE(i * 4);
+	  }
+	  return out;
+	 }
+	function AES(key) {
+	  this._key = bufferToArray(key);
+	  this._doReset();
+	}
+
+	AES.prototype._doReset = function() {
+	  var invKsRow, keySize, keyWords, ksRow, ksRows, t, _i, _j;
+	  keyWords = this._key;
+	  keySize = keyWords.length;
+	  this._nRounds = keySize + 6;
+	  ksRows = (this._nRounds + 1) * 4;
+	  this._keySchedule = [];
+	  for (ksRow = _i = 0; 0 <= ksRows ? _i < ksRows : _i > ksRows; ksRow = 0 <= ksRows ? ++_i : --_i) {
+	    this._keySchedule[ksRow] = ksRow < keySize ? keyWords[ksRow] : (t = this._keySchedule[ksRow - 1], (ksRow % keySize) === 0 ? (t = (t << 8) | (t >>> 24), t = (G.SBOX[t >>> 24] << 24) | (G.SBOX[(t >>> 16) & 0xff] << 16) | (G.SBOX[(t >>> 8) & 0xff] << 8) | G.SBOX[t & 0xff], t ^= G.RCON[(ksRow / keySize) | 0] << 24) : keySize > 6 && ksRow % keySize === 4 ? t = (G.SBOX[t >>> 24] << 24) | (G.SBOX[(t >>> 16) & 0xff] << 16) | (G.SBOX[(t >>> 8) & 0xff] << 8) | G.SBOX[t & 0xff] : void 0, this._keySchedule[ksRow - keySize] ^ t);
+	  }
+	  this._invKeySchedule = [];
+	  for (invKsRow = _j = 0; 0 <= ksRows ? _j < ksRows : _j > ksRows; invKsRow = 0 <= ksRows ? ++_j : --_j) {
+	    ksRow = ksRows - invKsRow;
+	    t = this._keySchedule[ksRow - (invKsRow % 4 ? 0 : 4)];
+	    this._invKeySchedule[invKsRow] = invKsRow < 4 || ksRow <= 4 ? t : G.INV_SUB_MIX[0][G.SBOX[t >>> 24]] ^ G.INV_SUB_MIX[1][G.SBOX[(t >>> 16) & 0xff]] ^ G.INV_SUB_MIX[2][G.SBOX[(t >>> 8) & 0xff]] ^ G.INV_SUB_MIX[3][G.SBOX[t & 0xff]];
+	  }
+	  return true;
+	};
+
+	AES.prototype.encryptBlock = function(M) {
+	  M = bufferToArray(new Buffer(M));
+	  var out = this._doCryptBlock(M, this._keySchedule, G.SUB_MIX, G.SBOX);
+	  var buf = new Buffer(16);
+	  buf.writeUInt32BE(out[0], 0);
+	  buf.writeUInt32BE(out[1], 4);
+	  buf.writeUInt32BE(out[2], 8);
+	  buf.writeUInt32BE(out[3], 12);
+	  return buf;
+	};
+
+	AES.prototype.decryptBlock = function(M) {
+	  M = bufferToArray(new Buffer(M));
+	  var temp = [M[3], M[1]];
+	  M[1] = temp[0];
+	  M[3] = temp[1];
+	  var out = this._doCryptBlock(M, this._invKeySchedule, G.INV_SUB_MIX, G.INV_SBOX);
+	  var buf = new Buffer(16);
+	  buf.writeUInt32BE(out[0], 0);
+	  buf.writeUInt32BE(out[3], 4);
+	  buf.writeUInt32BE(out[2], 8);
+	  buf.writeUInt32BE(out[1], 12);
+	  return buf;
+	};
+
+	AES.prototype.scrub = function() {
+	  scrub_vec(this._keySchedule);
+	  scrub_vec(this._invKeySchedule);
+	  scrub_vec(this._key);
+	};
+
+	AES.prototype._doCryptBlock = function(M, keySchedule, SUB_MIX, SBOX) {
+	  var ksRow, round, s0, s1, s2, s3, t0, t1, t2, t3, _i, _ref;
+
+	  s0 = M[0] ^ keySchedule[0];
+	  s1 = M[1] ^ keySchedule[1];
+	  s2 = M[2] ^ keySchedule[2];
+	  s3 = M[3] ^ keySchedule[3];
+	  ksRow = 4;
+	  for (round = _i = 1, _ref = this._nRounds; 1 <= _ref ? _i < _ref : _i > _ref; round = 1 <= _ref ? ++_i : --_i) {
+	    t0 = SUB_MIX[0][s0 >>> 24] ^ SUB_MIX[1][(s1 >>> 16) & 0xff] ^ SUB_MIX[2][(s2 >>> 8) & 0xff] ^ SUB_MIX[3][s3 & 0xff] ^ keySchedule[ksRow++];
+	    t1 = SUB_MIX[0][s1 >>> 24] ^ SUB_MIX[1][(s2 >>> 16) & 0xff] ^ SUB_MIX[2][(s3 >>> 8) & 0xff] ^ SUB_MIX[3][s0 & 0xff] ^ keySchedule[ksRow++];
+	    t2 = SUB_MIX[0][s2 >>> 24] ^ SUB_MIX[1][(s3 >>> 16) & 0xff] ^ SUB_MIX[2][(s0 >>> 8) & 0xff] ^ SUB_MIX[3][s1 & 0xff] ^ keySchedule[ksRow++];
+	    t3 = SUB_MIX[0][s3 >>> 24] ^ SUB_MIX[1][(s0 >>> 16) & 0xff] ^ SUB_MIX[2][(s1 >>> 8) & 0xff] ^ SUB_MIX[3][s2 & 0xff] ^ keySchedule[ksRow++];
+	    s0 = t0;
+	    s1 = t1;
+	    s2 = t2;
+	    s3 = t3;
+	  }
+	  t0 = ((SBOX[s0 >>> 24] << 24) | (SBOX[(s1 >>> 16) & 0xff] << 16) | (SBOX[(s2 >>> 8) & 0xff] << 8) | SBOX[s3 & 0xff]) ^ keySchedule[ksRow++];
+	  t1 = ((SBOX[s1 >>> 24] << 24) | (SBOX[(s2 >>> 16) & 0xff] << 16) | (SBOX[(s3 >>> 8) & 0xff] << 8) | SBOX[s0 & 0xff]) ^ keySchedule[ksRow++];
+	  t2 = ((SBOX[s2 >>> 24] << 24) | (SBOX[(s3 >>> 16) & 0xff] << 16) | (SBOX[(s0 >>> 8) & 0xff] << 8) | SBOX[s1 & 0xff]) ^ keySchedule[ksRow++];
+	  t3 = ((SBOX[s3 >>> 24] << 24) | (SBOX[(s0 >>> 16) & 0xff] << 16) | (SBOX[(s1 >>> 8) & 0xff] << 8) | SBOX[s2 & 0xff]) ^ keySchedule[ksRow++];
+	  return [
+	    fixup_uint32(t0),
+	    fixup_uint32(t1),
+	    fixup_uint32(t2),
+	    fixup_uint32(t3)
+	  ];
+
+	};
+
+
+
+
+	  exports.AES = AES;
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(13).Buffer))
+
+/***/ },
+/* 242 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(Buffer) {var Transform = __webpack_require__(243).Transform;
+	var inherits = __webpack_require__(245);
+
+	module.exports = CipherBase;
+	inherits(CipherBase, Transform);
+	function CipherBase() {
+	  Transform.call(this);
+	}
+	CipherBase.prototype.update = function (data, inputEnd, outputEnc) {
+	  this.write(data, inputEnd);
+	  var outData = new Buffer('');
+	  var chunk;
+	  while ((chunk = this.read())) {
+	    outData = Buffer.concat([outData, chunk]);
+	  }
+	  if (outputEnc) {
+	    outData = outData.toString(outputEnc);
+	  }
+	  return outData;
+	};
+	CipherBase.prototype.final = function (outputEnc) {
+	  this.end();
+	  var outData = new Buffer('');
+	  var chunk;
+	  while ((chunk = this.read())) {
+	    outData = Buffer.concat([outData, chunk]);
+	  }
+	  if (outputEnc) {
+	    outData = outData.toString(outputEnc);
+	  }
+	  return outData;
+	};
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(13).Buffer))
+
+/***/ },
+/* 243 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// Copyright Joyent, Inc. and other Node contributors.
+	//
+	// Permission is hereby granted, free of charge, to any person obtaining a
+	// copy of this software and associated documentation files (the
+	// "Software"), to deal in the Software without restriction, including
+	// without limitation the rights to use, copy, modify, merge, publish,
+	// distribute, sublicense, and/or sell copies of the Software, and to permit
+	// persons to whom the Software is furnished to do so, subject to the
+	// following conditions:
+	//
+	// The above copyright notice and this permission notice shall be included
+	// in all copies or substantial portions of the Software.
+	//
+	// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+	// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+	// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
+	// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+	// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+	// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+	// USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+	module.exports = Stream;
+
+	var EE = __webpack_require__(244).EventEmitter;
+	var inherits = __webpack_require__(245);
+
+	inherits(Stream, EE);
+	Stream.Readable = __webpack_require__(246);
+	Stream.Writable = __webpack_require__(261);
+	Stream.Duplex = __webpack_require__(262);
+	Stream.Transform = __webpack_require__(263);
+	Stream.PassThrough = __webpack_require__(264);
+
+	// Backwards-compat with node 0.4.x
+	Stream.Stream = Stream;
+
+
+
+	// old-style streams.  Note that the pipe method (the only relevant
+	// part of this class) is overridden in the Readable class.
+
+	function Stream() {
+	  EE.call(this);
+	}
+
+	Stream.prototype.pipe = function(dest, options) {
+	  var source = this;
+
+	  function ondata(chunk) {
+	    if (dest.writable) {
+	      if (false === dest.write(chunk) && source.pause) {
+	        source.pause();
+	      }
+	    }
+	  }
+
+	  source.on('data', ondata);
+
+	  function ondrain() {
+	    if (source.readable && source.resume) {
+	      source.resume();
+	    }
+	  }
+
+	  dest.on('drain', ondrain);
+
+	  // If the 'end' option is not supplied, dest.end() will be called when
+	  // source gets the 'end' or 'close' events.  Only dest.end() once.
+	  if (!dest._isStdio && (!options || options.end !== false)) {
+	    source.on('end', onend);
+	    source.on('close', onclose);
+	  }
+
+	  var didOnEnd = false;
+	  function onend() {
+	    if (didOnEnd) return;
+	    didOnEnd = true;
+
+	    dest.end();
+	  }
+
+
+	  function onclose() {
+	    if (didOnEnd) return;
+	    didOnEnd = true;
+
+	    if (typeof dest.destroy === 'function') dest.destroy();
+	  }
+
+	  // don't leave dangling pipes when there are errors.
+	  function onerror(er) {
+	    cleanup();
+	    if (EE.listenerCount(this, 'error') === 0) {
+	      throw er; // Unhandled stream error in pipe.
+	    }
+	  }
+
+	  source.on('error', onerror);
+	  dest.on('error', onerror);
+
+	  // remove all the event listeners that were added.
+	  function cleanup() {
+	    source.removeListener('data', ondata);
+	    dest.removeListener('drain', ondrain);
+
+	    source.removeListener('end', onend);
+	    source.removeListener('close', onclose);
+
+	    source.removeListener('error', onerror);
+	    dest.removeListener('error', onerror);
+
+	    source.removeListener('end', cleanup);
+	    source.removeListener('close', cleanup);
+
+	    dest.removeListener('close', cleanup);
+	  }
+
+	  source.on('end', cleanup);
+	  source.on('close', cleanup);
+
+	  dest.on('close', cleanup);
+
+	  dest.emit('pipe', source);
+
+	  // Allow for unix-like usage: A.pipe(B).pipe(C)
+	  return dest;
+	};
+
+
+/***/ },
+/* 244 */
+/***/ function(module, exports) {
+
+	// Copyright Joyent, Inc. and other Node contributors.
+	//
+	// Permission is hereby granted, free of charge, to any person obtaining a
+	// copy of this software and associated documentation files (the
+	// "Software"), to deal in the Software without restriction, including
+	// without limitation the rights to use, copy, modify, merge, publish,
+	// distribute, sublicense, and/or sell copies of the Software, and to permit
+	// persons to whom the Software is furnished to do so, subject to the
+	// following conditions:
+	//
+	// The above copyright notice and this permission notice shall be included
+	// in all copies or substantial portions of the Software.
+	//
+	// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+	// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+	// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
+	// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+	// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+	// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+	// USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+	function EventEmitter() {
+	  this._events = this._events || {};
+	  this._maxListeners = this._maxListeners || undefined;
+	}
+	module.exports = EventEmitter;
+
+	// Backwards-compat with node 0.10.x
+	EventEmitter.EventEmitter = EventEmitter;
+
+	EventEmitter.prototype._events = undefined;
+	EventEmitter.prototype._maxListeners = undefined;
+
+	// By default EventEmitters will print a warning if more than 10 listeners are
+	// added to it. This is a useful default which helps finding memory leaks.
+	EventEmitter.defaultMaxListeners = 10;
+
+	// Obviously not all Emitters should be limited to 10. This function allows
+	// that to be increased. Set to zero for unlimited.
+	EventEmitter.prototype.setMaxListeners = function(n) {
+	  if (!isNumber(n) || n < 0 || isNaN(n))
+	    throw TypeError('n must be a positive number');
+	  this._maxListeners = n;
+	  return this;
+	};
+
+	EventEmitter.prototype.emit = function(type) {
+	  var er, handler, len, args, i, listeners;
+
+	  if (!this._events)
+	    this._events = {};
+
+	  // If there is no 'error' event listener then throw.
+	  if (type === 'error') {
+	    if (!this._events.error ||
+	        (isObject(this._events.error) && !this._events.error.length)) {
+	      er = arguments[1];
+	      if (er instanceof Error) {
+	        throw er; // Unhandled 'error' event
+	      } else {
+	        // At least give some kind of context to the user
+	        var err = new Error('Uncaught, unspecified "error" event. (' + er + ')');
+	        err.context = er;
+	        throw err;
+	      }
+	    }
+	  }
+
+	  handler = this._events[type];
+
+	  if (isUndefined(handler))
+	    return false;
+
+	  if (isFunction(handler)) {
+	    switch (arguments.length) {
+	      // fast cases
+	      case 1:
+	        handler.call(this);
+	        break;
+	      case 2:
+	        handler.call(this, arguments[1]);
+	        break;
+	      case 3:
+	        handler.call(this, arguments[1], arguments[2]);
+	        break;
+	      // slower
+	      default:
+	        args = Array.prototype.slice.call(arguments, 1);
+	        handler.apply(this, args);
+	    }
+	  } else if (isObject(handler)) {
+	    args = Array.prototype.slice.call(arguments, 1);
+	    listeners = handler.slice();
+	    len = listeners.length;
+	    for (i = 0; i < len; i++)
+	      listeners[i].apply(this, args);
+	  }
+
+	  return true;
+	};
+
+	EventEmitter.prototype.addListener = function(type, listener) {
+	  var m;
+
+	  if (!isFunction(listener))
+	    throw TypeError('listener must be a function');
+
+	  if (!this._events)
+	    this._events = {};
+
+	  // To avoid recursion in the case that type === "newListener"! Before
+	  // adding it to the listeners, first emit "newListener".
+	  if (this._events.newListener)
+	    this.emit('newListener', type,
+	              isFunction(listener.listener) ?
+	              listener.listener : listener);
+
+	  if (!this._events[type])
+	    // Optimize the case of one listener. Don't need the extra array object.
+	    this._events[type] = listener;
+	  else if (isObject(this._events[type]))
+	    // If we've already got an array, just append.
+	    this._events[type].push(listener);
+	  else
+	    // Adding the second element, need to change to array.
+	    this._events[type] = [this._events[type], listener];
+
+	  // Check for listener leak
+	  if (isObject(this._events[type]) && !this._events[type].warned) {
+	    if (!isUndefined(this._maxListeners)) {
+	      m = this._maxListeners;
+	    } else {
+	      m = EventEmitter.defaultMaxListeners;
+	    }
+
+	    if (m && m > 0 && this._events[type].length > m) {
+	      this._events[type].warned = true;
+	      console.error('(node) warning: possible EventEmitter memory ' +
+	                    'leak detected. %d listeners added. ' +
+	                    'Use emitter.setMaxListeners() to increase limit.',
+	                    this._events[type].length);
+	      if (typeof console.trace === 'function') {
+	        // not supported in IE 10
+	        console.trace();
+	      }
+	    }
+	  }
+
+	  return this;
+	};
+
+	EventEmitter.prototype.on = EventEmitter.prototype.addListener;
+
+	EventEmitter.prototype.once = function(type, listener) {
+	  if (!isFunction(listener))
+	    throw TypeError('listener must be a function');
+
+	  var fired = false;
+
+	  function g() {
+	    this.removeListener(type, g);
+
+	    if (!fired) {
+	      fired = true;
+	      listener.apply(this, arguments);
+	    }
+	  }
+
+	  g.listener = listener;
+	  this.on(type, g);
+
+	  return this;
+	};
+
+	// emits a 'removeListener' event iff the listener was removed
+	EventEmitter.prototype.removeListener = function(type, listener) {
+	  var list, position, length, i;
+
+	  if (!isFunction(listener))
+	    throw TypeError('listener must be a function');
+
+	  if (!this._events || !this._events[type])
+	    return this;
+
+	  list = this._events[type];
+	  length = list.length;
+	  position = -1;
+
+	  if (list === listener ||
+	      (isFunction(list.listener) && list.listener === listener)) {
+	    delete this._events[type];
+	    if (this._events.removeListener)
+	      this.emit('removeListener', type, listener);
+
+	  } else if (isObject(list)) {
+	    for (i = length; i-- > 0;) {
+	      if (list[i] === listener ||
+	          (list[i].listener && list[i].listener === listener)) {
+	        position = i;
+	        break;
+	      }
+	    }
+
+	    if (position < 0)
+	      return this;
+
+	    if (list.length === 1) {
+	      list.length = 0;
+	      delete this._events[type];
+	    } else {
+	      list.splice(position, 1);
+	    }
+
+	    if (this._events.removeListener)
+	      this.emit('removeListener', type, listener);
+	  }
+
+	  return this;
+	};
+
+	EventEmitter.prototype.removeAllListeners = function(type) {
+	  var key, listeners;
+
+	  if (!this._events)
+	    return this;
+
+	  // not listening for removeListener, no need to emit
+	  if (!this._events.removeListener) {
+	    if (arguments.length === 0)
+	      this._events = {};
+	    else if (this._events[type])
+	      delete this._events[type];
+	    return this;
+	  }
+
+	  // emit removeListener for all listeners on all events
+	  if (arguments.length === 0) {
+	    for (key in this._events) {
+	      if (key === 'removeListener') continue;
+	      this.removeAllListeners(key);
+	    }
+	    this.removeAllListeners('removeListener');
+	    this._events = {};
+	    return this;
+	  }
+
+	  listeners = this._events[type];
+
+	  if (isFunction(listeners)) {
+	    this.removeListener(type, listeners);
+	  } else if (listeners) {
+	    // LIFO order
+	    while (listeners.length)
+	      this.removeListener(type, listeners[listeners.length - 1]);
+	  }
+	  delete this._events[type];
+
+	  return this;
+	};
+
+	EventEmitter.prototype.listeners = function(type) {
+	  var ret;
+	  if (!this._events || !this._events[type])
+	    ret = [];
+	  else if (isFunction(this._events[type]))
+	    ret = [this._events[type]];
+	  else
+	    ret = this._events[type].slice();
+	  return ret;
+	};
+
+	EventEmitter.prototype.listenerCount = function(type) {
+	  if (this._events) {
+	    var evlistener = this._events[type];
+
+	    if (isFunction(evlistener))
+	      return 1;
+	    else if (evlistener)
+	      return evlistener.length;
+	  }
+	  return 0;
+	};
+
+	EventEmitter.listenerCount = function(emitter, type) {
+	  return emitter.listenerCount(type);
+	};
+
+	function isFunction(arg) {
+	  return typeof arg === 'function';
+	}
+
+	function isNumber(arg) {
+	  return typeof arg === 'number';
+	}
+
+	function isObject(arg) {
+	  return typeof arg === 'object' && arg !== null;
+	}
+
+	function isUndefined(arg) {
+	  return arg === void 0;
+	}
+
+
+/***/ },
+/* 245 */
+/***/ function(module, exports) {
+
+	if (typeof Object.create === 'function') {
+	  // implementation from standard node.js 'util' module
+	  module.exports = function inherits(ctor, superCtor) {
+	    ctor.super_ = superCtor
+	    ctor.prototype = Object.create(superCtor.prototype, {
+	      constructor: {
+	        value: ctor,
+	        enumerable: false,
+	        writable: true,
+	        configurable: true
+	      }
+	    });
+	  };
+	} else {
+	  // old school shim for old browsers
+	  module.exports = function inherits(ctor, superCtor) {
+	    ctor.super_ = superCtor
+	    var TempCtor = function () {}
+	    TempCtor.prototype = superCtor.prototype
+	    ctor.prototype = new TempCtor()
+	    ctor.prototype.constructor = ctor
+	  }
+	}
+
+
+/***/ },
+/* 246 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(process) {var Stream = (function (){
+	  try {
+	    return __webpack_require__(243); // hack to fix a circular dependency issue when used with browserify
+	  } catch(_){}
+	}());
+	exports = module.exports = __webpack_require__(247);
+	exports.Stream = Stream || exports;
+	exports.Readable = exports;
+	exports.Writable = __webpack_require__(254);
+	exports.Duplex = __webpack_require__(253);
+	exports.Transform = __webpack_require__(259);
+	exports.PassThrough = __webpack_require__(260);
+
+	if (!process.browser && process.env.READABLE_STREAM === 'disable' && Stream) {
+	  module.exports = Stream;
+	}
+
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(23)))
+
+/***/ },
+/* 247 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
+
+	module.exports = Readable;
+
+	/*<replacement>*/
+	var processNextTick = __webpack_require__(248);
+	/*</replacement>*/
+
+	/*<replacement>*/
+	var isArray = __webpack_require__(16);
+	/*</replacement>*/
+
+	/*<replacement>*/
+	var Duplex;
+	/*</replacement>*/
+
+	Readable.ReadableState = ReadableState;
+
+	/*<replacement>*/
+	var EE = __webpack_require__(244).EventEmitter;
+
+	var EElistenerCount = function (emitter, type) {
+	  return emitter.listeners(type).length;
+	};
+	/*</replacement>*/
+
+	/*<replacement>*/
+	var Stream;
+	(function () {
+	  try {
+	    Stream = __webpack_require__(243);
+	  } catch (_) {} finally {
+	    if (!Stream) Stream = __webpack_require__(244).EventEmitter;
+	  }
+	})();
+	/*</replacement>*/
+
+	var Buffer = __webpack_require__(13).Buffer;
+	/*<replacement>*/
+	var bufferShim = __webpack_require__(249);
+	/*</replacement>*/
+
+	/*<replacement>*/
+	var util = __webpack_require__(250);
+	util.inherits = __webpack_require__(245);
+	/*</replacement>*/
+
+	/*<replacement>*/
+	var debugUtil = __webpack_require__(251);
+	var debug = void 0;
+	if (debugUtil && debugUtil.debuglog) {
+	  debug = debugUtil.debuglog('stream');
+	} else {
+	  debug = function () {};
+	}
+	/*</replacement>*/
+
+	var BufferList = __webpack_require__(252);
+	var StringDecoder;
+
+	util.inherits(Readable, Stream);
+
+	function prependListener(emitter, event, fn) {
+	  // Sadly this is not cacheable as some libraries bundle their own
+	  // event emitter implementation with them.
+	  if (typeof emitter.prependListener === 'function') {
+	    return emitter.prependListener(event, fn);
+	  } else {
+	    // This is a hack to make sure that our error handler is attached before any
+	    // userland ones.  NEVER DO THIS. This is here only because this code needs
+	    // to continue to work with older versions of Node.js that do not include
+	    // the prependListener() method. The goal is to eventually remove this hack.
+	    if (!emitter._events || !emitter._events[event]) emitter.on(event, fn);else if (isArray(emitter._events[event])) emitter._events[event].unshift(fn);else emitter._events[event] = [fn, emitter._events[event]];
+	  }
+	}
+
+	function ReadableState(options, stream) {
+	  Duplex = Duplex || __webpack_require__(253);
+
+	  options = options || {};
+
+	  // object stream flag. Used to make read(n) ignore n and to
+	  // make all the buffer merging and length checks go away
+	  this.objectMode = !!options.objectMode;
+
+	  if (stream instanceof Duplex) this.objectMode = this.objectMode || !!options.readableObjectMode;
+
+	  // the point at which it stops calling _read() to fill the buffer
+	  // Note: 0 is a valid value, means "don't call _read preemptively ever"
+	  var hwm = options.highWaterMark;
+	  var defaultHwm = this.objectMode ? 16 : 16 * 1024;
+	  this.highWaterMark = hwm || hwm === 0 ? hwm : defaultHwm;
+
+	  // cast to ints.
+	  this.highWaterMark = ~ ~this.highWaterMark;
+
+	  // A linked list is used to store data chunks instead of an array because the
+	  // linked list can remove elements from the beginning faster than
+	  // array.shift()
+	  this.buffer = new BufferList();
+	  this.length = 0;
+	  this.pipes = null;
+	  this.pipesCount = 0;
+	  this.flowing = null;
+	  this.ended = false;
+	  this.endEmitted = false;
+	  this.reading = false;
+
+	  // a flag to be able to tell if the onwrite cb is called immediately,
+	  // or on a later tick.  We set this to true at first, because any
+	  // actions that shouldn't happen until "later" should generally also
+	  // not happen before the first write call.
+	  this.sync = true;
+
+	  // whenever we return null, then we set a flag to say
+	  // that we're awaiting a 'readable' event emission.
+	  this.needReadable = false;
+	  this.emittedReadable = false;
+	  this.readableListening = false;
+	  this.resumeScheduled = false;
+
+	  // Crypto is kind of old and crusty.  Historically, its default string
+	  // encoding is 'binary' so we have to make this configurable.
+	  // Everything else in the universe uses 'utf8', though.
+	  this.defaultEncoding = options.defaultEncoding || 'utf8';
+
+	  // when piping, we only care about 'readable' events that happen
+	  // after read()ing all the bytes and not getting any pushback.
+	  this.ranOut = false;
+
+	  // the number of writers that are awaiting a drain event in .pipe()s
+	  this.awaitDrain = 0;
+
+	  // if true, a maybeReadMore has been scheduled
+	  this.readingMore = false;
+
+	  this.decoder = null;
+	  this.encoding = null;
+	  if (options.encoding) {
+	    if (!StringDecoder) StringDecoder = __webpack_require__(258).StringDecoder;
+	    this.decoder = new StringDecoder(options.encoding);
+	    this.encoding = options.encoding;
+	  }
+	}
+
+	function Readable(options) {
+	  Duplex = Duplex || __webpack_require__(253);
+
+	  if (!(this instanceof Readable)) return new Readable(options);
+
+	  this._readableState = new ReadableState(options, this);
+
+	  // legacy
+	  this.readable = true;
+
+	  if (options && typeof options.read === 'function') this._read = options.read;
+
+	  Stream.call(this);
+	}
+
+	// Manually shove something into the read() buffer.
+	// This returns true if the highWaterMark has not been hit yet,
+	// similar to how Writable.write() returns true if you should
+	// write() some more.
+	Readable.prototype.push = function (chunk, encoding) {
+	  var state = this._readableState;
+
+	  if (!state.objectMode && typeof chunk === 'string') {
+	    encoding = encoding || state.defaultEncoding;
+	    if (encoding !== state.encoding) {
+	      chunk = bufferShim.from(chunk, encoding);
+	      encoding = '';
+	    }
+	  }
+
+	  return readableAddChunk(this, state, chunk, encoding, false);
+	};
+
+	// Unshift should *always* be something directly out of read()
+	Readable.prototype.unshift = function (chunk) {
+	  var state = this._readableState;
+	  return readableAddChunk(this, state, chunk, '', true);
+	};
+
+	Readable.prototype.isPaused = function () {
+	  return this._readableState.flowing === false;
+	};
+
+	function readableAddChunk(stream, state, chunk, encoding, addToFront) {
+	  var er = chunkInvalid(state, chunk);
+	  if (er) {
+	    stream.emit('error', er);
+	  } else if (chunk === null) {
+	    state.reading = false;
+	    onEofChunk(stream, state);
+	  } else if (state.objectMode || chunk && chunk.length > 0) {
+	    if (state.ended && !addToFront) {
+	      var e = new Error('stream.push() after EOF');
+	      stream.emit('error', e);
+	    } else if (state.endEmitted && addToFront) {
+	      var _e = new Error('stream.unshift() after end event');
+	      stream.emit('error', _e);
+	    } else {
+	      var skipAdd;
+	      if (state.decoder && !addToFront && !encoding) {
+	        chunk = state.decoder.write(chunk);
+	        skipAdd = !state.objectMode && chunk.length === 0;
+	      }
+
+	      if (!addToFront) state.reading = false;
+
+	      // Don't add to the buffer if we've decoded to an empty string chunk and
+	      // we're not in object mode
+	      if (!skipAdd) {
+	        // if we want the data now, just emit it.
+	        if (state.flowing && state.length === 0 && !state.sync) {
+	          stream.emit('data', chunk);
+	          stream.read(0);
+	        } else {
+	          // update the buffer info.
+	          state.length += state.objectMode ? 1 : chunk.length;
+	          if (addToFront) state.buffer.unshift(chunk);else state.buffer.push(chunk);
+
+	          if (state.needReadable) emitReadable(stream);
+	        }
+	      }
+
+	      maybeReadMore(stream, state);
+	    }
+	  } else if (!addToFront) {
+	    state.reading = false;
+	  }
+
+	  return needMoreData(state);
+	}
+
+	// if it's past the high water mark, we can push in some more.
+	// Also, if we have no data yet, we can stand some
+	// more bytes.  This is to work around cases where hwm=0,
+	// such as the repl.  Also, if the push() triggered a
+	// readable event, and the user called read(largeNumber) such that
+	// needReadable was set, then we ought to push more, so that another
+	// 'readable' event will be triggered.
+	function needMoreData(state) {
+	  return !state.ended && (state.needReadable || state.length < state.highWaterMark || state.length === 0);
+	}
+
+	// backwards compatibility.
+	Readable.prototype.setEncoding = function (enc) {
+	  if (!StringDecoder) StringDecoder = __webpack_require__(258).StringDecoder;
+	  this._readableState.decoder = new StringDecoder(enc);
+	  this._readableState.encoding = enc;
+	  return this;
+	};
+
+	// Don't raise the hwm > 8MB
+	var MAX_HWM = 0x800000;
+	function computeNewHighWaterMark(n) {
+	  if (n >= MAX_HWM) {
+	    n = MAX_HWM;
+	  } else {
+	    // Get the next highest power of 2 to prevent increasing hwm excessively in
+	    // tiny amounts
+	    n--;
+	    n |= n >>> 1;
+	    n |= n >>> 2;
+	    n |= n >>> 4;
+	    n |= n >>> 8;
+	    n |= n >>> 16;
+	    n++;
+	  }
+	  return n;
+	}
+
+	// This function is designed to be inlinable, so please take care when making
+	// changes to the function body.
+	function howMuchToRead(n, state) {
+	  if (n <= 0 || state.length === 0 && state.ended) return 0;
+	  if (state.objectMode) return 1;
+	  if (n !== n) {
+	    // Only flow one buffer at a time
+	    if (state.flowing && state.length) return state.buffer.head.data.length;else return state.length;
+	  }
+	  // If we're asking for more than the current hwm, then raise the hwm.
+	  if (n > state.highWaterMark) state.highWaterMark = computeNewHighWaterMark(n);
+	  if (n <= state.length) return n;
+	  // Don't have enough
+	  if (!state.ended) {
+	    state.needReadable = true;
+	    return 0;
+	  }
+	  return state.length;
+	}
+
+	// you can override either this method, or the async _read(n) below.
+	Readable.prototype.read = function (n) {
+	  debug('read', n);
+	  n = parseInt(n, 10);
+	  var state = this._readableState;
+	  var nOrig = n;
+
+	  if (n !== 0) state.emittedReadable = false;
+
+	  // if we're doing read(0) to trigger a readable event, but we
+	  // already have a bunch of data in the buffer, then just trigger
+	  // the 'readable' event and move on.
+	  if (n === 0 && state.needReadable && (state.length >= state.highWaterMark || state.ended)) {
+	    debug('read: emitReadable', state.length, state.ended);
+	    if (state.length === 0 && state.ended) endReadable(this);else emitReadable(this);
+	    return null;
+	  }
+
+	  n = howMuchToRead(n, state);
+
+	  // if we've ended, and we're now clear, then finish it up.
+	  if (n === 0 && state.ended) {
+	    if (state.length === 0) endReadable(this);
+	    return null;
+	  }
+
+	  // All the actual chunk generation logic needs to be
+	  // *below* the call to _read.  The reason is that in certain
+	  // synthetic stream cases, such as passthrough streams, _read
+	  // may be a completely synchronous operation which may change
+	  // the state of the read buffer, providing enough data when
+	  // before there was *not* enough.
+	  //
+	  // So, the steps are:
+	  // 1. Figure out what the state of things will be after we do
+	  // a read from the buffer.
+	  //
+	  // 2. If that resulting state will trigger a _read, then call _read.
+	  // Note that this may be asynchronous, or synchronous.  Yes, it is
+	  // deeply ugly to write APIs this way, but that still doesn't mean
+	  // that the Readable class should behave improperly, as streams are
+	  // designed to be sync/async agnostic.
+	  // Take note if the _read call is sync or async (ie, if the read call
+	  // has returned yet), so that we know whether or not it's safe to emit
+	  // 'readable' etc.
+	  //
+	  // 3. Actually pull the requested chunks out of the buffer and return.
+
+	  // if we need a readable event, then we need to do some reading.
+	  var doRead = state.needReadable;
+	  debug('need readable', doRead);
+
+	  // if we currently have less than the highWaterMark, then also read some
+	  if (state.length === 0 || state.length - n < state.highWaterMark) {
+	    doRead = true;
+	    debug('length less than watermark', doRead);
+	  }
+
+	  // however, if we've ended, then there's no point, and if we're already
+	  // reading, then it's unnecessary.
+	  if (state.ended || state.reading) {
+	    doRead = false;
+	    debug('reading or ended', doRead);
+	  } else if (doRead) {
+	    debug('do read');
+	    state.reading = true;
+	    state.sync = true;
+	    // if the length is currently zero, then we *need* a readable event.
+	    if (state.length === 0) state.needReadable = true;
+	    // call internal read method
+	    this._read(state.highWaterMark);
+	    state.sync = false;
+	    // If _read pushed data synchronously, then `reading` will be false,
+	    // and we need to re-evaluate how much data we can return to the user.
+	    if (!state.reading) n = howMuchToRead(nOrig, state);
+	  }
+
+	  var ret;
+	  if (n > 0) ret = fromList(n, state);else ret = null;
+
+	  if (ret === null) {
+	    state.needReadable = true;
+	    n = 0;
+	  } else {
+	    state.length -= n;
+	  }
+
+	  if (state.length === 0) {
+	    // If we have nothing in the buffer, then we want to know
+	    // as soon as we *do* get something into the buffer.
+	    if (!state.ended) state.needReadable = true;
+
+	    // If we tried to read() past the EOF, then emit end on the next tick.
+	    if (nOrig !== n && state.ended) endReadable(this);
+	  }
+
+	  if (ret !== null) this.emit('data', ret);
+
+	  return ret;
+	};
+
+	function chunkInvalid(state, chunk) {
+	  var er = null;
+	  if (!Buffer.isBuffer(chunk) && typeof chunk !== 'string' && chunk !== null && chunk !== undefined && !state.objectMode) {
+	    er = new TypeError('Invalid non-string/buffer chunk');
+	  }
+	  return er;
+	}
+
+	function onEofChunk(stream, state) {
+	  if (state.ended) return;
+	  if (state.decoder) {
+	    var chunk = state.decoder.end();
+	    if (chunk && chunk.length) {
+	      state.buffer.push(chunk);
+	      state.length += state.objectMode ? 1 : chunk.length;
+	    }
+	  }
+	  state.ended = true;
+
+	  // emit 'readable' now to make sure it gets picked up.
+	  emitReadable(stream);
+	}
+
+	// Don't emit readable right away in sync mode, because this can trigger
+	// another read() call => stack overflow.  This way, it might trigger
+	// a nextTick recursion warning, but that's not so bad.
+	function emitReadable(stream) {
+	  var state = stream._readableState;
+	  state.needReadable = false;
+	  if (!state.emittedReadable) {
+	    debug('emitReadable', state.flowing);
+	    state.emittedReadable = true;
+	    if (state.sync) processNextTick(emitReadable_, stream);else emitReadable_(stream);
+	  }
+	}
+
+	function emitReadable_(stream) {
+	  debug('emit readable');
+	  stream.emit('readable');
+	  flow(stream);
+	}
+
+	// at this point, the user has presumably seen the 'readable' event,
+	// and called read() to consume some data.  that may have triggered
+	// in turn another _read(n) call, in which case reading = true if
+	// it's in progress.
+	// However, if we're not ended, or reading, and the length < hwm,
+	// then go ahead and try to read some more preemptively.
+	function maybeReadMore(stream, state) {
+	  if (!state.readingMore) {
+	    state.readingMore = true;
+	    processNextTick(maybeReadMore_, stream, state);
+	  }
+	}
+
+	function maybeReadMore_(stream, state) {
+	  var len = state.length;
+	  while (!state.reading && !state.flowing && !state.ended && state.length < state.highWaterMark) {
+	    debug('maybeReadMore read 0');
+	    stream.read(0);
+	    if (len === state.length)
+	      // didn't get any data, stop spinning.
+	      break;else len = state.length;
+	  }
+	  state.readingMore = false;
+	}
+
+	// abstract method.  to be overridden in specific implementation classes.
+	// call cb(er, data) where data is <= n in length.
+	// for virtual (non-string, non-buffer) streams, "length" is somewhat
+	// arbitrary, and perhaps not very meaningful.
+	Readable.prototype._read = function (n) {
+	  this.emit('error', new Error('_read() is not implemented'));
+	};
+
+	Readable.prototype.pipe = function (dest, pipeOpts) {
+	  var src = this;
+	  var state = this._readableState;
+
+	  switch (state.pipesCount) {
+	    case 0:
+	      state.pipes = dest;
+	      break;
+	    case 1:
+	      state.pipes = [state.pipes, dest];
+	      break;
+	    default:
+	      state.pipes.push(dest);
+	      break;
+	  }
+	  state.pipesCount += 1;
+	  debug('pipe count=%d opts=%j', state.pipesCount, pipeOpts);
+
+	  var doEnd = (!pipeOpts || pipeOpts.end !== false) && dest !== process.stdout && dest !== process.stderr;
+
+	  var endFn = doEnd ? onend : cleanup;
+	  if (state.endEmitted) processNextTick(endFn);else src.once('end', endFn);
+
+	  dest.on('unpipe', onunpipe);
+	  function onunpipe(readable) {
+	    debug('onunpipe');
+	    if (readable === src) {
+	      cleanup();
+	    }
+	  }
+
+	  function onend() {
+	    debug('onend');
+	    dest.end();
+	  }
+
+	  // when the dest drains, it reduces the awaitDrain counter
+	  // on the source.  This would be more elegant with a .once()
+	  // handler in flow(), but adding and removing repeatedly is
+	  // too slow.
+	  var ondrain = pipeOnDrain(src);
+	  dest.on('drain', ondrain);
+
+	  var cleanedUp = false;
+	  function cleanup() {
+	    debug('cleanup');
+	    // cleanup event handlers once the pipe is broken
+	    dest.removeListener('close', onclose);
+	    dest.removeListener('finish', onfinish);
+	    dest.removeListener('drain', ondrain);
+	    dest.removeListener('error', onerror);
+	    dest.removeListener('unpipe', onunpipe);
+	    src.removeListener('end', onend);
+	    src.removeListener('end', cleanup);
+	    src.removeListener('data', ondata);
+
+	    cleanedUp = true;
+
+	    // if the reader is waiting for a drain event from this
+	    // specific writer, then it would cause it to never start
+	    // flowing again.
+	    // So, if this is awaiting a drain, then we just call it now.
+	    // If we don't know, then assume that we are waiting for one.
+	    if (state.awaitDrain && (!dest._writableState || dest._writableState.needDrain)) ondrain();
+	  }
+
+	  // If the user pushes more data while we're writing to dest then we'll end up
+	  // in ondata again. However, we only want to increase awaitDrain once because
+	  // dest will only emit one 'drain' event for the multiple writes.
+	  // => Introduce a guard on increasing awaitDrain.
+	  var increasedAwaitDrain = false;
+	  src.on('data', ondata);
+	  function ondata(chunk) {
+	    debug('ondata');
+	    increasedAwaitDrain = false;
+	    var ret = dest.write(chunk);
+	    if (false === ret && !increasedAwaitDrain) {
+	      // If the user unpiped during `dest.write()`, it is possible
+	      // to get stuck in a permanently paused state if that write
+	      // also returned false.
+	      // => Check whether `dest` is still a piping destination.
+	      if ((state.pipesCount === 1 && state.pipes === dest || state.pipesCount > 1 && indexOf(state.pipes, dest) !== -1) && !cleanedUp) {
+	        debug('false write response, pause', src._readableState.awaitDrain);
+	        src._readableState.awaitDrain++;
+	        increasedAwaitDrain = true;
+	      }
+	      src.pause();
+	    }
+	  }
+
+	  // if the dest has an error, then stop piping into it.
+	  // however, don't suppress the throwing behavior for this.
+	  function onerror(er) {
+	    debug('onerror', er);
+	    unpipe();
+	    dest.removeListener('error', onerror);
+	    if (EElistenerCount(dest, 'error') === 0) dest.emit('error', er);
+	  }
+
+	  // Make sure our error handler is attached before userland ones.
+	  prependListener(dest, 'error', onerror);
+
+	  // Both close and finish should trigger unpipe, but only once.
+	  function onclose() {
+	    dest.removeListener('finish', onfinish);
+	    unpipe();
+	  }
+	  dest.once('close', onclose);
+	  function onfinish() {
+	    debug('onfinish');
+	    dest.removeListener('close', onclose);
+	    unpipe();
+	  }
+	  dest.once('finish', onfinish);
+
+	  function unpipe() {
+	    debug('unpipe');
+	    src.unpipe(dest);
+	  }
+
+	  // tell the dest that it's being piped to
+	  dest.emit('pipe', src);
+
+	  // start the flow if it hasn't been started already.
+	  if (!state.flowing) {
+	    debug('pipe resume');
+	    src.resume();
+	  }
+
+	  return dest;
+	};
+
+	function pipeOnDrain(src) {
+	  return function () {
+	    var state = src._readableState;
+	    debug('pipeOnDrain', state.awaitDrain);
+	    if (state.awaitDrain) state.awaitDrain--;
+	    if (state.awaitDrain === 0 && EElistenerCount(src, 'data')) {
+	      state.flowing = true;
+	      flow(src);
+	    }
+	  };
+	}
+
+	Readable.prototype.unpipe = function (dest) {
+	  var state = this._readableState;
+
+	  // if we're not piping anywhere, then do nothing.
+	  if (state.pipesCount === 0) return this;
+
+	  // just one destination.  most common case.
+	  if (state.pipesCount === 1) {
+	    // passed in one, but it's not the right one.
+	    if (dest && dest !== state.pipes) return this;
+
+	    if (!dest) dest = state.pipes;
+
+	    // got a match.
+	    state.pipes = null;
+	    state.pipesCount = 0;
+	    state.flowing = false;
+	    if (dest) dest.emit('unpipe', this);
+	    return this;
+	  }
+
+	  // slow case. multiple pipe destinations.
+
+	  if (!dest) {
+	    // remove all.
+	    var dests = state.pipes;
+	    var len = state.pipesCount;
+	    state.pipes = null;
+	    state.pipesCount = 0;
+	    state.flowing = false;
+
+	    for (var i = 0; i < len; i++) {
+	      dests[i].emit('unpipe', this);
+	    }return this;
+	  }
+
+	  // try to find the right one.
+	  var index = indexOf(state.pipes, dest);
+	  if (index === -1) return this;
+
+	  state.pipes.splice(index, 1);
+	  state.pipesCount -= 1;
+	  if (state.pipesCount === 1) state.pipes = state.pipes[0];
+
+	  dest.emit('unpipe', this);
+
+	  return this;
+	};
+
+	// set up data events if they are asked for
+	// Ensure readable listeners eventually get something
+	Readable.prototype.on = function (ev, fn) {
+	  var res = Stream.prototype.on.call(this, ev, fn);
+
+	  if (ev === 'data') {
+	    // Start flowing on next tick if stream isn't explicitly paused
+	    if (this._readableState.flowing !== false) this.resume();
+	  } else if (ev === 'readable') {
+	    var state = this._readableState;
+	    if (!state.endEmitted && !state.readableListening) {
+	      state.readableListening = state.needReadable = true;
+	      state.emittedReadable = false;
+	      if (!state.reading) {
+	        processNextTick(nReadingNextTick, this);
+	      } else if (state.length) {
+	        emitReadable(this, state);
+	      }
+	    }
+	  }
+
+	  return res;
+	};
+	Readable.prototype.addListener = Readable.prototype.on;
+
+	function nReadingNextTick(self) {
+	  debug('readable nexttick read 0');
+	  self.read(0);
+	}
+
+	// pause() and resume() are remnants of the legacy readable stream API
+	// If the user uses them, then switch into old mode.
+	Readable.prototype.resume = function () {
+	  var state = this._readableState;
+	  if (!state.flowing) {
+	    debug('resume');
+	    state.flowing = true;
+	    resume(this, state);
+	  }
+	  return this;
+	};
+
+	function resume(stream, state) {
+	  if (!state.resumeScheduled) {
+	    state.resumeScheduled = true;
+	    processNextTick(resume_, stream, state);
+	  }
+	}
+
+	function resume_(stream, state) {
+	  if (!state.reading) {
+	    debug('resume read 0');
+	    stream.read(0);
+	  }
+
+	  state.resumeScheduled = false;
+	  state.awaitDrain = 0;
+	  stream.emit('resume');
+	  flow(stream);
+	  if (state.flowing && !state.reading) stream.read(0);
+	}
+
+	Readable.prototype.pause = function () {
+	  debug('call pause flowing=%j', this._readableState.flowing);
+	  if (false !== this._readableState.flowing) {
+	    debug('pause');
+	    this._readableState.flowing = false;
+	    this.emit('pause');
+	  }
+	  return this;
+	};
+
+	function flow(stream) {
+	  var state = stream._readableState;
+	  debug('flow', state.flowing);
+	  while (state.flowing && stream.read() !== null) {}
+	}
+
+	// wrap an old-style stream as the async data source.
+	// This is *not* part of the readable stream interface.
+	// It is an ugly unfortunate mess of history.
+	Readable.prototype.wrap = function (stream) {
+	  var state = this._readableState;
+	  var paused = false;
+
+	  var self = this;
+	  stream.on('end', function () {
+	    debug('wrapped end');
+	    if (state.decoder && !state.ended) {
+	      var chunk = state.decoder.end();
+	      if (chunk && chunk.length) self.push(chunk);
+	    }
+
+	    self.push(null);
+	  });
+
+	  stream.on('data', function (chunk) {
+	    debug('wrapped data');
+	    if (state.decoder) chunk = state.decoder.write(chunk);
+
+	    // don't skip over falsy values in objectMode
+	    if (state.objectMode && (chunk === null || chunk === undefined)) return;else if (!state.objectMode && (!chunk || !chunk.length)) return;
+
+	    var ret = self.push(chunk);
+	    if (!ret) {
+	      paused = true;
+	      stream.pause();
+	    }
+	  });
+
+	  // proxy all the other methods.
+	  // important when wrapping filters and duplexes.
+	  for (var i in stream) {
+	    if (this[i] === undefined && typeof stream[i] === 'function') {
+	      this[i] = function (method) {
+	        return function () {
+	          return stream[method].apply(stream, arguments);
+	        };
+	      }(i);
+	    }
+	  }
+
+	  // proxy certain important events.
+	  var events = ['error', 'close', 'destroy', 'pause', 'resume'];
+	  forEach(events, function (ev) {
+	    stream.on(ev, self.emit.bind(self, ev));
+	  });
+
+	  // when we try to consume some more bytes, simply unpause the
+	  // underlying stream.
+	  self._read = function (n) {
+	    debug('wrapped _read', n);
+	    if (paused) {
+	      paused = false;
+	      stream.resume();
+	    }
+	  };
+
+	  return self;
+	};
+
+	// exposed for testing purposes only.
+	Readable._fromList = fromList;
+
+	// Pluck off n bytes from an array of buffers.
+	// Length is the combined lengths of all the buffers in the list.
+	// This function is designed to be inlinable, so please take care when making
+	// changes to the function body.
+	function fromList(n, state) {
+	  // nothing buffered
+	  if (state.length === 0) return null;
+
+	  var ret;
+	  if (state.objectMode) ret = state.buffer.shift();else if (!n || n >= state.length) {
+	    // read it all, truncate the list
+	    if (state.decoder) ret = state.buffer.join('');else if (state.buffer.length === 1) ret = state.buffer.head.data;else ret = state.buffer.concat(state.length);
+	    state.buffer.clear();
+	  } else {
+	    // read part of list
+	    ret = fromListPartial(n, state.buffer, state.decoder);
+	  }
+
+	  return ret;
+	}
+
+	// Extracts only enough buffered data to satisfy the amount requested.
+	// This function is designed to be inlinable, so please take care when making
+	// changes to the function body.
+	function fromListPartial(n, list, hasStrings) {
+	  var ret;
+	  if (n < list.head.data.length) {
+	    // slice is the same for buffers and strings
+	    ret = list.head.data.slice(0, n);
+	    list.head.data = list.head.data.slice(n);
+	  } else if (n === list.head.data.length) {
+	    // first chunk is a perfect match
+	    ret = list.shift();
+	  } else {
+	    // result spans more than one buffer
+	    ret = hasStrings ? copyFromBufferString(n, list) : copyFromBuffer(n, list);
+	  }
+	  return ret;
+	}
+
+	// Copies a specified amount of characters from the list of buffered data
+	// chunks.
+	// This function is designed to be inlinable, so please take care when making
+	// changes to the function body.
+	function copyFromBufferString(n, list) {
+	  var p = list.head;
+	  var c = 1;
+	  var ret = p.data;
+	  n -= ret.length;
+	  while (p = p.next) {
+	    var str = p.data;
+	    var nb = n > str.length ? str.length : n;
+	    if (nb === str.length) ret += str;else ret += str.slice(0, n);
+	    n -= nb;
+	    if (n === 0) {
+	      if (nb === str.length) {
+	        ++c;
+	        if (p.next) list.head = p.next;else list.head = list.tail = null;
+	      } else {
+	        list.head = p;
+	        p.data = str.slice(nb);
+	      }
+	      break;
+	    }
+	    ++c;
+	  }
+	  list.length -= c;
+	  return ret;
+	}
+
+	// Copies a specified amount of bytes from the list of buffered data chunks.
+	// This function is designed to be inlinable, so please take care when making
+	// changes to the function body.
+	function copyFromBuffer(n, list) {
+	  var ret = bufferShim.allocUnsafe(n);
+	  var p = list.head;
+	  var c = 1;
+	  p.data.copy(ret);
+	  n -= p.data.length;
+	  while (p = p.next) {
+	    var buf = p.data;
+	    var nb = n > buf.length ? buf.length : n;
+	    buf.copy(ret, ret.length - n, 0, nb);
+	    n -= nb;
+	    if (n === 0) {
+	      if (nb === buf.length) {
+	        ++c;
+	        if (p.next) list.head = p.next;else list.head = list.tail = null;
+	      } else {
+	        list.head = p;
+	        p.data = buf.slice(nb);
+	      }
+	      break;
+	    }
+	    ++c;
+	  }
+	  list.length -= c;
+	  return ret;
+	}
+
+	function endReadable(stream) {
+	  var state = stream._readableState;
+
+	  // If we get here before consuming all the bytes, then that is a
+	  // bug in node.  Should never happen.
+	  if (state.length > 0) throw new Error('"endReadable()" called on non-empty stream');
+
+	  if (!state.endEmitted) {
+	    state.ended = true;
+	    processNextTick(endReadableNT, state, stream);
+	  }
+	}
+
+	function endReadableNT(state, stream) {
+	  // Check that we didn't get one last unshift.
+	  if (!state.endEmitted && state.length === 0) {
+	    state.endEmitted = true;
+	    stream.readable = false;
+	    stream.emit('end');
+	  }
+	}
+
+	function forEach(xs, f) {
+	  for (var i = 0, l = xs.length; i < l; i++) {
+	    f(xs[i], i);
+	  }
+	}
+
+	function indexOf(xs, x) {
+	  for (var i = 0, l = xs.length; i < l; i++) {
+	    if (xs[i] === x) return i;
+	  }
+	  return -1;
+	}
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(23)))
+
+/***/ },
+/* 248 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
+
+	if (!process.version ||
+	    process.version.indexOf('v0.') === 0 ||
+	    process.version.indexOf('v1.') === 0 && process.version.indexOf('v1.8.') !== 0) {
+	  module.exports = nextTick;
+	} else {
+	  module.exports = process.nextTick;
+	}
+
+	function nextTick(fn, arg1, arg2, arg3) {
+	  if (typeof fn !== 'function') {
+	    throw new TypeError('"callback" argument must be a function');
+	  }
+	  var len = arguments.length;
+	  var args, i;
+	  switch (len) {
+	  case 0:
+	  case 1:
+	    return process.nextTick(fn);
+	  case 2:
+	    return process.nextTick(function afterTickOne() {
+	      fn.call(null, arg1);
+	    });
+	  case 3:
+	    return process.nextTick(function afterTickTwo() {
+	      fn.call(null, arg1, arg2);
+	    });
+	  case 4:
+	    return process.nextTick(function afterTickThree() {
+	      fn.call(null, arg1, arg2, arg3);
+	    });
+	  default:
+	    args = new Array(len - 1);
+	    i = 0;
+	    while (i < args.length) {
+	      args[i++] = arguments[i];
+	    }
+	    return process.nextTick(function afterTick() {
+	      fn.apply(null, args);
+	    });
+	  }
+	}
+
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(23)))
+
+/***/ },
+/* 249 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(global) {'use strict';
+
+	var buffer = __webpack_require__(13);
+	var Buffer = buffer.Buffer;
+	var SlowBuffer = buffer.SlowBuffer;
+	var MAX_LEN = buffer.kMaxLength || 2147483647;
+	exports.alloc = function alloc(size, fill, encoding) {
+	  if (typeof Buffer.alloc === 'function') {
+	    return Buffer.alloc(size, fill, encoding);
+	  }
+	  if (typeof encoding === 'number') {
+	    throw new TypeError('encoding must not be number');
+	  }
+	  if (typeof size !== 'number') {
+	    throw new TypeError('size must be a number');
+	  }
+	  if (size > MAX_LEN) {
+	    throw new RangeError('size is too large');
+	  }
+	  var enc = encoding;
+	  var _fill = fill;
+	  if (_fill === undefined) {
+	    enc = undefined;
+	    _fill = 0;
+	  }
+	  var buf = new Buffer(size);
+	  if (typeof _fill === 'string') {
+	    var fillBuf = new Buffer(_fill, enc);
+	    var flen = fillBuf.length;
+	    var i = -1;
+	    while (++i < size) {
+	      buf[i] = fillBuf[i % flen];
+	    }
+	  } else {
+	    buf.fill(_fill);
+	  }
+	  return buf;
+	}
+	exports.allocUnsafe = function allocUnsafe(size) {
+	  if (typeof Buffer.allocUnsafe === 'function') {
+	    return Buffer.allocUnsafe(size);
+	  }
+	  if (typeof size !== 'number') {
+	    throw new TypeError('size must be a number');
+	  }
+	  if (size > MAX_LEN) {
+	    throw new RangeError('size is too large');
+	  }
+	  return new Buffer(size);
+	}
+	exports.from = function from(value, encodingOrOffset, length) {
+	  if (typeof Buffer.from === 'function' && (!global.Uint8Array || Uint8Array.from !== Buffer.from)) {
+	    return Buffer.from(value, encodingOrOffset, length);
+	  }
+	  if (typeof value === 'number') {
+	    throw new TypeError('"value" argument must not be a number');
+	  }
+	  if (typeof value === 'string') {
+	    return new Buffer(value, encodingOrOffset);
+	  }
+	  if (typeof ArrayBuffer !== 'undefined' && value instanceof ArrayBuffer) {
+	    var offset = encodingOrOffset;
+	    if (arguments.length === 1) {
+	      return new Buffer(value);
+	    }
+	    if (typeof offset === 'undefined') {
+	      offset = 0;
+	    }
+	    var len = length;
+	    if (typeof len === 'undefined') {
+	      len = value.byteLength - offset;
+	    }
+	    if (offset >= value.byteLength) {
+	      throw new RangeError('\'offset\' is out of bounds');
+	    }
+	    if (len > value.byteLength - offset) {
+	      throw new RangeError('\'length\' is out of bounds');
+	    }
+	    return new Buffer(value.slice(offset, offset + len));
+	  }
+	  if (Buffer.isBuffer(value)) {
+	    var out = new Buffer(value.length);
+	    value.copy(out, 0, 0, value.length);
+	    return out;
+	  }
+	  if (value) {
+	    if (Array.isArray(value) || (typeof ArrayBuffer !== 'undefined' && value.buffer instanceof ArrayBuffer) || 'length' in value) {
+	      return new Buffer(value);
+	    }
+	    if (value.type === 'Buffer' && Array.isArray(value.data)) {
+	      return new Buffer(value.data);
+	    }
+	  }
+
+	  throw new TypeError('First argument must be a string, Buffer, ' + 'ArrayBuffer, Array, or array-like object.');
+	}
+	exports.allocUnsafeSlow = function allocUnsafeSlow(size) {
+	  if (typeof Buffer.allocUnsafeSlow === 'function') {
+	    return Buffer.allocUnsafeSlow(size);
+	  }
+	  if (typeof size !== 'number') {
+	    throw new TypeError('size must be a number');
+	  }
+	  if (size >= MAX_LEN) {
+	    throw new RangeError('size is too large');
+	  }
+	  return new SlowBuffer(size);
+	}
+
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
+
+/***/ },
+/* 250 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(Buffer) {// Copyright Joyent, Inc. and other Node contributors.
+	//
+	// Permission is hereby granted, free of charge, to any person obtaining a
+	// copy of this software and associated documentation files (the
+	// "Software"), to deal in the Software without restriction, including
+	// without limitation the rights to use, copy, modify, merge, publish,
+	// distribute, sublicense, and/or sell copies of the Software, and to permit
+	// persons to whom the Software is furnished to do so, subject to the
+	// following conditions:
+	//
+	// The above copyright notice and this permission notice shall be included
+	// in all copies or substantial portions of the Software.
+	//
+	// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+	// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+	// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
+	// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+	// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+	// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+	// USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+	// NOTE: These type checking functions intentionally don't use `instanceof`
+	// because it is fragile and can be easily faked with `Object.create()`.
+
+	function isArray(arg) {
+	  if (Array.isArray) {
+	    return Array.isArray(arg);
+	  }
+	  return objectToString(arg) === '[object Array]';
+	}
+	exports.isArray = isArray;
+
+	function isBoolean(arg) {
+	  return typeof arg === 'boolean';
+	}
+	exports.isBoolean = isBoolean;
+
+	function isNull(arg) {
+	  return arg === null;
+	}
+	exports.isNull = isNull;
+
+	function isNullOrUndefined(arg) {
+	  return arg == null;
+	}
+	exports.isNullOrUndefined = isNullOrUndefined;
+
+	function isNumber(arg) {
+	  return typeof arg === 'number';
+	}
+	exports.isNumber = isNumber;
+
+	function isString(arg) {
+	  return typeof arg === 'string';
+	}
+	exports.isString = isString;
+
+	function isSymbol(arg) {
+	  return typeof arg === 'symbol';
+	}
+	exports.isSymbol = isSymbol;
+
+	function isUndefined(arg) {
+	  return arg === void 0;
+	}
+	exports.isUndefined = isUndefined;
+
+	function isRegExp(re) {
+	  return objectToString(re) === '[object RegExp]';
+	}
+	exports.isRegExp = isRegExp;
+
+	function isObject(arg) {
+	  return typeof arg === 'object' && arg !== null;
+	}
+	exports.isObject = isObject;
+
+	function isDate(d) {
+	  return objectToString(d) === '[object Date]';
+	}
+	exports.isDate = isDate;
+
+	function isError(e) {
+	  return (objectToString(e) === '[object Error]' || e instanceof Error);
+	}
+	exports.isError = isError;
+
+	function isFunction(arg) {
+	  return typeof arg === 'function';
+	}
+	exports.isFunction = isFunction;
+
+	function isPrimitive(arg) {
+	  return arg === null ||
+	         typeof arg === 'boolean' ||
+	         typeof arg === 'number' ||
+	         typeof arg === 'string' ||
+	         typeof arg === 'symbol' ||  // ES6 symbol
+	         typeof arg === 'undefined';
+	}
+	exports.isPrimitive = isPrimitive;
+
+	exports.isBuffer = Buffer.isBuffer;
+
+	function objectToString(o) {
+	  return Object.prototype.toString.call(o);
+	}
+
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(13).Buffer))
+
+/***/ },
+/* 251 */
+/***/ function(module, exports) {
+
+	/* (ignored) */
+
+/***/ },
+/* 252 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var Buffer = __webpack_require__(13).Buffer;
+	/*<replacement>*/
+	var bufferShim = __webpack_require__(249);
+	/*</replacement>*/
+
+	module.exports = BufferList;
+
+	function BufferList() {
+	  this.head = null;
+	  this.tail = null;
+	  this.length = 0;
+	}
+
+	BufferList.prototype.push = function (v) {
+	  var entry = { data: v, next: null };
+	  if (this.length > 0) this.tail.next = entry;else this.head = entry;
+	  this.tail = entry;
+	  ++this.length;
+	};
+
+	BufferList.prototype.unshift = function (v) {
+	  var entry = { data: v, next: this.head };
+	  if (this.length === 0) this.tail = entry;
+	  this.head = entry;
+	  ++this.length;
+	};
+
+	BufferList.prototype.shift = function () {
+	  if (this.length === 0) return;
+	  var ret = this.head.data;
+	  if (this.length === 1) this.head = this.tail = null;else this.head = this.head.next;
+	  --this.length;
+	  return ret;
+	};
+
+	BufferList.prototype.clear = function () {
+	  this.head = this.tail = null;
+	  this.length = 0;
+	};
+
+	BufferList.prototype.join = function (s) {
+	  if (this.length === 0) return '';
+	  var p = this.head;
+	  var ret = '' + p.data;
+	  while (p = p.next) {
+	    ret += s + p.data;
+	  }return ret;
+	};
+
+	BufferList.prototype.concat = function (n) {
+	  if (this.length === 0) return bufferShim.alloc(0);
+	  if (this.length === 1) return this.head.data;
+	  var ret = bufferShim.allocUnsafe(n >>> 0);
+	  var p = this.head;
+	  var i = 0;
+	  while (p) {
+	    p.data.copy(ret, i);
+	    i += p.data.length;
+	    p = p.next;
+	  }
+	  return ret;
+	};
+
+/***/ },
+/* 253 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// a duplex stream is just a stream that is both readable and writable.
+	// Since JS doesn't have multiple prototypal inheritance, this class
+	// prototypally inherits from Readable, and then parasitically from
+	// Writable.
+
+	'use strict';
+
+	/*<replacement>*/
+
+	var objectKeys = Object.keys || function (obj) {
+	  var keys = [];
+	  for (var key in obj) {
+	    keys.push(key);
+	  }return keys;
+	};
+	/*</replacement>*/
+
+	module.exports = Duplex;
+
+	/*<replacement>*/
+	var processNextTick = __webpack_require__(248);
+	/*</replacement>*/
+
+	/*<replacement>*/
+	var util = __webpack_require__(250);
+	util.inherits = __webpack_require__(245);
+	/*</replacement>*/
+
+	var Readable = __webpack_require__(247);
+	var Writable = __webpack_require__(254);
+
+	util.inherits(Duplex, Readable);
+
+	var keys = objectKeys(Writable.prototype);
+	for (var v = 0; v < keys.length; v++) {
+	  var method = keys[v];
+	  if (!Duplex.prototype[method]) Duplex.prototype[method] = Writable.prototype[method];
+	}
+
+	function Duplex(options) {
+	  if (!(this instanceof Duplex)) return new Duplex(options);
+
+	  Readable.call(this, options);
+	  Writable.call(this, options);
+
+	  if (options && options.readable === false) this.readable = false;
+
+	  if (options && options.writable === false) this.writable = false;
+
+	  this.allowHalfOpen = true;
+	  if (options && options.allowHalfOpen === false) this.allowHalfOpen = false;
+
+	  this.once('end', onend);
+	}
+
+	// the no-half-open enforcer
+	function onend() {
+	  // if we allow half-open state, or if the writable side ended,
+	  // then we're ok.
+	  if (this.allowHalfOpen || this._writableState.ended) return;
+
+	  // no more data can be written.
+	  // But allow more writes to happen in this tick.
+	  processNextTick(onEndNT, this);
+	}
+
+	function onEndNT(self) {
+	  self.end();
+	}
+
+	function forEach(xs, f) {
+	  for (var i = 0, l = xs.length; i < l; i++) {
+	    f(xs[i], i);
+	  }
+	}
+
+/***/ },
+/* 254 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(process, setImmediate) {// A bit simpler than readable streams.
+	// Implement an async ._write(chunk, encoding, cb), and it'll handle all
+	// the drain event emission and buffering.
+
+	'use strict';
+
+	module.exports = Writable;
+
+	/*<replacement>*/
+	var processNextTick = __webpack_require__(248);
+	/*</replacement>*/
+
+	/*<replacement>*/
+	var asyncWrite = !process.browser && ['v0.10', 'v0.9.'].indexOf(process.version.slice(0, 5)) > -1 ? setImmediate : processNextTick;
+	/*</replacement>*/
+
+	/*<replacement>*/
+	var Duplex;
+	/*</replacement>*/
+
+	Writable.WritableState = WritableState;
+
+	/*<replacement>*/
+	var util = __webpack_require__(250);
+	util.inherits = __webpack_require__(245);
+	/*</replacement>*/
+
+	/*<replacement>*/
+	var internalUtil = {
+	  deprecate: __webpack_require__(257)
+	};
+	/*</replacement>*/
+
+	/*<replacement>*/
+	var Stream;
+	(function () {
+	  try {
+	    Stream = __webpack_require__(243);
+	  } catch (_) {} finally {
+	    if (!Stream) Stream = __webpack_require__(244).EventEmitter;
+	  }
+	})();
+	/*</replacement>*/
+
+	var Buffer = __webpack_require__(13).Buffer;
+	/*<replacement>*/
+	var bufferShim = __webpack_require__(249);
+	/*</replacement>*/
+
+	util.inherits(Writable, Stream);
+
+	function nop() {}
+
+	function WriteReq(chunk, encoding, cb) {
+	  this.chunk = chunk;
+	  this.encoding = encoding;
+	  this.callback = cb;
+	  this.next = null;
+	}
+
+	function WritableState(options, stream) {
+	  Duplex = Duplex || __webpack_require__(253);
+
+	  options = options || {};
+
+	  // object stream flag to indicate whether or not this stream
+	  // contains buffers or objects.
+	  this.objectMode = !!options.objectMode;
+
+	  if (stream instanceof Duplex) this.objectMode = this.objectMode || !!options.writableObjectMode;
+
+	  // the point at which write() starts returning false
+	  // Note: 0 is a valid value, means that we always return false if
+	  // the entire buffer is not flushed immediately on write()
+	  var hwm = options.highWaterMark;
+	  var defaultHwm = this.objectMode ? 16 : 16 * 1024;
+	  this.highWaterMark = hwm || hwm === 0 ? hwm : defaultHwm;
+
+	  // cast to ints.
+	  this.highWaterMark = ~ ~this.highWaterMark;
+
+	  // drain event flag.
+	  this.needDrain = false;
+	  // at the start of calling end()
+	  this.ending = false;
+	  // when end() has been called, and returned
+	  this.ended = false;
+	  // when 'finish' is emitted
+	  this.finished = false;
+
+	  // should we decode strings into buffers before passing to _write?
+	  // this is here so that some node-core streams can optimize string
+	  // handling at a lower level.
+	  var noDecode = options.decodeStrings === false;
+	  this.decodeStrings = !noDecode;
+
+	  // Crypto is kind of old and crusty.  Historically, its default string
+	  // encoding is 'binary' so we have to make this configurable.
+	  // Everything else in the universe uses 'utf8', though.
+	  this.defaultEncoding = options.defaultEncoding || 'utf8';
+
+	  // not an actual buffer we keep track of, but a measurement
+	  // of how much we're waiting to get pushed to some underlying
+	  // socket or file.
+	  this.length = 0;
+
+	  // a flag to see when we're in the middle of a write.
+	  this.writing = false;
+
+	  // when true all writes will be buffered until .uncork() call
+	  this.corked = 0;
+
+	  // a flag to be able to tell if the onwrite cb is called immediately,
+	  // or on a later tick.  We set this to true at first, because any
+	  // actions that shouldn't happen until "later" should generally also
+	  // not happen before the first write call.
+	  this.sync = true;
+
+	  // a flag to know if we're processing previously buffered items, which
+	  // may call the _write() callback in the same tick, so that we don't
+	  // end up in an overlapped onwrite situation.
+	  this.bufferProcessing = false;
+
+	  // the callback that's passed to _write(chunk,cb)
+	  this.onwrite = function (er) {
+	    onwrite(stream, er);
+	  };
+
+	  // the callback that the user supplies to write(chunk,encoding,cb)
+	  this.writecb = null;
+
+	  // the amount that is being written when _write is called.
+	  this.writelen = 0;
+
+	  this.bufferedRequest = null;
+	  this.lastBufferedRequest = null;
+
+	  // number of pending user-supplied write callbacks
+	  // this must be 0 before 'finish' can be emitted
+	  this.pendingcb = 0;
+
+	  // emit prefinish if the only thing we're waiting for is _write cbs
+	  // This is relevant for synchronous Transform streams
+	  this.prefinished = false;
+
+	  // True if the error was already emitted and should not be thrown again
+	  this.errorEmitted = false;
+
+	  // count buffered requests
+	  this.bufferedRequestCount = 0;
+
+	  // allocate the first CorkedRequest, there is always
+	  // one allocated and free to use, and we maintain at most two
+	  this.corkedRequestsFree = new CorkedRequest(this);
+	}
+
+	WritableState.prototype.getBuffer = function getBuffer() {
+	  var current = this.bufferedRequest;
+	  var out = [];
+	  while (current) {
+	    out.push(current);
+	    current = current.next;
+	  }
+	  return out;
+	};
+
+	(function () {
+	  try {
+	    Object.defineProperty(WritableState.prototype, 'buffer', {
+	      get: internalUtil.deprecate(function () {
+	        return this.getBuffer();
+	      }, '_writableState.buffer is deprecated. Use _writableState.getBuffer ' + 'instead.')
+	    });
+	  } catch (_) {}
+	})();
+
+	// Test _writableState for inheritance to account for Duplex streams,
+	// whose prototype chain only points to Readable.
+	var realHasInstance;
+	if (typeof Symbol === 'function' && Symbol.hasInstance && typeof Function.prototype[Symbol.hasInstance] === 'function') {
+	  realHasInstance = Function.prototype[Symbol.hasInstance];
+	  Object.defineProperty(Writable, Symbol.hasInstance, {
+	    value: function (object) {
+	      if (realHasInstance.call(this, object)) return true;
+
+	      return object && object._writableState instanceof WritableState;
+	    }
+	  });
+	} else {
+	  realHasInstance = function (object) {
+	    return object instanceof this;
+	  };
+	}
+
+	function Writable(options) {
+	  Duplex = Duplex || __webpack_require__(253);
+
+	  // Writable ctor is applied to Duplexes, too.
+	  // `realHasInstance` is necessary because using plain `instanceof`
+	  // would return false, as no `_writableState` property is attached.
+
+	  // Trying to use the custom `instanceof` for Writable here will also break the
+	  // Node.js LazyTransform implementation, which has a non-trivial getter for
+	  // `_writableState` that would lead to infinite recursion.
+	  if (!realHasInstance.call(Writable, this) && !(this instanceof Duplex)) {
+	    return new Writable(options);
+	  }
+
+	  this._writableState = new WritableState(options, this);
+
+	  // legacy.
+	  this.writable = true;
+
+	  if (options) {
+	    if (typeof options.write === 'function') this._write = options.write;
+
+	    if (typeof options.writev === 'function') this._writev = options.writev;
+	  }
+
+	  Stream.call(this);
+	}
+
+	// Otherwise people can pipe Writable streams, which is just wrong.
+	Writable.prototype.pipe = function () {
+	  this.emit('error', new Error('Cannot pipe, not readable'));
+	};
+
+	function writeAfterEnd(stream, cb) {
+	  var er = new Error('write after end');
+	  // TODO: defer error events consistently everywhere, not just the cb
+	  stream.emit('error', er);
+	  processNextTick(cb, er);
+	}
+
+	// If we get something that is not a buffer, string, null, or undefined,
+	// and we're not in objectMode, then that's an error.
+	// Otherwise stream chunks are all considered to be of length=1, and the
+	// watermarks determine how many objects to keep in the buffer, rather than
+	// how many bytes or characters.
+	function validChunk(stream, state, chunk, cb) {
+	  var valid = true;
+	  var er = false;
+	  // Always throw error if a null is written
+	  // if we are not in object mode then throw
+	  // if it is not a buffer, string, or undefined.
+	  if (chunk === null) {
+	    er = new TypeError('May not write null values to stream');
+	  } else if (!Buffer.isBuffer(chunk) && typeof chunk !== 'string' && chunk !== undefined && !state.objectMode) {
+	    er = new TypeError('Invalid non-string/buffer chunk');
+	  }
+	  if (er) {
+	    stream.emit('error', er);
+	    processNextTick(cb, er);
+	    valid = false;
+	  }
+	  return valid;
+	}
+
+	Writable.prototype.write = function (chunk, encoding, cb) {
+	  var state = this._writableState;
+	  var ret = false;
+
+	  if (typeof encoding === 'function') {
+	    cb = encoding;
+	    encoding = null;
+	  }
+
+	  if (Buffer.isBuffer(chunk)) encoding = 'buffer';else if (!encoding) encoding = state.defaultEncoding;
+
+	  if (typeof cb !== 'function') cb = nop;
+
+	  if (state.ended) writeAfterEnd(this, cb);else if (validChunk(this, state, chunk, cb)) {
+	    state.pendingcb++;
+	    ret = writeOrBuffer(this, state, chunk, encoding, cb);
+	  }
+
+	  return ret;
+	};
+
+	Writable.prototype.cork = function () {
+	  var state = this._writableState;
+
+	  state.corked++;
+	};
+
+	Writable.prototype.uncork = function () {
+	  var state = this._writableState;
+
+	  if (state.corked) {
+	    state.corked--;
+
+	    if (!state.writing && !state.corked && !state.finished && !state.bufferProcessing && state.bufferedRequest) clearBuffer(this, state);
+	  }
+	};
+
+	Writable.prototype.setDefaultEncoding = function setDefaultEncoding(encoding) {
+	  // node::ParseEncoding() requires lower case.
+	  if (typeof encoding === 'string') encoding = encoding.toLowerCase();
+	  if (!(['hex', 'utf8', 'utf-8', 'ascii', 'binary', 'base64', 'ucs2', 'ucs-2', 'utf16le', 'utf-16le', 'raw'].indexOf((encoding + '').toLowerCase()) > -1)) throw new TypeError('Unknown encoding: ' + encoding);
+	  this._writableState.defaultEncoding = encoding;
+	  return this;
+	};
+
+	function decodeChunk(state, chunk, encoding) {
+	  if (!state.objectMode && state.decodeStrings !== false && typeof chunk === 'string') {
+	    chunk = bufferShim.from(chunk, encoding);
+	  }
+	  return chunk;
+	}
+
+	// if we're already writing something, then just put this
+	// in the queue, and wait our turn.  Otherwise, call _write
+	// If we return false, then we need a drain event, so set that flag.
+	function writeOrBuffer(stream, state, chunk, encoding, cb) {
+	  chunk = decodeChunk(state, chunk, encoding);
+
+	  if (Buffer.isBuffer(chunk)) encoding = 'buffer';
+	  var len = state.objectMode ? 1 : chunk.length;
+
+	  state.length += len;
+
+	  var ret = state.length < state.highWaterMark;
+	  // we must ensure that previous needDrain will not be reset to false.
+	  if (!ret) state.needDrain = true;
+
+	  if (state.writing || state.corked) {
+	    var last = state.lastBufferedRequest;
+	    state.lastBufferedRequest = new WriteReq(chunk, encoding, cb);
+	    if (last) {
+	      last.next = state.lastBufferedRequest;
+	    } else {
+	      state.bufferedRequest = state.lastBufferedRequest;
+	    }
+	    state.bufferedRequestCount += 1;
+	  } else {
+	    doWrite(stream, state, false, len, chunk, encoding, cb);
+	  }
+
+	  return ret;
+	}
+
+	function doWrite(stream, state, writev, len, chunk, encoding, cb) {
+	  state.writelen = len;
+	  state.writecb = cb;
+	  state.writing = true;
+	  state.sync = true;
+	  if (writev) stream._writev(chunk, state.onwrite);else stream._write(chunk, encoding, state.onwrite);
+	  state.sync = false;
+	}
+
+	function onwriteError(stream, state, sync, er, cb) {
+	  --state.pendingcb;
+	  if (sync) processNextTick(cb, er);else cb(er);
+
+	  stream._writableState.errorEmitted = true;
+	  stream.emit('error', er);
+	}
+
+	function onwriteStateUpdate(state) {
+	  state.writing = false;
+	  state.writecb = null;
+	  state.length -= state.writelen;
+	  state.writelen = 0;
+	}
+
+	function onwrite(stream, er) {
+	  var state = stream._writableState;
+	  var sync = state.sync;
+	  var cb = state.writecb;
+
+	  onwriteStateUpdate(state);
+
+	  if (er) onwriteError(stream, state, sync, er, cb);else {
+	    // Check if we're actually ready to finish, but don't emit yet
+	    var finished = needFinish(state);
+
+	    if (!finished && !state.corked && !state.bufferProcessing && state.bufferedRequest) {
+	      clearBuffer(stream, state);
+	    }
+
+	    if (sync) {
+	      /*<replacement>*/
+	      asyncWrite(afterWrite, stream, state, finished, cb);
+	      /*</replacement>*/
+	    } else {
+	        afterWrite(stream, state, finished, cb);
+	      }
+	  }
+	}
+
+	function afterWrite(stream, state, finished, cb) {
+	  if (!finished) onwriteDrain(stream, state);
+	  state.pendingcb--;
+	  cb();
+	  finishMaybe(stream, state);
+	}
+
+	// Must force callback to be called on nextTick, so that we don't
+	// emit 'drain' before the write() consumer gets the 'false' return
+	// value, and has a chance to attach a 'drain' listener.
+	function onwriteDrain(stream, state) {
+	  if (state.length === 0 && state.needDrain) {
+	    state.needDrain = false;
+	    stream.emit('drain');
+	  }
+	}
+
+	// if there's something in the buffer waiting, then process it
+	function clearBuffer(stream, state) {
+	  state.bufferProcessing = true;
+	  var entry = state.bufferedRequest;
+
+	  if (stream._writev && entry && entry.next) {
+	    // Fast case, write everything using _writev()
+	    var l = state.bufferedRequestCount;
+	    var buffer = new Array(l);
+	    var holder = state.corkedRequestsFree;
+	    holder.entry = entry;
+
+	    var count = 0;
+	    while (entry) {
+	      buffer[count] = entry;
+	      entry = entry.next;
+	      count += 1;
+	    }
+
+	    doWrite(stream, state, true, state.length, buffer, '', holder.finish);
+
+	    // doWrite is almost always async, defer these to save a bit of time
+	    // as the hot path ends with doWrite
+	    state.pendingcb++;
+	    state.lastBufferedRequest = null;
+	    if (holder.next) {
+	      state.corkedRequestsFree = holder.next;
+	      holder.next = null;
+	    } else {
+	      state.corkedRequestsFree = new CorkedRequest(state);
+	    }
+	  } else {
+	    // Slow case, write chunks one-by-one
+	    while (entry) {
+	      var chunk = entry.chunk;
+	      var encoding = entry.encoding;
+	      var cb = entry.callback;
+	      var len = state.objectMode ? 1 : chunk.length;
+
+	      doWrite(stream, state, false, len, chunk, encoding, cb);
+	      entry = entry.next;
+	      // if we didn't call the onwrite immediately, then
+	      // it means that we need to wait until it does.
+	      // also, that means that the chunk and cb are currently
+	      // being processed, so move the buffer counter past them.
+	      if (state.writing) {
+	        break;
+	      }
+	    }
+
+	    if (entry === null) state.lastBufferedRequest = null;
+	  }
+
+	  state.bufferedRequestCount = 0;
+	  state.bufferedRequest = entry;
+	  state.bufferProcessing = false;
+	}
+
+	Writable.prototype._write = function (chunk, encoding, cb) {
+	  cb(new Error('_write() is not implemented'));
+	};
+
+	Writable.prototype._writev = null;
+
+	Writable.prototype.end = function (chunk, encoding, cb) {
+	  var state = this._writableState;
+
+	  if (typeof chunk === 'function') {
+	    cb = chunk;
+	    chunk = null;
+	    encoding = null;
+	  } else if (typeof encoding === 'function') {
+	    cb = encoding;
+	    encoding = null;
+	  }
+
+	  if (chunk !== null && chunk !== undefined) this.write(chunk, encoding);
+
+	  // .end() fully uncorks
+	  if (state.corked) {
+	    state.corked = 1;
+	    this.uncork();
+	  }
+
+	  // ignore unnecessary end() calls.
+	  if (!state.ending && !state.finished) endWritable(this, state, cb);
+	};
+
+	function needFinish(state) {
+	  return state.ending && state.length === 0 && state.bufferedRequest === null && !state.finished && !state.writing;
+	}
+
+	function prefinish(stream, state) {
+	  if (!state.prefinished) {
+	    state.prefinished = true;
+	    stream.emit('prefinish');
+	  }
+	}
+
+	function finishMaybe(stream, state) {
+	  var need = needFinish(state);
+	  if (need) {
+	    if (state.pendingcb === 0) {
+	      prefinish(stream, state);
+	      state.finished = true;
+	      stream.emit('finish');
+	    } else {
+	      prefinish(stream, state);
+	    }
+	  }
+	  return need;
+	}
+
+	function endWritable(stream, state, cb) {
+	  state.ending = true;
+	  finishMaybe(stream, state);
+	  if (cb) {
+	    if (state.finished) processNextTick(cb);else stream.once('finish', cb);
+	  }
+	  state.ended = true;
+	  stream.writable = false;
+	}
+
+	// It seems a linked list but it is not
+	// there will be only 2 of these for each stream
+	function CorkedRequest(state) {
+	  var _this = this;
+
+	  this.next = null;
+	  this.entry = null;
+
+	  this.finish = function (err) {
+	    var entry = _this.entry;
+	    _this.entry = null;
+	    while (entry) {
+	      var cb = entry.callback;
+	      state.pendingcb--;
+	      cb(err);
+	      entry = entry.next;
+	    }
+	    if (state.corkedRequestsFree) {
+	      state.corkedRequestsFree.next = _this;
+	    } else {
+	      state.corkedRequestsFree = _this;
+	    }
+	  };
+	}
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(23), __webpack_require__(255).setImmediate))
+
+/***/ },
+/* 255 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var apply = Function.prototype.apply;
+
+	// DOM APIs, for completeness
+
+	exports.setTimeout = function() {
+	  return new Timeout(apply.call(setTimeout, window, arguments), clearTimeout);
+	};
+	exports.setInterval = function() {
+	  return new Timeout(apply.call(setInterval, window, arguments), clearInterval);
+	};
+	exports.clearTimeout =
+	exports.clearInterval = function(timeout) {
+	  if (timeout) {
+	    timeout.close();
+	  }
+	};
+
+	function Timeout(id, clearFn) {
+	  this._id = id;
+	  this._clearFn = clearFn;
+	}
+	Timeout.prototype.unref = Timeout.prototype.ref = function() {};
+	Timeout.prototype.close = function() {
+	  this._clearFn.call(window, this._id);
+	};
+
+	// Does not start the time, just sets up the members needed.
+	exports.enroll = function(item, msecs) {
+	  clearTimeout(item._idleTimeoutId);
+	  item._idleTimeout = msecs;
+	};
+
+	exports.unenroll = function(item) {
+	  clearTimeout(item._idleTimeoutId);
+	  item._idleTimeout = -1;
+	};
+
+	exports._unrefActive = exports.active = function(item) {
+	  clearTimeout(item._idleTimeoutId);
+
+	  var msecs = item._idleTimeout;
+	  if (msecs >= 0) {
+	    item._idleTimeoutId = setTimeout(function onTimeout() {
+	      if (item._onTimeout)
+	        item._onTimeout();
+	    }, msecs);
+	  }
+	};
+
+	// setimmediate attaches itself to the global object
+	__webpack_require__(256);
+	exports.setImmediate = setImmediate;
+	exports.clearImmediate = clearImmediate;
+
+
+/***/ },
+/* 256 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(global, process) {(function (global, undefined) {
+	    "use strict";
+
+	    if (global.setImmediate) {
+	        return;
+	    }
+
+	    var nextHandle = 1; // Spec says greater than zero
+	    var tasksByHandle = {};
+	    var currentlyRunningATask = false;
+	    var doc = global.document;
+	    var registerImmediate;
+
+	    function setImmediate(callback) {
+	      // Callback can either be a function or a string
+	      if (typeof callback !== "function") {
+	        callback = new Function("" + callback);
+	      }
+	      // Copy function arguments
+	      var args = new Array(arguments.length - 1);
+	      for (var i = 0; i < args.length; i++) {
+	          args[i] = arguments[i + 1];
+	      }
+	      // Store and register the task
+	      var task = { callback: callback, args: args };
+	      tasksByHandle[nextHandle] = task;
+	      registerImmediate(nextHandle);
+	      return nextHandle++;
+	    }
+
+	    function clearImmediate(handle) {
+	        delete tasksByHandle[handle];
+	    }
+
+	    function run(task) {
+	        var callback = task.callback;
+	        var args = task.args;
+	        switch (args.length) {
+	        case 0:
+	            callback();
+	            break;
+	        case 1:
+	            callback(args[0]);
+	            break;
+	        case 2:
+	            callback(args[0], args[1]);
+	            break;
+	        case 3:
+	            callback(args[0], args[1], args[2]);
+	            break;
+	        default:
+	            callback.apply(undefined, args);
+	            break;
+	        }
+	    }
+
+	    function runIfPresent(handle) {
+	        // From the spec: "Wait until any invocations of this algorithm started before this one have completed."
+	        // So if we're currently running a task, we'll need to delay this invocation.
+	        if (currentlyRunningATask) {
+	            // Delay by doing a setTimeout. setImmediate was tried instead, but in Firefox 7 it generated a
+	            // "too much recursion" error.
+	            setTimeout(runIfPresent, 0, handle);
+	        } else {
+	            var task = tasksByHandle[handle];
+	            if (task) {
+	                currentlyRunningATask = true;
+	                try {
+	                    run(task);
+	                } finally {
+	                    clearImmediate(handle);
+	                    currentlyRunningATask = false;
+	                }
+	            }
+	        }
+	    }
+
+	    function installNextTickImplementation() {
+	        registerImmediate = function(handle) {
+	            process.nextTick(function () { runIfPresent(handle); });
+	        };
+	    }
+
+	    function canUsePostMessage() {
+	        // The test against `importScripts` prevents this implementation from being installed inside a web worker,
+	        // where `global.postMessage` means something completely different and can't be used for this purpose.
+	        if (global.postMessage && !global.importScripts) {
+	            var postMessageIsAsynchronous = true;
+	            var oldOnMessage = global.onmessage;
+	            global.onmessage = function() {
+	                postMessageIsAsynchronous = false;
+	            };
+	            global.postMessage("", "*");
+	            global.onmessage = oldOnMessage;
+	            return postMessageIsAsynchronous;
+	        }
+	    }
+
+	    function installPostMessageImplementation() {
+	        // Installs an event handler on `global` for the `message` event: see
+	        // * https://developer.mozilla.org/en/DOM/window.postMessage
+	        // * http://www.whatwg.org/specs/web-apps/current-work/multipage/comms.html#crossDocumentMessages
+
+	        var messagePrefix = "setImmediate$" + Math.random() + "$";
+	        var onGlobalMessage = function(event) {
+	            if (event.source === global &&
+	                typeof event.data === "string" &&
+	                event.data.indexOf(messagePrefix) === 0) {
+	                runIfPresent(+event.data.slice(messagePrefix.length));
+	            }
+	        };
+
+	        if (global.addEventListener) {
+	            global.addEventListener("message", onGlobalMessage, false);
+	        } else {
+	            global.attachEvent("onmessage", onGlobalMessage);
+	        }
+
+	        registerImmediate = function(handle) {
+	            global.postMessage(messagePrefix + handle, "*");
+	        };
+	    }
+
+	    function installMessageChannelImplementation() {
+	        var channel = new MessageChannel();
+	        channel.port1.onmessage = function(event) {
+	            var handle = event.data;
+	            runIfPresent(handle);
+	        };
+
+	        registerImmediate = function(handle) {
+	            channel.port2.postMessage(handle);
+	        };
+	    }
+
+	    function installReadyStateChangeImplementation() {
+	        var html = doc.documentElement;
+	        registerImmediate = function(handle) {
+	            // Create a <script> element; its readystatechange event will be fired asynchronously once it is inserted
+	            // into the document. Do so, thus queuing up the task. Remember to clean up once it's been called.
+	            var script = doc.createElement("script");
+	            script.onreadystatechange = function () {
+	                runIfPresent(handle);
+	                script.onreadystatechange = null;
+	                html.removeChild(script);
+	                script = null;
+	            };
+	            html.appendChild(script);
+	        };
+	    }
+
+	    function installSetTimeoutImplementation() {
+	        registerImmediate = function(handle) {
+	            setTimeout(runIfPresent, 0, handle);
+	        };
+	    }
+
+	    // If supported, we should attach to the prototype of global, since that is where setTimeout et al. live.
+	    var attachTo = Object.getPrototypeOf && Object.getPrototypeOf(global);
+	    attachTo = attachTo && attachTo.setTimeout ? attachTo : global;
+
+	    // Don't get fooled by e.g. browserify environments.
+	    if ({}.toString.call(global.process) === "[object process]") {
+	        // For Node.js before 0.9
+	        installNextTickImplementation();
+
+	    } else if (canUsePostMessage()) {
+	        // For non-IE10 modern browsers
+	        installPostMessageImplementation();
+
+	    } else if (global.MessageChannel) {
+	        // For web workers, where supported
+	        installMessageChannelImplementation();
+
+	    } else if (doc && "onreadystatechange" in doc.createElement("script")) {
+	        // For IE 6–8
+	        installReadyStateChangeImplementation();
+
+	    } else {
+	        // For older browsers
+	        installSetTimeoutImplementation();
+	    }
+
+	    attachTo.setImmediate = setImmediate;
+	    attachTo.clearImmediate = clearImmediate;
+	}(typeof self === "undefined" ? typeof global === "undefined" ? this : global : self));
+
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(23)))
+
+/***/ },
+/* 257 */
+/***/ function(module, exports) {
+
+	/* WEBPACK VAR INJECTION */(function(global) {
+	/**
+	 * Module exports.
+	 */
+
+	module.exports = deprecate;
+
+	/**
+	 * Mark that a method should not be used.
+	 * Returns a modified function which warns once by default.
+	 *
+	 * If `localStorage.noDeprecation = true` is set, then it is a no-op.
+	 *
+	 * If `localStorage.throwDeprecation = true` is set, then deprecated functions
+	 * will throw an Error when invoked.
+	 *
+	 * If `localStorage.traceDeprecation = true` is set, then deprecated functions
+	 * will invoke `console.trace()` instead of `console.error()`.
+	 *
+	 * @param {Function} fn - the function to deprecate
+	 * @param {String} msg - the string to print to the console when `fn` is invoked
+	 * @returns {Function} a new "deprecated" version of `fn`
+	 * @api public
+	 */
+
+	function deprecate (fn, msg) {
+	  if (config('noDeprecation')) {
+	    return fn;
+	  }
+
+	  var warned = false;
+	  function deprecated() {
+	    if (!warned) {
+	      if (config('throwDeprecation')) {
+	        throw new Error(msg);
+	      } else if (config('traceDeprecation')) {
+	        console.trace(msg);
+	      } else {
+	        console.warn(msg);
+	      }
+	      warned = true;
+	    }
+	    return fn.apply(this, arguments);
+	  }
+
+	  return deprecated;
+	}
+
+	/**
+	 * Checks `localStorage` for boolean values for the given `name`.
+	 *
+	 * @param {String} name
+	 * @returns {Boolean}
+	 * @api private
+	 */
+
+	function config (name) {
+	  // accessing global.localStorage can trigger a DOMException in sandboxed iframes
+	  try {
+	    if (!global.localStorage) return false;
+	  } catch (_) {
+	    return false;
+	  }
+	  var val = global.localStorage[name];
+	  if (null == val) return false;
+	  return String(val).toLowerCase() === 'true';
+	}
+
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
+
+/***/ },
+/* 258 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// Copyright Joyent, Inc. and other Node contributors.
+	//
+	// Permission is hereby granted, free of charge, to any person obtaining a
+	// copy of this software and associated documentation files (the
+	// "Software"), to deal in the Software without restriction, including
+	// without limitation the rights to use, copy, modify, merge, publish,
+	// distribute, sublicense, and/or sell copies of the Software, and to permit
+	// persons to whom the Software is furnished to do so, subject to the
+	// following conditions:
+	//
+	// The above copyright notice and this permission notice shall be included
+	// in all copies or substantial portions of the Software.
+	//
+	// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+	// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+	// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
+	// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+	// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+	// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+	// USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+	var Buffer = __webpack_require__(13).Buffer;
+
+	var isBufferEncoding = Buffer.isEncoding
+	  || function(encoding) {
+	       switch (encoding && encoding.toLowerCase()) {
+	         case 'hex': case 'utf8': case 'utf-8': case 'ascii': case 'binary': case 'base64': case 'ucs2': case 'ucs-2': case 'utf16le': case 'utf-16le': case 'raw': return true;
+	         default: return false;
+	       }
+	     }
+
+
+	function assertEncoding(encoding) {
+	  if (encoding && !isBufferEncoding(encoding)) {
+	    throw new Error('Unknown encoding: ' + encoding);
+	  }
+	}
+
+	// StringDecoder provides an interface for efficiently splitting a series of
+	// buffers into a series of JS strings without breaking apart multi-byte
+	// characters. CESU-8 is handled as part of the UTF-8 encoding.
+	//
+	// @TODO Handling all encodings inside a single object makes it very difficult
+	// to reason about this code, so it should be split up in the future.
+	// @TODO There should be a utf8-strict encoding that rejects invalid UTF-8 code
+	// points as used by CESU-8.
+	var StringDecoder = exports.StringDecoder = function(encoding) {
+	  this.encoding = (encoding || 'utf8').toLowerCase().replace(/[-_]/, '');
+	  assertEncoding(encoding);
+	  switch (this.encoding) {
+	    case 'utf8':
+	      // CESU-8 represents each of Surrogate Pair by 3-bytes
+	      this.surrogateSize = 3;
+	      break;
+	    case 'ucs2':
+	    case 'utf16le':
+	      // UTF-16 represents each of Surrogate Pair by 2-bytes
+	      this.surrogateSize = 2;
+	      this.detectIncompleteChar = utf16DetectIncompleteChar;
+	      break;
+	    case 'base64':
+	      // Base-64 stores 3 bytes in 4 chars, and pads the remainder.
+	      this.surrogateSize = 3;
+	      this.detectIncompleteChar = base64DetectIncompleteChar;
+	      break;
+	    default:
+	      this.write = passThroughWrite;
+	      return;
+	  }
+
+	  // Enough space to store all bytes of a single character. UTF-8 needs 4
+	  // bytes, but CESU-8 may require up to 6 (3 bytes per surrogate).
+	  this.charBuffer = new Buffer(6);
+	  // Number of bytes received for the current incomplete multi-byte character.
+	  this.charReceived = 0;
+	  // Number of bytes expected for the current incomplete multi-byte character.
+	  this.charLength = 0;
+	};
+
+
+	// write decodes the given buffer and returns it as JS string that is
+	// guaranteed to not contain any partial multi-byte characters. Any partial
+	// character found at the end of the buffer is buffered up, and will be
+	// returned when calling write again with the remaining bytes.
+	//
+	// Note: Converting a Buffer containing an orphan surrogate to a String
+	// currently works, but converting a String to a Buffer (via `new Buffer`, or
+	// Buffer#write) will replace incomplete surrogates with the unicode
+	// replacement character. See https://codereview.chromium.org/121173009/ .
+	StringDecoder.prototype.write = function(buffer) {
+	  var charStr = '';
+	  // if our last write ended with an incomplete multibyte character
+	  while (this.charLength) {
+	    // determine how many remaining bytes this buffer has to offer for this char
+	    var available = (buffer.length >= this.charLength - this.charReceived) ?
+	        this.charLength - this.charReceived :
+	        buffer.length;
+
+	    // add the new bytes to the char buffer
+	    buffer.copy(this.charBuffer, this.charReceived, 0, available);
+	    this.charReceived += available;
+
+	    if (this.charReceived < this.charLength) {
+	      // still not enough chars in this buffer? wait for more ...
+	      return '';
+	    }
+
+	    // remove bytes belonging to the current character from the buffer
+	    buffer = buffer.slice(available, buffer.length);
+
+	    // get the character that was split
+	    charStr = this.charBuffer.slice(0, this.charLength).toString(this.encoding);
+
+	    // CESU-8: lead surrogate (D800-DBFF) is also the incomplete character
+	    var charCode = charStr.charCodeAt(charStr.length - 1);
+	    if (charCode >= 0xD800 && charCode <= 0xDBFF) {
+	      this.charLength += this.surrogateSize;
+	      charStr = '';
+	      continue;
+	    }
+	    this.charReceived = this.charLength = 0;
+
+	    // if there are no more bytes in this buffer, just emit our char
+	    if (buffer.length === 0) {
+	      return charStr;
+	    }
+	    break;
+	  }
+
+	  // determine and set charLength / charReceived
+	  this.detectIncompleteChar(buffer);
+
+	  var end = buffer.length;
+	  if (this.charLength) {
+	    // buffer the incomplete character bytes we got
+	    buffer.copy(this.charBuffer, 0, buffer.length - this.charReceived, end);
+	    end -= this.charReceived;
+	  }
+
+	  charStr += buffer.toString(this.encoding, 0, end);
+
+	  var end = charStr.length - 1;
+	  var charCode = charStr.charCodeAt(end);
+	  // CESU-8: lead surrogate (D800-DBFF) is also the incomplete character
+	  if (charCode >= 0xD800 && charCode <= 0xDBFF) {
+	    var size = this.surrogateSize;
+	    this.charLength += size;
+	    this.charReceived += size;
+	    this.charBuffer.copy(this.charBuffer, size, 0, size);
+	    buffer.copy(this.charBuffer, 0, 0, size);
+	    return charStr.substring(0, end);
+	  }
+
+	  // or just emit the charStr
+	  return charStr;
+	};
+
+	// detectIncompleteChar determines if there is an incomplete UTF-8 character at
+	// the end of the given buffer. If so, it sets this.charLength to the byte
+	// length that character, and sets this.charReceived to the number of bytes
+	// that are available for this character.
+	StringDecoder.prototype.detectIncompleteChar = function(buffer) {
+	  // determine how many bytes we have to check at the end of this buffer
+	  var i = (buffer.length >= 3) ? 3 : buffer.length;
+
+	  // Figure out if one of the last i bytes of our buffer announces an
+	  // incomplete char.
+	  for (; i > 0; i--) {
+	    var c = buffer[buffer.length - i];
+
+	    // See http://en.wikipedia.org/wiki/UTF-8#Description
+
+	    // 110XXXXX
+	    if (i == 1 && c >> 5 == 0x06) {
+	      this.charLength = 2;
+	      break;
+	    }
+
+	    // 1110XXXX
+	    if (i <= 2 && c >> 4 == 0x0E) {
+	      this.charLength = 3;
+	      break;
+	    }
+
+	    // 11110XXX
+	    if (i <= 3 && c >> 3 == 0x1E) {
+	      this.charLength = 4;
+	      break;
+	    }
+	  }
+	  this.charReceived = i;
+	};
+
+	StringDecoder.prototype.end = function(buffer) {
+	  var res = '';
+	  if (buffer && buffer.length)
+	    res = this.write(buffer);
+
+	  if (this.charReceived) {
+	    var cr = this.charReceived;
+	    var buf = this.charBuffer;
+	    var enc = this.encoding;
+	    res += buf.slice(0, cr).toString(enc);
+	  }
+
+	  return res;
+	};
+
+	function passThroughWrite(buffer) {
+	  return buffer.toString(this.encoding);
+	}
+
+	function utf16DetectIncompleteChar(buffer) {
+	  this.charReceived = buffer.length % 2;
+	  this.charLength = this.charReceived ? 2 : 0;
+	}
+
+	function base64DetectIncompleteChar(buffer) {
+	  this.charReceived = buffer.length % 3;
+	  this.charLength = this.charReceived ? 3 : 0;
+	}
+
+
+/***/ },
+/* 259 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// a transform stream is a readable/writable stream where you do
+	// something with the data.  Sometimes it's called a "filter",
+	// but that's not a great name for it, since that implies a thing where
+	// some bits pass through, and others are simply ignored.  (That would
+	// be a valid example of a transform, of course.)
+	//
+	// While the output is causally related to the input, it's not a
+	// necessarily symmetric or synchronous transformation.  For example,
+	// a zlib stream might take multiple plain-text writes(), and then
+	// emit a single compressed chunk some time in the future.
+	//
+	// Here's how this works:
+	//
+	// The Transform stream has all the aspects of the readable and writable
+	// stream classes.  When you write(chunk), that calls _write(chunk,cb)
+	// internally, and returns false if there's a lot of pending writes
+	// buffered up.  When you call read(), that calls _read(n) until
+	// there's enough pending readable data buffered up.
+	//
+	// In a transform stream, the written data is placed in a buffer.  When
+	// _read(n) is called, it transforms the queued up data, calling the
+	// buffered _write cb's as it consumes chunks.  If consuming a single
+	// written chunk would result in multiple output chunks, then the first
+	// outputted bit calls the readcb, and subsequent chunks just go into
+	// the read buffer, and will cause it to emit 'readable' if necessary.
+	//
+	// This way, back-pressure is actually determined by the reading side,
+	// since _read has to be called to start processing a new chunk.  However,
+	// a pathological inflate type of transform can cause excessive buffering
+	// here.  For example, imagine a stream where every byte of input is
+	// interpreted as an integer from 0-255, and then results in that many
+	// bytes of output.  Writing the 4 bytes {ff,ff,ff,ff} would result in
+	// 1kb of data being output.  In this case, you could write a very small
+	// amount of input, and end up with a very large amount of output.  In
+	// such a pathological inflating mechanism, there'd be no way to tell
+	// the system to stop doing the transform.  A single 4MB write could
+	// cause the system to run out of memory.
+	//
+	// However, even in such a pathological case, only a single written chunk
+	// would be consumed, and then the rest would wait (un-transformed) until
+	// the results of the previous transformed chunk were consumed.
+
+	'use strict';
+
+	module.exports = Transform;
+
+	var Duplex = __webpack_require__(253);
+
+	/*<replacement>*/
+	var util = __webpack_require__(250);
+	util.inherits = __webpack_require__(245);
+	/*</replacement>*/
+
+	util.inherits(Transform, Duplex);
+
+	function TransformState(stream) {
+	  this.afterTransform = function (er, data) {
+	    return afterTransform(stream, er, data);
+	  };
+
+	  this.needTransform = false;
+	  this.transforming = false;
+	  this.writecb = null;
+	  this.writechunk = null;
+	  this.writeencoding = null;
+	}
+
+	function afterTransform(stream, er, data) {
+	  var ts = stream._transformState;
+	  ts.transforming = false;
+
+	  var cb = ts.writecb;
+
+	  if (!cb) return stream.emit('error', new Error('no writecb in Transform class'));
+
+	  ts.writechunk = null;
+	  ts.writecb = null;
+
+	  if (data !== null && data !== undefined) stream.push(data);
+
+	  cb(er);
+
+	  var rs = stream._readableState;
+	  rs.reading = false;
+	  if (rs.needReadable || rs.length < rs.highWaterMark) {
+	    stream._read(rs.highWaterMark);
+	  }
+	}
+
+	function Transform(options) {
+	  if (!(this instanceof Transform)) return new Transform(options);
+
+	  Duplex.call(this, options);
+
+	  this._transformState = new TransformState(this);
+
+	  var stream = this;
+
+	  // start out asking for a readable event once data is transformed.
+	  this._readableState.needReadable = true;
+
+	  // we have implemented the _read method, and done the other things
+	  // that Readable wants before the first _read call, so unset the
+	  // sync guard flag.
+	  this._readableState.sync = false;
+
+	  if (options) {
+	    if (typeof options.transform === 'function') this._transform = options.transform;
+
+	    if (typeof options.flush === 'function') this._flush = options.flush;
+	  }
+
+	  // When the writable side finishes, then flush out anything remaining.
+	  this.once('prefinish', function () {
+	    if (typeof this._flush === 'function') this._flush(function (er, data) {
+	      done(stream, er, data);
+	    });else done(stream);
+	  });
+	}
+
+	Transform.prototype.push = function (chunk, encoding) {
+	  this._transformState.needTransform = false;
+	  return Duplex.prototype.push.call(this, chunk, encoding);
+	};
+
+	// This is the part where you do stuff!
+	// override this function in implementation classes.
+	// 'chunk' is an input chunk.
+	//
+	// Call `push(newChunk)` to pass along transformed output
+	// to the readable side.  You may call 'push' zero or more times.
+	//
+	// Call `cb(err)` when you are done with this chunk.  If you pass
+	// an error, then that'll put the hurt on the whole operation.  If you
+	// never call cb(), then you'll never get another chunk.
+	Transform.prototype._transform = function (chunk, encoding, cb) {
+	  throw new Error('_transform() is not implemented');
+	};
+
+	Transform.prototype._write = function (chunk, encoding, cb) {
+	  var ts = this._transformState;
+	  ts.writecb = cb;
+	  ts.writechunk = chunk;
+	  ts.writeencoding = encoding;
+	  if (!ts.transforming) {
+	    var rs = this._readableState;
+	    if (ts.needTransform || rs.needReadable || rs.length < rs.highWaterMark) this._read(rs.highWaterMark);
+	  }
+	};
+
+	// Doesn't matter what the args are here.
+	// _transform does all the work.
+	// That we got here means that the readable side wants more data.
+	Transform.prototype._read = function (n) {
+	  var ts = this._transformState;
+
+	  if (ts.writechunk !== null && ts.writecb && !ts.transforming) {
+	    ts.transforming = true;
+	    this._transform(ts.writechunk, ts.writeencoding, ts.afterTransform);
+	  } else {
+	    // mark that we need a transform, so that any data that comes in
+	    // will get processed, now that we've asked for it.
+	    ts.needTransform = true;
+	  }
+	};
+
+	function done(stream, er, data) {
+	  if (er) return stream.emit('error', er);
+
+	  if (data !== null && data !== undefined) stream.push(data);
+
+	  // if there's nothing in the write buffer, then that means
+	  // that nothing more will ever be provided
+	  var ws = stream._writableState;
+	  var ts = stream._transformState;
+
+	  if (ws.length) throw new Error('Calling transform done when ws.length != 0');
+
+	  if (ts.transforming) throw new Error('Calling transform done when still transforming');
+
+	  return stream.push(null);
+	}
+
+/***/ },
+/* 260 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// a passthrough stream.
+	// basically just the most minimal sort of Transform stream.
+	// Every written chunk gets output as-is.
+
+	'use strict';
+
+	module.exports = PassThrough;
+
+	var Transform = __webpack_require__(259);
+
+	/*<replacement>*/
+	var util = __webpack_require__(250);
+	util.inherits = __webpack_require__(245);
+	/*</replacement>*/
+
+	util.inherits(PassThrough, Transform);
+
+	function PassThrough(options) {
+	  if (!(this instanceof PassThrough)) return new PassThrough(options);
+
+	  Transform.call(this, options);
+	}
+
+	PassThrough.prototype._transform = function (chunk, encoding, cb) {
+	  cb(null, chunk);
+	};
+
+/***/ },
+/* 261 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__(254)
+
+
+/***/ },
+/* 262 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__(253)
+
+
+/***/ },
+/* 263 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__(259)
+
+
+/***/ },
+/* 264 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__(260)
+
+
+/***/ },
+/* 265 */
+/***/ function(module, exports) {
+
+	exports['aes-128-ecb'] = {
+	  cipher: 'AES',
+	  key: 128,
+	  iv: 0,
+	  mode: 'ECB',
+	  type: 'block'
+	};
+	exports['aes-192-ecb'] = {
+	  cipher: 'AES',
+	  key: 192,
+	  iv: 0,
+	  mode: 'ECB',
+	  type: 'block'
+	};
+	exports['aes-256-ecb'] = {
+	  cipher: 'AES',
+	  key: 256,
+	  iv: 0,
+	  mode: 'ECB',
+	  type: 'block'
+	};
+	exports['aes-128-cbc'] = {
+	  cipher: 'AES',
+	  key: 128,
+	  iv: 16,
+	  mode: 'CBC',
+	  type: 'block'
+	};
+	exports['aes-192-cbc'] = {
+	  cipher: 'AES',
+	  key: 192,
+	  iv: 16,
+	  mode: 'CBC',
+	  type: 'block'
+	};
+	exports['aes-256-cbc'] = {
+	  cipher: 'AES',
+	  key: 256,
+	  iv: 16,
+	  mode: 'CBC',
+	  type: 'block'
+	};
+	exports['aes128'] = exports['aes-128-cbc'];
+	exports['aes192'] = exports['aes-192-cbc'];
+	exports['aes256'] = exports['aes-256-cbc'];
+	exports['aes-128-cfb'] = {
+	  cipher: 'AES',
+	  key: 128,
+	  iv: 16,
+	  mode: 'CFB',
+	  type: 'stream'
+	};
+	exports['aes-192-cfb'] = {
+	  cipher: 'AES',
+	  key: 192,
+	  iv: 16,
+	  mode: 'CFB',
+	  type: 'stream'
+	};
+	exports['aes-256-cfb'] = {
+	  cipher: 'AES',
+	  key: 256,
+	  iv: 16,
+	  mode: 'CFB',
+	  type: 'stream'
+	};
+	exports['aes-128-ofb'] = {
+	  cipher: 'AES',
+	  key: 128,
+	  iv: 16,
+	  mode: 'OFB',
+	  type: 'stream'
+	};
+	exports['aes-192-ofb'] = {
+	  cipher: 'AES',
+	  key: 192,
+	  iv: 16,
+	  mode: 'OFB',
+	  type: 'stream'
+	};
+	exports['aes-256-ofb'] = {
+	  cipher: 'AES',
+	  key: 256,
+	  iv: 16,
+	  mode: 'OFB',
+	  type: 'stream'
+	};
+	exports['aes-128-ctr'] = {
+	  cipher: 'AES',
+	  key: 128,
+	  iv: 16,
+	  mode: 'CTR',
+	  type: 'stream'
+	};
+	exports['aes-192-ctr'] = {
+	  cipher: 'AES',
+	  key: 192,
+	  iv: 16,
+	  mode: 'CTR',
+	  type: 'stream'
+	};
+	exports['aes-256-ctr'] = {
+	  cipher: 'AES',
+	  key: 256,
+	  iv: 16,
+	  mode: 'CTR',
+	  type: 'stream'
+	};
+
+/***/ },
+/* 266 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(Buffer) {
+	module.exports = function (crypto, password, keyLen, ivLen) {
+	  keyLen = keyLen/8;
+	  ivLen = ivLen || 0;
+	  var ki = 0;
+	  var ii = 0;
+	  var key = new Buffer(keyLen);
+	  var iv = new Buffer(ivLen);
+	  var addmd = 0;
+	  var md, md_buf;
+	  var i;
+	  while (true) {
+	    md = crypto.createHash('md5');
+	    if(addmd++ > 0) {
+	       md.update(md_buf);
+	    }
+	    md.update(password);
+	    md_buf = md.digest();
+	    i = 0;
+	    if(keyLen > 0) {
+	      while(true) {
+	        if(keyLen === 0) {
+	          break;
+	        }
+	        if(i === md_buf.length) {
+	          break;
+	        }
+	        key[ki++] = md_buf[i];
+	        keyLen--;
+	        i++;
+	       }
+	    }
+	    if(ivLen > 0 && i !== md_buf.length) {
+	      while(true) {
+	        if(ivLen === 0) {
+	          break;
+	        }
+	        if(i === md_buf.length) {
+	          break;
+	        }
+	       iv[ii++] = md_buf[i];
+	       ivLen--;
+	       i++;
+	     }
+	   }
+	   if(keyLen === 0 && ivLen === 0) {
+	      break;
+	    }
+	  }
+	  for(i=0;i<md_buf.length;i++) {
+	    md_buf[i] = 0;
+	  }
+	  return {
+	    key: key,
+	    iv: iv
+	  };
+	};
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(13).Buffer))
+
+/***/ },
+/* 267 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(Buffer) {var aes = __webpack_require__(241);
+	var Transform = __webpack_require__(242);
+	var inherits = __webpack_require__(245);
+
+	inherits(StreamCipher, Transform);
+	module.exports = StreamCipher;
+	function StreamCipher(mode, key, iv, decrypt) {
+	  if (!(this instanceof StreamCipher)) {
+	    return new StreamCipher(mode, key, iv);
+	  }
+	  Transform.call(this);
+	  this._cipher = new aes.AES(key);
+	  this._prev = new Buffer(iv.length);
+	  this._cache = new Buffer('');
+	  this._secCache = new Buffer('');
+	  this._decrypt = decrypt;
+	  iv.copy(this._prev);
+	  this._mode = mode;
+	}
+	StreamCipher.prototype._transform = function (chunk, _, next) {
+	  next(null, this._mode.encrypt(this, chunk, this._decrypt));
+	};
+	StreamCipher.prototype._flush = function (next) {
+	  this._cipher.scrub();
+	  next();
+	};
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(13).Buffer))
+
+/***/ },
+/* 268 */
+/***/ function(module, exports) {
+
+	exports.encrypt = function (self, block) {
+	  return self._cipher.encryptBlock(block);
+	};
+	exports.decrypt = function (self, block) {
+	  return self._cipher.decryptBlock(block);
+	};
+
+/***/ },
+/* 269 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var xor = __webpack_require__(270);
+	exports.encrypt = function (self, block) {
+	  var data = xor(block, self._prev);
+	  self._prev = self._cipher.encryptBlock(data);
+	  return self._prev;
+	};
+	exports.decrypt = function (self, block) {
+	  var pad = self._prev;
+	  self._prev = block;
+	  var out = self._cipher.decryptBlock(block);
+	  return xor(out, pad);
+	};
+
+/***/ },
+/* 270 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(Buffer) {module.exports = xor;
+	function xor(a, b) {
+	  var len = Math.min(a.length, b.length);
+	  var out = new Buffer(len);
+	  var i = -1;
+	  while (++i < len) {
+	    out.writeUInt8(a[i] ^ b[i], i);
+	  }
+	  return out;
+	}
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(13).Buffer))
+
+/***/ },
+/* 271 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(Buffer) {var xor = __webpack_require__(270);
+	exports.encrypt = function (self, data, decrypt) {
+	  var out = new Buffer('');
+	  var len;
+	  while (data.length) {
+	    if (self._cache.length === 0) {
+	      self._cache = self._cipher.encryptBlock(self._prev);
+	      self._prev = new Buffer('');
+	    }
+	    if (self._cache.length <= data.length) {
+	      len = self._cache.length;
+	      out = Buffer.concat([out, encryptStart(self, data.slice(0, len), decrypt)]);
+	      data = data.slice(len);
+	    } else {
+	      out = Buffer.concat([out, encryptStart(self, data, decrypt)]);
+	      break;
+	    }
+	  }
+	  return out;
+	};
+	function encryptStart(self, data, decrypt) {
+	  var len = data.length;
+	  var out = xor(data, self._cache);
+	  self._cache = self._cache.slice(len);
+	  self._prev = Buffer.concat([self._prev, decrypt?data:out]);
+	  return out;
+	}
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(13).Buffer))
+
+/***/ },
+/* 272 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(Buffer) {var xor = __webpack_require__(270);
+	function getBlock(self) {
+	  self._prev = self._cipher.encryptBlock(self._prev);
+	  return self._prev;
+	}
+	exports.encrypt = function (self, chunk) {
+	  while (self._cache.length < chunk.length) {
+	    self._cache = Buffer.concat([self._cache, getBlock(self)]);
+	  }
+	  var pad = self._cache.slice(0, chunk.length);
+	  self._cache = self._cache.slice(chunk.length);
+	  return xor(chunk, pad);
+	};
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(13).Buffer))
+
+/***/ },
+/* 273 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(Buffer) {var xor = __webpack_require__(270);
+	function getBlock(self) {
+	  var out = self._cipher.encryptBlock(self._prev);
+	  incr32(self._prev);
+	  return out;
+	}
+	exports.encrypt = function (self, chunk) {
+	  while (self._cache.length < chunk.length) {
+	    self._cache = Buffer.concat([self._cache, getBlock(self)]);
+	  }
+	  var pad = self._cache.slice(0, chunk.length);
+	  self._cache = self._cache.slice(chunk.length);
+	  return xor(chunk, pad);
+	};
+	function incr32(iv) {
+	  var len = iv.length;
+	  var item;
+	  while (len--) {
+	    item = iv.readUInt8(len);
+	    if (item === 255) {
+	      iv.writeUInt8(0, len);
+	    } else {
+	      item++;
+	      iv.writeUInt8(item, len);
+	      break;
+	    }
+	  }
+	}
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(13).Buffer))
+
+/***/ },
+/* 274 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(Buffer) {var aes = __webpack_require__(241);
+	var Transform = __webpack_require__(242);
+	var inherits = __webpack_require__(245);
+	var modes = __webpack_require__(265);
+	var StreamCipher = __webpack_require__(267);
+	var ebtk = __webpack_require__(266);
+
+	inherits(Decipher, Transform);
+	function Decipher(mode, key, iv) {
+	  if (!(this instanceof Decipher)) {
+	    return new Decipher(mode, key, iv);
+	  }
+	  Transform.call(this);
+	  this._cache = new Splitter();
+	  this._last = void 0;
+	  this._cipher = new aes.AES(key);
+	  this._prev = new Buffer(iv.length);
+	  iv.copy(this._prev);
+	  this._mode = mode;
+	}
+	Decipher.prototype._transform = function (data, _, next) {
+	  this._cache.add(data);
+	  var chunk;
+	  var thing;
+	  while ((chunk = this._cache.get())) {
+	    thing = this._mode.decrypt(this, chunk);
+	    this.push(thing);
+	  }
+	  next();
+	};
+	Decipher.prototype._flush = function (next) {
+	  var chunk = this._cache.flush();
+	  if (!chunk) {
+	    return next;
+	  }
+
+	  this.push(unpad(this._mode.decrypt(this, chunk)));
+
+	  next();
+	};
+
+	function Splitter() {
+	   if (!(this instanceof Splitter)) {
+	    return new Splitter();
+	  }
+	  this.cache = new Buffer('');
+	}
+	Splitter.prototype.add = function (data) {
+	  this.cache = Buffer.concat([this.cache, data]);
+	};
+
+	Splitter.prototype.get = function () {
+	  if (this.cache.length > 16) {
+	    var out = this.cache.slice(0, 16);
+	    this.cache = this.cache.slice(16);
+	    return out;
+	  }
+	  return null;
+	};
+	Splitter.prototype.flush = function () {
+	  if (this.cache.length) {
+	    return this.cache;
+	  }
+	};
+	function unpad(last) {
+	  var padded = last[15];
+	  if (padded === 16) {
+	    return;
+	  }
+	  return last.slice(0, 16 - padded);
+	}
+
+	var modelist = {
+	  ECB: __webpack_require__(268),
+	  CBC: __webpack_require__(269),
+	  CFB: __webpack_require__(271),
+	  OFB: __webpack_require__(272),
+	  CTR: __webpack_require__(273)
+	};
+
+	module.exports = function (crypto) {
+	  function createDecipheriv(suite, password, iv) {
+	    var config = modes[suite];
+	    if (!config) {
+	      throw new TypeError('invalid suite type');
+	    }
+	    if (typeof iv === 'string') {
+	      iv = new Buffer(iv);
+	    }
+	    if (typeof password === 'string') {
+	      password = new Buffer(password);
+	    }
+	    if (password.length !== config.key/8) {
+	      throw new TypeError('invalid key length ' + password.length);
+	    }
+	    if (iv.length !== config.iv) {
+	      throw new TypeError('invalid iv length ' + iv.length);
+	    }
+	    if (config.type === 'stream') {
+	      return new StreamCipher(modelist[config.mode], password, iv, true);
+	    }
+	    return new Decipher(modelist[config.mode], password, iv);
+	  }
+
+	  function createDecipher (suite, password) {
+	    var config = modes[suite];
+	    if (!config) {
+	      throw new TypeError('invalid suite type');
+	    }
+	    var keys = ebtk(crypto, password, config.key, config.iv);
+	    return createDecipheriv(suite, keys.key, keys.iv);
+	  }
+	  return {
+	    createDecipher: createDecipher,
+	    createDecipheriv: createDecipheriv
+	  };
+	};
+
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(13).Buffer))
+
+/***/ },
+/* 275 */
+/***/ function(module, exports, __webpack_require__) {
+
 	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
@@ -37872,8 +42686,6 @@ var StellarBase =
 	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-
-	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i]; return arr2; } else { return Array.from(arr); } }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -37887,13 +42699,13 @@ var StellarBase =
 
 	var _keypair = __webpack_require__(63);
 
-	var _account = __webpack_require__(225);
+	var _account = __webpack_require__(276);
 
 	var _operation = __webpack_require__(110);
 
 	var _transaction = __webpack_require__(109);
 
-	var _memo = __webpack_require__(226);
+	var _memo = __webpack_require__(277);
 
 	var _bignumberJs = __webpack_require__(182);
 
@@ -37970,7 +42782,6 @@ var StellarBase =
 	        }
 	        this.source = sourceAccount;
 	        this.operations = [];
-	        this.signers = [];
 
 	        this.baseFee = (0, _lodashIsUndefined2["default"])(opts.fee) ? BASE_FEE : opts.fee;
 
@@ -38018,7 +42829,7 @@ var StellarBase =
 	            var sequenceNumber = new _bignumberJs2["default"](this.source.sequenceNumber()).add(1);
 
 	            var attrs = {
-	                sourceAccount: _keypair.Keypair.fromAccountId(this.source.accountId()).xdrAccountId(),
+	                sourceAccount: _keypair.Keypair.fromPublicKey(this.source.accountId()).xdrAccountId(),
 	                fee: this.baseFee * this.operations.length,
 	                seqNum: _generatedStellarXdr_generated2["default"].SequenceNumber.fromString(sequenceNumber.toString()),
 	                memo: this.memo,
@@ -38034,7 +42845,6 @@ var StellarBase =
 	            var xenv = new _generatedStellarXdr_generated2["default"].TransactionEnvelope({ tx: xtx });
 
 	            var tx = new _transaction.Transaction(xenv);
-	            tx.sign.apply(tx, _toConsumableArray(this.signers));
 
 	            this.source.incrementSequenceNumber();
 	            return tx;
@@ -38047,7 +42857,7 @@ var StellarBase =
 	exports.TransactionBuilder = TransactionBuilder;
 
 /***/ },
-/* 225 */
+/* 276 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -38090,7 +42900,7 @@ var StellarBase =
 	    function Account(accountId, sequence) {
 	        _classCallCheck(this, Account);
 
-	        if (!_keypair.Keypair.isValidPublicKey(accountId)) {
+	        if (!_strkey.StrKey.isValidEd25519PublicKey(accountId)) {
 	            throw new Error('accountId is invalid');
 	        }
 	        if (!(0, _lodashIsString2['default'])(sequence)) {
@@ -38101,19 +42911,12 @@ var StellarBase =
 	    }
 
 	    /**
-	     * Returns true if the given accountId is a valid Stellar account ID.
-	     * @param {string} accountId account ID to check
-	     * @returns {boolean}
-	     * @deprecated Use {@link Keypair.isValidPublicKey}
+	     * Returns Stellar account ID, ex. `GB3KJPLFUYN5VL6R3GU3EGCGVCKFDSD7BEDX42HWG5BWFKB3KQGJJRMA`
+	     * @returns {string}
 	     */
 
 	    _createClass(Account, [{
 	        key: 'accountId',
-
-	        /**
-	         * Returns Stellar account ID, ex. `GB3KJPLFUYN5VL6R3GU3EGCGVCKFDSD7BEDX42HWG5BWFKB3KQGJJRMA`
-	         * @returns {string}
-	         */
 	        value: function accountId() {
 	            return this._accountId;
 	        }
@@ -38135,20 +42938,6 @@ var StellarBase =
 	        value: function incrementSequenceNumber() {
 	            this.sequence = this.sequence.add(1);
 	        }
-	    }], [{
-	        key: 'isValidAccountId',
-	        value: function isValidAccountId(accountId) {
-	            console.warn('Account.isValidAccountId is deprecated. Use Keypair.isValidPublicKey.');
-	            try {
-	                var decoded = (0, _strkey.decodeCheck)("accountId", accountId);
-	                if (decoded.length !== 32) {
-	                    return false;
-	                }
-	            } catch (err) {
-	                return false;
-	            }
-	            return true;
-	        }
 	    }]);
 
 	    return Account;
@@ -38157,7 +42946,7 @@ var StellarBase =
 	exports.Account = Account;
 
 /***/ },
-/* 226 */
+/* 277 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(Buffer) {"use strict";
