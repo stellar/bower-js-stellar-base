@@ -29482,6 +29482,10 @@ var StellarBase =
 
 	var _lodashEach2 = _interopRequireDefault(_lodashEach);
 
+	var _lodashIsString = __webpack_require__(92);
+
+	var _lodashIsString2 = _interopRequireDefault(_lodashIsString);
+
 	var _crypto = __webpack_require__(224);
 
 	var _crypto2 = _interopRequireDefault(_crypto);
@@ -29563,6 +29567,14 @@ var StellarBase =
 	    }, {
 	        key: "signHashX",
 	        value: function signHashX(preimage) {
+	            if ((0, _lodashIsString2["default"])(preimage)) {
+	                preimage = Buffer.from(preimage, "hex");
+	            }
+
+	            if (preimage.length > 64) {
+	                throw new Error('preimage cannnot be longer than 64 bytes');
+	            }
+
 	            var signature = preimage;
 	            var hash = _crypto2["default"].createHash('sha256').update(preimage).digest();
 	            var hint = hash.slice(hash.length - 4);
