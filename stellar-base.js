@@ -225,7 +225,7 @@ var StellarBase =
 /* 2 */
 /***/ function(module, exports, __webpack_require__) {
 
-	// Automatically generated on 2017-01-25T18:59:57+01:00
+	// Automatically generated on 2017-02-08T14:45:22+01:00
 	// DO NOT EDIT or your changes may be overwritten
 	/* jshint maxstatements:2147483647  */ /* jshint esnext:true  */"use strict";Object.defineProperty(exports,"__esModule",{value:true});function _interopRequireWildcard(obj){if(obj && obj.__esModule){return obj;}else {var newObj={};if(obj != null){for(var key in obj) {if(Object.prototype.hasOwnProperty.call(obj,key))newObj[key] = obj[key];}}newObj["default"] = obj;return newObj;}}var _jsXdr=__webpack_require__(3);var XDR=_interopRequireWildcard(_jsXdr);var types=XDR.config(function(xdr){ // === xdr source ============================================================
 	//
@@ -2223,12 +2223,12 @@ var StellarBase =
 	//   enum CryptoKeyType
 	//   {
 	//       KEY_TYPE_ED25519 = 0,
-	//       KEY_TYPE_HASH_TX = 1,
+	//       KEY_TYPE_PRE_AUTH_TX = 1,
 	//       KEY_TYPE_HASH_X = 2
 	//   };
 	//
 	// ===========================================================================
-	xdr["enum"]("CryptoKeyType",{keyTypeEd25519:0,keyTypeHashTx:1,keyTypeHashX:2}); // === xdr source ============================================================
+	xdr["enum"]("CryptoKeyType",{keyTypeEd25519:0,keyTypePreAuthTx:1,keyTypeHashX:2}); // === xdr source ============================================================
 	//
 	//   enum PublicKeyType
 	//   {
@@ -2241,12 +2241,12 @@ var StellarBase =
 	//   enum SignerKeyType
 	//   {
 	//       SIGNER_KEY_TYPE_ED25519 = KEY_TYPE_ED25519,
-	//       SIGNER_KEY_TYPE_HASH_TX = KEY_TYPE_HASH_TX,
+	//       SIGNER_KEY_TYPE_PRE_AUTH_TX = KEY_TYPE_PRE_AUTH_TX,
 	//       SIGNER_KEY_TYPE_HASH_X = KEY_TYPE_HASH_X
 	//   };
 	//
 	// ===========================================================================
-	xdr["enum"]("SignerKeyType",{signerKeyTypeEd25519:0,signerKeyTypeHashTx:1,signerKeyTypeHashX:2}); // === xdr source ============================================================
+	xdr["enum"]("SignerKeyType",{signerKeyTypeEd25519:0,signerKeyTypePreAuthTx:1,signerKeyTypeHashX:2}); // === xdr source ============================================================
 	//
 	//   union PublicKey switch (PublicKeyType type)
 	//   {
@@ -2261,16 +2261,16 @@ var StellarBase =
 	//   {
 	//   case SIGNER_KEY_TYPE_ED25519:
 	//       uint256 ed25519;
-	//   case SIGNER_KEY_TYPE_HASH_TX:
+	//   case SIGNER_KEY_TYPE_PRE_AUTH_TX:
 	//       /* Hash of Transaction structure */
-	//       uint256 hashTx;
+	//       uint256 preAuthTx;
 	//   case SIGNER_KEY_TYPE_HASH_X:
 	//       /* Hash of random 256 bit preimage X */
 	//       uint256 hashX;
 	//   };
 	//
 	// ===========================================================================
-	xdr.union("SignerKey",{switchOn:xdr.lookup("SignerKeyType"),switchName:"type",switches:[["signerKeyTypeEd25519","ed25519"],["signerKeyTypeHashTx","hashTx"],["signerKeyTypeHashX","hashX"]],arms:{ed25519:xdr.lookup("Uint256"),hashTx:xdr.lookup("Uint256"),hashX:xdr.lookup("Uint256")}}); // === xdr source ============================================================
+	xdr.union("SignerKey",{switchOn:xdr.lookup("SignerKeyType"),switchName:"type",switches:[["signerKeyTypeEd25519","ed25519"],["signerKeyTypePreAuthTx","preAuthTx"],["signerKeyTypeHashX","hashX"]],arms:{ed25519:xdr.lookup("Uint256"),preAuthTx:xdr.lookup("Uint256"),hashX:xdr.lookup("Uint256")}}); // === xdr source ============================================================
 	//
 	//   typedef opaque Signature<64>;
 	//
@@ -30021,7 +30021,7 @@ var StellarBase =
 	                    if (!(Buffer.isBuffer(opts.signer.preAuthTx) && opts.signer.preAuthTx.length == 32)) {
 	                        throw new Error("signer.preAuthTx must be 32 bytes Buffer.");
 	                    }
-	                    key = new _generatedStellarXdr_generated2["default"].SignerKey.signerKeyTypeHashTx(opts.signer.preAuthTx);
+	                    key = new _generatedStellarXdr_generated2["default"].SignerKey.signerKeyTypePreAuthTx(opts.signer.preAuthTx);
 	                    setValues++;
 	                }
 
@@ -30296,8 +30296,8 @@ var StellarBase =
 	                        var arm = attrs.signer().key().arm();
 	                        if (arm == "ed25519") {
 	                            signer.ed25519PublicKey = accountIdtoAddress(attrs.signer().key());
-	                        } else if (arm == "hashTx") {
-	                            signer.preAuthTx = attrs.signer().key().hashTx();
+	                        } else if (arm == "preAuthTx") {
+	                            signer.preAuthTx = attrs.signer().key().preAuthTx();
 	                        } else if (arm == "hashX") {
 	                            signer.sha256Hash = attrs.signer().key().hashX();
 	                        }
