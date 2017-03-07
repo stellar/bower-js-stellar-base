@@ -24476,7 +24476,7 @@ var StellarBase =
 /* 61 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(Buffer) {(function(nacl) {
+	(function(nacl) {
 	'use strict';
 
 	// Ported in 2014 by Dmitry Chestnykh and Devi Mandiri.
@@ -25223,7 +25223,7 @@ var StellarBase =
 	  }
 	  g[9] -= (1 << 13);
 
-	  mask = (g[9] >>> ((2 * 8) - 1)) - 1;
+	  mask = (c ^ 1) - 1;
 	  for (i = 0; i < 10; i++) g[i] &= mask;
 	  mask = ~mask;
 	  for (i = 0; i < 10; i++) this.h[i] = (this.h[i] & mask) | g[i];
@@ -26635,39 +26635,13 @@ var StellarBase =
 	  for (var i = 0; i < arr.length; i++) arr[i] = 0;
 	}
 
-	nacl.util = {};
-
-	nacl.util.decodeUTF8 = function(s) {
-	  var i, d = unescape(encodeURIComponent(s)), b = new Uint8Array(d.length);
-	  for (i = 0; i < d.length; i++) b[i] = d.charCodeAt(i);
-	  return b;
-	};
-
-	nacl.util.encodeUTF8 = function(arr) {
-	  var i, s = [];
-	  for (i = 0; i < arr.length; i++) s.push(String.fromCharCode(arr[i]));
-	  return decodeURIComponent(escape(s.join('')));
-	};
-
-	nacl.util.encodeBase64 = function(arr) {
-	  if (typeof btoa === 'undefined') {
-	    return (new Buffer(arr)).toString('base64');
-	  } else {
-	    var i, s = [], len = arr.length;
-	    for (i = 0; i < len; i++) s.push(String.fromCharCode(arr[i]));
-	    return btoa(s.join(''));
-	  }
-	};
-
-	nacl.util.decodeBase64 = function(s) {
-	  if (typeof atob === 'undefined') {
-	    return new Uint8Array(Array.prototype.slice.call(new Buffer(s, 'base64'), 0));
-	  } else {
-	    var i, d = atob(s), b = new Uint8Array(d.length);
-	    for (i = 0; i < d.length; i++) b[i] = d.charCodeAt(i);
-	    return b;
-	  }
-	};
+	// TODO: Completely remove this in v0.15.
+	if (!nacl.util) {
+	  nacl.util = {};
+	  nacl.util.decodeUTF8 = nacl.util.encodeUTF8 = nacl.util.encodeBase64 = nacl.util.decodeBase64 = function() {
+	    throw new Error('nacl.util moved into separate package: https://github.com/dchest/tweetnacl-util-js');
+	  };
+	}
 
 	nacl.randomBytes = function(n) {
 	  var b = new Uint8Array(n);
@@ -26864,26 +26838,22 @@ var StellarBase =
 	(function() {
 	  // Initialize PRNG if environment provides CSPRNG.
 	  // If not, methods calling randombytes will throw.
-	  var crypto;
-	  if (typeof window !== 'undefined') {
-	    // Browser.
-	    if (window.crypto && window.crypto.getRandomValues) {
-	      crypto = window.crypto; // Standard
-	    } else if (window.msCrypto && window.msCrypto.getRandomValues) {
-	      crypto = window.msCrypto; // Internet Explorer 11+
-	    }
-	    if (crypto) {
-	      nacl.setPRNG(function(x, n) {
-	        var i, v = new Uint8Array(n);
-	        crypto.getRandomValues(v);
-	        for (i = 0; i < n; i++) x[i] = v[i];
-	        cleanup(v);
-	      });
-	    }
+	  var crypto = typeof self !== 'undefined' ? (self.crypto || self.msCrypto) : null;
+	  if (crypto && crypto.getRandomValues) {
+	    // Browsers.
+	    var QUOTA = 65536;
+	    nacl.setPRNG(function(x, n) {
+	      var i, v = new Uint8Array(n);
+	      for (i = 0; i < n; i += QUOTA) {
+	        crypto.getRandomValues(v.subarray(i, i + Math.min(n - i, QUOTA)));
+	      }
+	      for (i = 0; i < n; i++) x[i] = v[i];
+	      cleanup(v);
+	    });
 	  } else if (true) {
 	    // Node.js.
 	    crypto = __webpack_require__(62);
-	    if (crypto) {
+	    if (crypto && crypto.randomBytes) {
 	      nacl.setPRNG(function(x, n) {
 	        var i, v = crypto.randomBytes(n);
 	        for (i = 0; i < n; i++) x[i] = v[i];
@@ -26893,9 +26863,8 @@ var StellarBase =
 	  }
 	})();
 
-	})(typeof module !== 'undefined' && module.exports ? module.exports : (window.nacl = window.nacl || {}));
+	})(typeof module !== 'undefined' && module.exports ? module.exports : (self.nacl = self.nacl || {}));
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(13).Buffer))
 
 /***/ },
 /* 62 */
@@ -26935,7 +26904,9 @@ var StellarBase =
 
 	var _generatedStellarXdr_generated2 = _interopRequireDefault(_generatedStellarXdr_generated);
 
-	var nacl = __webpack_require__(61);
+	var _tweetnacl = __webpack_require__(61);
+
+	var _tweetnacl2 = _interopRequireDefault(_tweetnacl);
 
 	var Keypair = (function () {
 	  /**
@@ -27102,7 +27073,7 @@ var StellarBase =
 	    value: function fromRawSeed(rawSeed) {
 	      rawSeed = new Buffer(rawSeed);
 	      var rawSeedU8 = new Uint8Array(rawSeed);
-	      var keys = nacl.sign.keyPair.fromSeed(rawSeedU8);
+	      var keys = _tweetnacl2["default"].sign.keyPair.fromSeed(rawSeedU8);
 	      keys.secretSeed = rawSeed;
 
 	      return new this(keys);
@@ -27143,7 +27114,7 @@ var StellarBase =
 	  }, {
 	    key: "random",
 	    value: function random() {
-	      var seed = nacl.randomBytes(32);
+	      var seed = _tweetnacl2["default"].randomBytes(32);
 	      return this.fromRawSeed(seed);
 	    }
 	  }]);
@@ -27278,10 +27249,7 @@ var StellarBase =
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.decodeBase58 = decodeBase58;
 	exports.decodeBase58Check = decodeBase58Check;
-	exports.encodeBase58 = encodeBase58;
-	exports.encodeBase58Check = encodeBase58Check;
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -27299,18 +27267,12 @@ var StellarBase =
 
 	var _hashing = __webpack_require__(50);
 
-	var nacl = __webpack_require__(61);
-
 	var versionBytes = {
 	  "accountId": 0x00, // decimal 0
 	  "none": 0x01, // decimal 1
 	  "seed": 0x21 };
 
 	// decimal 33
-
-	function decodeBase58(encoded) {
-	  return new Buffer(_vendorBs582["default"].decode(encoded));
-	}
 
 	function decodeBase58Check(versionByteName, encoded) {
 	  var decoded = _vendorBs582["default"].decode(encoded);
@@ -27340,34 +27302,6 @@ var StellarBase =
 	  }
 
 	  return new Buffer(data);
-	}
-
-	function encodeBase58(data) {
-	  if ((0, _lodashIsNull2["default"])(data) || (0, _lodashIsUndefined2["default"])(data)) {
-	    throw new Error("cannot encode null data");
-	  }
-
-	  return _vendorBs582["default"].encode(data);
-	}
-
-	function encodeBase58Check(versionByteName, data) {
-	  if ((0, _lodashIsNull2["default"])(data) || (0, _lodashIsUndefined2["default"])(data)) {
-	    throw new Error("cannot encode null data");
-	  }
-
-	  var versionByte = versionBytes[versionByteName];
-
-	  if ((0, _lodashIsUndefined2["default"])(versionByte)) {
-	    throw new Error(versionByteName + " is not a valid version byte name.  expected one of \"accountId\", \"seed\", or \"none\"");
-	  }
-
-	  data = new Buffer(data);
-	  var versionBuffer = new Buffer([versionByte]);
-	  var payload = Buffer.concat([versionBuffer, data]);
-	  var checksum = calculateChecksum(payload);
-	  var unencoded = Buffer.concat([payload, checksum]);
-
-	  return encodeBase58(unencoded);
 	}
 
 	function calculateChecksum(payload) {
@@ -27417,44 +27351,6 @@ var StellarBase =
 	}
 	var BASE = 58;
 
-	function encode(buffer) {
-	  if (buffer.length === 0) return '';
-
-	  var i,
-	      j,
-	      digits = [0];
-	  for (i = 0; i < buffer.length; ++i) {
-	    for (j = 0; j < digits.length; ++j) digits[j] <<= 8;
-
-	    digits[0] += buffer[i];
-
-	    var carry = 0;
-	    for (j = 0; j < digits.length; ++j) {
-	      digits[j] += carry;
-
-	      carry = digits[j] / BASE | 0;
-	      digits[j] %= BASE;
-	    }
-
-	    while (carry) {
-	      digits.push(carry % BASE);
-
-	      carry = carry / BASE | 0;
-	    }
-	  }
-
-	  // deal with leading zeros
-	  for (i = 0; buffer[i] === 0 && i < buffer.length - 1; ++i) digits.push(0);
-
-	  // convert digits to a string
-	  var str = "";
-	  for (i = digits.length - 1; i >= 0; --i) {
-	    str += ALPHABET[digits[i]];
-	  }
-
-	  return str;
-	}
-
 	function decode(string) {
 	  if (string.length === 0) return [];
 
@@ -27489,10 +27385,7 @@ var StellarBase =
 	  return bytes.reverse();
 	}
 
-	module.exports = {
-	  encode: encode,
-	  decode: decode
-	};
+	module.exports = { decode: decode };
 
 /***/ },
 /* 67 */
@@ -32917,21 +32810,21 @@ var StellarBase =
 /* 182 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var __WEBPACK_AMD_DEFINE_RESULT__;/*! bignumber.js v2.1.3 https://github.com/MikeMcl/bignumber.js/LICENCE */
+	var __WEBPACK_AMD_DEFINE_RESULT__;/*! bignumber.js v4.0.0 https://github.com/MikeMcl/bignumber.js/LICENCE */
 
 	;(function (globalObj) {
 	    'use strict';
 
 	    /*
-	      bignumber.js v2.1.3
+	      bignumber.js v4.0.0
 	      A JavaScript library for arbitrary-precision arithmetic.
 	      https://github.com/MikeMcl/bignumber.js
-	      Copyright (c) 2015 Michael Mclaughlin <M8ch88l@gmail.com>
+	      Copyright (c) 2017 Michael Mclaughlin <M8ch88l@gmail.com>
 	      MIT Expat Licence
 	    */
 
 
-	    var cryptoObj, parseNumeric,
+	    var BigNumber,
 	        isNumeric = /^-?(\d+(\.\d*)?|\.\d+)(e[+-]?\d+)?$/i,
 	        mathceil = Math.ceil,
 	        mathfloor = Math.floor,
@@ -32953,14 +32846,12 @@ var StellarBase =
 	         */
 	        MAX = 1E9;                                   // 0 to MAX_INT32
 
-	    if ( typeof crypto != 'undefined' ) cryptoObj = crypto;
-
 
 	    /*
 	     * Create and return a BigNumber constructor.
 	     */
-	    function constructorFactory(configObj) {
-	        var div,
+	    function constructorFactory(config) {
+	        var div, parseNumeric,
 
 	            // id tracks the caller function, so its name can be included in error messages.
 	            id = 0,
@@ -33046,7 +32937,7 @@ var StellarBase =
 
 	            // The maximum number of significant digits of the result of the toPower operation.
 	            // If POW_PRECISION is 0, there will be unlimited significant digits.
-	            POW_PRECISION = 100,                     // 0 to MAX
+	            POW_PRECISION = 0,                       // 0 to MAX
 
 	            // The format specification used by the BigNumber.prototype.toFormat method.
 	            FORMAT = {
@@ -33179,7 +33070,9 @@ var StellarBase =
 
 	                // Disallow numbers with over 15 significant digits if number type.
 	                // 'new BigNumber() number type has more than 15 significant digits: {n}'
-	                if ( num && ERRORS && len > 15 ) raise( id, tooManyDigits, x.s * n );
+	                if ( num && ERRORS && len > 15 && ( n > MAX_SAFE_INTEGER || n !== mathfloor(n) ) ) {
+	                    raise( id, tooManyDigits, x.s * n );
+	                }
 
 	                e = e - i - 1;
 
@@ -33281,7 +33174,7 @@ var StellarBase =
 	         * Ignore properties/parameters set to null or undefined.
 	         * Return an object with the properties current values.
 	         */
-	        BigNumber.config = function () {
+	        BigNumber.config = BigNumber.set = function () {
 	            var v, p,
 	                i = 0,
 	                r = {},
@@ -33361,9 +33254,19 @@ var StellarBase =
 	            // 'config() crypto unavailable: {crypto}'
 	            if ( has( p = 'CRYPTO' ) ) {
 
-	                if ( v === !!v || v === 1 || v === 0 ) {
-	                    CRYPTO = !!( v && cryptoObj );
-	                    if ( v && !CRYPTO && ERRORS ) raise( 2, 'crypto unavailable', cryptoObj );
+	                if ( v === true || v === false || v === 1 || v === 0 ) {
+	                    if (v) {
+	                        v = typeof crypto == 'undefined';
+	                        if ( !v && crypto && (crypto.getRandomValues || crypto.randomBytes)) {
+	                            CRYPTO = true;
+	                        } else if (ERRORS) {
+	                            raise( 2, 'crypto unavailable', v ? void 0 : crypto );
+	                        } else {
+	                            CRYPTO = false;
+	                        }
+	                    } else {
+	                        CRYPTO = false;
+	                    }
 	                } else if (ERRORS) {
 	                    raise( 2, p + notBool, v );
 	                }
@@ -33453,9 +33356,9 @@ var StellarBase =
 	                if (CRYPTO) {
 
 	                    // Browsers supporting crypto.getRandomValues.
-	                    if ( cryptoObj && cryptoObj.getRandomValues ) {
+	                    if (crypto.getRandomValues) {
 
-	                        a = cryptoObj.getRandomValues( new Uint32Array( k *= 2 ) );
+	                        a = crypto.getRandomValues( new Uint32Array( k *= 2 ) );
 
 	                        for ( ; i < k; ) {
 
@@ -33472,7 +33375,7 @@ var StellarBase =
 	                            // Probability that v >= 9e15, is
 	                            // 7199254740992 / 9007199254740992 ~= 0.0008, i.e. 1 in 1251
 	                            if ( v >= 9e15 ) {
-	                                b = cryptoObj.getRandomValues( new Uint32Array(2) );
+	                                b = crypto.getRandomValues( new Uint32Array(2) );
 	                                a[i] = b[0];
 	                                a[i + 1] = b[1];
 	                            } else {
@@ -33486,10 +33389,10 @@ var StellarBase =
 	                        i = k / 2;
 
 	                    // Node.js supporting crypto.randomBytes.
-	                    } else if ( cryptoObj && cryptoObj.randomBytes ) {
+	                    } else if (crypto.randomBytes) {
 
 	                        // buffer
-	                        a = cryptoObj.randomBytes( k *= 7 );
+	                        a = crypto.randomBytes( k *= 7 );
 
 	                        for ( ; i < k; ) {
 
@@ -33502,7 +33405,7 @@ var StellarBase =
 	                                  ( a[i + 4] << 16 ) + ( a[i + 5] << 8 ) + a[i + 6];
 
 	                            if ( v >= 9e15 ) {
-	                                cryptoObj.randomBytes(7).copy( a, i );
+	                                crypto.randomBytes(7).copy( a, i );
 	                            } else {
 
 	                                // 0 <= (v % 1e14) <= 99999999999999
@@ -33511,13 +33414,14 @@ var StellarBase =
 	                            }
 	                        }
 	                        i = k / 7;
-	                    } else if (ERRORS) {
-	                        raise( 14, 'crypto unavailable', cryptoObj );
+	                    } else {
+	                        CRYPTO = false;
+	                        if (ERRORS) raise( 14, 'crypto unavailable', crypto );
 	                    }
 	                }
 
-	                // Use Math.random: CRYPTO is false or crypto is unavailable and ERRORS is false.
-	                if (!i) {
+	                // Use Math.random.
+	                if (!CRYPTO) {
 
 	                    for ( ; i < k; ) {
 	                        v = random53bitInt();
@@ -34763,7 +34667,7 @@ var StellarBase =
 	            // Only start adding at yc.length - 1 as the further digits of xc can be ignored.
 	            for ( a = 0; b; ) {
 	                a = ( xc[--b] = xc[b] + yc[b] + a ) / BASE | 0;
-	                xc[b] %= BASE;
+	                xc[b] = BASE === xc[b] ? 0 : xc[b] % BASE;
 	            }
 
 	            if (a) {
@@ -35280,50 +35184,85 @@ var StellarBase =
 
 	        /*
 	         * Return a BigNumber whose value is the value of this BigNumber raised to the power n.
+	         * If m is present, return the result modulo m.
 	         * If n is negative round according to DECIMAL_PLACES and ROUNDING_MODE.
-	         * If POW_PRECISION is not 0, round to POW_PRECISION using ROUNDING_MODE.
+	         * If POW_PRECISION is non-zero and m is not present, round to POW_PRECISION using
+	         * ROUNDING_MODE.
 	         *
-	         * n {number} Integer, -9007199254740992 to 9007199254740992 inclusive.
-	         * (Performs 54 loop iterations for n of 9007199254740992.)
+	         * The modular power operation works efficiently when x, n, and m are positive integers,
+	         * otherwise it is equivalent to calculating x.toPower(n).modulo(m) (with POW_PRECISION 0).
+	         *
+	         * n {number} Integer, -MAX_SAFE_INTEGER to MAX_SAFE_INTEGER inclusive.
+	         * [m] {number|string|BigNumber} The modulus.
 	         *
 	         * 'pow() exponent not an integer: {n}'
 	         * 'pow() exponent out of range: {n}'
+	         *
+	         * Performs 54 loop iterations for n of 9007199254740991.
 	         */
-	        P.toPower = P.pow = function (n) {
-	            var k, y,
+	        P.toPower = P.pow = function ( n, m ) {
+	            var k, y, z,
 	                i = mathfloor( n < 0 ? -n : +n ),
 	                x = this;
+
+	            if ( m != null ) {
+	                id = 23;
+	                m = new BigNumber(m);
+	            }
 
 	            // Pass ±Infinity to Math.pow if exponent is out of range.
 	            if ( !isValidInt( n, -MAX_SAFE_INTEGER, MAX_SAFE_INTEGER, 23, 'exponent' ) &&
 	              ( !isFinite(n) || i > MAX_SAFE_INTEGER && ( n /= 0 ) ||
-	                parseFloat(n) != n && !( n = NaN ) ) ) {
-	                return new BigNumber( Math.pow( +x, n ) );
+	                parseFloat(n) != n && !( n = NaN ) ) || n == 0 ) {
+	                k = Math.pow( +x, n );
+	                return new BigNumber( m ? k % m : k );
 	            }
 
-	            // Truncating each coefficient array to a length of k after each multiplication equates
-	            // to truncating significant digits to POW_PRECISION + [28, 41], i.e. there will be a
-	            // minimum of 28 guard digits retained. (Using + 1.5 would give [9, 21] guard digits.)
-	            k = POW_PRECISION ? mathceil( POW_PRECISION / LOG_BASE + 2 ) : 0;
+	            if (m) {
+	                if ( n > 1 && x.gt(ONE) && x.isInt() && m.gt(ONE) && m.isInt() ) {
+	                    x = x.mod(m);
+	                } else {
+	                    z = m;
+
+	                    // Nullify m so only a single mod operation is performed at the end.
+	                    m = null;
+	                }
+	            } else if (POW_PRECISION) {
+
+	                // Truncating each coefficient array to a length of k after each multiplication
+	                // equates to truncating significant digits to POW_PRECISION + [28, 41],
+	                // i.e. there will be a minimum of 28 guard digits retained.
+	                // (Using + 1.5 would give [9, 21] guard digits.)
+	                k = mathceil( POW_PRECISION / LOG_BASE + 2 );
+	            }
+
 	            y = new BigNumber(ONE);
 
 	            for ( ; ; ) {
-
 	                if ( i % 2 ) {
 	                    y = y.times(x);
 	                    if ( !y.c ) break;
-	                    if ( k && y.c.length > k ) y.c.length = k;
+	                    if (k) {
+	                        if ( y.c.length > k ) y.c.length = k;
+	                    } else if (m) {
+	                        y = y.mod(m);
+	                    }
 	                }
 
 	                i = mathfloor( i / 2 );
 	                if ( !i ) break;
-
 	                x = x.times(x);
-	                if ( k && x.c && x.c.length > k ) x.c.length = k;
+	                if (k) {
+	                    if ( x.c && x.c.length > k ) x.c.length = k;
+	                } else if (m) {
+	                    x = x.mod(m);
+	                }
 	            }
 
+	            if (m) return y;
 	            if ( n < 0 ) y = ONE.div(y);
-	            return k ? round( y, POW_PRECISION, ROUNDING_MODE ) : y;
+
+	            return z ? y.mod(z) : k ? round( y, POW_PRECISION, ROUNDING_MODE ) : y;
 	        };
 
 
@@ -35401,7 +35340,6 @@ var StellarBase =
 	        };
 
 
-
 	        /*
 	         * Return as toString, but do not accept a base argument, and include the minus sign for
 	         * negative zero.
@@ -35423,17 +35361,9 @@ var StellarBase =
 	        };
 
 
-	        // Aliases for BigDecimal methods.
-	        //P.add = P.plus;         // P.add included above
-	        //P.subtract = P.minus;   // P.sub included above
-	        //P.multiply = P.times;   // P.mul included above
-	        //P.divide = P.div;
-	        //P.remainder = P.mod;
-	        //P.compareTo = P.cmp;
-	        //P.negate = P.neg;
+	        P.isBigNumber = true;
 
-
-	        if ( configObj != null ) BigNumber.config(configObj);
+	        if ( config != null ) BigNumber.config(config);
 
 	        return BigNumber;
 	    }
@@ -35596,21 +35526,22 @@ var StellarBase =
 	    // EXPORT
 
 
-	   // AMD.
+	    BigNumber = constructorFactory();
+	    BigNumber.default = BigNumber.BigNumber = BigNumber;
+
+
+	    // AMD.
 	    if ( true ) {
-	        !(__WEBPACK_AMD_DEFINE_RESULT__ = function () { return constructorFactory(); }.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	        !(__WEBPACK_AMD_DEFINE_RESULT__ = function () { return BigNumber; }.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 
 	    // Node.js and other environments that support module.exports.
 	    } else if ( typeof module != 'undefined' && module.exports ) {
-	        module.exports = constructorFactory();
-
-	        // Split string stops browserify adding crypto shim.
-	        if ( !cryptoObj ) try { cryptoObj = require('cry' + 'pto'); } catch (e) {}
+	        module.exports = BigNumber;
 
 	    // Browser.
 	    } else {
 	        if ( !globalObj ) globalObj = typeof self != 'undefined' ? self : Function('return this')();
-	        globalObj.BigNumber = constructorFactory();
+	        globalObj.BigNumber = BigNumber;
 	    }
 	})(this);
 
