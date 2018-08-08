@@ -2780,9 +2780,9 @@ var StellarBase =
 	      case "raw":
 	        buffer = input;break;
 	      case "hex":
-	        buffer = new Buffer(input, "hex");break;
+	        buffer = Buffer.from(input, "hex");break;
 	      case "base64":
-	        buffer = new Buffer(input, "base64");break;
+	        buffer = Buffer.from(input, "base64");break;
 	      default:
 	        throw new Error("Invalid format " + format + ", must be \"raw\", \"hex\", \"base64\"");
 	    }
@@ -4913,8 +4913,7 @@ var StellarBase =
 	    writeBufferPadded: {
 	      value: function writeBufferPadded(buffer) {
 	        var padding = calculatePadding(buffer.length);
-	        var paddingBuffer = new Buffer(padding);
-	        paddingBuffer.fill(0);
+	        var paddingBuffer = Buffer.alloc(padding);
 
 	        return this.copyFrom(new Cursor(buffer)).copyFrom(new Cursor(paddingBuffer));
 	      }
@@ -12065,7 +12064,7 @@ var StellarBase =
 	        if (!isString(value)) {
 	          throw new Error("XDR Write Error: " + value + " is not a string,");
 	        }
-	        var buffer = new Buffer(value, "utf8");
+	        var buffer = Buffer.from(value, "utf8");
 
 	        Int.write(buffer.length, io);
 	        io.writeBufferPadded(buffer);
@@ -12076,7 +12075,7 @@ var StellarBase =
 	        if (!isString(value)) {
 	          return false;
 	        }
-	        var buffer = new Buffer(value, "utf8");
+	        var buffer = Buffer.from(value, "utf8");
 	        return buffer.length <= this._maxLength;
 	      }
 	    }
@@ -13003,6 +13002,17 @@ var StellarBase =
 	        return result;
 	      }
 	    },
+	    fromValue: {
+	      value: function fromValue(value) {
+	        var result = this._byValue.get(value);
+
+	        if (!result) {
+	          throw new Error("" + value + " is not a value of any member of " + this.enumName);
+	        }
+
+	        return result;
+	      }
+	    },
 	    create: {
 	      value: function create(context, name, members) {
 	        var ChildEnum = (function (_Enum) {
@@ -13408,10 +13418,9 @@ var StellarBase =
 
 	var pick = _interopRequire(__webpack_require__(198));
 
-	// types is the root
-	var types = {};
-
 	function config(fn) {
+	  var types = arguments[1] === undefined ? {} : arguments[1];
+
 	  if (fn) {
 	    var builder = new TypeBuilder(types);
 	    fn(builder);
