@@ -115,7 +115,7 @@ var StellarBase =
 	  }
 	});
 
-	var _transaction = __webpack_require__(321);
+	var _transaction = __webpack_require__(310);
 
 	Object.defineProperty(exports, 'Transaction', {
 	  enumerable: true,
@@ -124,7 +124,7 @@ var StellarBase =
 	  }
 	});
 
-	var _transaction_builder = __webpack_require__(511);
+	var _transaction_builder = __webpack_require__(373);
 
 	Object.defineProperty(exports, 'TransactionBuilder', {
 	  enumerable: true,
@@ -145,7 +145,7 @@ var StellarBase =
 	  }
 	});
 
-	var _asset = __webpack_require__(456);
+	var _asset = __webpack_require__(327);
 
 	Object.defineProperty(exports, 'Asset', {
 	  enumerable: true,
@@ -154,7 +154,7 @@ var StellarBase =
 	  }
 	});
 
-	var _operation = __webpack_require__(439);
+	var _operation = __webpack_require__(311);
 
 	Object.defineProperty(exports, 'Operation', {
 	  enumerable: true,
@@ -181,7 +181,7 @@ var StellarBase =
 	  }
 	});
 
-	var _memo = __webpack_require__(510);
+	var _memo = __webpack_require__(372);
 
 	Object.keys(_memo).forEach(function (key) {
 	  if (key === "default" || key === "__esModule") return;
@@ -193,7 +193,7 @@ var StellarBase =
 	  });
 	});
 
-	var _account = __webpack_require__(512);
+	var _account = __webpack_require__(374);
 
 	Object.defineProperty(exports, 'Account', {
 	  enumerable: true,
@@ -9618,2008 +9618,6 @@ var StellarBase =
 
 	  // === xdr source ============================================================
 	  //
-	  //   enum ErrorCode
-	  //   {
-	  //       ERR_MISC = 0, // Unspecific error
-	  //       ERR_DATA = 1, // Malformed data
-	  //       ERR_CONF = 2, // Misconfiguration error
-	  //       ERR_AUTH = 3, // Authentication failure
-	  //       ERR_LOAD = 4  // System overloaded
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.enum("ErrorCode", {
-	    errMisc: 0,
-	    errDatum: 1,
-	    errConf: 2,
-	    errAuth: 3,
-	    errLoad: 4
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct Error
-	  //   {
-	  //       ErrorCode code;
-	  //       string msg<100>;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.struct("Error", [["code", xdr.lookup("ErrorCode")], ["msg", xdr.string(100)]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct AuthCert
-	  //   {
-	  //       Curve25519Public pubkey;
-	  //       uint64 expiration;
-	  //       Signature sig;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.struct("AuthCert", [["pubkey", xdr.lookup("Curve25519Public")], ["expiration", xdr.lookup("Uint64")], ["sig", xdr.lookup("Signature")]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct Hello
-	  //   {
-	  //       uint32 ledgerVersion;
-	  //       uint32 overlayVersion;
-	  //       uint32 overlayMinVersion;
-	  //       Hash networkID;
-	  //       string versionStr<100>;
-	  //       int listeningPort;
-	  //       NodeID peerID;
-	  //       AuthCert cert;
-	  //       uint256 nonce;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.struct("Hello", [["ledgerVersion", xdr.lookup("Uint32")], ["overlayVersion", xdr.lookup("Uint32")], ["overlayMinVersion", xdr.lookup("Uint32")], ["networkId", xdr.lookup("Hash")], ["versionStr", xdr.string(100)], ["listeningPort", xdr.int()], ["peerId", xdr.lookup("NodeId")], ["cert", xdr.lookup("AuthCert")], ["nonce", xdr.lookup("Uint256")]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct Auth
-	  //   {
-	  //       // Empty message, just to confirm
-	  //       // establishment of MAC keys.
-	  //       int unused;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.struct("Auth", [["unused", xdr.int()]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   enum IPAddrType
-	  //   {
-	  //       IPv4 = 0,
-	  //       IPv6 = 1
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.enum("IpAddrType", {
-	    iPv4: 0,
-	    iPv6: 1
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   union switch (IPAddrType type)
-	  //       {
-	  //       case IPv4:
-	  //           opaque ipv4[4];
-	  //       case IPv6:
-	  //           opaque ipv6[16];
-	  //       }
-	  //
-	  // ===========================================================================
-	  xdr.union("PeerAddressIp", {
-	    switchOn: xdr.lookup("IpAddrType"),
-	    switchName: "type",
-	    switches: [["iPv4", "ipv4"], ["iPv6", "ipv6"]],
-	    arms: {
-	      ipv4: xdr.opaque(4),
-	      ipv6: xdr.opaque(16)
-	    }
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct PeerAddress
-	  //   {
-	  //       union switch (IPAddrType type)
-	  //       {
-	  //       case IPv4:
-	  //           opaque ipv4[4];
-	  //       case IPv6:
-	  //           opaque ipv6[16];
-	  //       }
-	  //       ip;
-	  //       uint32 port;
-	  //       uint32 numFailures;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.struct("PeerAddress", [["ip", xdr.lookup("PeerAddressIp")], ["port", xdr.lookup("Uint32")], ["numFailures", xdr.lookup("Uint32")]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   enum MessageType
-	  //   {
-	  //       ERROR_MSG = 0,
-	  //       AUTH = 2,
-	  //       DONT_HAVE = 3,
-	  //   
-	  //       GET_PEERS = 4, // gets a list of peers this guy knows about
-	  //       PEERS = 5,
-	  //   
-	  //       GET_TX_SET = 6, // gets a particular txset by hash
-	  //       TX_SET = 7,
-	  //   
-	  //       TRANSACTION = 8, // pass on a tx you have heard about
-	  //   
-	  //       // SCP
-	  //       GET_SCP_QUORUMSET = 9,
-	  //       SCP_QUORUMSET = 10,
-	  //       SCP_MESSAGE = 11,
-	  //       GET_SCP_STATE = 12,
-	  //   
-	  //       // new messages
-	  //       HELLO = 13
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.enum("MessageType", {
-	    errorMsg: 0,
-	    auth: 2,
-	    dontHave: 3,
-	    getPeer: 4,
-	    peer: 5,
-	    getTxSet: 6,
-	    txSet: 7,
-	    transaction: 8,
-	    getScpQuorumset: 9,
-	    scpQuorumset: 10,
-	    scpMessage: 11,
-	    getScpState: 12,
-	    hello: 13
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct DontHave
-	  //   {
-	  //       MessageType type;
-	  //       uint256 reqHash;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.struct("DontHave", [["type", xdr.lookup("MessageType")], ["reqHash", xdr.lookup("Uint256")]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   union StellarMessage switch (MessageType type)
-	  //   {
-	  //   case ERROR_MSG:
-	  //       Error error;
-	  //   case HELLO:
-	  //       Hello hello;
-	  //   case AUTH:
-	  //       Auth auth;
-	  //   case DONT_HAVE:
-	  //       DontHave dontHave;
-	  //   case GET_PEERS:
-	  //       void;
-	  //   case PEERS:
-	  //       PeerAddress peers<100>;
-	  //   
-	  //   case GET_TX_SET:
-	  //       uint256 txSetHash;
-	  //   case TX_SET:
-	  //       TransactionSet txSet;
-	  //   
-	  //   case TRANSACTION:
-	  //       TransactionEnvelope transaction;
-	  //   
-	  //   // SCP
-	  //   case GET_SCP_QUORUMSET:
-	  //       uint256 qSetHash;
-	  //   case SCP_QUORUMSET:
-	  //       SCPQuorumSet qSet;
-	  //   case SCP_MESSAGE:
-	  //       SCPEnvelope envelope;
-	  //   case GET_SCP_STATE:
-	  //       uint32 getSCPLedgerSeq; // ledger seq requested ; if 0, requests the latest
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.union("StellarMessage", {
-	    switchOn: xdr.lookup("MessageType"),
-	    switchName: "type",
-	    switches: [["errorMsg", "error"], ["hello", "hello"], ["auth", "auth"], ["dontHave", "dontHave"], ["getPeer", xdr.void()], ["peer", "peers"], ["getTxSet", "txSetHash"], ["txSet", "txSet"], ["transaction", "transaction"], ["getScpQuorumset", "qSetHash"], ["scpQuorumset", "qSet"], ["scpMessage", "envelope"], ["getScpState", "getScpLedgerSeq"]],
-	    arms: {
-	      error: xdr.lookup("Error"),
-	      hello: xdr.lookup("Hello"),
-	      auth: xdr.lookup("Auth"),
-	      dontHave: xdr.lookup("DontHave"),
-	      peers: xdr.varArray(xdr.lookup("PeerAddress"), 100),
-	      txSetHash: xdr.lookup("Uint256"),
-	      txSet: xdr.lookup("TransactionSet"),
-	      transaction: xdr.lookup("TransactionEnvelope"),
-	      qSetHash: xdr.lookup("Uint256"),
-	      qSet: xdr.lookup("ScpQuorumSet"),
-	      envelope: xdr.lookup("ScpEnvelope"),
-	      getScpLedgerSeq: xdr.lookup("Uint32")
-	    }
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct
-	  //   {
-	  //      uint64 sequence;
-	  //      StellarMessage message;
-	  //      HmacSha256Mac mac;
-	  //       }
-	  //
-	  // ===========================================================================
-	  xdr.struct("AuthenticatedMessageV0", [["sequence", xdr.lookup("Uint64")], ["message", xdr.lookup("StellarMessage")], ["mac", xdr.lookup("HmacSha256Mac")]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   union AuthenticatedMessage switch (uint32 v)
-	  //   {
-	  //   case 0:
-	  //       struct
-	  //   {
-	  //      uint64 sequence;
-	  //      StellarMessage message;
-	  //      HmacSha256Mac mac;
-	  //       } v0;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.union("AuthenticatedMessage", {
-	    switchOn: xdr.lookup("Uint32"),
-	    switchName: "v",
-	    switches: [[0, "v0"]],
-	    arms: {
-	      v0: xdr.lookup("AuthenticatedMessageV0")
-	    }
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   typedef opaque Hash[32];
-	  //
-	  // ===========================================================================
-	  xdr.typedef("Hash", xdr.opaque(32));
-
-	  // === xdr source ============================================================
-	  //
-	  //   typedef opaque uint256[32];
-	  //
-	  // ===========================================================================
-	  xdr.typedef("Uint256", xdr.opaque(32));
-
-	  // === xdr source ============================================================
-	  //
-	  //   typedef unsigned int uint32;
-	  //
-	  // ===========================================================================
-	  xdr.typedef("Uint32", xdr.uint());
-
-	  // === xdr source ============================================================
-	  //
-	  //   typedef int int32;
-	  //
-	  // ===========================================================================
-	  xdr.typedef("Int32", xdr.int());
-
-	  // === xdr source ============================================================
-	  //
-	  //   typedef unsigned hyper uint64;
-	  //
-	  // ===========================================================================
-	  xdr.typedef("Uint64", xdr.uhyper());
-
-	  // === xdr source ============================================================
-	  //
-	  //   typedef hyper int64;
-	  //
-	  // ===========================================================================
-	  xdr.typedef("Int64", xdr.hyper());
-
-	  // === xdr source ============================================================
-	  //
-	  //   enum CryptoKeyType
-	  //   {
-	  //       KEY_TYPE_ED25519 = 0,
-	  //       KEY_TYPE_PRE_AUTH_TX = 1,
-	  //       KEY_TYPE_HASH_X = 2
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.enum("CryptoKeyType", {
-	    keyTypeEd25519: 0,
-	    keyTypePreAuthTx: 1,
-	    keyTypeHashX: 2
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   enum PublicKeyType
-	  //   {
-	  //       PUBLIC_KEY_TYPE_ED25519 = KEY_TYPE_ED25519
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.enum("PublicKeyType", {
-	    publicKeyTypeEd25519: 0
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   enum SignerKeyType
-	  //   {
-	  //       SIGNER_KEY_TYPE_ED25519 = KEY_TYPE_ED25519,
-	  //       SIGNER_KEY_TYPE_PRE_AUTH_TX = KEY_TYPE_PRE_AUTH_TX,
-	  //       SIGNER_KEY_TYPE_HASH_X = KEY_TYPE_HASH_X
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.enum("SignerKeyType", {
-	    signerKeyTypeEd25519: 0,
-	    signerKeyTypePreAuthTx: 1,
-	    signerKeyTypeHashX: 2
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   union PublicKey switch (PublicKeyType type)
-	  //   {
-	  //   case PUBLIC_KEY_TYPE_ED25519:
-	  //       uint256 ed25519;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.union("PublicKey", {
-	    switchOn: xdr.lookup("PublicKeyType"),
-	    switchName: "type",
-	    switches: [["publicKeyTypeEd25519", "ed25519"]],
-	    arms: {
-	      ed25519: xdr.lookup("Uint256")
-	    }
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   union SignerKey switch (SignerKeyType type)
-	  //   {
-	  //   case SIGNER_KEY_TYPE_ED25519:
-	  //       uint256 ed25519;
-	  //   case SIGNER_KEY_TYPE_PRE_AUTH_TX:
-	  //       /* SHA-256 Hash of TransactionSignaturePayload structure */
-	  //       uint256 preAuthTx;
-	  //   case SIGNER_KEY_TYPE_HASH_X:
-	  //       /* Hash of random 256 bit preimage X */
-	  //       uint256 hashX;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.union("SignerKey", {
-	    switchOn: xdr.lookup("SignerKeyType"),
-	    switchName: "type",
-	    switches: [["signerKeyTypeEd25519", "ed25519"], ["signerKeyTypePreAuthTx", "preAuthTx"], ["signerKeyTypeHashX", "hashX"]],
-	    arms: {
-	      ed25519: xdr.lookup("Uint256"),
-	      preAuthTx: xdr.lookup("Uint256"),
-	      hashX: xdr.lookup("Uint256")
-	    }
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   typedef opaque Signature<64>;
-	  //
-	  // ===========================================================================
-	  xdr.typedef("Signature", xdr.varOpaque(64));
-
-	  // === xdr source ============================================================
-	  //
-	  //   typedef opaque SignatureHint[4];
-	  //
-	  // ===========================================================================
-	  xdr.typedef("SignatureHint", xdr.opaque(4));
-
-	  // === xdr source ============================================================
-	  //
-	  //   typedef PublicKey NodeID;
-	  //
-	  // ===========================================================================
-	  xdr.typedef("NodeId", xdr.lookup("PublicKey"));
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct Curve25519Secret
-	  //   {
-	  //           opaque key[32];
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.struct("Curve25519Secret", [["key", xdr.opaque(32)]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct Curve25519Public
-	  //   {
-	  //           opaque key[32];
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.struct("Curve25519Public", [["key", xdr.opaque(32)]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct HmacSha256Key
-	  //   {
-	  //           opaque key[32];
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.struct("HmacSha256Key", [["key", xdr.opaque(32)]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct HmacSha256Mac
-	  //   {
-	  //           opaque mac[32];
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.struct("HmacSha256Mac", [["mac", xdr.opaque(32)]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct DecoratedSignature
-	  //   {
-	  //       SignatureHint hint;  // last 4 bytes of the public key, used as a hint
-	  //       Signature signature; // actual signature
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.struct("DecoratedSignature", [["hint", xdr.lookup("SignatureHint")], ["signature", xdr.lookup("Signature")]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   enum OperationType
-	  //   {
-	  //       CREATE_ACCOUNT = 0,
-	  //       PAYMENT = 1,
-	  //       PATH_PAYMENT = 2,
-	  //       MANAGE_OFFER = 3,
-	  //       CREATE_PASSIVE_OFFER = 4,
-	  //       SET_OPTIONS = 5,
-	  //       CHANGE_TRUST = 6,
-	  //       ALLOW_TRUST = 7,
-	  //       ACCOUNT_MERGE = 8,
-	  //       INFLATION = 9,
-	  //       MANAGE_DATA = 10,
-	  //       BUMP_SEQUENCE = 11
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.enum("OperationType", {
-	    createAccount: 0,
-	    payment: 1,
-	    pathPayment: 2,
-	    manageOffer: 3,
-	    createPassiveOffer: 4,
-	    setOption: 5,
-	    changeTrust: 6,
-	    allowTrust: 7,
-	    accountMerge: 8,
-	    inflation: 9,
-	    manageDatum: 10,
-	    bumpSequence: 11
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct CreateAccountOp
-	  //   {
-	  //       AccountID destination; // account to create
-	  //       int64 startingBalance; // amount they end up with
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.struct("CreateAccountOp", [["destination", xdr.lookup("AccountId")], ["startingBalance", xdr.lookup("Int64")]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct PaymentOp
-	  //   {
-	  //       AccountID destination; // recipient of the payment
-	  //       Asset asset;           // what they end up with
-	  //       int64 amount;          // amount they end up with
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.struct("PaymentOp", [["destination", xdr.lookup("AccountId")], ["asset", xdr.lookup("Asset")], ["amount", xdr.lookup("Int64")]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct PathPaymentOp
-	  //   {
-	  //       Asset sendAsset; // asset we pay with
-	  //       int64 sendMax;   // the maximum amount of sendAsset to
-	  //                        // send (excluding fees).
-	  //                        // The operation will fail if can't be met
-	  //   
-	  //       AccountID destination; // recipient of the payment
-	  //       Asset destAsset;       // what they end up with
-	  //       int64 destAmount;      // amount they end up with
-	  //   
-	  //       Asset path<5>; // additional hops it must go through to get there
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.struct("PathPaymentOp", [["sendAsset", xdr.lookup("Asset")], ["sendMax", xdr.lookup("Int64")], ["destination", xdr.lookup("AccountId")], ["destAsset", xdr.lookup("Asset")], ["destAmount", xdr.lookup("Int64")], ["path", xdr.varArray(xdr.lookup("Asset"), 5)]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct ManageOfferOp
-	  //   {
-	  //       Asset selling;
-	  //       Asset buying;
-	  //       int64 amount; // amount being sold. if set to 0, delete the offer
-	  //       Price price;  // price of thing being sold in terms of what you are buying
-	  //   
-	  //       // 0=create a new offer, otherwise edit an existing offer
-	  //       uint64 offerID;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.struct("ManageOfferOp", [["selling", xdr.lookup("Asset")], ["buying", xdr.lookup("Asset")], ["amount", xdr.lookup("Int64")], ["price", xdr.lookup("Price")], ["offerId", xdr.lookup("Uint64")]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct CreatePassiveOfferOp
-	  //   {
-	  //       Asset selling; // A
-	  //       Asset buying;  // B
-	  //       int64 amount;  // amount taker gets. if set to 0, delete the offer
-	  //       Price price;   // cost of A in terms of B
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.struct("CreatePassiveOfferOp", [["selling", xdr.lookup("Asset")], ["buying", xdr.lookup("Asset")], ["amount", xdr.lookup("Int64")], ["price", xdr.lookup("Price")]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct SetOptionsOp
-	  //   {
-	  //       AccountID* inflationDest; // sets the inflation destination
-	  //   
-	  //       uint32* clearFlags; // which flags to clear
-	  //       uint32* setFlags;   // which flags to set
-	  //   
-	  //       // account threshold manipulation
-	  //       uint32* masterWeight; // weight of the master account
-	  //       uint32* lowThreshold;
-	  //       uint32* medThreshold;
-	  //       uint32* highThreshold;
-	  //   
-	  //       string32* homeDomain; // sets the home domain
-	  //   
-	  //       // Add, update or remove a signer for the account
-	  //       // signer is deleted if the weight is 0
-	  //       Signer* signer;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.struct("SetOptionsOp", [["inflationDest", xdr.option(xdr.lookup("AccountId"))], ["clearFlags", xdr.option(xdr.lookup("Uint32"))], ["setFlags", xdr.option(xdr.lookup("Uint32"))], ["masterWeight", xdr.option(xdr.lookup("Uint32"))], ["lowThreshold", xdr.option(xdr.lookup("Uint32"))], ["medThreshold", xdr.option(xdr.lookup("Uint32"))], ["highThreshold", xdr.option(xdr.lookup("Uint32"))], ["homeDomain", xdr.option(xdr.lookup("String32"))], ["signer", xdr.option(xdr.lookup("Signer"))]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct ChangeTrustOp
-	  //   {
-	  //       Asset line;
-	  //   
-	  //       // if limit is set to 0, deletes the trust line
-	  //       int64 limit;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.struct("ChangeTrustOp", [["line", xdr.lookup("Asset")], ["limit", xdr.lookup("Int64")]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   union switch (AssetType type)
-	  //       {
-	  //       // ASSET_TYPE_NATIVE is not allowed
-	  //       case ASSET_TYPE_CREDIT_ALPHANUM4:
-	  //           opaque assetCode4[4];
-	  //   
-	  //       case ASSET_TYPE_CREDIT_ALPHANUM12:
-	  //           opaque assetCode12[12];
-	  //   
-	  //           // add other asset types here in the future
-	  //       }
-	  //
-	  // ===========================================================================
-	  xdr.union("AllowTrustOpAsset", {
-	    switchOn: xdr.lookup("AssetType"),
-	    switchName: "type",
-	    switches: [["assetTypeCreditAlphanum4", "assetCode4"], ["assetTypeCreditAlphanum12", "assetCode12"]],
-	    arms: {
-	      assetCode4: xdr.opaque(4),
-	      assetCode12: xdr.opaque(12)
-	    }
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct AllowTrustOp
-	  //   {
-	  //       AccountID trustor;
-	  //       union switch (AssetType type)
-	  //       {
-	  //       // ASSET_TYPE_NATIVE is not allowed
-	  //       case ASSET_TYPE_CREDIT_ALPHANUM4:
-	  //           opaque assetCode4[4];
-	  //   
-	  //       case ASSET_TYPE_CREDIT_ALPHANUM12:
-	  //           opaque assetCode12[12];
-	  //   
-	  //           // add other asset types here in the future
-	  //       }
-	  //       asset;
-	  //   
-	  //       bool authorize;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.struct("AllowTrustOp", [["trustor", xdr.lookup("AccountId")], ["asset", xdr.lookup("AllowTrustOpAsset")], ["authorize", xdr.bool()]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct ManageDataOp
-	  //   {
-	  //       string64 dataName;
-	  //       DataValue* dataValue; // set to null to clear
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.struct("ManageDataOp", [["dataName", xdr.lookup("String64")], ["dataValue", xdr.option(xdr.lookup("DataValue"))]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct BumpSequenceOp
-	  //   {
-	  //       SequenceNumber bumpTo;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.struct("BumpSequenceOp", [["bumpTo", xdr.lookup("SequenceNumber")]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   union switch (OperationType type)
-	  //       {
-	  //       case CREATE_ACCOUNT:
-	  //           CreateAccountOp createAccountOp;
-	  //       case PAYMENT:
-	  //           PaymentOp paymentOp;
-	  //       case PATH_PAYMENT:
-	  //           PathPaymentOp pathPaymentOp;
-	  //       case MANAGE_OFFER:
-	  //           ManageOfferOp manageOfferOp;
-	  //       case CREATE_PASSIVE_OFFER:
-	  //           CreatePassiveOfferOp createPassiveOfferOp;
-	  //       case SET_OPTIONS:
-	  //           SetOptionsOp setOptionsOp;
-	  //       case CHANGE_TRUST:
-	  //           ChangeTrustOp changeTrustOp;
-	  //       case ALLOW_TRUST:
-	  //           AllowTrustOp allowTrustOp;
-	  //       case ACCOUNT_MERGE:
-	  //           AccountID destination;
-	  //       case INFLATION:
-	  //           void;
-	  //       case MANAGE_DATA:
-	  //           ManageDataOp manageDataOp;
-	  //       case BUMP_SEQUENCE:
-	  //           BumpSequenceOp bumpSequenceOp;
-	  //       }
-	  //
-	  // ===========================================================================
-	  xdr.union("OperationBody", {
-	    switchOn: xdr.lookup("OperationType"),
-	    switchName: "type",
-	    switches: [["createAccount", "createAccountOp"], ["payment", "paymentOp"], ["pathPayment", "pathPaymentOp"], ["manageOffer", "manageOfferOp"], ["createPassiveOffer", "createPassiveOfferOp"], ["setOption", "setOptionsOp"], ["changeTrust", "changeTrustOp"], ["allowTrust", "allowTrustOp"], ["accountMerge", "destination"], ["inflation", xdr.void()], ["manageDatum", "manageDataOp"], ["bumpSequence", "bumpSequenceOp"]],
-	    arms: {
-	      createAccountOp: xdr.lookup("CreateAccountOp"),
-	      paymentOp: xdr.lookup("PaymentOp"),
-	      pathPaymentOp: xdr.lookup("PathPaymentOp"),
-	      manageOfferOp: xdr.lookup("ManageOfferOp"),
-	      createPassiveOfferOp: xdr.lookup("CreatePassiveOfferOp"),
-	      setOptionsOp: xdr.lookup("SetOptionsOp"),
-	      changeTrustOp: xdr.lookup("ChangeTrustOp"),
-	      allowTrustOp: xdr.lookup("AllowTrustOp"),
-	      destination: xdr.lookup("AccountId"),
-	      manageDataOp: xdr.lookup("ManageDataOp"),
-	      bumpSequenceOp: xdr.lookup("BumpSequenceOp")
-	    }
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct Operation
-	  //   {
-	  //       // sourceAccount is the account used to run the operation
-	  //       // if not set, the runtime defaults to "sourceAccount" specified at
-	  //       // the transaction level
-	  //       AccountID* sourceAccount;
-	  //   
-	  //       union switch (OperationType type)
-	  //       {
-	  //       case CREATE_ACCOUNT:
-	  //           CreateAccountOp createAccountOp;
-	  //       case PAYMENT:
-	  //           PaymentOp paymentOp;
-	  //       case PATH_PAYMENT:
-	  //           PathPaymentOp pathPaymentOp;
-	  //       case MANAGE_OFFER:
-	  //           ManageOfferOp manageOfferOp;
-	  //       case CREATE_PASSIVE_OFFER:
-	  //           CreatePassiveOfferOp createPassiveOfferOp;
-	  //       case SET_OPTIONS:
-	  //           SetOptionsOp setOptionsOp;
-	  //       case CHANGE_TRUST:
-	  //           ChangeTrustOp changeTrustOp;
-	  //       case ALLOW_TRUST:
-	  //           AllowTrustOp allowTrustOp;
-	  //       case ACCOUNT_MERGE:
-	  //           AccountID destination;
-	  //       case INFLATION:
-	  //           void;
-	  //       case MANAGE_DATA:
-	  //           ManageDataOp manageDataOp;
-	  //       case BUMP_SEQUENCE:
-	  //           BumpSequenceOp bumpSequenceOp;
-	  //       }
-	  //       body;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.struct("Operation", [["sourceAccount", xdr.option(xdr.lookup("AccountId"))], ["body", xdr.lookup("OperationBody")]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   enum MemoType
-	  //   {
-	  //       MEMO_NONE = 0,
-	  //       MEMO_TEXT = 1,
-	  //       MEMO_ID = 2,
-	  //       MEMO_HASH = 3,
-	  //       MEMO_RETURN = 4
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.enum("MemoType", {
-	    memoNone: 0,
-	    memoText: 1,
-	    memoId: 2,
-	    memoHash: 3,
-	    memoReturn: 4
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   union Memo switch (MemoType type)
-	  //   {
-	  //   case MEMO_NONE:
-	  //       void;
-	  //   case MEMO_TEXT:
-	  //       string text<28>;
-	  //   case MEMO_ID:
-	  //       uint64 id;
-	  //   case MEMO_HASH:
-	  //       Hash hash; // the hash of what to pull from the content server
-	  //   case MEMO_RETURN:
-	  //       Hash retHash; // the hash of the tx you are rejecting
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.union("Memo", {
-	    switchOn: xdr.lookup("MemoType"),
-	    switchName: "type",
-	    switches: [["memoNone", xdr.void()], ["memoText", "text"], ["memoId", "id"], ["memoHash", "hash"], ["memoReturn", "retHash"]],
-	    arms: {
-	      text: xdr.string(28),
-	      id: xdr.lookup("Uint64"),
-	      hash: xdr.lookup("Hash"),
-	      retHash: xdr.lookup("Hash")
-	    }
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct TimeBounds
-	  //   {
-	  //       uint64 minTime;
-	  //       uint64 maxTime; // 0 here means no maxTime
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.struct("TimeBounds", [["minTime", xdr.lookup("Uint64")], ["maxTime", xdr.lookup("Uint64")]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   union switch (int v)
-	  //       {
-	  //       case 0:
-	  //           void;
-	  //       }
-	  //
-	  // ===========================================================================
-	  xdr.union("TransactionExt", {
-	    switchOn: xdr.int(),
-	    switchName: "v",
-	    switches: [[0, xdr.void()]],
-	    arms: {}
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct Transaction
-	  //   {
-	  //       // account used to run the transaction
-	  //       AccountID sourceAccount;
-	  //   
-	  //       // the fee the sourceAccount will pay
-	  //       uint32 fee;
-	  //   
-	  //       // sequence number to consume in the account
-	  //       SequenceNumber seqNum;
-	  //   
-	  //       // validity range (inclusive) for the last ledger close time
-	  //       TimeBounds* timeBounds;
-	  //   
-	  //       Memo memo;
-	  //   
-	  //       Operation operations<100>;
-	  //   
-	  //       // reserved for future use
-	  //       union switch (int v)
-	  //       {
-	  //       case 0:
-	  //           void;
-	  //       }
-	  //       ext;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.struct("Transaction", [["sourceAccount", xdr.lookup("AccountId")], ["fee", xdr.lookup("Uint32")], ["seqNum", xdr.lookup("SequenceNumber")], ["timeBounds", xdr.option(xdr.lookup("TimeBounds"))], ["memo", xdr.lookup("Memo")], ["operations", xdr.varArray(xdr.lookup("Operation"), 100)], ["ext", xdr.lookup("TransactionExt")]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   union switch (EnvelopeType type)
-	  //       {
-	  //       case ENVELOPE_TYPE_TX:
-	  //           Transaction tx;
-	  //           /* All other values of type are invalid */
-	  //       }
-	  //
-	  // ===========================================================================
-	  xdr.union("TransactionSignaturePayloadTaggedTransaction", {
-	    switchOn: xdr.lookup("EnvelopeType"),
-	    switchName: "type",
-	    switches: [["envelopeTypeTx", "tx"]],
-	    arms: {
-	      tx: xdr.lookup("Transaction")
-	    }
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct TransactionSignaturePayload
-	  //   {
-	  //       Hash networkId;
-	  //       union switch (EnvelopeType type)
-	  //       {
-	  //       case ENVELOPE_TYPE_TX:
-	  //           Transaction tx;
-	  //           /* All other values of type are invalid */
-	  //       }
-	  //       taggedTransaction;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.struct("TransactionSignaturePayload", [["networkId", xdr.lookup("Hash")], ["taggedTransaction", xdr.lookup("TransactionSignaturePayloadTaggedTransaction")]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct TransactionEnvelope
-	  //   {
-	  //       Transaction tx;
-	  //       /* Each decorated signature is a signature over the SHA256 hash of
-	  //        * a TransactionSignaturePayload */
-	  //       DecoratedSignature signatures<20>;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.struct("TransactionEnvelope", [["tx", xdr.lookup("Transaction")], ["signatures", xdr.varArray(xdr.lookup("DecoratedSignature"), 20)]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct ClaimOfferAtom
-	  //   {
-	  //       // emitted to identify the offer
-	  //       AccountID sellerID; // Account that owns the offer
-	  //       uint64 offerID;
-	  //   
-	  //       // amount and asset taken from the owner
-	  //       Asset assetSold;
-	  //       int64 amountSold;
-	  //   
-	  //       // amount and asset sent to the owner
-	  //       Asset assetBought;
-	  //       int64 amountBought;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.struct("ClaimOfferAtom", [["sellerId", xdr.lookup("AccountId")], ["offerId", xdr.lookup("Uint64")], ["assetSold", xdr.lookup("Asset")], ["amountSold", xdr.lookup("Int64")], ["assetBought", xdr.lookup("Asset")], ["amountBought", xdr.lookup("Int64")]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   enum CreateAccountResultCode
-	  //   {
-	  //       // codes considered as "success" for the operation
-	  //       CREATE_ACCOUNT_SUCCESS = 0, // account was created
-	  //   
-	  //       // codes considered as "failure" for the operation
-	  //       CREATE_ACCOUNT_MALFORMED = -1,   // invalid destination
-	  //       CREATE_ACCOUNT_UNDERFUNDED = -2, // not enough funds in source account
-	  //       CREATE_ACCOUNT_LOW_RESERVE =
-	  //           -3, // would create an account below the min reserve
-	  //       CREATE_ACCOUNT_ALREADY_EXIST = -4 // account already exists
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.enum("CreateAccountResultCode", {
-	    createAccountSuccess: 0,
-	    createAccountMalformed: -1,
-	    createAccountUnderfunded: -2,
-	    createAccountLowReserve: -3,
-	    createAccountAlreadyExist: -4
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   union CreateAccountResult switch (CreateAccountResultCode code)
-	  //   {
-	  //   case CREATE_ACCOUNT_SUCCESS:
-	  //       void;
-	  //   default:
-	  //       void;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.union("CreateAccountResult", {
-	    switchOn: xdr.lookup("CreateAccountResultCode"),
-	    switchName: "code",
-	    switches: [["createAccountSuccess", xdr.void()]],
-	    arms: {},
-	    defaultArm: xdr.void()
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   enum PaymentResultCode
-	  //   {
-	  //       // codes considered as "success" for the operation
-	  //       PAYMENT_SUCCESS = 0, // payment successfuly completed
-	  //   
-	  //       // codes considered as "failure" for the operation
-	  //       PAYMENT_MALFORMED = -1,          // bad input
-	  //       PAYMENT_UNDERFUNDED = -2,        // not enough funds in source account
-	  //       PAYMENT_SRC_NO_TRUST = -3,       // no trust line on source account
-	  //       PAYMENT_SRC_NOT_AUTHORIZED = -4, // source not authorized to transfer
-	  //       PAYMENT_NO_DESTINATION = -5,     // destination account does not exist
-	  //       PAYMENT_NO_TRUST = -6,       // destination missing a trust line for asset
-	  //       PAYMENT_NOT_AUTHORIZED = -7, // destination not authorized to hold asset
-	  //       PAYMENT_LINE_FULL = -8,      // destination would go above their limit
-	  //       PAYMENT_NO_ISSUER = -9       // missing issuer on asset
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.enum("PaymentResultCode", {
-	    paymentSuccess: 0,
-	    paymentMalformed: -1,
-	    paymentUnderfunded: -2,
-	    paymentSrcNoTrust: -3,
-	    paymentSrcNotAuthorized: -4,
-	    paymentNoDestination: -5,
-	    paymentNoTrust: -6,
-	    paymentNotAuthorized: -7,
-	    paymentLineFull: -8,
-	    paymentNoIssuer: -9
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   union PaymentResult switch (PaymentResultCode code)
-	  //   {
-	  //   case PAYMENT_SUCCESS:
-	  //       void;
-	  //   default:
-	  //       void;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.union("PaymentResult", {
-	    switchOn: xdr.lookup("PaymentResultCode"),
-	    switchName: "code",
-	    switches: [["paymentSuccess", xdr.void()]],
-	    arms: {},
-	    defaultArm: xdr.void()
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   enum PathPaymentResultCode
-	  //   {
-	  //       // codes considered as "success" for the operation
-	  //       PATH_PAYMENT_SUCCESS = 0, // success
-	  //   
-	  //       // codes considered as "failure" for the operation
-	  //       PATH_PAYMENT_MALFORMED = -1,          // bad input
-	  //       PATH_PAYMENT_UNDERFUNDED = -2,        // not enough funds in source account
-	  //       PATH_PAYMENT_SRC_NO_TRUST = -3,       // no trust line on source account
-	  //       PATH_PAYMENT_SRC_NOT_AUTHORIZED = -4, // source not authorized to transfer
-	  //       PATH_PAYMENT_NO_DESTINATION = -5,     // destination account does not exist
-	  //       PATH_PAYMENT_NO_TRUST = -6,           // dest missing a trust line for asset
-	  //       PATH_PAYMENT_NOT_AUTHORIZED = -7,     // dest not authorized to hold asset
-	  //       PATH_PAYMENT_LINE_FULL = -8,          // dest would go above their limit
-	  //       PATH_PAYMENT_NO_ISSUER = -9,          // missing issuer on one asset
-	  //       PATH_PAYMENT_TOO_FEW_OFFERS = -10,    // not enough offers to satisfy path
-	  //       PATH_PAYMENT_OFFER_CROSS_SELF = -11,  // would cross one of its own offers
-	  //       PATH_PAYMENT_OVER_SENDMAX = -12       // could not satisfy sendmax
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.enum("PathPaymentResultCode", {
-	    pathPaymentSuccess: 0,
-	    pathPaymentMalformed: -1,
-	    pathPaymentUnderfunded: -2,
-	    pathPaymentSrcNoTrust: -3,
-	    pathPaymentSrcNotAuthorized: -4,
-	    pathPaymentNoDestination: -5,
-	    pathPaymentNoTrust: -6,
-	    pathPaymentNotAuthorized: -7,
-	    pathPaymentLineFull: -8,
-	    pathPaymentNoIssuer: -9,
-	    pathPaymentTooFewOffer: -10,
-	    pathPaymentOfferCrossSelf: -11,
-	    pathPaymentOverSendmax: -12
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct SimplePaymentResult
-	  //   {
-	  //       AccountID destination;
-	  //       Asset asset;
-	  //       int64 amount;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.struct("SimplePaymentResult", [["destination", xdr.lookup("AccountId")], ["asset", xdr.lookup("Asset")], ["amount", xdr.lookup("Int64")]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct
-	  //       {
-	  //           ClaimOfferAtom offers<>;
-	  //           SimplePaymentResult last;
-	  //       }
-	  //
-	  // ===========================================================================
-	  xdr.struct("PathPaymentResultSuccess", [["offers", xdr.varArray(xdr.lookup("ClaimOfferAtom"), 2147483647)], ["last", xdr.lookup("SimplePaymentResult")]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   union PathPaymentResult switch (PathPaymentResultCode code)
-	  //   {
-	  //   case PATH_PAYMENT_SUCCESS:
-	  //       struct
-	  //       {
-	  //           ClaimOfferAtom offers<>;
-	  //           SimplePaymentResult last;
-	  //       } success;
-	  //   case PATH_PAYMENT_NO_ISSUER:
-	  //       Asset noIssuer; // the asset that caused the error
-	  //   default:
-	  //       void;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.union("PathPaymentResult", {
-	    switchOn: xdr.lookup("PathPaymentResultCode"),
-	    switchName: "code",
-	    switches: [["pathPaymentSuccess", "success"], ["pathPaymentNoIssuer", "noIssuer"]],
-	    arms: {
-	      success: xdr.lookup("PathPaymentResultSuccess"),
-	      noIssuer: xdr.lookup("Asset")
-	    },
-	    defaultArm: xdr.void()
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   enum ManageOfferResultCode
-	  //   {
-	  //       // codes considered as "success" for the operation
-	  //       MANAGE_OFFER_SUCCESS = 0,
-	  //   
-	  //       // codes considered as "failure" for the operation
-	  //       MANAGE_OFFER_MALFORMED = -1,     // generated offer would be invalid
-	  //       MANAGE_OFFER_SELL_NO_TRUST = -2, // no trust line for what we're selling
-	  //       MANAGE_OFFER_BUY_NO_TRUST = -3,  // no trust line for what we're buying
-	  //       MANAGE_OFFER_SELL_NOT_AUTHORIZED = -4, // not authorized to sell
-	  //       MANAGE_OFFER_BUY_NOT_AUTHORIZED = -5,  // not authorized to buy
-	  //       MANAGE_OFFER_LINE_FULL = -6,      // can't receive more of what it's buying
-	  //       MANAGE_OFFER_UNDERFUNDED = -7,    // doesn't hold what it's trying to sell
-	  //       MANAGE_OFFER_CROSS_SELF = -8,     // would cross an offer from the same user
-	  //       MANAGE_OFFER_SELL_NO_ISSUER = -9, // no issuer for what we're selling
-	  //       MANAGE_OFFER_BUY_NO_ISSUER = -10, // no issuer for what we're buying
-	  //   
-	  //       // update errors
-	  //       MANAGE_OFFER_NOT_FOUND = -11, // offerID does not match an existing offer
-	  //   
-	  //       MANAGE_OFFER_LOW_RESERVE = -12 // not enough funds to create a new Offer
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.enum("ManageOfferResultCode", {
-	    manageOfferSuccess: 0,
-	    manageOfferMalformed: -1,
-	    manageOfferSellNoTrust: -2,
-	    manageOfferBuyNoTrust: -3,
-	    manageOfferSellNotAuthorized: -4,
-	    manageOfferBuyNotAuthorized: -5,
-	    manageOfferLineFull: -6,
-	    manageOfferUnderfunded: -7,
-	    manageOfferCrossSelf: -8,
-	    manageOfferSellNoIssuer: -9,
-	    manageOfferBuyNoIssuer: -10,
-	    manageOfferNotFound: -11,
-	    manageOfferLowReserve: -12
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   enum ManageOfferEffect
-	  //   {
-	  //       MANAGE_OFFER_CREATED = 0,
-	  //       MANAGE_OFFER_UPDATED = 1,
-	  //       MANAGE_OFFER_DELETED = 2
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.enum("ManageOfferEffect", {
-	    manageOfferCreated: 0,
-	    manageOfferUpdated: 1,
-	    manageOfferDeleted: 2
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   union switch (ManageOfferEffect effect)
-	  //       {
-	  //       case MANAGE_OFFER_CREATED:
-	  //       case MANAGE_OFFER_UPDATED:
-	  //           OfferEntry offer;
-	  //       default:
-	  //           void;
-	  //       }
-	  //
-	  // ===========================================================================
-	  xdr.union("ManageOfferSuccessResultOffer", {
-	    switchOn: xdr.lookup("ManageOfferEffect"),
-	    switchName: "effect",
-	    switches: [["manageOfferCreated", "offer"], ["manageOfferUpdated", "offer"]],
-	    arms: {
-	      offer: xdr.lookup("OfferEntry")
-	    },
-	    defaultArm: xdr.void()
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct ManageOfferSuccessResult
-	  //   {
-	  //       // offers that got claimed while creating this offer
-	  //       ClaimOfferAtom offersClaimed<>;
-	  //   
-	  //       union switch (ManageOfferEffect effect)
-	  //       {
-	  //       case MANAGE_OFFER_CREATED:
-	  //       case MANAGE_OFFER_UPDATED:
-	  //           OfferEntry offer;
-	  //       default:
-	  //           void;
-	  //       }
-	  //       offer;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.struct("ManageOfferSuccessResult", [["offersClaimed", xdr.varArray(xdr.lookup("ClaimOfferAtom"), 2147483647)], ["offer", xdr.lookup("ManageOfferSuccessResultOffer")]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   union ManageOfferResult switch (ManageOfferResultCode code)
-	  //   {
-	  //   case MANAGE_OFFER_SUCCESS:
-	  //       ManageOfferSuccessResult success;
-	  //   default:
-	  //       void;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.union("ManageOfferResult", {
-	    switchOn: xdr.lookup("ManageOfferResultCode"),
-	    switchName: "code",
-	    switches: [["manageOfferSuccess", "success"]],
-	    arms: {
-	      success: xdr.lookup("ManageOfferSuccessResult")
-	    },
-	    defaultArm: xdr.void()
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   enum SetOptionsResultCode
-	  //   {
-	  //       // codes considered as "success" for the operation
-	  //       SET_OPTIONS_SUCCESS = 0,
-	  //       // codes considered as "failure" for the operation
-	  //       SET_OPTIONS_LOW_RESERVE = -1,      // not enough funds to add a signer
-	  //       SET_OPTIONS_TOO_MANY_SIGNERS = -2, // max number of signers already reached
-	  //       SET_OPTIONS_BAD_FLAGS = -3,        // invalid combination of clear/set flags
-	  //       SET_OPTIONS_INVALID_INFLATION = -4,      // inflation account does not exist
-	  //       SET_OPTIONS_CANT_CHANGE = -5,            // can no longer change this option
-	  //       SET_OPTIONS_UNKNOWN_FLAG = -6,           // can't set an unknown flag
-	  //       SET_OPTIONS_THRESHOLD_OUT_OF_RANGE = -7, // bad value for weight/threshold
-	  //       SET_OPTIONS_BAD_SIGNER = -8,             // signer cannot be masterkey
-	  //       SET_OPTIONS_INVALID_HOME_DOMAIN = -9     // malformed home domain
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.enum("SetOptionsResultCode", {
-	    setOptionsSuccess: 0,
-	    setOptionsLowReserve: -1,
-	    setOptionsTooManySigner: -2,
-	    setOptionsBadFlag: -3,
-	    setOptionsInvalidInflation: -4,
-	    setOptionsCantChange: -5,
-	    setOptionsUnknownFlag: -6,
-	    setOptionsThresholdOutOfRange: -7,
-	    setOptionsBadSigner: -8,
-	    setOptionsInvalidHomeDomain: -9
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   union SetOptionsResult switch (SetOptionsResultCode code)
-	  //   {
-	  //   case SET_OPTIONS_SUCCESS:
-	  //       void;
-	  //   default:
-	  //       void;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.union("SetOptionsResult", {
-	    switchOn: xdr.lookup("SetOptionsResultCode"),
-	    switchName: "code",
-	    switches: [["setOptionsSuccess", xdr.void()]],
-	    arms: {},
-	    defaultArm: xdr.void()
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   enum ChangeTrustResultCode
-	  //   {
-	  //       // codes considered as "success" for the operation
-	  //       CHANGE_TRUST_SUCCESS = 0,
-	  //       // codes considered as "failure" for the operation
-	  //       CHANGE_TRUST_MALFORMED = -1,     // bad input
-	  //       CHANGE_TRUST_NO_ISSUER = -2,     // could not find issuer
-	  //       CHANGE_TRUST_INVALID_LIMIT = -3, // cannot drop limit below balance
-	  //                                        // cannot create with a limit of 0
-	  //       CHANGE_TRUST_LOW_RESERVE =
-	  //           -4, // not enough funds to create a new trust line,
-	  //       CHANGE_TRUST_SELF_NOT_ALLOWED = -5 // trusting self is not allowed
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.enum("ChangeTrustResultCode", {
-	    changeTrustSuccess: 0,
-	    changeTrustMalformed: -1,
-	    changeTrustNoIssuer: -2,
-	    changeTrustInvalidLimit: -3,
-	    changeTrustLowReserve: -4,
-	    changeTrustSelfNotAllowed: -5
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   union ChangeTrustResult switch (ChangeTrustResultCode code)
-	  //   {
-	  //   case CHANGE_TRUST_SUCCESS:
-	  //       void;
-	  //   default:
-	  //       void;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.union("ChangeTrustResult", {
-	    switchOn: xdr.lookup("ChangeTrustResultCode"),
-	    switchName: "code",
-	    switches: [["changeTrustSuccess", xdr.void()]],
-	    arms: {},
-	    defaultArm: xdr.void()
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   enum AllowTrustResultCode
-	  //   {
-	  //       // codes considered as "success" for the operation
-	  //       ALLOW_TRUST_SUCCESS = 0,
-	  //       // codes considered as "failure" for the operation
-	  //       ALLOW_TRUST_MALFORMED = -1,     // asset is not ASSET_TYPE_ALPHANUM
-	  //       ALLOW_TRUST_NO_TRUST_LINE = -2, // trustor does not have a trustline
-	  //                                       // source account does not require trust
-	  //       ALLOW_TRUST_TRUST_NOT_REQUIRED = -3,
-	  //       ALLOW_TRUST_CANT_REVOKE = -4,     // source account can't revoke trust,
-	  //       ALLOW_TRUST_SELF_NOT_ALLOWED = -5 // trusting self is not allowed
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.enum("AllowTrustResultCode", {
-	    allowTrustSuccess: 0,
-	    allowTrustMalformed: -1,
-	    allowTrustNoTrustLine: -2,
-	    allowTrustTrustNotRequired: -3,
-	    allowTrustCantRevoke: -4,
-	    allowTrustSelfNotAllowed: -5
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   union AllowTrustResult switch (AllowTrustResultCode code)
-	  //   {
-	  //   case ALLOW_TRUST_SUCCESS:
-	  //       void;
-	  //   default:
-	  //       void;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.union("AllowTrustResult", {
-	    switchOn: xdr.lookup("AllowTrustResultCode"),
-	    switchName: "code",
-	    switches: [["allowTrustSuccess", xdr.void()]],
-	    arms: {},
-	    defaultArm: xdr.void()
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   enum AccountMergeResultCode
-	  //   {
-	  //       // codes considered as "success" for the operation
-	  //       ACCOUNT_MERGE_SUCCESS = 0,
-	  //       // codes considered as "failure" for the operation
-	  //       ACCOUNT_MERGE_MALFORMED = -1,       // can't merge onto itself
-	  //       ACCOUNT_MERGE_NO_ACCOUNT = -2,      // destination does not exist
-	  //       ACCOUNT_MERGE_IMMUTABLE_SET = -3,   // source account has AUTH_IMMUTABLE set
-	  //       ACCOUNT_MERGE_HAS_SUB_ENTRIES = -4, // account has trust lines/offers
-	  //       ACCOUNT_MERGE_SEQNUM_TOO_FAR = -5,  // sequence number is over max allowed
-	  //       ACCOUNT_MERGE_DEST_FULL = -6        // can't add source balance to
-	  //                                           // destination balance
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.enum("AccountMergeResultCode", {
-	    accountMergeSuccess: 0,
-	    accountMergeMalformed: -1,
-	    accountMergeNoAccount: -2,
-	    accountMergeImmutableSet: -3,
-	    accountMergeHasSubEntry: -4,
-	    accountMergeSeqnumTooFar: -5,
-	    accountMergeDestFull: -6
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   union AccountMergeResult switch (AccountMergeResultCode code)
-	  //   {
-	  //   case ACCOUNT_MERGE_SUCCESS:
-	  //       int64 sourceAccountBalance; // how much got transfered from source account
-	  //   default:
-	  //       void;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.union("AccountMergeResult", {
-	    switchOn: xdr.lookup("AccountMergeResultCode"),
-	    switchName: "code",
-	    switches: [["accountMergeSuccess", "sourceAccountBalance"]],
-	    arms: {
-	      sourceAccountBalance: xdr.lookup("Int64")
-	    },
-	    defaultArm: xdr.void()
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   enum InflationResultCode
-	  //   {
-	  //       // codes considered as "success" for the operation
-	  //       INFLATION_SUCCESS = 0,
-	  //       // codes considered as "failure" for the operation
-	  //       INFLATION_NOT_TIME = -1
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.enum("InflationResultCode", {
-	    inflationSuccess: 0,
-	    inflationNotTime: -1
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct InflationPayout // or use PaymentResultAtom to limit types?
-	  //   {
-	  //       AccountID destination;
-	  //       int64 amount;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.struct("InflationPayout", [["destination", xdr.lookup("AccountId")], ["amount", xdr.lookup("Int64")]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   union InflationResult switch (InflationResultCode code)
-	  //   {
-	  //   case INFLATION_SUCCESS:
-	  //       InflationPayout payouts<>;
-	  //   default:
-	  //       void;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.union("InflationResult", {
-	    switchOn: xdr.lookup("InflationResultCode"),
-	    switchName: "code",
-	    switches: [["inflationSuccess", "payouts"]],
-	    arms: {
-	      payouts: xdr.varArray(xdr.lookup("InflationPayout"), 2147483647)
-	    },
-	    defaultArm: xdr.void()
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   enum ManageDataResultCode
-	  //   {
-	  //       // codes considered as "success" for the operation
-	  //       MANAGE_DATA_SUCCESS = 0,
-	  //       // codes considered as "failure" for the operation
-	  //       MANAGE_DATA_NOT_SUPPORTED_YET =
-	  //           -1, // The network hasn't moved to this protocol change yet
-	  //       MANAGE_DATA_NAME_NOT_FOUND =
-	  //           -2, // Trying to remove a Data Entry that isn't there
-	  //       MANAGE_DATA_LOW_RESERVE = -3, // not enough funds to create a new Data Entry
-	  //       MANAGE_DATA_INVALID_NAME = -4 // Name not a valid string
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.enum("ManageDataResultCode", {
-	    manageDataSuccess: 0,
-	    manageDataNotSupportedYet: -1,
-	    manageDataNameNotFound: -2,
-	    manageDataLowReserve: -3,
-	    manageDataInvalidName: -4
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   union ManageDataResult switch (ManageDataResultCode code)
-	  //   {
-	  //   case MANAGE_DATA_SUCCESS:
-	  //       void;
-	  //   default:
-	  //       void;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.union("ManageDataResult", {
-	    switchOn: xdr.lookup("ManageDataResultCode"),
-	    switchName: "code",
-	    switches: [["manageDataSuccess", xdr.void()]],
-	    arms: {},
-	    defaultArm: xdr.void()
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   enum BumpSequenceResultCode
-	  //   {
-	  //       // codes considered as "success" for the operation
-	  //       BUMP_SEQUENCE_SUCCESS = 0,
-	  //       // codes considered as "failure" for the operation
-	  //       BUMP_SEQUENCE_BAD_SEQ = -1 // `bumpTo` is not within bounds
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.enum("BumpSequenceResultCode", {
-	    bumpSequenceSuccess: 0,
-	    bumpSequenceBadSeq: -1
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   union BumpSequenceResult switch (BumpSequenceResultCode code)
-	  //   {
-	  //   case BUMP_SEQUENCE_SUCCESS:
-	  //       void;
-	  //   default:
-	  //       void;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.union("BumpSequenceResult", {
-	    switchOn: xdr.lookup("BumpSequenceResultCode"),
-	    switchName: "code",
-	    switches: [["bumpSequenceSuccess", xdr.void()]],
-	    arms: {},
-	    defaultArm: xdr.void()
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   enum OperationResultCode
-	  //   {
-	  //       opINNER = 0, // inner object result is valid
-	  //   
-	  //       opBAD_AUTH = -1,     // too few valid signatures / wrong network
-	  //       opNO_ACCOUNT = -2,   // source account was not found
-	  //       opNOT_SUPPORTED = -3 // operation not supported at this time
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.enum("OperationResultCode", {
-	    opInner: 0,
-	    opBadAuth: -1,
-	    opNoAccount: -2,
-	    opNotSupported: -3
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   union switch (OperationType type)
-	  //       {
-	  //       case CREATE_ACCOUNT:
-	  //           CreateAccountResult createAccountResult;
-	  //       case PAYMENT:
-	  //           PaymentResult paymentResult;
-	  //       case PATH_PAYMENT:
-	  //           PathPaymentResult pathPaymentResult;
-	  //       case MANAGE_OFFER:
-	  //           ManageOfferResult manageOfferResult;
-	  //       case CREATE_PASSIVE_OFFER:
-	  //           ManageOfferResult createPassiveOfferResult;
-	  //       case SET_OPTIONS:
-	  //           SetOptionsResult setOptionsResult;
-	  //       case CHANGE_TRUST:
-	  //           ChangeTrustResult changeTrustResult;
-	  //       case ALLOW_TRUST:
-	  //           AllowTrustResult allowTrustResult;
-	  //       case ACCOUNT_MERGE:
-	  //           AccountMergeResult accountMergeResult;
-	  //       case INFLATION:
-	  //           InflationResult inflationResult;
-	  //       case MANAGE_DATA:
-	  //           ManageDataResult manageDataResult;
-	  //       case BUMP_SEQUENCE:
-	  //           BumpSequenceResult bumpSeqResult;
-	  //       }
-	  //
-	  // ===========================================================================
-	  xdr.union("OperationResultTr", {
-	    switchOn: xdr.lookup("OperationType"),
-	    switchName: "type",
-	    switches: [["createAccount", "createAccountResult"], ["payment", "paymentResult"], ["pathPayment", "pathPaymentResult"], ["manageOffer", "manageOfferResult"], ["createPassiveOffer", "createPassiveOfferResult"], ["setOption", "setOptionsResult"], ["changeTrust", "changeTrustResult"], ["allowTrust", "allowTrustResult"], ["accountMerge", "accountMergeResult"], ["inflation", "inflationResult"], ["manageDatum", "manageDataResult"], ["bumpSequence", "bumpSeqResult"]],
-	    arms: {
-	      createAccountResult: xdr.lookup("CreateAccountResult"),
-	      paymentResult: xdr.lookup("PaymentResult"),
-	      pathPaymentResult: xdr.lookup("PathPaymentResult"),
-	      manageOfferResult: xdr.lookup("ManageOfferResult"),
-	      createPassiveOfferResult: xdr.lookup("ManageOfferResult"),
-	      setOptionsResult: xdr.lookup("SetOptionsResult"),
-	      changeTrustResult: xdr.lookup("ChangeTrustResult"),
-	      allowTrustResult: xdr.lookup("AllowTrustResult"),
-	      accountMergeResult: xdr.lookup("AccountMergeResult"),
-	      inflationResult: xdr.lookup("InflationResult"),
-	      manageDataResult: xdr.lookup("ManageDataResult"),
-	      bumpSeqResult: xdr.lookup("BumpSequenceResult")
-	    }
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   union OperationResult switch (OperationResultCode code)
-	  //   {
-	  //   case opINNER:
-	  //       union switch (OperationType type)
-	  //       {
-	  //       case CREATE_ACCOUNT:
-	  //           CreateAccountResult createAccountResult;
-	  //       case PAYMENT:
-	  //           PaymentResult paymentResult;
-	  //       case PATH_PAYMENT:
-	  //           PathPaymentResult pathPaymentResult;
-	  //       case MANAGE_OFFER:
-	  //           ManageOfferResult manageOfferResult;
-	  //       case CREATE_PASSIVE_OFFER:
-	  //           ManageOfferResult createPassiveOfferResult;
-	  //       case SET_OPTIONS:
-	  //           SetOptionsResult setOptionsResult;
-	  //       case CHANGE_TRUST:
-	  //           ChangeTrustResult changeTrustResult;
-	  //       case ALLOW_TRUST:
-	  //           AllowTrustResult allowTrustResult;
-	  //       case ACCOUNT_MERGE:
-	  //           AccountMergeResult accountMergeResult;
-	  //       case INFLATION:
-	  //           InflationResult inflationResult;
-	  //       case MANAGE_DATA:
-	  //           ManageDataResult manageDataResult;
-	  //       case BUMP_SEQUENCE:
-	  //           BumpSequenceResult bumpSeqResult;
-	  //       }
-	  //       tr;
-	  //   default:
-	  //       void;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.union("OperationResult", {
-	    switchOn: xdr.lookup("OperationResultCode"),
-	    switchName: "code",
-	    switches: [["opInner", "tr"]],
-	    arms: {
-	      tr: xdr.lookup("OperationResultTr")
-	    },
-	    defaultArm: xdr.void()
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   enum TransactionResultCode
-	  //   {
-	  //       txSUCCESS = 0, // all operations succeeded
-	  //   
-	  //       txFAILED = -1, // one of the operations failed (none were applied)
-	  //   
-	  //       txTOO_EARLY = -2,         // ledger closeTime before minTime
-	  //       txTOO_LATE = -3,          // ledger closeTime after maxTime
-	  //       txMISSING_OPERATION = -4, // no operation was specified
-	  //       txBAD_SEQ = -5,           // sequence number does not match source account
-	  //   
-	  //       txBAD_AUTH = -6,             // too few valid signatures / wrong network
-	  //       txINSUFFICIENT_BALANCE = -7, // fee would bring account below reserve
-	  //       txNO_ACCOUNT = -8,           // source account not found
-	  //       txINSUFFICIENT_FEE = -9,     // fee is too small
-	  //       txBAD_AUTH_EXTRA = -10,      // unused signatures attached to transaction
-	  //       txINTERNAL_ERROR = -11       // an unknown error occured
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.enum("TransactionResultCode", {
-	    txSuccess: 0,
-	    txFailed: -1,
-	    txTooEarly: -2,
-	    txTooLate: -3,
-	    txMissingOperation: -4,
-	    txBadSeq: -5,
-	    txBadAuth: -6,
-	    txInsufficientBalance: -7,
-	    txNoAccount: -8,
-	    txInsufficientFee: -9,
-	    txBadAuthExtra: -10,
-	    txInternalError: -11
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   union switch (TransactionResultCode code)
-	  //       {
-	  //       case txSUCCESS:
-	  //       case txFAILED:
-	  //           OperationResult results<>;
-	  //       default:
-	  //           void;
-	  //       }
-	  //
-	  // ===========================================================================
-	  xdr.union("TransactionResultResult", {
-	    switchOn: xdr.lookup("TransactionResultCode"),
-	    switchName: "code",
-	    switches: [["txSuccess", "results"], ["txFailed", "results"]],
-	    arms: {
-	      results: xdr.varArray(xdr.lookup("OperationResult"), 2147483647)
-	    },
-	    defaultArm: xdr.void()
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   union switch (int v)
-	  //       {
-	  //       case 0:
-	  //           void;
-	  //       }
-	  //
-	  // ===========================================================================
-	  xdr.union("TransactionResultExt", {
-	    switchOn: xdr.int(),
-	    switchName: "v",
-	    switches: [[0, xdr.void()]],
-	    arms: {}
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct TransactionResult
-	  //   {
-	  //       int64 feeCharged; // actual fee charged for the transaction
-	  //   
-	  //       union switch (TransactionResultCode code)
-	  //       {
-	  //       case txSUCCESS:
-	  //       case txFAILED:
-	  //           OperationResult results<>;
-	  //       default:
-	  //           void;
-	  //       }
-	  //       result;
-	  //   
-	  //       // reserved for future use
-	  //       union switch (int v)
-	  //       {
-	  //       case 0:
-	  //           void;
-	  //       }
-	  //       ext;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.struct("TransactionResult", [["feeCharged", xdr.lookup("Int64")], ["result", xdr.lookup("TransactionResultResult")], ["ext", xdr.lookup("TransactionResultExt")]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   typedef opaque Value<>;
-	  //
-	  // ===========================================================================
-	  xdr.typedef("Value", xdr.varOpaque());
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct SCPBallot
-	  //   {
-	  //       uint32 counter; // n
-	  //       Value value;    // x
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.struct("ScpBallot", [["counter", xdr.lookup("Uint32")], ["value", xdr.lookup("Value")]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   enum SCPStatementType
-	  //   {
-	  //       SCP_ST_PREPARE = 0,
-	  //       SCP_ST_CONFIRM = 1,
-	  //       SCP_ST_EXTERNALIZE = 2,
-	  //       SCP_ST_NOMINATE = 3
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.enum("ScpStatementType", {
-	    scpStPrepare: 0,
-	    scpStConfirm: 1,
-	    scpStExternalize: 2,
-	    scpStNominate: 3
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct SCPNomination
-	  //   {
-	  //       Hash quorumSetHash; // D
-	  //       Value votes<>;      // X
-	  //       Value accepted<>;   // Y
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.struct("ScpNomination", [["quorumSetHash", xdr.lookup("Hash")], ["votes", xdr.varArray(xdr.lookup("Value"), 2147483647)], ["accepted", xdr.varArray(xdr.lookup("Value"), 2147483647)]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct
-	  //           {
-	  //               Hash quorumSetHash;       // D
-	  //               SCPBallot ballot;         // b
-	  //               SCPBallot* prepared;      // p
-	  //               SCPBallot* preparedPrime; // p'
-	  //               uint32 nC;                // c.n
-	  //               uint32 nH;                // h.n
-	  //           }
-	  //
-	  // ===========================================================================
-	  xdr.struct("ScpStatementPrepare", [["quorumSetHash", xdr.lookup("Hash")], ["ballot", xdr.lookup("ScpBallot")], ["prepared", xdr.option(xdr.lookup("ScpBallot"))], ["preparedPrime", xdr.option(xdr.lookup("ScpBallot"))], ["nC", xdr.lookup("Uint32")], ["nH", xdr.lookup("Uint32")]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct
-	  //           {
-	  //               SCPBallot ballot;   // b
-	  //               uint32 nPrepared;   // p.n
-	  //               uint32 nCommit;     // c.n
-	  //               uint32 nH;          // h.n
-	  //               Hash quorumSetHash; // D
-	  //           }
-	  //
-	  // ===========================================================================
-	  xdr.struct("ScpStatementConfirm", [["ballot", xdr.lookup("ScpBallot")], ["nPrepared", xdr.lookup("Uint32")], ["nCommit", xdr.lookup("Uint32")], ["nH", xdr.lookup("Uint32")], ["quorumSetHash", xdr.lookup("Hash")]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct
-	  //           {
-	  //               SCPBallot commit;         // c
-	  //               uint32 nH;                // h.n
-	  //               Hash commitQuorumSetHash; // D used before EXTERNALIZE
-	  //           }
-	  //
-	  // ===========================================================================
-	  xdr.struct("ScpStatementExternalize", [["commit", xdr.lookup("ScpBallot")], ["nH", xdr.lookup("Uint32")], ["commitQuorumSetHash", xdr.lookup("Hash")]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   union switch (SCPStatementType type)
-	  //       {
-	  //       case SCP_ST_PREPARE:
-	  //           struct
-	  //           {
-	  //               Hash quorumSetHash;       // D
-	  //               SCPBallot ballot;         // b
-	  //               SCPBallot* prepared;      // p
-	  //               SCPBallot* preparedPrime; // p'
-	  //               uint32 nC;                // c.n
-	  //               uint32 nH;                // h.n
-	  //           } prepare;
-	  //       case SCP_ST_CONFIRM:
-	  //           struct
-	  //           {
-	  //               SCPBallot ballot;   // b
-	  //               uint32 nPrepared;   // p.n
-	  //               uint32 nCommit;     // c.n
-	  //               uint32 nH;          // h.n
-	  //               Hash quorumSetHash; // D
-	  //           } confirm;
-	  //       case SCP_ST_EXTERNALIZE:
-	  //           struct
-	  //           {
-	  //               SCPBallot commit;         // c
-	  //               uint32 nH;                // h.n
-	  //               Hash commitQuorumSetHash; // D used before EXTERNALIZE
-	  //           } externalize;
-	  //       case SCP_ST_NOMINATE:
-	  //           SCPNomination nominate;
-	  //       }
-	  //
-	  // ===========================================================================
-	  xdr.union("ScpStatementPledges", {
-	    switchOn: xdr.lookup("ScpStatementType"),
-	    switchName: "type",
-	    switches: [["scpStPrepare", "prepare"], ["scpStConfirm", "confirm"], ["scpStExternalize", "externalize"], ["scpStNominate", "nominate"]],
-	    arms: {
-	      prepare: xdr.lookup("ScpStatementPrepare"),
-	      confirm: xdr.lookup("ScpStatementConfirm"),
-	      externalize: xdr.lookup("ScpStatementExternalize"),
-	      nominate: xdr.lookup("ScpNomination")
-	    }
-	  });
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct SCPStatement
-	  //   {
-	  //       NodeID nodeID;    // v
-	  //       uint64 slotIndex; // i
-	  //   
-	  //       union switch (SCPStatementType type)
-	  //       {
-	  //       case SCP_ST_PREPARE:
-	  //           struct
-	  //           {
-	  //               Hash quorumSetHash;       // D
-	  //               SCPBallot ballot;         // b
-	  //               SCPBallot* prepared;      // p
-	  //               SCPBallot* preparedPrime; // p'
-	  //               uint32 nC;                // c.n
-	  //               uint32 nH;                // h.n
-	  //           } prepare;
-	  //       case SCP_ST_CONFIRM:
-	  //           struct
-	  //           {
-	  //               SCPBallot ballot;   // b
-	  //               uint32 nPrepared;   // p.n
-	  //               uint32 nCommit;     // c.n
-	  //               uint32 nH;          // h.n
-	  //               Hash quorumSetHash; // D
-	  //           } confirm;
-	  //       case SCP_ST_EXTERNALIZE:
-	  //           struct
-	  //           {
-	  //               SCPBallot commit;         // c
-	  //               uint32 nH;                // h.n
-	  //               Hash commitQuorumSetHash; // D used before EXTERNALIZE
-	  //           } externalize;
-	  //       case SCP_ST_NOMINATE:
-	  //           SCPNomination nominate;
-	  //       }
-	  //       pledges;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.struct("ScpStatement", [["nodeId", xdr.lookup("NodeId")], ["slotIndex", xdr.lookup("Uint64")], ["pledges", xdr.lookup("ScpStatementPledges")]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct SCPEnvelope
-	  //   {
-	  //       SCPStatement statement;
-	  //       Signature signature;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.struct("ScpEnvelope", [["statement", xdr.lookup("ScpStatement")], ["signature", xdr.lookup("Signature")]]);
-
-	  // === xdr source ============================================================
-	  //
-	  //   struct SCPQuorumSet
-	  //   {
-	  //       uint32 threshold;
-	  //       PublicKey validators<>;
-	  //       SCPQuorumSet innerSets<>;
-	  //   };
-	  //
-	  // ===========================================================================
-	  xdr.struct("ScpQuorumSet", [["threshold", xdr.lookup("Uint32")], ["validators", xdr.varArray(xdr.lookup("PublicKey"), 2147483647)], ["innerSets", xdr.varArray(xdr.lookup("ScpQuorumSet"), 2147483647)]]);
-
-	  // === xdr source ============================================================
-	  //
 	  //   typedef PublicKey AccountID;
 	  //
 	  // ===========================================================================
@@ -11655,10 +9653,31 @@ var StellarBase =
 
 	  // === xdr source ============================================================
 	  //
+	  //   typedef uint64 TimePoint;
+	  //
+	  // ===========================================================================
+	  xdr.typedef("TimePoint", xdr.lookup("Uint64"));
+
+	  // === xdr source ============================================================
+	  //
 	  //   typedef opaque DataValue<64>;
 	  //
 	  // ===========================================================================
 	  xdr.typedef("DataValue", xdr.varOpaque(64));
+
+	  // === xdr source ============================================================
+	  //
+	  //   typedef opaque AssetCode4[4];
+	  //
+	  // ===========================================================================
+	  xdr.typedef("AssetCode4", xdr.opaque(4));
+
+	  // === xdr source ============================================================
+	  //
+	  //   typedef opaque AssetCode12[12];
+	  //
+	  // ===========================================================================
+	  xdr.typedef("AssetCode12", xdr.opaque(12));
 
 	  // === xdr source ============================================================
 	  //
@@ -11680,23 +9699,23 @@ var StellarBase =
 	  //
 	  //   struct
 	  //       {
-	  //           opaque assetCode[4]; // 1 to 4 characters
+	  //           AssetCode4 assetCode;
 	  //           AccountID issuer;
 	  //       }
 	  //
 	  // ===========================================================================
-	  xdr.struct("AssetAlphaNum4", [["assetCode", xdr.opaque(4)], ["issuer", xdr.lookup("AccountId")]]);
+	  xdr.struct("AssetAlphaNum4", [["assetCode", xdr.lookup("AssetCode4")], ["issuer", xdr.lookup("AccountId")]]);
 
 	  // === xdr source ============================================================
 	  //
 	  //   struct
 	  //       {
-	  //           opaque assetCode[12]; // 5 to 12 characters
+	  //           AssetCode12 assetCode;
 	  //           AccountID issuer;
 	  //       }
 	  //
 	  // ===========================================================================
-	  xdr.struct("AssetAlphaNum12", [["assetCode", xdr.opaque(12)], ["issuer", xdr.lookup("AccountId")]]);
+	  xdr.struct("AssetAlphaNum12", [["assetCode", xdr.lookup("AssetCode12")], ["issuer", xdr.lookup("AccountId")]]);
 
 	  // === xdr source ============================================================
 	  //
@@ -11708,14 +9727,14 @@ var StellarBase =
 	  //   case ASSET_TYPE_CREDIT_ALPHANUM4:
 	  //       struct
 	  //       {
-	  //           opaque assetCode[4]; // 1 to 4 characters
+	  //           AssetCode4 assetCode;
 	  //           AccountID issuer;
 	  //       } alphaNum4;
 	  //   
 	  //   case ASSET_TYPE_CREDIT_ALPHANUM12:
 	  //       struct
 	  //       {
-	  //           opaque assetCode[12]; // 5 to 12 characters
+	  //           AssetCode12 assetCode;
 	  //           AccountID issuer;
 	  //       } alphaNum12;
 	  //   
@@ -11796,7 +9815,7 @@ var StellarBase =
 	  //   struct Signer
 	  //   {
 	  //       SignerKey key;
-	  //       uint32 weight; // really only need 1byte
+	  //       uint32 weight; // really only need 1 byte
 	  //   };
 	  //
 	  // ===========================================================================
@@ -12099,7 +10118,7 @@ var StellarBase =
 	  //   struct OfferEntry
 	  //   {
 	  //       AccountID sellerID;
-	  //       uint64 offerID;
+	  //       int64 offerID;
 	  //       Asset selling; // A
 	  //       Asset buying;  // B
 	  //       int64 amount;  // amount of A
@@ -12122,7 +10141,7 @@ var StellarBase =
 	  //   };
 	  //
 	  // ===========================================================================
-	  xdr.struct("OfferEntry", [["sellerId", xdr.lookup("AccountId")], ["offerId", xdr.lookup("Uint64")], ["selling", xdr.lookup("Asset")], ["buying", xdr.lookup("Asset")], ["amount", xdr.lookup("Int64")], ["price", xdr.lookup("Price")], ["flags", xdr.lookup("Uint32")], ["ext", xdr.lookup("OfferEntryExt")]]);
+	  xdr.struct("OfferEntry", [["sellerId", xdr.lookup("AccountId")], ["offerId", xdr.lookup("Int64")], ["selling", xdr.lookup("Asset")], ["buying", xdr.lookup("Asset")], ["amount", xdr.lookup("Int64")], ["price", xdr.lookup("Price")], ["flags", xdr.lookup("Uint32")], ["ext", xdr.lookup("OfferEntryExt")]]);
 
 	  // === xdr source ============================================================
 	  //
@@ -12240,14 +10259,16 @@ var StellarBase =
 	  //   {
 	  //       ENVELOPE_TYPE_SCP = 1,
 	  //       ENVELOPE_TYPE_TX = 2,
-	  //       ENVELOPE_TYPE_AUTH = 3
+	  //       ENVELOPE_TYPE_AUTH = 3,
+	  //       ENVELOPE_TYPE_SCPVALUE = 4
 	  //   };
 	  //
 	  // ===========================================================================
 	  xdr.enum("EnvelopeType", {
 	    envelopeTypeScp: 1,
 	    envelopeTypeTx: 2,
-	    envelopeTypeAuth: 3
+	    envelopeTypeAuth: 3,
+	    envelopeTypeScpvalue: 4
 	  });
 
 	  // === xdr source ============================================================
@@ -12259,26 +10280,55 @@ var StellarBase =
 
 	  // === xdr source ============================================================
 	  //
-	  //   union switch (int v)
+	  //   enum StellarValueType
+	  //   {
+	  //       STELLAR_VALUE_BASIC = 0,
+	  //       STELLAR_VALUE_SIGNED = 1
+	  //   };
+	  //
+	  // ===========================================================================
+	  xdr.enum("StellarValueType", {
+	    stellarValueBasic: 0,
+	    stellarValueSigned: 1
+	  });
+
+	  // === xdr source ============================================================
+	  //
+	  //   struct LedgerCloseValueSignature
+	  //   {
+	  //       NodeID nodeID;       // which node introduced the value
+	  //       Signature signature; // nodeID's signature
+	  //   };
+	  //
+	  // ===========================================================================
+	  xdr.struct("LedgerCloseValueSignature", [["nodeId", xdr.lookup("NodeId")], ["signature", xdr.lookup("Signature")]]);
+
+	  // === xdr source ============================================================
+	  //
+	  //   union switch (StellarValueType v)
 	  //       {
-	  //       case 0:
+	  //       case STELLAR_VALUE_BASIC:
 	  //           void;
+	  //       case STELLAR_VALUE_SIGNED:
+	  //           LedgerCloseValueSignature lcValueSignature;
 	  //       }
 	  //
 	  // ===========================================================================
 	  xdr.union("StellarValueExt", {
-	    switchOn: xdr.int(),
+	    switchOn: xdr.lookup("StellarValueType"),
 	    switchName: "v",
-	    switches: [[0, xdr.void()]],
-	    arms: {}
+	    switches: [["stellarValueBasic", xdr.void()], ["stellarValueSigned", "lcValueSignature"]],
+	    arms: {
+	      lcValueSignature: xdr.lookup("LedgerCloseValueSignature")
+	    }
 	  });
 
 	  // === xdr source ============================================================
 	  //
 	  //   struct StellarValue
 	  //   {
-	  //       Hash txSetHash;   // transaction set to apply to previous ledger
-	  //       uint64 closeTime; // network close time
+	  //       Hash txSetHash;      // transaction set to apply to previous ledger
+	  //       TimePoint closeTime; // network close time
 	  //   
 	  //       // upgrades to apply to the previous ledger (usually empty)
 	  //       // this is a vector of encoded 'LedgerUpgrade' so that nodes can drop
@@ -12288,16 +10338,18 @@ var StellarBase =
 	  //       UpgradeType upgrades<6>;
 	  //   
 	  //       // reserved for future use
-	  //       union switch (int v)
+	  //       union switch (StellarValueType v)
 	  //       {
-	  //       case 0:
+	  //       case STELLAR_VALUE_BASIC:
 	  //           void;
+	  //       case STELLAR_VALUE_SIGNED:
+	  //           LedgerCloseValueSignature lcValueSignature;
 	  //       }
 	  //       ext;
 	  //   };
 	  //
 	  // ===========================================================================
-	  xdr.struct("StellarValue", [["txSetHash", xdr.lookup("Hash")], ["closeTime", xdr.lookup("Uint64")], ["upgrades", xdr.varArray(xdr.lookup("UpgradeType"), 6)], ["ext", xdr.lookup("StellarValueExt")]]);
+	  xdr.struct("StellarValue", [["txSetHash", xdr.lookup("Hash")], ["closeTime", xdr.lookup("TimePoint")], ["upgrades", xdr.varArray(xdr.lookup("UpgradeType"), 6)], ["ext", xdr.lookup("StellarValueExt")]]);
 
 	  // === xdr source ============================================================
 	  //
@@ -12429,11 +10481,11 @@ var StellarBase =
 	  //   struct
 	  //       {
 	  //           AccountID sellerID;
-	  //           uint64 offerID;
+	  //           int64 offerID;
 	  //       }
 	  //
 	  // ===========================================================================
-	  xdr.struct("LedgerKeyOffer", [["sellerId", xdr.lookup("AccountId")], ["offerId", xdr.lookup("Uint64")]]);
+	  xdr.struct("LedgerKeyOffer", [["sellerId", xdr.lookup("AccountId")], ["offerId", xdr.lookup("Int64")]]);
 
 	  // === xdr source ============================================================
 	  //
@@ -12467,7 +10519,7 @@ var StellarBase =
 	  //       struct
 	  //       {
 	  //           AccountID sellerID;
-	  //           uint64 offerID;
+	  //           int64 offerID;
 	  //       } offer;
 	  //   
 	  //   case DATA:
@@ -12495,35 +10547,80 @@ var StellarBase =
 	  //
 	  //   enum BucketEntryType
 	  //   {
-	  //       LIVEENTRY = 0,
-	  //       DEADENTRY = 1
+	  //       METAENTRY =
+	  //           -1, // At-and-after protocol 11: bucket metadata, should come first.
+	  //       LIVEENTRY = 0, // Before protocol 11: created-or-updated;
+	  //                      // At-and-after protocol 11: only updated.
+	  //       DEADENTRY = 1,
+	  //       INITENTRY = 2 // At-and-after protocol 11: only created.
 	  //   };
 	  //
 	  // ===========================================================================
 	  xdr.enum("BucketEntryType", {
+	    metaentry: -1,
 	    liveentry: 0,
-	    deadentry: 1
+	    deadentry: 1,
+	    initentry: 2
 	  });
+
+	  // === xdr source ============================================================
+	  //
+	  //   union switch (int v)
+	  //       {
+	  //       case 0:
+	  //           void;
+	  //       }
+	  //
+	  // ===========================================================================
+	  xdr.union("BucketMetadataExt", {
+	    switchOn: xdr.int(),
+	    switchName: "v",
+	    switches: [[0, xdr.void()]],
+	    arms: {}
+	  });
+
+	  // === xdr source ============================================================
+	  //
+	  //   struct BucketMetadata
+	  //   {
+	  //       // Indicates the protocol version used to create / merge this bucket.
+	  //       uint32 ledgerVersion;
+	  //   
+	  //       // reserved for future use
+	  //       union switch (int v)
+	  //       {
+	  //       case 0:
+	  //           void;
+	  //       }
+	  //       ext;
+	  //   };
+	  //
+	  // ===========================================================================
+	  xdr.struct("BucketMetadata", [["ledgerVersion", xdr.lookup("Uint32")], ["ext", xdr.lookup("BucketMetadataExt")]]);
 
 	  // === xdr source ============================================================
 	  //
 	  //   union BucketEntry switch (BucketEntryType type)
 	  //   {
 	  //   case LIVEENTRY:
+	  //   case INITENTRY:
 	  //       LedgerEntry liveEntry;
 	  //   
 	  //   case DEADENTRY:
 	  //       LedgerKey deadEntry;
+	  //   case METAENTRY:
+	  //       BucketMetadata metaEntry;
 	  //   };
 	  //
 	  // ===========================================================================
 	  xdr.union("BucketEntry", {
 	    switchOn: xdr.lookup("BucketEntryType"),
 	    switchName: "type",
-	    switches: [["liveentry", "liveEntry"], ["deadentry", "deadEntry"]],
+	    switches: [["liveentry", "liveEntry"], ["initentry", "liveEntry"], ["deadentry", "deadEntry"], ["metaentry", "metaEntry"]],
 	    arms: {
 	      liveEntry: xdr.lookup("LedgerEntry"),
-	      deadEntry: xdr.lookup("LedgerKey")
+	      deadEntry: xdr.lookup("LedgerKey"),
+	      metaEntry: xdr.lookup("BucketMetadata")
 	    }
 	  });
 
@@ -12771,7 +10868,7 @@ var StellarBase =
 	  //   struct TransactionMetaV1
 	  //   {
 	  //       LedgerEntryChanges txChanges; // tx level changes if any
-	  //       OperationMeta operations<>; // meta for each operation
+	  //       OperationMeta operations<>;   // meta for each operation
 	  //   };
 	  //
 	  // ===========================================================================
@@ -12797,7 +10894,2112 @@ var StellarBase =
 	      v1: xdr.lookup("TransactionMetaV1")
 	    }
 	  });
-	}); // Automatically generated on 2018-10-16T17:42:19+02:00
+
+	  // === xdr source ============================================================
+	  //
+	  //   enum ErrorCode
+	  //   {
+	  //       ERR_MISC = 0, // Unspecific error
+	  //       ERR_DATA = 1, // Malformed data
+	  //       ERR_CONF = 2, // Misconfiguration error
+	  //       ERR_AUTH = 3, // Authentication failure
+	  //       ERR_LOAD = 4  // System overloaded
+	  //   };
+	  //
+	  // ===========================================================================
+	  xdr.enum("ErrorCode", {
+	    errMisc: 0,
+	    errDatum: 1,
+	    errConf: 2,
+	    errAuth: 3,
+	    errLoad: 4
+	  });
+
+	  // === xdr source ============================================================
+	  //
+	  //   struct Error
+	  //   {
+	  //       ErrorCode code;
+	  //       string msg<100>;
+	  //   };
+	  //
+	  // ===========================================================================
+	  xdr.struct("Error", [["code", xdr.lookup("ErrorCode")], ["msg", xdr.string(100)]]);
+
+	  // === xdr source ============================================================
+	  //
+	  //   struct AuthCert
+	  //   {
+	  //       Curve25519Public pubkey;
+	  //       uint64 expiration;
+	  //       Signature sig;
+	  //   };
+	  //
+	  // ===========================================================================
+	  xdr.struct("AuthCert", [["pubkey", xdr.lookup("Curve25519Public")], ["expiration", xdr.lookup("Uint64")], ["sig", xdr.lookup("Signature")]]);
+
+	  // === xdr source ============================================================
+	  //
+	  //   struct Hello
+	  //   {
+	  //       uint32 ledgerVersion;
+	  //       uint32 overlayVersion;
+	  //       uint32 overlayMinVersion;
+	  //       Hash networkID;
+	  //       string versionStr<100>;
+	  //       int listeningPort;
+	  //       NodeID peerID;
+	  //       AuthCert cert;
+	  //       uint256 nonce;
+	  //   };
+	  //
+	  // ===========================================================================
+	  xdr.struct("Hello", [["ledgerVersion", xdr.lookup("Uint32")], ["overlayVersion", xdr.lookup("Uint32")], ["overlayMinVersion", xdr.lookup("Uint32")], ["networkId", xdr.lookup("Hash")], ["versionStr", xdr.string(100)], ["listeningPort", xdr.int()], ["peerId", xdr.lookup("NodeId")], ["cert", xdr.lookup("AuthCert")], ["nonce", xdr.lookup("Uint256")]]);
+
+	  // === xdr source ============================================================
+	  //
+	  //   struct Auth
+	  //   {
+	  //       // Empty message, just to confirm
+	  //       // establishment of MAC keys.
+	  //       int unused;
+	  //   };
+	  //
+	  // ===========================================================================
+	  xdr.struct("Auth", [["unused", xdr.int()]]);
+
+	  // === xdr source ============================================================
+	  //
+	  //   enum IPAddrType
+	  //   {
+	  //       IPv4 = 0,
+	  //       IPv6 = 1
+	  //   };
+	  //
+	  // ===========================================================================
+	  xdr.enum("IpAddrType", {
+	    iPv4: 0,
+	    iPv6: 1
+	  });
+
+	  // === xdr source ============================================================
+	  //
+	  //   union switch (IPAddrType type)
+	  //       {
+	  //       case IPv4:
+	  //           opaque ipv4[4];
+	  //       case IPv6:
+	  //           opaque ipv6[16];
+	  //       }
+	  //
+	  // ===========================================================================
+	  xdr.union("PeerAddressIp", {
+	    switchOn: xdr.lookup("IpAddrType"),
+	    switchName: "type",
+	    switches: [["iPv4", "ipv4"], ["iPv6", "ipv6"]],
+	    arms: {
+	      ipv4: xdr.opaque(4),
+	      ipv6: xdr.opaque(16)
+	    }
+	  });
+
+	  // === xdr source ============================================================
+	  //
+	  //   struct PeerAddress
+	  //   {
+	  //       union switch (IPAddrType type)
+	  //       {
+	  //       case IPv4:
+	  //           opaque ipv4[4];
+	  //       case IPv6:
+	  //           opaque ipv6[16];
+	  //       }
+	  //       ip;
+	  //       uint32 port;
+	  //       uint32 numFailures;
+	  //   };
+	  //
+	  // ===========================================================================
+	  xdr.struct("PeerAddress", [["ip", xdr.lookup("PeerAddressIp")], ["port", xdr.lookup("Uint32")], ["numFailures", xdr.lookup("Uint32")]]);
+
+	  // === xdr source ============================================================
+	  //
+	  //   enum MessageType
+	  //   {
+	  //       ERROR_MSG = 0,
+	  //       AUTH = 2,
+	  //       DONT_HAVE = 3,
+	  //   
+	  //       GET_PEERS = 4, // gets a list of peers this guy knows about
+	  //       PEERS = 5,
+	  //   
+	  //       GET_TX_SET = 6, // gets a particular txset by hash
+	  //       TX_SET = 7,
+	  //   
+	  //       TRANSACTION = 8, // pass on a tx you have heard about
+	  //   
+	  //       // SCP
+	  //       GET_SCP_QUORUMSET = 9,
+	  //       SCP_QUORUMSET = 10,
+	  //       SCP_MESSAGE = 11,
+	  //       GET_SCP_STATE = 12,
+	  //   
+	  //       // new messages
+	  //       HELLO = 13
+	  //   };
+	  //
+	  // ===========================================================================
+	  xdr.enum("MessageType", {
+	    errorMsg: 0,
+	    auth: 2,
+	    dontHave: 3,
+	    getPeer: 4,
+	    peer: 5,
+	    getTxSet: 6,
+	    txSet: 7,
+	    transaction: 8,
+	    getScpQuorumset: 9,
+	    scpQuorumset: 10,
+	    scpMessage: 11,
+	    getScpState: 12,
+	    hello: 13
+	  });
+
+	  // === xdr source ============================================================
+	  //
+	  //   struct DontHave
+	  //   {
+	  //       MessageType type;
+	  //       uint256 reqHash;
+	  //   };
+	  //
+	  // ===========================================================================
+	  xdr.struct("DontHave", [["type", xdr.lookup("MessageType")], ["reqHash", xdr.lookup("Uint256")]]);
+
+	  // === xdr source ============================================================
+	  //
+	  //   union StellarMessage switch (MessageType type)
+	  //   {
+	  //   case ERROR_MSG:
+	  //       Error error;
+	  //   case HELLO:
+	  //       Hello hello;
+	  //   case AUTH:
+	  //       Auth auth;
+	  //   case DONT_HAVE:
+	  //       DontHave dontHave;
+	  //   case GET_PEERS:
+	  //       void;
+	  //   case PEERS:
+	  //       PeerAddress peers<100>;
+	  //   
+	  //   case GET_TX_SET:
+	  //       uint256 txSetHash;
+	  //   case TX_SET:
+	  //       TransactionSet txSet;
+	  //   
+	  //   case TRANSACTION:
+	  //       TransactionEnvelope transaction;
+	  //   
+	  //   // SCP
+	  //   case GET_SCP_QUORUMSET:
+	  //       uint256 qSetHash;
+	  //   case SCP_QUORUMSET:
+	  //       SCPQuorumSet qSet;
+	  //   case SCP_MESSAGE:
+	  //       SCPEnvelope envelope;
+	  //   case GET_SCP_STATE:
+	  //       uint32 getSCPLedgerSeq; // ledger seq requested ; if 0, requests the latest
+	  //   };
+	  //
+	  // ===========================================================================
+	  xdr.union("StellarMessage", {
+	    switchOn: xdr.lookup("MessageType"),
+	    switchName: "type",
+	    switches: [["errorMsg", "error"], ["hello", "hello"], ["auth", "auth"], ["dontHave", "dontHave"], ["getPeer", xdr.void()], ["peer", "peers"], ["getTxSet", "txSetHash"], ["txSet", "txSet"], ["transaction", "transaction"], ["getScpQuorumset", "qSetHash"], ["scpQuorumset", "qSet"], ["scpMessage", "envelope"], ["getScpState", "getScpLedgerSeq"]],
+	    arms: {
+	      error: xdr.lookup("Error"),
+	      hello: xdr.lookup("Hello"),
+	      auth: xdr.lookup("Auth"),
+	      dontHave: xdr.lookup("DontHave"),
+	      peers: xdr.varArray(xdr.lookup("PeerAddress"), 100),
+	      txSetHash: xdr.lookup("Uint256"),
+	      txSet: xdr.lookup("TransactionSet"),
+	      transaction: xdr.lookup("TransactionEnvelope"),
+	      qSetHash: xdr.lookup("Uint256"),
+	      qSet: xdr.lookup("ScpQuorumSet"),
+	      envelope: xdr.lookup("ScpEnvelope"),
+	      getScpLedgerSeq: xdr.lookup("Uint32")
+	    }
+	  });
+
+	  // === xdr source ============================================================
+	  //
+	  //   struct
+	  //   {
+	  //      uint64 sequence;
+	  //      StellarMessage message;
+	  //      HmacSha256Mac mac;
+	  //       }
+	  //
+	  // ===========================================================================
+	  xdr.struct("AuthenticatedMessageV0", [["sequence", xdr.lookup("Uint64")], ["message", xdr.lookup("StellarMessage")], ["mac", xdr.lookup("HmacSha256Mac")]]);
+
+	  // === xdr source ============================================================
+	  //
+	  //   union AuthenticatedMessage switch (uint32 v)
+	  //   {
+	  //   case 0:
+	  //       struct
+	  //   {
+	  //      uint64 sequence;
+	  //      StellarMessage message;
+	  //      HmacSha256Mac mac;
+	  //       } v0;
+	  //   };
+	  //
+	  // ===========================================================================
+	  xdr.union("AuthenticatedMessage", {
+	    switchOn: xdr.lookup("Uint32"),
+	    switchName: "v",
+	    switches: [[0, "v0"]],
+	    arms: {
+	      v0: xdr.lookup("AuthenticatedMessageV0")
+	    }
+	  });
+
+	  // === xdr source ============================================================
+	  //
+	  //   typedef opaque Value<>;
+	  //
+	  // ===========================================================================
+	  xdr.typedef("Value", xdr.varOpaque());
+
+	  // === xdr source ============================================================
+	  //
+	  //   struct SCPBallot
+	  //   {
+	  //       uint32 counter; // n
+	  //       Value value;    // x
+	  //   };
+	  //
+	  // ===========================================================================
+	  xdr.struct("ScpBallot", [["counter", xdr.lookup("Uint32")], ["value", xdr.lookup("Value")]]);
+
+	  // === xdr source ============================================================
+	  //
+	  //   enum SCPStatementType
+	  //   {
+	  //       SCP_ST_PREPARE = 0,
+	  //       SCP_ST_CONFIRM = 1,
+	  //       SCP_ST_EXTERNALIZE = 2,
+	  //       SCP_ST_NOMINATE = 3
+	  //   };
+	  //
+	  // ===========================================================================
+	  xdr.enum("ScpStatementType", {
+	    scpStPrepare: 0,
+	    scpStConfirm: 1,
+	    scpStExternalize: 2,
+	    scpStNominate: 3
+	  });
+
+	  // === xdr source ============================================================
+	  //
+	  //   struct SCPNomination
+	  //   {
+	  //       Hash quorumSetHash; // D
+	  //       Value votes<>;      // X
+	  //       Value accepted<>;   // Y
+	  //   };
+	  //
+	  // ===========================================================================
+	  xdr.struct("ScpNomination", [["quorumSetHash", xdr.lookup("Hash")], ["votes", xdr.varArray(xdr.lookup("Value"), 2147483647)], ["accepted", xdr.varArray(xdr.lookup("Value"), 2147483647)]]);
+
+	  // === xdr source ============================================================
+	  //
+	  //   struct
+	  //           {
+	  //               Hash quorumSetHash;       // D
+	  //               SCPBallot ballot;         // b
+	  //               SCPBallot* prepared;      // p
+	  //               SCPBallot* preparedPrime; // p'
+	  //               uint32 nC;                // c.n
+	  //               uint32 nH;                // h.n
+	  //           }
+	  //
+	  // ===========================================================================
+	  xdr.struct("ScpStatementPrepare", [["quorumSetHash", xdr.lookup("Hash")], ["ballot", xdr.lookup("ScpBallot")], ["prepared", xdr.option(xdr.lookup("ScpBallot"))], ["preparedPrime", xdr.option(xdr.lookup("ScpBallot"))], ["nC", xdr.lookup("Uint32")], ["nH", xdr.lookup("Uint32")]]);
+
+	  // === xdr source ============================================================
+	  //
+	  //   struct
+	  //           {
+	  //               SCPBallot ballot;   // b
+	  //               uint32 nPrepared;   // p.n
+	  //               uint32 nCommit;     // c.n
+	  //               uint32 nH;          // h.n
+	  //               Hash quorumSetHash; // D
+	  //           }
+	  //
+	  // ===========================================================================
+	  xdr.struct("ScpStatementConfirm", [["ballot", xdr.lookup("ScpBallot")], ["nPrepared", xdr.lookup("Uint32")], ["nCommit", xdr.lookup("Uint32")], ["nH", xdr.lookup("Uint32")], ["quorumSetHash", xdr.lookup("Hash")]]);
+
+	  // === xdr source ============================================================
+	  //
+	  //   struct
+	  //           {
+	  //               SCPBallot commit;         // c
+	  //               uint32 nH;                // h.n
+	  //               Hash commitQuorumSetHash; // D used before EXTERNALIZE
+	  //           }
+	  //
+	  // ===========================================================================
+	  xdr.struct("ScpStatementExternalize", [["commit", xdr.lookup("ScpBallot")], ["nH", xdr.lookup("Uint32")], ["commitQuorumSetHash", xdr.lookup("Hash")]]);
+
+	  // === xdr source ============================================================
+	  //
+	  //   union switch (SCPStatementType type)
+	  //       {
+	  //       case SCP_ST_PREPARE:
+	  //           struct
+	  //           {
+	  //               Hash quorumSetHash;       // D
+	  //               SCPBallot ballot;         // b
+	  //               SCPBallot* prepared;      // p
+	  //               SCPBallot* preparedPrime; // p'
+	  //               uint32 nC;                // c.n
+	  //               uint32 nH;                // h.n
+	  //           } prepare;
+	  //       case SCP_ST_CONFIRM:
+	  //           struct
+	  //           {
+	  //               SCPBallot ballot;   // b
+	  //               uint32 nPrepared;   // p.n
+	  //               uint32 nCommit;     // c.n
+	  //               uint32 nH;          // h.n
+	  //               Hash quorumSetHash; // D
+	  //           } confirm;
+	  //       case SCP_ST_EXTERNALIZE:
+	  //           struct
+	  //           {
+	  //               SCPBallot commit;         // c
+	  //               uint32 nH;                // h.n
+	  //               Hash commitQuorumSetHash; // D used before EXTERNALIZE
+	  //           } externalize;
+	  //       case SCP_ST_NOMINATE:
+	  //           SCPNomination nominate;
+	  //       }
+	  //
+	  // ===========================================================================
+	  xdr.union("ScpStatementPledges", {
+	    switchOn: xdr.lookup("ScpStatementType"),
+	    switchName: "type",
+	    switches: [["scpStPrepare", "prepare"], ["scpStConfirm", "confirm"], ["scpStExternalize", "externalize"], ["scpStNominate", "nominate"]],
+	    arms: {
+	      prepare: xdr.lookup("ScpStatementPrepare"),
+	      confirm: xdr.lookup("ScpStatementConfirm"),
+	      externalize: xdr.lookup("ScpStatementExternalize"),
+	      nominate: xdr.lookup("ScpNomination")
+	    }
+	  });
+
+	  // === xdr source ============================================================
+	  //
+	  //   struct SCPStatement
+	  //   {
+	  //       NodeID nodeID;    // v
+	  //       uint64 slotIndex; // i
+	  //   
+	  //       union switch (SCPStatementType type)
+	  //       {
+	  //       case SCP_ST_PREPARE:
+	  //           struct
+	  //           {
+	  //               Hash quorumSetHash;       // D
+	  //               SCPBallot ballot;         // b
+	  //               SCPBallot* prepared;      // p
+	  //               SCPBallot* preparedPrime; // p'
+	  //               uint32 nC;                // c.n
+	  //               uint32 nH;                // h.n
+	  //           } prepare;
+	  //       case SCP_ST_CONFIRM:
+	  //           struct
+	  //           {
+	  //               SCPBallot ballot;   // b
+	  //               uint32 nPrepared;   // p.n
+	  //               uint32 nCommit;     // c.n
+	  //               uint32 nH;          // h.n
+	  //               Hash quorumSetHash; // D
+	  //           } confirm;
+	  //       case SCP_ST_EXTERNALIZE:
+	  //           struct
+	  //           {
+	  //               SCPBallot commit;         // c
+	  //               uint32 nH;                // h.n
+	  //               Hash commitQuorumSetHash; // D used before EXTERNALIZE
+	  //           } externalize;
+	  //       case SCP_ST_NOMINATE:
+	  //           SCPNomination nominate;
+	  //       }
+	  //       pledges;
+	  //   };
+	  //
+	  // ===========================================================================
+	  xdr.struct("ScpStatement", [["nodeId", xdr.lookup("NodeId")], ["slotIndex", xdr.lookup("Uint64")], ["pledges", xdr.lookup("ScpStatementPledges")]]);
+
+	  // === xdr source ============================================================
+	  //
+	  //   struct SCPEnvelope
+	  //   {
+	  //       SCPStatement statement;
+	  //       Signature signature;
+	  //   };
+	  //
+	  // ===========================================================================
+	  xdr.struct("ScpEnvelope", [["statement", xdr.lookup("ScpStatement")], ["signature", xdr.lookup("Signature")]]);
+
+	  // === xdr source ============================================================
+	  //
+	  //   struct SCPQuorumSet
+	  //   {
+	  //       uint32 threshold;
+	  //       PublicKey validators<>;
+	  //       SCPQuorumSet innerSets<>;
+	  //   };
+	  //
+	  // ===========================================================================
+	  xdr.struct("ScpQuorumSet", [["threshold", xdr.lookup("Uint32")], ["validators", xdr.varArray(xdr.lookup("PublicKey"), 2147483647)], ["innerSets", xdr.varArray(xdr.lookup("ScpQuorumSet"), 2147483647)]]);
+
+	  // === xdr source ============================================================
+	  //
+	  //   struct DecoratedSignature
+	  //   {
+	  //       SignatureHint hint;  // last 4 bytes of the public key, used as a hint
+	  //       Signature signature; // actual signature
+	  //   };
+	  //
+	  // ===========================================================================
+	  xdr.struct("DecoratedSignature", [["hint", xdr.lookup("SignatureHint")], ["signature", xdr.lookup("Signature")]]);
+
+	  // === xdr source ============================================================
+	  //
+	  //   enum OperationType
+	  //   {
+	  //       CREATE_ACCOUNT = 0,
+	  //       PAYMENT = 1,
+	  //       PATH_PAYMENT = 2,
+	  //       MANAGE_SELL_OFFER = 3,
+	  //       CREATE_PASSIVE_SELL_OFFER = 4,
+	  //       SET_OPTIONS = 5,
+	  //       CHANGE_TRUST = 6,
+	  //       ALLOW_TRUST = 7,
+	  //       ACCOUNT_MERGE = 8,
+	  //       INFLATION = 9,
+	  //       MANAGE_DATA = 10,
+	  //       BUMP_SEQUENCE = 11,
+	  //       MANAGE_BUY_OFFER = 12
+	  //   };
+	  //
+	  // ===========================================================================
+	  xdr.enum("OperationType", {
+	    createAccount: 0,
+	    payment: 1,
+	    pathPayment: 2,
+	    manageSellOffer: 3,
+	    createPassiveSellOffer: 4,
+	    setOption: 5,
+	    changeTrust: 6,
+	    allowTrust: 7,
+	    accountMerge: 8,
+	    inflation: 9,
+	    manageDatum: 10,
+	    bumpSequence: 11,
+	    manageBuyOffer: 12
+	  });
+
+	  // === xdr source ============================================================
+	  //
+	  //   struct CreateAccountOp
+	  //   {
+	  //       AccountID destination; // account to create
+	  //       int64 startingBalance; // amount they end up with
+	  //   };
+	  //
+	  // ===========================================================================
+	  xdr.struct("CreateAccountOp", [["destination", xdr.lookup("AccountId")], ["startingBalance", xdr.lookup("Int64")]]);
+
+	  // === xdr source ============================================================
+	  //
+	  //   struct PaymentOp
+	  //   {
+	  //       AccountID destination; // recipient of the payment
+	  //       Asset asset;           // what they end up with
+	  //       int64 amount;          // amount they end up with
+	  //   };
+	  //
+	  // ===========================================================================
+	  xdr.struct("PaymentOp", [["destination", xdr.lookup("AccountId")], ["asset", xdr.lookup("Asset")], ["amount", xdr.lookup("Int64")]]);
+
+	  // === xdr source ============================================================
+	  //
+	  //   struct PathPaymentOp
+	  //   {
+	  //       Asset sendAsset; // asset we pay with
+	  //       int64 sendMax;   // the maximum amount of sendAsset to
+	  //                        // send (excluding fees).
+	  //                        // The operation will fail if can't be met
+	  //   
+	  //       AccountID destination; // recipient of the payment
+	  //       Asset destAsset;       // what they end up with
+	  //       int64 destAmount;      // amount they end up with
+	  //   
+	  //       Asset path<5>; // additional hops it must go through to get there
+	  //   };
+	  //
+	  // ===========================================================================
+	  xdr.struct("PathPaymentOp", [["sendAsset", xdr.lookup("Asset")], ["sendMax", xdr.lookup("Int64")], ["destination", xdr.lookup("AccountId")], ["destAsset", xdr.lookup("Asset")], ["destAmount", xdr.lookup("Int64")], ["path", xdr.varArray(xdr.lookup("Asset"), 5)]]);
+
+	  // === xdr source ============================================================
+	  //
+	  //   struct ManageSellOfferOp
+	  //   {
+	  //       Asset selling;
+	  //       Asset buying;
+	  //       int64 amount; // amount being sold. if set to 0, delete the offer
+	  //       Price price;  // price of thing being sold in terms of what you are buying
+	  //   
+	  //       // 0=create a new offer, otherwise edit an existing offer
+	  //       int64 offerID;
+	  //   };
+	  //
+	  // ===========================================================================
+	  xdr.struct("ManageSellOfferOp", [["selling", xdr.lookup("Asset")], ["buying", xdr.lookup("Asset")], ["amount", xdr.lookup("Int64")], ["price", xdr.lookup("Price")], ["offerId", xdr.lookup("Int64")]]);
+
+	  // === xdr source ============================================================
+	  //
+	  //   struct ManageBuyOfferOp
+	  //   {
+	  //       Asset selling;
+	  //       Asset buying;
+	  //       int64 buyAmount; // amount being bought. if set to 0, delete the offer
+	  //       Price price;     // price of thing being bought in terms of what you are
+	  //                        // selling
+	  //   
+	  //       // 0=create a new offer, otherwise edit an existing offer
+	  //       int64 offerID;
+	  //   };
+	  //
+	  // ===========================================================================
+	  xdr.struct("ManageBuyOfferOp", [["selling", xdr.lookup("Asset")], ["buying", xdr.lookup("Asset")], ["buyAmount", xdr.lookup("Int64")], ["price", xdr.lookup("Price")], ["offerId", xdr.lookup("Int64")]]);
+
+	  // === xdr source ============================================================
+	  //
+	  //   struct CreatePassiveSellOfferOp
+	  //   {
+	  //       Asset selling; // A
+	  //       Asset buying;  // B
+	  //       int64 amount;  // amount taker gets. if set to 0, delete the offer
+	  //       Price price;   // cost of A in terms of B
+	  //   };
+	  //
+	  // ===========================================================================
+	  xdr.struct("CreatePassiveSellOfferOp", [["selling", xdr.lookup("Asset")], ["buying", xdr.lookup("Asset")], ["amount", xdr.lookup("Int64")], ["price", xdr.lookup("Price")]]);
+
+	  // === xdr source ============================================================
+	  //
+	  //   struct SetOptionsOp
+	  //   {
+	  //       AccountID* inflationDest; // sets the inflation destination
+	  //   
+	  //       uint32* clearFlags; // which flags to clear
+	  //       uint32* setFlags;   // which flags to set
+	  //   
+	  //       // account threshold manipulation
+	  //       uint32* masterWeight; // weight of the master account
+	  //       uint32* lowThreshold;
+	  //       uint32* medThreshold;
+	  //       uint32* highThreshold;
+	  //   
+	  //       string32* homeDomain; // sets the home domain
+	  //   
+	  //       // Add, update or remove a signer for the account
+	  //       // signer is deleted if the weight is 0
+	  //       Signer* signer;
+	  //   };
+	  //
+	  // ===========================================================================
+	  xdr.struct("SetOptionsOp", [["inflationDest", xdr.option(xdr.lookup("AccountId"))], ["clearFlags", xdr.option(xdr.lookup("Uint32"))], ["setFlags", xdr.option(xdr.lookup("Uint32"))], ["masterWeight", xdr.option(xdr.lookup("Uint32"))], ["lowThreshold", xdr.option(xdr.lookup("Uint32"))], ["medThreshold", xdr.option(xdr.lookup("Uint32"))], ["highThreshold", xdr.option(xdr.lookup("Uint32"))], ["homeDomain", xdr.option(xdr.lookup("String32"))], ["signer", xdr.option(xdr.lookup("Signer"))]]);
+
+	  // === xdr source ============================================================
+	  //
+	  //   struct ChangeTrustOp
+	  //   {
+	  //       Asset line;
+	  //   
+	  //       // if limit is set to 0, deletes the trust line
+	  //       int64 limit;
+	  //   };
+	  //
+	  // ===========================================================================
+	  xdr.struct("ChangeTrustOp", [["line", xdr.lookup("Asset")], ["limit", xdr.lookup("Int64")]]);
+
+	  // === xdr source ============================================================
+	  //
+	  //   union switch (AssetType type)
+	  //       {
+	  //       // ASSET_TYPE_NATIVE is not allowed
+	  //       case ASSET_TYPE_CREDIT_ALPHANUM4:
+	  //           AssetCode4 assetCode4;
+	  //   
+	  //       case ASSET_TYPE_CREDIT_ALPHANUM12:
+	  //           AssetCode12 assetCode12;
+	  //   
+	  //           // add other asset types here in the future
+	  //       }
+	  //
+	  // ===========================================================================
+	  xdr.union("AllowTrustOpAsset", {
+	    switchOn: xdr.lookup("AssetType"),
+	    switchName: "type",
+	    switches: [["assetTypeCreditAlphanum4", "assetCode4"], ["assetTypeCreditAlphanum12", "assetCode12"]],
+	    arms: {
+	      assetCode4: xdr.lookup("AssetCode4"),
+	      assetCode12: xdr.lookup("AssetCode12")
+	    }
+	  });
+
+	  // === xdr source ============================================================
+	  //
+	  //   struct AllowTrustOp
+	  //   {
+	  //       AccountID trustor;
+	  //       union switch (AssetType type)
+	  //       {
+	  //       // ASSET_TYPE_NATIVE is not allowed
+	  //       case ASSET_TYPE_CREDIT_ALPHANUM4:
+	  //           AssetCode4 assetCode4;
+	  //   
+	  //       case ASSET_TYPE_CREDIT_ALPHANUM12:
+	  //           AssetCode12 assetCode12;
+	  //   
+	  //           // add other asset types here in the future
+	  //       }
+	  //       asset;
+	  //   
+	  //       bool authorize;
+	  //   };
+	  //
+	  // ===========================================================================
+	  xdr.struct("AllowTrustOp", [["trustor", xdr.lookup("AccountId")], ["asset", xdr.lookup("AllowTrustOpAsset")], ["authorize", xdr.bool()]]);
+
+	  // === xdr source ============================================================
+	  //
+	  //   struct ManageDataOp
+	  //   {
+	  //       string64 dataName;
+	  //       DataValue* dataValue; // set to null to clear
+	  //   };
+	  //
+	  // ===========================================================================
+	  xdr.struct("ManageDataOp", [["dataName", xdr.lookup("String64")], ["dataValue", xdr.option(xdr.lookup("DataValue"))]]);
+
+	  // === xdr source ============================================================
+	  //
+	  //   struct BumpSequenceOp
+	  //   {
+	  //       SequenceNumber bumpTo;
+	  //   };
+	  //
+	  // ===========================================================================
+	  xdr.struct("BumpSequenceOp", [["bumpTo", xdr.lookup("SequenceNumber")]]);
+
+	  // === xdr source ============================================================
+	  //
+	  //   union switch (OperationType type)
+	  //       {
+	  //       case CREATE_ACCOUNT:
+	  //           CreateAccountOp createAccountOp;
+	  //       case PAYMENT:
+	  //           PaymentOp paymentOp;
+	  //       case PATH_PAYMENT:
+	  //           PathPaymentOp pathPaymentOp;
+	  //       case MANAGE_SELL_OFFER:
+	  //           ManageSellOfferOp manageSellOfferOp;
+	  //       case CREATE_PASSIVE_SELL_OFFER:
+	  //           CreatePassiveSellOfferOp createPassiveSellOfferOp;
+	  //       case SET_OPTIONS:
+	  //           SetOptionsOp setOptionsOp;
+	  //       case CHANGE_TRUST:
+	  //           ChangeTrustOp changeTrustOp;
+	  //       case ALLOW_TRUST:
+	  //           AllowTrustOp allowTrustOp;
+	  //       case ACCOUNT_MERGE:
+	  //           AccountID destination;
+	  //       case INFLATION:
+	  //           void;
+	  //       case MANAGE_DATA:
+	  //           ManageDataOp manageDataOp;
+	  //       case BUMP_SEQUENCE:
+	  //           BumpSequenceOp bumpSequenceOp;
+	  //       case MANAGE_BUY_OFFER:
+	  //           ManageBuyOfferOp manageBuyOfferOp;
+	  //       }
+	  //
+	  // ===========================================================================
+	  xdr.union("OperationBody", {
+	    switchOn: xdr.lookup("OperationType"),
+	    switchName: "type",
+	    switches: [["createAccount", "createAccountOp"], ["payment", "paymentOp"], ["pathPayment", "pathPaymentOp"], ["manageSellOffer", "manageSellOfferOp"], ["createPassiveSellOffer", "createPassiveSellOfferOp"], ["setOption", "setOptionsOp"], ["changeTrust", "changeTrustOp"], ["allowTrust", "allowTrustOp"], ["accountMerge", "destination"], ["inflation", xdr.void()], ["manageDatum", "manageDataOp"], ["bumpSequence", "bumpSequenceOp"], ["manageBuyOffer", "manageBuyOfferOp"]],
+	    arms: {
+	      createAccountOp: xdr.lookup("CreateAccountOp"),
+	      paymentOp: xdr.lookup("PaymentOp"),
+	      pathPaymentOp: xdr.lookup("PathPaymentOp"),
+	      manageSellOfferOp: xdr.lookup("ManageSellOfferOp"),
+	      createPassiveSellOfferOp: xdr.lookup("CreatePassiveSellOfferOp"),
+	      setOptionsOp: xdr.lookup("SetOptionsOp"),
+	      changeTrustOp: xdr.lookup("ChangeTrustOp"),
+	      allowTrustOp: xdr.lookup("AllowTrustOp"),
+	      destination: xdr.lookup("AccountId"),
+	      manageDataOp: xdr.lookup("ManageDataOp"),
+	      bumpSequenceOp: xdr.lookup("BumpSequenceOp"),
+	      manageBuyOfferOp: xdr.lookup("ManageBuyOfferOp")
+	    }
+	  });
+
+	  // === xdr source ============================================================
+	  //
+	  //   struct Operation
+	  //   {
+	  //       // sourceAccount is the account used to run the operation
+	  //       // if not set, the runtime defaults to "sourceAccount" specified at
+	  //       // the transaction level
+	  //       AccountID* sourceAccount;
+	  //   
+	  //       union switch (OperationType type)
+	  //       {
+	  //       case CREATE_ACCOUNT:
+	  //           CreateAccountOp createAccountOp;
+	  //       case PAYMENT:
+	  //           PaymentOp paymentOp;
+	  //       case PATH_PAYMENT:
+	  //           PathPaymentOp pathPaymentOp;
+	  //       case MANAGE_SELL_OFFER:
+	  //           ManageSellOfferOp manageSellOfferOp;
+	  //       case CREATE_PASSIVE_SELL_OFFER:
+	  //           CreatePassiveSellOfferOp createPassiveSellOfferOp;
+	  //       case SET_OPTIONS:
+	  //           SetOptionsOp setOptionsOp;
+	  //       case CHANGE_TRUST:
+	  //           ChangeTrustOp changeTrustOp;
+	  //       case ALLOW_TRUST:
+	  //           AllowTrustOp allowTrustOp;
+	  //       case ACCOUNT_MERGE:
+	  //           AccountID destination;
+	  //       case INFLATION:
+	  //           void;
+	  //       case MANAGE_DATA:
+	  //           ManageDataOp manageDataOp;
+	  //       case BUMP_SEQUENCE:
+	  //           BumpSequenceOp bumpSequenceOp;
+	  //       case MANAGE_BUY_OFFER:
+	  //           ManageBuyOfferOp manageBuyOfferOp;
+	  //       }
+	  //       body;
+	  //   };
+	  //
+	  // ===========================================================================
+	  xdr.struct("Operation", [["sourceAccount", xdr.option(xdr.lookup("AccountId"))], ["body", xdr.lookup("OperationBody")]]);
+
+	  // === xdr source ============================================================
+	  //
+	  //   enum MemoType
+	  //   {
+	  //       MEMO_NONE = 0,
+	  //       MEMO_TEXT = 1,
+	  //       MEMO_ID = 2,
+	  //       MEMO_HASH = 3,
+	  //       MEMO_RETURN = 4
+	  //   };
+	  //
+	  // ===========================================================================
+	  xdr.enum("MemoType", {
+	    memoNone: 0,
+	    memoText: 1,
+	    memoId: 2,
+	    memoHash: 3,
+	    memoReturn: 4
+	  });
+
+	  // === xdr source ============================================================
+	  //
+	  //   union Memo switch (MemoType type)
+	  //   {
+	  //   case MEMO_NONE:
+	  //       void;
+	  //   case MEMO_TEXT:
+	  //       string text<28>;
+	  //   case MEMO_ID:
+	  //       uint64 id;
+	  //   case MEMO_HASH:
+	  //       Hash hash; // the hash of what to pull from the content server
+	  //   case MEMO_RETURN:
+	  //       Hash retHash; // the hash of the tx you are rejecting
+	  //   };
+	  //
+	  // ===========================================================================
+	  xdr.union("Memo", {
+	    switchOn: xdr.lookup("MemoType"),
+	    switchName: "type",
+	    switches: [["memoNone", xdr.void()], ["memoText", "text"], ["memoId", "id"], ["memoHash", "hash"], ["memoReturn", "retHash"]],
+	    arms: {
+	      text: xdr.string(28),
+	      id: xdr.lookup("Uint64"),
+	      hash: xdr.lookup("Hash"),
+	      retHash: xdr.lookup("Hash")
+	    }
+	  });
+
+	  // === xdr source ============================================================
+	  //
+	  //   struct TimeBounds
+	  //   {
+	  //       TimePoint minTime;
+	  //       TimePoint maxTime; // 0 here means no maxTime
+	  //   };
+	  //
+	  // ===========================================================================
+	  xdr.struct("TimeBounds", [["minTime", xdr.lookup("TimePoint")], ["maxTime", xdr.lookup("TimePoint")]]);
+
+	  // === xdr source ============================================================
+	  //
+	  //   const MAX_OPS_PER_TX = 100;
+	  //
+	  // ===========================================================================
+	  xdr.const("MAX_OPS_PER_TX", 100);
+
+	  // === xdr source ============================================================
+	  //
+	  //   union switch (int v)
+	  //       {
+	  //       case 0:
+	  //           void;
+	  //       }
+	  //
+	  // ===========================================================================
+	  xdr.union("TransactionExt", {
+	    switchOn: xdr.int(),
+	    switchName: "v",
+	    switches: [[0, xdr.void()]],
+	    arms: {}
+	  });
+
+	  // === xdr source ============================================================
+	  //
+	  //   struct Transaction
+	  //   {
+	  //       // account used to run the transaction
+	  //       AccountID sourceAccount;
+	  //   
+	  //       // the fee the sourceAccount will pay
+	  //       uint32 fee;
+	  //   
+	  //       // sequence number to consume in the account
+	  //       SequenceNumber seqNum;
+	  //   
+	  //       // validity range (inclusive) for the last ledger close time
+	  //       TimeBounds* timeBounds;
+	  //   
+	  //       Memo memo;
+	  //   
+	  //       Operation operations<MAX_OPS_PER_TX>;
+	  //   
+	  //       // reserved for future use
+	  //       union switch (int v)
+	  //       {
+	  //       case 0:
+	  //           void;
+	  //       }
+	  //       ext;
+	  //   };
+	  //
+	  // ===========================================================================
+	  xdr.struct("Transaction", [["sourceAccount", xdr.lookup("AccountId")], ["fee", xdr.lookup("Uint32")], ["seqNum", xdr.lookup("SequenceNumber")], ["timeBounds", xdr.option(xdr.lookup("TimeBounds"))], ["memo", xdr.lookup("Memo")], ["operations", xdr.varArray(xdr.lookup("Operation"), xdr.lookup("MAX_OPS_PER_TX"))], ["ext", xdr.lookup("TransactionExt")]]);
+
+	  // === xdr source ============================================================
+	  //
+	  //   union switch (EnvelopeType type)
+	  //       {
+	  //       case ENVELOPE_TYPE_TX:
+	  //           Transaction tx;
+	  //           /* All other values of type are invalid */
+	  //       }
+	  //
+	  // ===========================================================================
+	  xdr.union("TransactionSignaturePayloadTaggedTransaction", {
+	    switchOn: xdr.lookup("EnvelopeType"),
+	    switchName: "type",
+	    switches: [["envelopeTypeTx", "tx"]],
+	    arms: {
+	      tx: xdr.lookup("Transaction")
+	    }
+	  });
+
+	  // === xdr source ============================================================
+	  //
+	  //   struct TransactionSignaturePayload
+	  //   {
+	  //       Hash networkId;
+	  //       union switch (EnvelopeType type)
+	  //       {
+	  //       case ENVELOPE_TYPE_TX:
+	  //           Transaction tx;
+	  //           /* All other values of type are invalid */
+	  //       }
+	  //       taggedTransaction;
+	  //   };
+	  //
+	  // ===========================================================================
+	  xdr.struct("TransactionSignaturePayload", [["networkId", xdr.lookup("Hash")], ["taggedTransaction", xdr.lookup("TransactionSignaturePayloadTaggedTransaction")]]);
+
+	  // === xdr source ============================================================
+	  //
+	  //   struct TransactionEnvelope
+	  //   {
+	  //       Transaction tx;
+	  //       /* Each decorated signature is a signature over the SHA256 hash of
+	  //        * a TransactionSignaturePayload */
+	  //       DecoratedSignature signatures<20>;
+	  //   };
+	  //
+	  // ===========================================================================
+	  xdr.struct("TransactionEnvelope", [["tx", xdr.lookup("Transaction")], ["signatures", xdr.varArray(xdr.lookup("DecoratedSignature"), 20)]]);
+
+	  // === xdr source ============================================================
+	  //
+	  //   struct ClaimOfferAtom
+	  //   {
+	  //       // emitted to identify the offer
+	  //       AccountID sellerID; // Account that owns the offer
+	  //       int64 offerID;
+	  //   
+	  //       // amount and asset taken from the owner
+	  //       Asset assetSold;
+	  //       int64 amountSold;
+	  //   
+	  //       // amount and asset sent to the owner
+	  //       Asset assetBought;
+	  //       int64 amountBought;
+	  //   };
+	  //
+	  // ===========================================================================
+	  xdr.struct("ClaimOfferAtom", [["sellerId", xdr.lookup("AccountId")], ["offerId", xdr.lookup("Int64")], ["assetSold", xdr.lookup("Asset")], ["amountSold", xdr.lookup("Int64")], ["assetBought", xdr.lookup("Asset")], ["amountBought", xdr.lookup("Int64")]]);
+
+	  // === xdr source ============================================================
+	  //
+	  //   enum CreateAccountResultCode
+	  //   {
+	  //       // codes considered as "success" for the operation
+	  //       CREATE_ACCOUNT_SUCCESS = 0, // account was created
+	  //   
+	  //       // codes considered as "failure" for the operation
+	  //       CREATE_ACCOUNT_MALFORMED = -1,   // invalid destination
+	  //       CREATE_ACCOUNT_UNDERFUNDED = -2, // not enough funds in source account
+	  //       CREATE_ACCOUNT_LOW_RESERVE =
+	  //           -3, // would create an account below the min reserve
+	  //       CREATE_ACCOUNT_ALREADY_EXIST = -4 // account already exists
+	  //   };
+	  //
+	  // ===========================================================================
+	  xdr.enum("CreateAccountResultCode", {
+	    createAccountSuccess: 0,
+	    createAccountMalformed: -1,
+	    createAccountUnderfunded: -2,
+	    createAccountLowReserve: -3,
+	    createAccountAlreadyExist: -4
+	  });
+
+	  // === xdr source ============================================================
+	  //
+	  //   union CreateAccountResult switch (CreateAccountResultCode code)
+	  //   {
+	  //   case CREATE_ACCOUNT_SUCCESS:
+	  //       void;
+	  //   default:
+	  //       void;
+	  //   };
+	  //
+	  // ===========================================================================
+	  xdr.union("CreateAccountResult", {
+	    switchOn: xdr.lookup("CreateAccountResultCode"),
+	    switchName: "code",
+	    switches: [["createAccountSuccess", xdr.void()]],
+	    arms: {},
+	    defaultArm: xdr.void()
+	  });
+
+	  // === xdr source ============================================================
+	  //
+	  //   enum PaymentResultCode
+	  //   {
+	  //       // codes considered as "success" for the operation
+	  //       PAYMENT_SUCCESS = 0, // payment successfuly completed
+	  //   
+	  //       // codes considered as "failure" for the operation
+	  //       PAYMENT_MALFORMED = -1,          // bad input
+	  //       PAYMENT_UNDERFUNDED = -2,        // not enough funds in source account
+	  //       PAYMENT_SRC_NO_TRUST = -3,       // no trust line on source account
+	  //       PAYMENT_SRC_NOT_AUTHORIZED = -4, // source not authorized to transfer
+	  //       PAYMENT_NO_DESTINATION = -5,     // destination account does not exist
+	  //       PAYMENT_NO_TRUST = -6,       // destination missing a trust line for asset
+	  //       PAYMENT_NOT_AUTHORIZED = -7, // destination not authorized to hold asset
+	  //       PAYMENT_LINE_FULL = -8,      // destination would go above their limit
+	  //       PAYMENT_NO_ISSUER = -9       // missing issuer on asset
+	  //   };
+	  //
+	  // ===========================================================================
+	  xdr.enum("PaymentResultCode", {
+	    paymentSuccess: 0,
+	    paymentMalformed: -1,
+	    paymentUnderfunded: -2,
+	    paymentSrcNoTrust: -3,
+	    paymentSrcNotAuthorized: -4,
+	    paymentNoDestination: -5,
+	    paymentNoTrust: -6,
+	    paymentNotAuthorized: -7,
+	    paymentLineFull: -8,
+	    paymentNoIssuer: -9
+	  });
+
+	  // === xdr source ============================================================
+	  //
+	  //   union PaymentResult switch (PaymentResultCode code)
+	  //   {
+	  //   case PAYMENT_SUCCESS:
+	  //       void;
+	  //   default:
+	  //       void;
+	  //   };
+	  //
+	  // ===========================================================================
+	  xdr.union("PaymentResult", {
+	    switchOn: xdr.lookup("PaymentResultCode"),
+	    switchName: "code",
+	    switches: [["paymentSuccess", xdr.void()]],
+	    arms: {},
+	    defaultArm: xdr.void()
+	  });
+
+	  // === xdr source ============================================================
+	  //
+	  //   enum PathPaymentResultCode
+	  //   {
+	  //       // codes considered as "success" for the operation
+	  //       PATH_PAYMENT_SUCCESS = 0, // success
+	  //   
+	  //       // codes considered as "failure" for the operation
+	  //       PATH_PAYMENT_MALFORMED = -1,          // bad input
+	  //       PATH_PAYMENT_UNDERFUNDED = -2,        // not enough funds in source account
+	  //       PATH_PAYMENT_SRC_NO_TRUST = -3,       // no trust line on source account
+	  //       PATH_PAYMENT_SRC_NOT_AUTHORIZED = -4, // source not authorized to transfer
+	  //       PATH_PAYMENT_NO_DESTINATION = -5,     // destination account does not exist
+	  //       PATH_PAYMENT_NO_TRUST = -6,           // dest missing a trust line for asset
+	  //       PATH_PAYMENT_NOT_AUTHORIZED = -7,     // dest not authorized to hold asset
+	  //       PATH_PAYMENT_LINE_FULL = -8,          // dest would go above their limit
+	  //       PATH_PAYMENT_NO_ISSUER = -9,          // missing issuer on one asset
+	  //       PATH_PAYMENT_TOO_FEW_OFFERS = -10,    // not enough offers to satisfy path
+	  //       PATH_PAYMENT_OFFER_CROSS_SELF = -11,  // would cross one of its own offers
+	  //       PATH_PAYMENT_OVER_SENDMAX = -12       // could not satisfy sendmax
+	  //   };
+	  //
+	  // ===========================================================================
+	  xdr.enum("PathPaymentResultCode", {
+	    pathPaymentSuccess: 0,
+	    pathPaymentMalformed: -1,
+	    pathPaymentUnderfunded: -2,
+	    pathPaymentSrcNoTrust: -3,
+	    pathPaymentSrcNotAuthorized: -4,
+	    pathPaymentNoDestination: -5,
+	    pathPaymentNoTrust: -6,
+	    pathPaymentNotAuthorized: -7,
+	    pathPaymentLineFull: -8,
+	    pathPaymentNoIssuer: -9,
+	    pathPaymentTooFewOffer: -10,
+	    pathPaymentOfferCrossSelf: -11,
+	    pathPaymentOverSendmax: -12
+	  });
+
+	  // === xdr source ============================================================
+	  //
+	  //   struct SimplePaymentResult
+	  //   {
+	  //       AccountID destination;
+	  //       Asset asset;
+	  //       int64 amount;
+	  //   };
+	  //
+	  // ===========================================================================
+	  xdr.struct("SimplePaymentResult", [["destination", xdr.lookup("AccountId")], ["asset", xdr.lookup("Asset")], ["amount", xdr.lookup("Int64")]]);
+
+	  // === xdr source ============================================================
+	  //
+	  //   struct
+	  //       {
+	  //           ClaimOfferAtom offers<>;
+	  //           SimplePaymentResult last;
+	  //       }
+	  //
+	  // ===========================================================================
+	  xdr.struct("PathPaymentResultSuccess", [["offers", xdr.varArray(xdr.lookup("ClaimOfferAtom"), 2147483647)], ["last", xdr.lookup("SimplePaymentResult")]]);
+
+	  // === xdr source ============================================================
+	  //
+	  //   union PathPaymentResult switch (PathPaymentResultCode code)
+	  //   {
+	  //   case PATH_PAYMENT_SUCCESS:
+	  //       struct
+	  //       {
+	  //           ClaimOfferAtom offers<>;
+	  //           SimplePaymentResult last;
+	  //       } success;
+	  //   case PATH_PAYMENT_NO_ISSUER:
+	  //       Asset noIssuer; // the asset that caused the error
+	  //   default:
+	  //       void;
+	  //   };
+	  //
+	  // ===========================================================================
+	  xdr.union("PathPaymentResult", {
+	    switchOn: xdr.lookup("PathPaymentResultCode"),
+	    switchName: "code",
+	    switches: [["pathPaymentSuccess", "success"], ["pathPaymentNoIssuer", "noIssuer"]],
+	    arms: {
+	      success: xdr.lookup("PathPaymentResultSuccess"),
+	      noIssuer: xdr.lookup("Asset")
+	    },
+	    defaultArm: xdr.void()
+	  });
+
+	  // === xdr source ============================================================
+	  //
+	  //   enum ManageSellOfferResultCode
+	  //   {
+	  //       // codes considered as "success" for the operation
+	  //       MANAGE_SELL_OFFER_SUCCESS = 0,
+	  //   
+	  //       // codes considered as "failure" for the operation
+	  //       MANAGE_SELL_OFFER_MALFORMED = -1,     // generated offer would be invalid
+	  //       MANAGE_SELL_OFFER_SELL_NO_TRUST = -2, // no trust line for what we're selling
+	  //       MANAGE_SELL_OFFER_BUY_NO_TRUST = -3,  // no trust line for what we're buying
+	  //       MANAGE_SELL_OFFER_SELL_NOT_AUTHORIZED = -4, // not authorized to sell
+	  //       MANAGE_SELL_OFFER_BUY_NOT_AUTHORIZED = -5,  // not authorized to buy
+	  //       MANAGE_SELL_OFFER_LINE_FULL = -6,      // can't receive more of what it's buying
+	  //       MANAGE_SELL_OFFER_UNDERFUNDED = -7,    // doesn't hold what it's trying to sell
+	  //       MANAGE_SELL_OFFER_CROSS_SELF = -8,     // would cross an offer from the same user
+	  //       MANAGE_SELL_OFFER_SELL_NO_ISSUER = -9, // no issuer for what we're selling
+	  //       MANAGE_SELL_OFFER_BUY_NO_ISSUER = -10, // no issuer for what we're buying
+	  //   
+	  //       // update errors
+	  //       MANAGE_SELL_OFFER_NOT_FOUND = -11, // offerID does not match an existing offer
+	  //   
+	  //       MANAGE_SELL_OFFER_LOW_RESERVE = -12 // not enough funds to create a new Offer
+	  //   };
+	  //
+	  // ===========================================================================
+	  xdr.enum("ManageSellOfferResultCode", {
+	    manageSellOfferSuccess: 0,
+	    manageSellOfferMalformed: -1,
+	    manageSellOfferSellNoTrust: -2,
+	    manageSellOfferBuyNoTrust: -3,
+	    manageSellOfferSellNotAuthorized: -4,
+	    manageSellOfferBuyNotAuthorized: -5,
+	    manageSellOfferLineFull: -6,
+	    manageSellOfferUnderfunded: -7,
+	    manageSellOfferCrossSelf: -8,
+	    manageSellOfferSellNoIssuer: -9,
+	    manageSellOfferBuyNoIssuer: -10,
+	    manageSellOfferNotFound: -11,
+	    manageSellOfferLowReserve: -12
+	  });
+
+	  // === xdr source ============================================================
+	  //
+	  //   enum ManageOfferEffect
+	  //   {
+	  //       MANAGE_OFFER_CREATED = 0,
+	  //       MANAGE_OFFER_UPDATED = 1,
+	  //       MANAGE_OFFER_DELETED = 2
+	  //   };
+	  //
+	  // ===========================================================================
+	  xdr.enum("ManageOfferEffect", {
+	    manageOfferCreated: 0,
+	    manageOfferUpdated: 1,
+	    manageOfferDeleted: 2
+	  });
+
+	  // === xdr source ============================================================
+	  //
+	  //   union switch (ManageOfferEffect effect)
+	  //       {
+	  //       case MANAGE_OFFER_CREATED:
+	  //       case MANAGE_OFFER_UPDATED:
+	  //           OfferEntry offer;
+	  //       default:
+	  //           void;
+	  //       }
+	  //
+	  // ===========================================================================
+	  xdr.union("ManageOfferSuccessResultOffer", {
+	    switchOn: xdr.lookup("ManageOfferEffect"),
+	    switchName: "effect",
+	    switches: [["manageOfferCreated", "offer"], ["manageOfferUpdated", "offer"]],
+	    arms: {
+	      offer: xdr.lookup("OfferEntry")
+	    },
+	    defaultArm: xdr.void()
+	  });
+
+	  // === xdr source ============================================================
+	  //
+	  //   struct ManageOfferSuccessResult
+	  //   {
+	  //       // offers that got claimed while creating this offer
+	  //       ClaimOfferAtom offersClaimed<>;
+	  //   
+	  //       union switch (ManageOfferEffect effect)
+	  //       {
+	  //       case MANAGE_OFFER_CREATED:
+	  //       case MANAGE_OFFER_UPDATED:
+	  //           OfferEntry offer;
+	  //       default:
+	  //           void;
+	  //       }
+	  //       offer;
+	  //   };
+	  //
+	  // ===========================================================================
+	  xdr.struct("ManageOfferSuccessResult", [["offersClaimed", xdr.varArray(xdr.lookup("ClaimOfferAtom"), 2147483647)], ["offer", xdr.lookup("ManageOfferSuccessResultOffer")]]);
+
+	  // === xdr source ============================================================
+	  //
+	  //   union ManageSellOfferResult switch (ManageSellOfferResultCode code)
+	  //   {
+	  //   case MANAGE_SELL_OFFER_SUCCESS:
+	  //       ManageOfferSuccessResult success;
+	  //   default:
+	  //       void;
+	  //   };
+	  //
+	  // ===========================================================================
+	  xdr.union("ManageSellOfferResult", {
+	    switchOn: xdr.lookup("ManageSellOfferResultCode"),
+	    switchName: "code",
+	    switches: [["manageSellOfferSuccess", "success"]],
+	    arms: {
+	      success: xdr.lookup("ManageOfferSuccessResult")
+	    },
+	    defaultArm: xdr.void()
+	  });
+
+	  // === xdr source ============================================================
+	  //
+	  //   enum ManageBuyOfferResultCode
+	  //   {
+	  //       // codes considered as "success" for the operation
+	  //       MANAGE_BUY_OFFER_SUCCESS = 0,
+	  //   
+	  //       // codes considered as "failure" for the operation
+	  //       MANAGE_BUY_OFFER_MALFORMED = -1,     // generated offer would be invalid
+	  //       MANAGE_BUY_OFFER_SELL_NO_TRUST = -2, // no trust line for what we're selling
+	  //       MANAGE_BUY_OFFER_BUY_NO_TRUST = -3,  // no trust line for what we're buying
+	  //       MANAGE_BUY_OFFER_SELL_NOT_AUTHORIZED = -4, // not authorized to sell
+	  //       MANAGE_BUY_OFFER_BUY_NOT_AUTHORIZED = -5,  // not authorized to buy
+	  //       MANAGE_BUY_OFFER_LINE_FULL = -6,      // can't receive more of what it's buying
+	  //       MANAGE_BUY_OFFER_UNDERFUNDED = -7,    // doesn't hold what it's trying to sell
+	  //       MANAGE_BUY_OFFER_CROSS_SELF = -8,     // would cross an offer from the same user
+	  //       MANAGE_BUY_OFFER_SELL_NO_ISSUER = -9, // no issuer for what we're selling
+	  //       MANAGE_BUY_OFFER_BUY_NO_ISSUER = -10, // no issuer for what we're buying
+	  //   
+	  //       // update errors
+	  //       MANAGE_BUY_OFFER_NOT_FOUND = -11, // offerID does not match an existing offer
+	  //   
+	  //       MANAGE_BUY_OFFER_LOW_RESERVE = -12 // not enough funds to create a new Offer
+	  //   };
+	  //
+	  // ===========================================================================
+	  xdr.enum("ManageBuyOfferResultCode", {
+	    manageBuyOfferSuccess: 0,
+	    manageBuyOfferMalformed: -1,
+	    manageBuyOfferSellNoTrust: -2,
+	    manageBuyOfferBuyNoTrust: -3,
+	    manageBuyOfferSellNotAuthorized: -4,
+	    manageBuyOfferBuyNotAuthorized: -5,
+	    manageBuyOfferLineFull: -6,
+	    manageBuyOfferUnderfunded: -7,
+	    manageBuyOfferCrossSelf: -8,
+	    manageBuyOfferSellNoIssuer: -9,
+	    manageBuyOfferBuyNoIssuer: -10,
+	    manageBuyOfferNotFound: -11,
+	    manageBuyOfferLowReserve: -12
+	  });
+
+	  // === xdr source ============================================================
+	  //
+	  //   union ManageBuyOfferResult switch (ManageBuyOfferResultCode code)
+	  //   {
+	  //   case MANAGE_BUY_OFFER_SUCCESS:
+	  //       ManageOfferSuccessResult success;
+	  //   default:
+	  //       void;
+	  //   };
+	  //
+	  // ===========================================================================
+	  xdr.union("ManageBuyOfferResult", {
+	    switchOn: xdr.lookup("ManageBuyOfferResultCode"),
+	    switchName: "code",
+	    switches: [["manageBuyOfferSuccess", "success"]],
+	    arms: {
+	      success: xdr.lookup("ManageOfferSuccessResult")
+	    },
+	    defaultArm: xdr.void()
+	  });
+
+	  // === xdr source ============================================================
+	  //
+	  //   enum SetOptionsResultCode
+	  //   {
+	  //       // codes considered as "success" for the operation
+	  //       SET_OPTIONS_SUCCESS = 0,
+	  //       // codes considered as "failure" for the operation
+	  //       SET_OPTIONS_LOW_RESERVE = -1,      // not enough funds to add a signer
+	  //       SET_OPTIONS_TOO_MANY_SIGNERS = -2, // max number of signers already reached
+	  //       SET_OPTIONS_BAD_FLAGS = -3,        // invalid combination of clear/set flags
+	  //       SET_OPTIONS_INVALID_INFLATION = -4,      // inflation account does not exist
+	  //       SET_OPTIONS_CANT_CHANGE = -5,            // can no longer change this option
+	  //       SET_OPTIONS_UNKNOWN_FLAG = -6,           // can't set an unknown flag
+	  //       SET_OPTIONS_THRESHOLD_OUT_OF_RANGE = -7, // bad value for weight/threshold
+	  //       SET_OPTIONS_BAD_SIGNER = -8,             // signer cannot be masterkey
+	  //       SET_OPTIONS_INVALID_HOME_DOMAIN = -9     // malformed home domain
+	  //   };
+	  //
+	  // ===========================================================================
+	  xdr.enum("SetOptionsResultCode", {
+	    setOptionsSuccess: 0,
+	    setOptionsLowReserve: -1,
+	    setOptionsTooManySigner: -2,
+	    setOptionsBadFlag: -3,
+	    setOptionsInvalidInflation: -4,
+	    setOptionsCantChange: -5,
+	    setOptionsUnknownFlag: -6,
+	    setOptionsThresholdOutOfRange: -7,
+	    setOptionsBadSigner: -8,
+	    setOptionsInvalidHomeDomain: -9
+	  });
+
+	  // === xdr source ============================================================
+	  //
+	  //   union SetOptionsResult switch (SetOptionsResultCode code)
+	  //   {
+	  //   case SET_OPTIONS_SUCCESS:
+	  //       void;
+	  //   default:
+	  //       void;
+	  //   };
+	  //
+	  // ===========================================================================
+	  xdr.union("SetOptionsResult", {
+	    switchOn: xdr.lookup("SetOptionsResultCode"),
+	    switchName: "code",
+	    switches: [["setOptionsSuccess", xdr.void()]],
+	    arms: {},
+	    defaultArm: xdr.void()
+	  });
+
+	  // === xdr source ============================================================
+	  //
+	  //   enum ChangeTrustResultCode
+	  //   {
+	  //       // codes considered as "success" for the operation
+	  //       CHANGE_TRUST_SUCCESS = 0,
+	  //       // codes considered as "failure" for the operation
+	  //       CHANGE_TRUST_MALFORMED = -1,     // bad input
+	  //       CHANGE_TRUST_NO_ISSUER = -2,     // could not find issuer
+	  //       CHANGE_TRUST_INVALID_LIMIT = -3, // cannot drop limit below balance
+	  //                                        // cannot create with a limit of 0
+	  //       CHANGE_TRUST_LOW_RESERVE =
+	  //           -4, // not enough funds to create a new trust line,
+	  //       CHANGE_TRUST_SELF_NOT_ALLOWED = -5  // trusting self is not allowed
+	  //   };
+	  //
+	  // ===========================================================================
+	  xdr.enum("ChangeTrustResultCode", {
+	    changeTrustSuccess: 0,
+	    changeTrustMalformed: -1,
+	    changeTrustNoIssuer: -2,
+	    changeTrustInvalidLimit: -3,
+	    changeTrustLowReserve: -4,
+	    changeTrustSelfNotAllowed: -5
+	  });
+
+	  // === xdr source ============================================================
+	  //
+	  //   union ChangeTrustResult switch (ChangeTrustResultCode code)
+	  //   {
+	  //   case CHANGE_TRUST_SUCCESS:
+	  //       void;
+	  //   default:
+	  //       void;
+	  //   };
+	  //
+	  // ===========================================================================
+	  xdr.union("ChangeTrustResult", {
+	    switchOn: xdr.lookup("ChangeTrustResultCode"),
+	    switchName: "code",
+	    switches: [["changeTrustSuccess", xdr.void()]],
+	    arms: {},
+	    defaultArm: xdr.void()
+	  });
+
+	  // === xdr source ============================================================
+	  //
+	  //   enum AllowTrustResultCode
+	  //   {
+	  //       // codes considered as "success" for the operation
+	  //       ALLOW_TRUST_SUCCESS = 0,
+	  //       // codes considered as "failure" for the operation
+	  //       ALLOW_TRUST_MALFORMED = -1,     // asset is not ASSET_TYPE_ALPHANUM
+	  //       ALLOW_TRUST_NO_TRUST_LINE = -2, // trustor does not have a trustline
+	  //                                       // source account does not require trust
+	  //       ALLOW_TRUST_TRUST_NOT_REQUIRED = -3,
+	  //       ALLOW_TRUST_CANT_REVOKE = -4,     // source account can't revoke trust,
+	  //       ALLOW_TRUST_SELF_NOT_ALLOWED = -5 // trusting self is not allowed
+	  //   };
+	  //
+	  // ===========================================================================
+	  xdr.enum("AllowTrustResultCode", {
+	    allowTrustSuccess: 0,
+	    allowTrustMalformed: -1,
+	    allowTrustNoTrustLine: -2,
+	    allowTrustTrustNotRequired: -3,
+	    allowTrustCantRevoke: -4,
+	    allowTrustSelfNotAllowed: -5
+	  });
+
+	  // === xdr source ============================================================
+	  //
+	  //   union AllowTrustResult switch (AllowTrustResultCode code)
+	  //   {
+	  //   case ALLOW_TRUST_SUCCESS:
+	  //       void;
+	  //   default:
+	  //       void;
+	  //   };
+	  //
+	  // ===========================================================================
+	  xdr.union("AllowTrustResult", {
+	    switchOn: xdr.lookup("AllowTrustResultCode"),
+	    switchName: "code",
+	    switches: [["allowTrustSuccess", xdr.void()]],
+	    arms: {},
+	    defaultArm: xdr.void()
+	  });
+
+	  // === xdr source ============================================================
+	  //
+	  //   enum AccountMergeResultCode
+	  //   {
+	  //       // codes considered as "success" for the operation
+	  //       ACCOUNT_MERGE_SUCCESS = 0,
+	  //       // codes considered as "failure" for the operation
+	  //       ACCOUNT_MERGE_MALFORMED = -1,       // can't merge onto itself
+	  //       ACCOUNT_MERGE_NO_ACCOUNT = -2,      // destination does not exist
+	  //       ACCOUNT_MERGE_IMMUTABLE_SET = -3,   // source account has AUTH_IMMUTABLE set
+	  //       ACCOUNT_MERGE_HAS_SUB_ENTRIES = -4, // account has trust lines/offers
+	  //       ACCOUNT_MERGE_SEQNUM_TOO_FAR = -5,  // sequence number is over max allowed
+	  //       ACCOUNT_MERGE_DEST_FULL = -6        // can't add source balance to
+	  //                                           // destination balance
+	  //   };
+	  //
+	  // ===========================================================================
+	  xdr.enum("AccountMergeResultCode", {
+	    accountMergeSuccess: 0,
+	    accountMergeMalformed: -1,
+	    accountMergeNoAccount: -2,
+	    accountMergeImmutableSet: -3,
+	    accountMergeHasSubEntry: -4,
+	    accountMergeSeqnumTooFar: -5,
+	    accountMergeDestFull: -6
+	  });
+
+	  // === xdr source ============================================================
+	  //
+	  //   union AccountMergeResult switch (AccountMergeResultCode code)
+	  //   {
+	  //   case ACCOUNT_MERGE_SUCCESS:
+	  //       int64 sourceAccountBalance; // how much got transfered from source account
+	  //   default:
+	  //       void;
+	  //   };
+	  //
+	  // ===========================================================================
+	  xdr.union("AccountMergeResult", {
+	    switchOn: xdr.lookup("AccountMergeResultCode"),
+	    switchName: "code",
+	    switches: [["accountMergeSuccess", "sourceAccountBalance"]],
+	    arms: {
+	      sourceAccountBalance: xdr.lookup("Int64")
+	    },
+	    defaultArm: xdr.void()
+	  });
+
+	  // === xdr source ============================================================
+	  //
+	  //   enum InflationResultCode
+	  //   {
+	  //       // codes considered as "success" for the operation
+	  //       INFLATION_SUCCESS = 0,
+	  //       // codes considered as "failure" for the operation
+	  //       INFLATION_NOT_TIME = -1
+	  //   };
+	  //
+	  // ===========================================================================
+	  xdr.enum("InflationResultCode", {
+	    inflationSuccess: 0,
+	    inflationNotTime: -1
+	  });
+
+	  // === xdr source ============================================================
+	  //
+	  //   struct InflationPayout // or use PaymentResultAtom to limit types?
+	  //   {
+	  //       AccountID destination;
+	  //       int64 amount;
+	  //   };
+	  //
+	  // ===========================================================================
+	  xdr.struct("InflationPayout", [["destination", xdr.lookup("AccountId")], ["amount", xdr.lookup("Int64")]]);
+
+	  // === xdr source ============================================================
+	  //
+	  //   union InflationResult switch (InflationResultCode code)
+	  //   {
+	  //   case INFLATION_SUCCESS:
+	  //       InflationPayout payouts<>;
+	  //   default:
+	  //       void;
+	  //   };
+	  //
+	  // ===========================================================================
+	  xdr.union("InflationResult", {
+	    switchOn: xdr.lookup("InflationResultCode"),
+	    switchName: "code",
+	    switches: [["inflationSuccess", "payouts"]],
+	    arms: {
+	      payouts: xdr.varArray(xdr.lookup("InflationPayout"), 2147483647)
+	    },
+	    defaultArm: xdr.void()
+	  });
+
+	  // === xdr source ============================================================
+	  //
+	  //   enum ManageDataResultCode
+	  //   {
+	  //       // codes considered as "success" for the operation
+	  //       MANAGE_DATA_SUCCESS = 0,
+	  //       // codes considered as "failure" for the operation
+	  //       MANAGE_DATA_NOT_SUPPORTED_YET =
+	  //           -1, // The network hasn't moved to this protocol change yet
+	  //       MANAGE_DATA_NAME_NOT_FOUND =
+	  //           -2, // Trying to remove a Data Entry that isn't there
+	  //       MANAGE_DATA_LOW_RESERVE = -3, // not enough funds to create a new Data Entry
+	  //       MANAGE_DATA_INVALID_NAME = -4 // Name not a valid string
+	  //   };
+	  //
+	  // ===========================================================================
+	  xdr.enum("ManageDataResultCode", {
+	    manageDataSuccess: 0,
+	    manageDataNotSupportedYet: -1,
+	    manageDataNameNotFound: -2,
+	    manageDataLowReserve: -3,
+	    manageDataInvalidName: -4
+	  });
+
+	  // === xdr source ============================================================
+	  //
+	  //   union ManageDataResult switch (ManageDataResultCode code)
+	  //   {
+	  //   case MANAGE_DATA_SUCCESS:
+	  //       void;
+	  //   default:
+	  //       void;
+	  //   };
+	  //
+	  // ===========================================================================
+	  xdr.union("ManageDataResult", {
+	    switchOn: xdr.lookup("ManageDataResultCode"),
+	    switchName: "code",
+	    switches: [["manageDataSuccess", xdr.void()]],
+	    arms: {},
+	    defaultArm: xdr.void()
+	  });
+
+	  // === xdr source ============================================================
+	  //
+	  //   enum BumpSequenceResultCode
+	  //   {
+	  //       // codes considered as "success" for the operation
+	  //       BUMP_SEQUENCE_SUCCESS = 0,
+	  //       // codes considered as "failure" for the operation
+	  //       BUMP_SEQUENCE_BAD_SEQ = -1 // `bumpTo` is not within bounds
+	  //   };
+	  //
+	  // ===========================================================================
+	  xdr.enum("BumpSequenceResultCode", {
+	    bumpSequenceSuccess: 0,
+	    bumpSequenceBadSeq: -1
+	  });
+
+	  // === xdr source ============================================================
+	  //
+	  //   union BumpSequenceResult switch (BumpSequenceResultCode code)
+	  //   {
+	  //   case BUMP_SEQUENCE_SUCCESS:
+	  //       void;
+	  //   default:
+	  //       void;
+	  //   };
+	  //
+	  // ===========================================================================
+	  xdr.union("BumpSequenceResult", {
+	    switchOn: xdr.lookup("BumpSequenceResultCode"),
+	    switchName: "code",
+	    switches: [["bumpSequenceSuccess", xdr.void()]],
+	    arms: {},
+	    defaultArm: xdr.void()
+	  });
+
+	  // === xdr source ============================================================
+	  //
+	  //   enum OperationResultCode
+	  //   {
+	  //       opINNER = 0, // inner object result is valid
+	  //   
+	  //       opBAD_AUTH = -1,     // too few valid signatures / wrong network
+	  //       opNO_ACCOUNT = -2,   // source account was not found
+	  //       opNOT_SUPPORTED = -3, // operation not supported at this time
+	  //       opTOO_MANY_SUBENTRIES = -4, // max number of subentries already reached
+	  //       opEXCEEDED_WORK_LIMIT = -5  // operation did too much work
+	  //   };
+	  //
+	  // ===========================================================================
+	  xdr.enum("OperationResultCode", {
+	    opInner: 0,
+	    opBadAuth: -1,
+	    opNoAccount: -2,
+	    opNotSupported: -3,
+	    opTooManySubentry: -4,
+	    opExceededWorkLimit: -5
+	  });
+
+	  // === xdr source ============================================================
+	  //
+	  //   union switch (OperationType type)
+	  //       {
+	  //       case CREATE_ACCOUNT:
+	  //           CreateAccountResult createAccountResult;
+	  //       case PAYMENT:
+	  //           PaymentResult paymentResult;
+	  //       case PATH_PAYMENT:
+	  //           PathPaymentResult pathPaymentResult;
+	  //       case MANAGE_SELL_OFFER:
+	  //           ManageSellOfferResult manageSellOfferResult;
+	  //       case CREATE_PASSIVE_SELL_OFFER:
+	  //           ManageSellOfferResult createPassiveSellOfferResult;
+	  //       case SET_OPTIONS:
+	  //           SetOptionsResult setOptionsResult;
+	  //       case CHANGE_TRUST:
+	  //           ChangeTrustResult changeTrustResult;
+	  //       case ALLOW_TRUST:
+	  //           AllowTrustResult allowTrustResult;
+	  //       case ACCOUNT_MERGE:
+	  //           AccountMergeResult accountMergeResult;
+	  //       case INFLATION:
+	  //           InflationResult inflationResult;
+	  //       case MANAGE_DATA:
+	  //           ManageDataResult manageDataResult;
+	  //       case BUMP_SEQUENCE:
+	  //           BumpSequenceResult bumpSeqResult;
+	  //       case MANAGE_BUY_OFFER:
+	  //   	ManageBuyOfferResult manageBuyOfferResult;
+	  //       }
+	  //
+	  // ===========================================================================
+	  xdr.union("OperationResultTr", {
+	    switchOn: xdr.lookup("OperationType"),
+	    switchName: "type",
+	    switches: [["createAccount", "createAccountResult"], ["payment", "paymentResult"], ["pathPayment", "pathPaymentResult"], ["manageSellOffer", "manageSellOfferResult"], ["createPassiveSellOffer", "createPassiveSellOfferResult"], ["setOption", "setOptionsResult"], ["changeTrust", "changeTrustResult"], ["allowTrust", "allowTrustResult"], ["accountMerge", "accountMergeResult"], ["inflation", "inflationResult"], ["manageDatum", "manageDataResult"], ["bumpSequence", "bumpSeqResult"], ["manageBuyOffer", "manageBuyOfferResult"]],
+	    arms: {
+	      createAccountResult: xdr.lookup("CreateAccountResult"),
+	      paymentResult: xdr.lookup("PaymentResult"),
+	      pathPaymentResult: xdr.lookup("PathPaymentResult"),
+	      manageSellOfferResult: xdr.lookup("ManageSellOfferResult"),
+	      createPassiveSellOfferResult: xdr.lookup("ManageSellOfferResult"),
+	      setOptionsResult: xdr.lookup("SetOptionsResult"),
+	      changeTrustResult: xdr.lookup("ChangeTrustResult"),
+	      allowTrustResult: xdr.lookup("AllowTrustResult"),
+	      accountMergeResult: xdr.lookup("AccountMergeResult"),
+	      inflationResult: xdr.lookup("InflationResult"),
+	      manageDataResult: xdr.lookup("ManageDataResult"),
+	      bumpSeqResult: xdr.lookup("BumpSequenceResult"),
+	      manageBuyOfferResult: xdr.lookup("ManageBuyOfferResult")
+	    }
+	  });
+
+	  // === xdr source ============================================================
+	  //
+	  //   union OperationResult switch (OperationResultCode code)
+	  //   {
+	  //   case opINNER:
+	  //       union switch (OperationType type)
+	  //       {
+	  //       case CREATE_ACCOUNT:
+	  //           CreateAccountResult createAccountResult;
+	  //       case PAYMENT:
+	  //           PaymentResult paymentResult;
+	  //       case PATH_PAYMENT:
+	  //           PathPaymentResult pathPaymentResult;
+	  //       case MANAGE_SELL_OFFER:
+	  //           ManageSellOfferResult manageSellOfferResult;
+	  //       case CREATE_PASSIVE_SELL_OFFER:
+	  //           ManageSellOfferResult createPassiveSellOfferResult;
+	  //       case SET_OPTIONS:
+	  //           SetOptionsResult setOptionsResult;
+	  //       case CHANGE_TRUST:
+	  //           ChangeTrustResult changeTrustResult;
+	  //       case ALLOW_TRUST:
+	  //           AllowTrustResult allowTrustResult;
+	  //       case ACCOUNT_MERGE:
+	  //           AccountMergeResult accountMergeResult;
+	  //       case INFLATION:
+	  //           InflationResult inflationResult;
+	  //       case MANAGE_DATA:
+	  //           ManageDataResult manageDataResult;
+	  //       case BUMP_SEQUENCE:
+	  //           BumpSequenceResult bumpSeqResult;
+	  //       case MANAGE_BUY_OFFER:
+	  //   	ManageBuyOfferResult manageBuyOfferResult;
+	  //       }
+	  //       tr;
+	  //   default:
+	  //       void;
+	  //   };
+	  //
+	  // ===========================================================================
+	  xdr.union("OperationResult", {
+	    switchOn: xdr.lookup("OperationResultCode"),
+	    switchName: "code",
+	    switches: [["opInner", "tr"]],
+	    arms: {
+	      tr: xdr.lookup("OperationResultTr")
+	    },
+	    defaultArm: xdr.void()
+	  });
+
+	  // === xdr source ============================================================
+	  //
+	  //   enum TransactionResultCode
+	  //   {
+	  //       txSUCCESS = 0, // all operations succeeded
+	  //   
+	  //       txFAILED = -1, // one of the operations failed (none were applied)
+	  //   
+	  //       txTOO_EARLY = -2,         // ledger closeTime before minTime
+	  //       txTOO_LATE = -3,          // ledger closeTime after maxTime
+	  //       txMISSING_OPERATION = -4, // no operation was specified
+	  //       txBAD_SEQ = -5,           // sequence number does not match source account
+	  //   
+	  //       txBAD_AUTH = -6,             // too few valid signatures / wrong network
+	  //       txINSUFFICIENT_BALANCE = -7, // fee would bring account below reserve
+	  //       txNO_ACCOUNT = -8,           // source account not found
+	  //       txINSUFFICIENT_FEE = -9,     // fee is too small
+	  //       txBAD_AUTH_EXTRA = -10,      // unused signatures attached to transaction
+	  //       txINTERNAL_ERROR = -11       // an unknown error occured
+	  //   };
+	  //
+	  // ===========================================================================
+	  xdr.enum("TransactionResultCode", {
+	    txSuccess: 0,
+	    txFailed: -1,
+	    txTooEarly: -2,
+	    txTooLate: -3,
+	    txMissingOperation: -4,
+	    txBadSeq: -5,
+	    txBadAuth: -6,
+	    txInsufficientBalance: -7,
+	    txNoAccount: -8,
+	    txInsufficientFee: -9,
+	    txBadAuthExtra: -10,
+	    txInternalError: -11
+	  });
+
+	  // === xdr source ============================================================
+	  //
+	  //   union switch (TransactionResultCode code)
+	  //       {
+	  //       case txSUCCESS:
+	  //       case txFAILED:
+	  //           OperationResult results<>;
+	  //       default:
+	  //           void;
+	  //       }
+	  //
+	  // ===========================================================================
+	  xdr.union("TransactionResultResult", {
+	    switchOn: xdr.lookup("TransactionResultCode"),
+	    switchName: "code",
+	    switches: [["txSuccess", "results"], ["txFailed", "results"]],
+	    arms: {
+	      results: xdr.varArray(xdr.lookup("OperationResult"), 2147483647)
+	    },
+	    defaultArm: xdr.void()
+	  });
+
+	  // === xdr source ============================================================
+	  //
+	  //   union switch (int v)
+	  //       {
+	  //       case 0:
+	  //           void;
+	  //       }
+	  //
+	  // ===========================================================================
+	  xdr.union("TransactionResultExt", {
+	    switchOn: xdr.int(),
+	    switchName: "v",
+	    switches: [[0, xdr.void()]],
+	    arms: {}
+	  });
+
+	  // === xdr source ============================================================
+	  //
+	  //   struct TransactionResult
+	  //   {
+	  //       int64 feeCharged; // actual fee charged for the transaction
+	  //   
+	  //       union switch (TransactionResultCode code)
+	  //       {
+	  //       case txSUCCESS:
+	  //       case txFAILED:
+	  //           OperationResult results<>;
+	  //       default:
+	  //           void;
+	  //       }
+	  //       result;
+	  //   
+	  //       // reserved for future use
+	  //       union switch (int v)
+	  //       {
+	  //       case 0:
+	  //           void;
+	  //       }
+	  //       ext;
+	  //   };
+	  //
+	  // ===========================================================================
+	  xdr.struct("TransactionResult", [["feeCharged", xdr.lookup("Int64")], ["result", xdr.lookup("TransactionResultResult")], ["ext", xdr.lookup("TransactionResultExt")]]);
+
+	  // === xdr source ============================================================
+	  //
+	  //   typedef opaque Hash[32];
+	  //
+	  // ===========================================================================
+	  xdr.typedef("Hash", xdr.opaque(32));
+
+	  // === xdr source ============================================================
+	  //
+	  //   typedef opaque uint256[32];
+	  //
+	  // ===========================================================================
+	  xdr.typedef("Uint256", xdr.opaque(32));
+
+	  // === xdr source ============================================================
+	  //
+	  //   typedef unsigned int uint32;
+	  //
+	  // ===========================================================================
+	  xdr.typedef("Uint32", xdr.uint());
+
+	  // === xdr source ============================================================
+	  //
+	  //   typedef int int32;
+	  //
+	  // ===========================================================================
+	  xdr.typedef("Int32", xdr.int());
+
+	  // === xdr source ============================================================
+	  //
+	  //   typedef unsigned hyper uint64;
+	  //
+	  // ===========================================================================
+	  xdr.typedef("Uint64", xdr.uhyper());
+
+	  // === xdr source ============================================================
+	  //
+	  //   typedef hyper int64;
+	  //
+	  // ===========================================================================
+	  xdr.typedef("Int64", xdr.hyper());
+
+	  // === xdr source ============================================================
+	  //
+	  //   enum CryptoKeyType
+	  //   {
+	  //       KEY_TYPE_ED25519 = 0,
+	  //       KEY_TYPE_PRE_AUTH_TX = 1,
+	  //       KEY_TYPE_HASH_X = 2
+	  //   };
+	  //
+	  // ===========================================================================
+	  xdr.enum("CryptoKeyType", {
+	    keyTypeEd25519: 0,
+	    keyTypePreAuthTx: 1,
+	    keyTypeHashX: 2
+	  });
+
+	  // === xdr source ============================================================
+	  //
+	  //   enum PublicKeyType
+	  //   {
+	  //       PUBLIC_KEY_TYPE_ED25519 = KEY_TYPE_ED25519
+	  //   };
+	  //
+	  // ===========================================================================
+	  xdr.enum("PublicKeyType", {
+	    publicKeyTypeEd25519: 0
+	  });
+
+	  // === xdr source ============================================================
+	  //
+	  //   enum SignerKeyType
+	  //   {
+	  //       SIGNER_KEY_TYPE_ED25519 = KEY_TYPE_ED25519,
+	  //       SIGNER_KEY_TYPE_PRE_AUTH_TX = KEY_TYPE_PRE_AUTH_TX,
+	  //       SIGNER_KEY_TYPE_HASH_X = KEY_TYPE_HASH_X
+	  //   };
+	  //
+	  // ===========================================================================
+	  xdr.enum("SignerKeyType", {
+	    signerKeyTypeEd25519: 0,
+	    signerKeyTypePreAuthTx: 1,
+	    signerKeyTypeHashX: 2
+	  });
+
+	  // === xdr source ============================================================
+	  //
+	  //   union PublicKey switch (PublicKeyType type)
+	  //   {
+	  //   case PUBLIC_KEY_TYPE_ED25519:
+	  //       uint256 ed25519;
+	  //   };
+	  //
+	  // ===========================================================================
+	  xdr.union("PublicKey", {
+	    switchOn: xdr.lookup("PublicKeyType"),
+	    switchName: "type",
+	    switches: [["publicKeyTypeEd25519", "ed25519"]],
+	    arms: {
+	      ed25519: xdr.lookup("Uint256")
+	    }
+	  });
+
+	  // === xdr source ============================================================
+	  //
+	  //   union SignerKey switch (SignerKeyType type)
+	  //   {
+	  //   case SIGNER_KEY_TYPE_ED25519:
+	  //       uint256 ed25519;
+	  //   case SIGNER_KEY_TYPE_PRE_AUTH_TX:
+	  //       /* SHA-256 Hash of TransactionSignaturePayload structure */
+	  //       uint256 preAuthTx;
+	  //   case SIGNER_KEY_TYPE_HASH_X:
+	  //       /* Hash of random 256 bit preimage X */
+	  //       uint256 hashX;
+	  //   };
+	  //
+	  // ===========================================================================
+	  xdr.union("SignerKey", {
+	    switchOn: xdr.lookup("SignerKeyType"),
+	    switchName: "type",
+	    switches: [["signerKeyTypeEd25519", "ed25519"], ["signerKeyTypePreAuthTx", "preAuthTx"], ["signerKeyTypeHashX", "hashX"]],
+	    arms: {
+	      ed25519: xdr.lookup("Uint256"),
+	      preAuthTx: xdr.lookup("Uint256"),
+	      hashX: xdr.lookup("Uint256")
+	    }
+	  });
+
+	  // === xdr source ============================================================
+	  //
+	  //   typedef opaque Signature<64>;
+	  //
+	  // ===========================================================================
+	  xdr.typedef("Signature", xdr.varOpaque(64));
+
+	  // === xdr source ============================================================
+	  //
+	  //   typedef opaque SignatureHint[4];
+	  //
+	  // ===========================================================================
+	  xdr.typedef("SignatureHint", xdr.opaque(4));
+
+	  // === xdr source ============================================================
+	  //
+	  //   typedef PublicKey NodeID;
+	  //
+	  // ===========================================================================
+	  xdr.typedef("NodeId", xdr.lookup("PublicKey"));
+
+	  // === xdr source ============================================================
+	  //
+	  //   struct Curve25519Secret
+	  //   {
+	  //           opaque key[32];
+	  //   };
+	  //
+	  // ===========================================================================
+	  xdr.struct("Curve25519Secret", [["key", xdr.opaque(32)]]);
+
+	  // === xdr source ============================================================
+	  //
+	  //   struct Curve25519Public
+	  //   {
+	  //           opaque key[32];
+	  //   };
+	  //
+	  // ===========================================================================
+	  xdr.struct("Curve25519Public", [["key", xdr.opaque(32)]]);
+
+	  // === xdr source ============================================================
+	  //
+	  //   struct HmacSha256Key
+	  //   {
+	  //           opaque key[32];
+	  //   };
+	  //
+	  // ===========================================================================
+	  xdr.struct("HmacSha256Key", [["key", xdr.opaque(32)]]);
+
+	  // === xdr source ============================================================
+	  //
+	  //   struct HmacSha256Mac
+	  //   {
+	  //           opaque mac[32];
+	  //   };
+	  //
+	  // ===========================================================================
+	  xdr.struct("HmacSha256Mac", [["mac", xdr.opaque(32)]]);
+	}); // Automatically generated on 2019-04-30T12:43:38-07:00
 	// DO NOT EDIT or your changes may be overwritten
 
 	/* jshint maxstatements:2147483647  */
@@ -12827,7 +13029,7 @@ var StellarBase =
 	  });
 	});
 
-	var _config = __webpack_require__(319);
+	var _config = __webpack_require__(308);
 
 	Object.keys(_config).forEach(function (key) {
 	  if (key === "default" || key === "__esModule") return;
@@ -12861,7 +13063,7 @@ var StellarBase =
 	  });
 	});
 
-	var _hyper = __webpack_require__(217);
+	var _hyper = __webpack_require__(209);
 
 	Object.keys(_hyper).forEach(function (key) {
 	  if (key === "default" || key === "__esModule") return;
@@ -12873,7 +13075,7 @@ var StellarBase =
 	  });
 	});
 
-	var _unsignedInt = __webpack_require__(220);
+	var _unsignedInt = __webpack_require__(212);
 
 	Object.keys(_unsignedInt).forEach(function (key) {
 	  if (key === "default" || key === "__esModule") return;
@@ -12885,7 +13087,7 @@ var StellarBase =
 	  });
 	});
 
-	var _unsignedHyper = __webpack_require__(221);
+	var _unsignedHyper = __webpack_require__(213);
 
 	Object.keys(_unsignedHyper).forEach(function (key) {
 	  if (key === "default" || key === "__esModule") return;
@@ -12897,7 +13099,7 @@ var StellarBase =
 	  });
 	});
 
-	var _float = __webpack_require__(222);
+	var _float = __webpack_require__(214);
 
 	Object.keys(_float).forEach(function (key) {
 	  if (key === "default" || key === "__esModule") return;
@@ -12909,7 +13111,7 @@ var StellarBase =
 	  });
 	});
 
-	var _double = __webpack_require__(223);
+	var _double = __webpack_require__(215);
 
 	Object.keys(_double).forEach(function (key) {
 	  if (key === "default" || key === "__esModule") return;
@@ -12921,7 +13123,7 @@ var StellarBase =
 	  });
 	});
 
-	var _quadruple = __webpack_require__(224);
+	var _quadruple = __webpack_require__(216);
 
 	Object.keys(_quadruple).forEach(function (key) {
 	  if (key === "default" || key === "__esModule") return;
@@ -12933,7 +13135,7 @@ var StellarBase =
 	  });
 	});
 
-	var _bool = __webpack_require__(225);
+	var _bool = __webpack_require__(217);
 
 	Object.keys(_bool).forEach(function (key) {
 	  if (key === "default" || key === "__esModule") return;
@@ -12945,7 +13147,7 @@ var StellarBase =
 	  });
 	});
 
-	var _string = __webpack_require__(227);
+	var _string = __webpack_require__(219);
 
 	Object.keys(_string).forEach(function (key) {
 	  if (key === "default" || key === "__esModule") return;
@@ -12957,7 +13159,7 @@ var StellarBase =
 	  });
 	});
 
-	var _opaque = __webpack_require__(229);
+	var _opaque = __webpack_require__(220);
 
 	Object.keys(_opaque).forEach(function (key) {
 	  if (key === "default" || key === "__esModule") return;
@@ -12969,7 +13171,7 @@ var StellarBase =
 	  });
 	});
 
-	var _varOpaque = __webpack_require__(230);
+	var _varOpaque = __webpack_require__(221);
 
 	Object.keys(_varOpaque).forEach(function (key) {
 	  if (key === "default" || key === "__esModule") return;
@@ -12981,7 +13183,7 @@ var StellarBase =
 	  });
 	});
 
-	var _array = __webpack_require__(231);
+	var _array = __webpack_require__(222);
 
 	Object.keys(_array).forEach(function (key) {
 	  if (key === "default" || key === "__esModule") return;
@@ -12993,7 +13195,7 @@ var StellarBase =
 	  });
 	});
 
-	var _varArray = __webpack_require__(240);
+	var _varArray = __webpack_require__(231);
 
 	Object.keys(_varArray).forEach(function (key) {
 	  if (key === "default" || key === "__esModule") return;
@@ -13005,7 +13207,7 @@ var StellarBase =
 	  });
 	});
 
-	var _option = __webpack_require__(241);
+	var _option = __webpack_require__(232);
 
 	Object.keys(_option).forEach(function (key) {
 	  if (key === "default" || key === "__esModule") return;
@@ -13017,7 +13219,7 @@ var StellarBase =
 	  });
 	});
 
-	var _void = __webpack_require__(244);
+	var _void = __webpack_require__(233);
 
 	Object.keys(_void).forEach(function (key) {
 	  if (key === "default" || key === "__esModule") return;
@@ -13029,7 +13231,7 @@ var StellarBase =
 	  });
 	});
 
-	var _enum = __webpack_require__(245);
+	var _enum = __webpack_require__(234);
 
 	Object.keys(_enum).forEach(function (key) {
 	  if (key === "default" || key === "__esModule") return;
@@ -13041,7 +13243,7 @@ var StellarBase =
 	  });
 	});
 
-	var _struct = __webpack_require__(315);
+	var _struct = __webpack_require__(304);
 
 	Object.keys(_struct).forEach(function (key) {
 	  if (key === "default" || key === "__esModule") return;
@@ -13053,7 +13255,7 @@ var StellarBase =
 	  });
 	});
 
-	var _union = __webpack_require__(320);
+	var _union = __webpack_require__(309);
 
 	Object.keys(_union).forEach(function (key) {
 	  if (key === "default" || key === "__esModule") return;
@@ -13080,7 +13282,7 @@ var StellarBase =
 
 	var _isNumber2 = _interopRequireDefault(_isNumber);
 
-	var _ioMixin = __webpack_require__(76);
+	var _ioMixin = __webpack_require__(69);
 
 	var _ioMixin2 = _interopRequireDefault(_ioMixin);
 
@@ -13122,8 +13324,8 @@ var StellarBase =
 /* 68 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var baseGetTag = __webpack_require__(69),
-	    isObjectLike = __webpack_require__(75);
+	var baseGetTag = __webpack_require__(56),
+	    isObjectLike = __webpack_require__(63);
 
 	/** `Object#toString` result references. */
 	var numberTag = '[object Number]';
@@ -13166,193 +13368,6 @@ var StellarBase =
 /* 69 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var Symbol = __webpack_require__(70),
-	    getRawTag = __webpack_require__(73),
-	    objectToString = __webpack_require__(74);
-
-	/** `Object#toString` result references. */
-	var nullTag = '[object Null]',
-	    undefinedTag = '[object Undefined]';
-
-	/** Built-in value references. */
-	var symToStringTag = Symbol ? Symbol.toStringTag : undefined;
-
-	/**
-	 * The base implementation of `getTag` without fallbacks for buggy environments.
-	 *
-	 * @private
-	 * @param {*} value The value to query.
-	 * @returns {string} Returns the `toStringTag`.
-	 */
-	function baseGetTag(value) {
-	  if (value == null) {
-	    return value === undefined ? undefinedTag : nullTag;
-	  }
-	  return (symToStringTag && symToStringTag in Object(value))
-	    ? getRawTag(value)
-	    : objectToString(value);
-	}
-
-	module.exports = baseGetTag;
-
-
-/***/ }),
-/* 70 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var root = __webpack_require__(71);
-
-	/** Built-in value references. */
-	var Symbol = root.Symbol;
-
-	module.exports = Symbol;
-
-
-/***/ }),
-/* 71 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var freeGlobal = __webpack_require__(72);
-
-	/** Detect free variable `self`. */
-	var freeSelf = typeof self == 'object' && self && self.Object === Object && self;
-
-	/** Used as a reference to the global object. */
-	var root = freeGlobal || freeSelf || Function('return this')();
-
-	module.exports = root;
-
-
-/***/ }),
-/* 72 */
-/***/ (function(module, exports) {
-
-	/* WEBPACK VAR INJECTION */(function(global) {/** Detect free variable `global` from Node.js. */
-	var freeGlobal = typeof global == 'object' && global && global.Object === Object && global;
-
-	module.exports = freeGlobal;
-
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
-
-/***/ }),
-/* 73 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var Symbol = __webpack_require__(70);
-
-	/** Used for built-in method references. */
-	var objectProto = Object.prototype;
-
-	/** Used to check objects for own properties. */
-	var hasOwnProperty = objectProto.hasOwnProperty;
-
-	/**
-	 * Used to resolve the
-	 * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
-	 * of values.
-	 */
-	var nativeObjectToString = objectProto.toString;
-
-	/** Built-in value references. */
-	var symToStringTag = Symbol ? Symbol.toStringTag : undefined;
-
-	/**
-	 * A specialized version of `baseGetTag` which ignores `Symbol.toStringTag` values.
-	 *
-	 * @private
-	 * @param {*} value The value to query.
-	 * @returns {string} Returns the raw `toStringTag`.
-	 */
-	function getRawTag(value) {
-	  var isOwn = hasOwnProperty.call(value, symToStringTag),
-	      tag = value[symToStringTag];
-
-	  try {
-	    value[symToStringTag] = undefined;
-	    var unmasked = true;
-	  } catch (e) {}
-
-	  var result = nativeObjectToString.call(value);
-	  if (unmasked) {
-	    if (isOwn) {
-	      value[symToStringTag] = tag;
-	    } else {
-	      delete value[symToStringTag];
-	    }
-	  }
-	  return result;
-	}
-
-	module.exports = getRawTag;
-
-
-/***/ }),
-/* 74 */
-/***/ (function(module, exports) {
-
-	/** Used for built-in method references. */
-	var objectProto = Object.prototype;
-
-	/**
-	 * Used to resolve the
-	 * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
-	 * of values.
-	 */
-	var nativeObjectToString = objectProto.toString;
-
-	/**
-	 * Converts `value` to a string using `Object.prototype.toString`.
-	 *
-	 * @private
-	 * @param {*} value The value to convert.
-	 * @returns {string} Returns the converted string.
-	 */
-	function objectToString(value) {
-	  return nativeObjectToString.call(value);
-	}
-
-	module.exports = objectToString;
-
-
-/***/ }),
-/* 75 */
-/***/ (function(module, exports) {
-
-	/**
-	 * Checks if `value` is object-like. A value is object-like if it's not `null`
-	 * and has a `typeof` result of "object".
-	 *
-	 * @static
-	 * @memberOf _
-	 * @since 4.0.0
-	 * @category Lang
-	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is object-like, else `false`.
-	 * @example
-	 *
-	 * _.isObjectLike({});
-	 * // => true
-	 *
-	 * _.isObjectLike([1, 2, 3]);
-	 * // => true
-	 *
-	 * _.isObjectLike(_.noop);
-	 * // => false
-	 *
-	 * _.isObjectLike(null);
-	 * // => false
-	 */
-	function isObjectLike(value) {
-	  return value != null && typeof value == 'object';
-	}
-
-	module.exports = isObjectLike;
-
-
-/***/ }),
-/* 76 */
-/***/ (function(module, exports, __webpack_require__) {
-
 	/* WEBPACK VAR INJECTION */(function(Buffer) {'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
@@ -13360,15 +13375,15 @@ var StellarBase =
 	});
 	exports.default = includeIoMixin;
 
-	var _extend = __webpack_require__(77);
+	var _extend = __webpack_require__(70);
 
 	var _extend2 = _interopRequireDefault(_extend);
 
-	var _isFunction = __webpack_require__(85);
+	var _isFunction = __webpack_require__(78);
 
 	var _isFunction2 = _interopRequireDefault(_isFunction);
 
-	var _cursor = __webpack_require__(121);
+	var _cursor = __webpack_require__(113);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -13439,19 +13454,19 @@ var StellarBase =
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9).Buffer))
 
 /***/ }),
-/* 77 */
+/* 70 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(78);
+	module.exports = __webpack_require__(71);
 
 
 /***/ }),
-/* 78 */
+/* 71 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var copyObject = __webpack_require__(79),
-	    createAssigner = __webpack_require__(92),
-	    keysIn = __webpack_require__(105);
+	var copyObject = __webpack_require__(72),
+	    createAssigner = __webpack_require__(85),
+	    keysIn = __webpack_require__(98);
 
 	/**
 	 * This method is like `_.assign` except that it iterates over own and
@@ -13492,11 +13507,11 @@ var StellarBase =
 
 
 /***/ }),
-/* 79 */
+/* 72 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var assignValue = __webpack_require__(80),
-	    baseAssignValue = __webpack_require__(81);
+	var assignValue = __webpack_require__(73),
+	    baseAssignValue = __webpack_require__(74);
 
 	/**
 	 * Copies properties of `source` to `object`.
@@ -13538,11 +13553,11 @@ var StellarBase =
 
 
 /***/ }),
-/* 80 */
+/* 73 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var baseAssignValue = __webpack_require__(81),
-	    eq = __webpack_require__(91);
+	var baseAssignValue = __webpack_require__(74),
+	    eq = __webpack_require__(84);
 
 	/** Used for built-in method references. */
 	var objectProto = Object.prototype;
@@ -13572,10 +13587,10 @@ var StellarBase =
 
 
 /***/ }),
-/* 81 */
+/* 74 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var defineProperty = __webpack_require__(82);
+	var defineProperty = __webpack_require__(75);
 
 	/**
 	 * The base implementation of `assignValue` and `assignMergeValue` without
@@ -13603,10 +13618,10 @@ var StellarBase =
 
 
 /***/ }),
-/* 82 */
+/* 75 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var getNative = __webpack_require__(83);
+	var getNative = __webpack_require__(76);
 
 	var defineProperty = (function() {
 	  try {
@@ -13620,11 +13635,11 @@ var StellarBase =
 
 
 /***/ }),
-/* 83 */
+/* 76 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var baseIsNative = __webpack_require__(84),
-	    getValue = __webpack_require__(90);
+	var baseIsNative = __webpack_require__(77),
+	    getValue = __webpack_require__(83);
 
 	/**
 	 * Gets the native function at `key` of `object`.
@@ -13643,13 +13658,13 @@ var StellarBase =
 
 
 /***/ }),
-/* 84 */
+/* 77 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var isFunction = __webpack_require__(85),
-	    isMasked = __webpack_require__(87),
-	    isObject = __webpack_require__(86),
-	    toSource = __webpack_require__(89);
+	var isFunction = __webpack_require__(78),
+	    isMasked = __webpack_require__(80),
+	    isObject = __webpack_require__(79),
+	    toSource = __webpack_require__(82);
 
 	/**
 	 * Used to match `RegExp`
@@ -13696,11 +13711,11 @@ var StellarBase =
 
 
 /***/ }),
-/* 85 */
+/* 78 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var baseGetTag = __webpack_require__(69),
-	    isObject = __webpack_require__(86);
+	var baseGetTag = __webpack_require__(56),
+	    isObject = __webpack_require__(79);
 
 	/** `Object#toString` result references. */
 	var asyncTag = '[object AsyncFunction]',
@@ -13739,7 +13754,7 @@ var StellarBase =
 
 
 /***/ }),
-/* 86 */
+/* 79 */
 /***/ (function(module, exports) {
 
 	/**
@@ -13776,10 +13791,10 @@ var StellarBase =
 
 
 /***/ }),
-/* 87 */
+/* 80 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var coreJsData = __webpack_require__(88);
+	var coreJsData = __webpack_require__(81);
 
 	/** Used to detect methods masquerading as native. */
 	var maskSrcKey = (function() {
@@ -13802,10 +13817,10 @@ var StellarBase =
 
 
 /***/ }),
-/* 88 */
+/* 81 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var root = __webpack_require__(71);
+	var root = __webpack_require__(58);
 
 	/** Used to detect overreaching core-js shims. */
 	var coreJsData = root['__core-js_shared__'];
@@ -13814,7 +13829,7 @@ var StellarBase =
 
 
 /***/ }),
-/* 89 */
+/* 82 */
 /***/ (function(module, exports) {
 
 	/** Used for built-in method references. */
@@ -13846,7 +13861,7 @@ var StellarBase =
 
 
 /***/ }),
-/* 90 */
+/* 83 */
 /***/ (function(module, exports) {
 
 	/**
@@ -13865,7 +13880,7 @@ var StellarBase =
 
 
 /***/ }),
-/* 91 */
+/* 84 */
 /***/ (function(module, exports) {
 
 	/**
@@ -13908,11 +13923,11 @@ var StellarBase =
 
 
 /***/ }),
-/* 92 */
+/* 85 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var baseRest = __webpack_require__(93),
-	    isIterateeCall = __webpack_require__(101);
+	var baseRest = __webpack_require__(86),
+	    isIterateeCall = __webpack_require__(94);
 
 	/**
 	 * Creates a function like `_.assign`.
@@ -13951,12 +13966,12 @@ var StellarBase =
 
 
 /***/ }),
-/* 93 */
+/* 86 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var identity = __webpack_require__(94),
-	    overRest = __webpack_require__(95),
-	    setToString = __webpack_require__(97);
+	var identity = __webpack_require__(87),
+	    overRest = __webpack_require__(88),
+	    setToString = __webpack_require__(90);
 
 	/**
 	 * The base implementation of `_.rest` which doesn't validate or coerce arguments.
@@ -13974,7 +13989,7 @@ var StellarBase =
 
 
 /***/ }),
-/* 94 */
+/* 87 */
 /***/ (function(module, exports) {
 
 	/**
@@ -14001,10 +14016,10 @@ var StellarBase =
 
 
 /***/ }),
-/* 95 */
+/* 88 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var apply = __webpack_require__(96);
+	var apply = __webpack_require__(89);
 
 	/* Built-in method references for those with the same name as other `lodash` methods. */
 	var nativeMax = Math.max;
@@ -14043,7 +14058,7 @@ var StellarBase =
 
 
 /***/ }),
-/* 96 */
+/* 89 */
 /***/ (function(module, exports) {
 
 	/**
@@ -14070,11 +14085,11 @@ var StellarBase =
 
 
 /***/ }),
-/* 97 */
+/* 90 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var baseSetToString = __webpack_require__(98),
-	    shortOut = __webpack_require__(100);
+	var baseSetToString = __webpack_require__(91),
+	    shortOut = __webpack_require__(93);
 
 	/**
 	 * Sets the `toString` method of `func` to return `string`.
@@ -14090,12 +14105,12 @@ var StellarBase =
 
 
 /***/ }),
-/* 98 */
+/* 91 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var constant = __webpack_require__(99),
-	    defineProperty = __webpack_require__(82),
-	    identity = __webpack_require__(94);
+	var constant = __webpack_require__(92),
+	    defineProperty = __webpack_require__(75),
+	    identity = __webpack_require__(87);
 
 	/**
 	 * The base implementation of `setToString` without support for hot loop shorting.
@@ -14118,7 +14133,7 @@ var StellarBase =
 
 
 /***/ }),
-/* 99 */
+/* 92 */
 /***/ (function(module, exports) {
 
 	/**
@@ -14150,7 +14165,7 @@ var StellarBase =
 
 
 /***/ }),
-/* 100 */
+/* 93 */
 /***/ (function(module, exports) {
 
 	/** Used to detect hot functions by number of calls within a span of milliseconds. */
@@ -14193,13 +14208,13 @@ var StellarBase =
 
 
 /***/ }),
-/* 101 */
+/* 94 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var eq = __webpack_require__(91),
-	    isArrayLike = __webpack_require__(102),
-	    isIndex = __webpack_require__(104),
-	    isObject = __webpack_require__(86);
+	var eq = __webpack_require__(84),
+	    isArrayLike = __webpack_require__(95),
+	    isIndex = __webpack_require__(97),
+	    isObject = __webpack_require__(79);
 
 	/**
 	 * Checks if the given arguments are from an iteratee call.
@@ -14229,11 +14244,11 @@ var StellarBase =
 
 
 /***/ }),
-/* 102 */
+/* 95 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var isFunction = __webpack_require__(85),
-	    isLength = __webpack_require__(103);
+	var isFunction = __webpack_require__(78),
+	    isLength = __webpack_require__(96);
 
 	/**
 	 * Checks if `value` is array-like. A value is considered array-like if it's
@@ -14268,7 +14283,7 @@ var StellarBase =
 
 
 /***/ }),
-/* 103 */
+/* 96 */
 /***/ (function(module, exports) {
 
 	/** Used as references for various `Number` constants. */
@@ -14309,7 +14324,7 @@ var StellarBase =
 
 
 /***/ }),
-/* 104 */
+/* 97 */
 /***/ (function(module, exports) {
 
 	/** Used as references for various `Number` constants. */
@@ -14340,12 +14355,12 @@ var StellarBase =
 
 
 /***/ }),
-/* 105 */
+/* 98 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var arrayLikeKeys = __webpack_require__(106),
-	    baseKeysIn = __webpack_require__(118),
-	    isArrayLike = __webpack_require__(102);
+	var arrayLikeKeys = __webpack_require__(99),
+	    baseKeysIn = __webpack_require__(110),
+	    isArrayLike = __webpack_require__(95);
 
 	/**
 	 * Creates an array of the own and inherited enumerable property names of `object`.
@@ -14378,15 +14393,15 @@ var StellarBase =
 
 
 /***/ }),
-/* 106 */
+/* 99 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var baseTimes = __webpack_require__(107),
-	    isArguments = __webpack_require__(108),
-	    isArray = __webpack_require__(110),
-	    isBuffer = __webpack_require__(111),
-	    isIndex = __webpack_require__(104),
-	    isTypedArray = __webpack_require__(114);
+	var baseTimes = __webpack_require__(100),
+	    isArguments = __webpack_require__(101),
+	    isArray = __webpack_require__(62),
+	    isBuffer = __webpack_require__(103),
+	    isIndex = __webpack_require__(97),
+	    isTypedArray = __webpack_require__(106);
 
 	/** Used for built-in method references. */
 	var objectProto = Object.prototype;
@@ -14433,7 +14448,7 @@ var StellarBase =
 
 
 /***/ }),
-/* 107 */
+/* 100 */
 /***/ (function(module, exports) {
 
 	/**
@@ -14459,11 +14474,11 @@ var StellarBase =
 
 
 /***/ }),
-/* 108 */
+/* 101 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var baseIsArguments = __webpack_require__(109),
-	    isObjectLike = __webpack_require__(75);
+	var baseIsArguments = __webpack_require__(102),
+	    isObjectLike = __webpack_require__(63);
 
 	/** Used for built-in method references. */
 	var objectProto = Object.prototype;
@@ -14501,11 +14516,11 @@ var StellarBase =
 
 
 /***/ }),
-/* 109 */
+/* 102 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var baseGetTag = __webpack_require__(69),
-	    isObjectLike = __webpack_require__(75);
+	var baseGetTag = __webpack_require__(56),
+	    isObjectLike = __webpack_require__(63);
 
 	/** `Object#toString` result references. */
 	var argsTag = '[object Arguments]';
@@ -14525,43 +14540,11 @@ var StellarBase =
 
 
 /***/ }),
-/* 110 */
-/***/ (function(module, exports) {
-
-	/**
-	 * Checks if `value` is classified as an `Array` object.
-	 *
-	 * @static
-	 * @memberOf _
-	 * @since 0.1.0
-	 * @category Lang
-	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is an array, else `false`.
-	 * @example
-	 *
-	 * _.isArray([1, 2, 3]);
-	 * // => true
-	 *
-	 * _.isArray(document.body.children);
-	 * // => false
-	 *
-	 * _.isArray('abc');
-	 * // => false
-	 *
-	 * _.isArray(_.noop);
-	 * // => false
-	 */
-	var isArray = Array.isArray;
-
-	module.exports = isArray;
-
-
-/***/ }),
-/* 111 */
+/* 103 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(module) {var root = __webpack_require__(71),
-	    stubFalse = __webpack_require__(113);
+	/* WEBPACK VAR INJECTION */(function(module) {var root = __webpack_require__(58),
+	    stubFalse = __webpack_require__(105);
 
 	/** Detect free variable `exports`. */
 	var freeExports = typeof exports == 'object' && exports && !exports.nodeType && exports;
@@ -14599,10 +14582,10 @@ var StellarBase =
 
 	module.exports = isBuffer;
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(112)(module)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(104)(module)))
 
 /***/ }),
-/* 112 */
+/* 104 */
 /***/ (function(module, exports) {
 
 	module.exports = function(module) {
@@ -14618,7 +14601,7 @@ var StellarBase =
 
 
 /***/ }),
-/* 113 */
+/* 105 */
 /***/ (function(module, exports) {
 
 	/**
@@ -14642,12 +14625,12 @@ var StellarBase =
 
 
 /***/ }),
-/* 114 */
+/* 106 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var baseIsTypedArray = __webpack_require__(115),
-	    baseUnary = __webpack_require__(116),
-	    nodeUtil = __webpack_require__(117);
+	var baseIsTypedArray = __webpack_require__(107),
+	    baseUnary = __webpack_require__(108),
+	    nodeUtil = __webpack_require__(109);
 
 	/* Node.js helper references. */
 	var nodeIsTypedArray = nodeUtil && nodeUtil.isTypedArray;
@@ -14675,12 +14658,12 @@ var StellarBase =
 
 
 /***/ }),
-/* 115 */
+/* 107 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var baseGetTag = __webpack_require__(69),
-	    isLength = __webpack_require__(103),
-	    isObjectLike = __webpack_require__(75);
+	var baseGetTag = __webpack_require__(56),
+	    isLength = __webpack_require__(96),
+	    isObjectLike = __webpack_require__(63);
 
 	/** `Object#toString` result references. */
 	var argsTag = '[object Arguments]',
@@ -14741,7 +14724,7 @@ var StellarBase =
 
 
 /***/ }),
-/* 116 */
+/* 108 */
 /***/ (function(module, exports) {
 
 	/**
@@ -14761,10 +14744,10 @@ var StellarBase =
 
 
 /***/ }),
-/* 117 */
+/* 109 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(module) {var freeGlobal = __webpack_require__(72);
+	/* WEBPACK VAR INJECTION */(function(module) {var freeGlobal = __webpack_require__(59);
 
 	/** Detect free variable `exports`. */
 	var freeExports = typeof exports == 'object' && exports && !exports.nodeType && exports;
@@ -14795,15 +14778,15 @@ var StellarBase =
 
 	module.exports = nodeUtil;
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(112)(module)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(104)(module)))
 
 /***/ }),
-/* 118 */
+/* 110 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var isObject = __webpack_require__(86),
-	    isPrototype = __webpack_require__(119),
-	    nativeKeysIn = __webpack_require__(120);
+	var isObject = __webpack_require__(79),
+	    isPrototype = __webpack_require__(111),
+	    nativeKeysIn = __webpack_require__(112);
 
 	/** Used for built-in method references. */
 	var objectProto = Object.prototype;
@@ -14837,7 +14820,7 @@ var StellarBase =
 
 
 /***/ }),
-/* 119 */
+/* 111 */
 /***/ (function(module, exports) {
 
 	/** Used for built-in method references. */
@@ -14861,7 +14844,7 @@ var StellarBase =
 
 
 /***/ }),
-/* 120 */
+/* 112 */
 /***/ (function(module, exports) {
 
 	/**
@@ -14887,7 +14870,7 @@ var StellarBase =
 
 
 /***/ }),
-/* 121 */
+/* 113 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(Buffer) {'use strict';
@@ -14899,11 +14882,11 @@ var StellarBase =
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _cursor = __webpack_require__(122);
+	var _cursor = __webpack_require__(114);
 
 	var _cursor2 = _interopRequireDefault(_cursor);
 
-	var _util = __webpack_require__(126);
+	var _util = __webpack_require__(118);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -14937,7 +14920,7 @@ var StellarBase =
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9).Buffer))
 
 /***/ }),
-/* 122 */
+/* 114 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(Buffer) {var Cursor = function(buffer)
@@ -15159,7 +15142,7 @@ var StellarBase =
 			parent.call(this, buffer);
 		};
 
-		__webpack_require__(123).inherits(C, parent);
+		__webpack_require__(115).inherits(C, parent);
 
 		C.extend = parent.extend;
 		C.define = parent.define;
@@ -15188,7 +15171,7 @@ var StellarBase =
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9).Buffer))
 
 /***/ }),
-/* 123 */
+/* 115 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global, process) {// Copyright Joyent, Inc. and other Node contributors.
@@ -15726,7 +15709,7 @@ var StellarBase =
 	}
 	exports.isPrimitive = isPrimitive;
 
-	exports.isBuffer = __webpack_require__(125);
+	exports.isBuffer = __webpack_require__(117);
 
 	function objectToString(o) {
 	  return Object.prototype.toString.call(o);
@@ -15895,10 +15878,10 @@ var StellarBase =
 	}
 	exports.callbackify = callbackify;
 
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(124)))
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(116)))
 
 /***/ }),
-/* 124 */
+/* 116 */
 /***/ (function(module, exports) {
 
 	// shim for using process in browser
@@ -16088,7 +16071,7 @@ var StellarBase =
 
 
 /***/ }),
-/* 125 */
+/* 117 */
 /***/ (function(module, exports) {
 
 	module.exports = function isBuffer(arg) {
@@ -16099,7 +16082,7 @@ var StellarBase =
 	}
 
 /***/ }),
-/* 126 */
+/* 118 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -16110,7 +16093,7 @@ var StellarBase =
 	exports.calculatePadding = calculatePadding;
 	exports.slicePadding = slicePadding;
 
-	var _every = __webpack_require__(127);
+	var _every = __webpack_require__(119);
 
 	var _every2 = _interopRequireDefault(_every);
 
@@ -16142,14 +16125,14 @@ var StellarBase =
 	}
 
 /***/ }),
-/* 127 */
+/* 119 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var arrayEvery = __webpack_require__(128),
-	    baseEvery = __webpack_require__(129),
-	    baseIteratee = __webpack_require__(139),
-	    isArray = __webpack_require__(110),
-	    isIterateeCall = __webpack_require__(101);
+	var arrayEvery = __webpack_require__(120),
+	    baseEvery = __webpack_require__(121),
+	    baseIteratee = __webpack_require__(131),
+	    isArray = __webpack_require__(62),
+	    isIterateeCall = __webpack_require__(94);
 
 	/**
 	 * Checks if `predicate` returns truthy for **all** elements of `collection`.
@@ -16204,7 +16187,7 @@ var StellarBase =
 
 
 /***/ }),
-/* 128 */
+/* 120 */
 /***/ (function(module, exports) {
 
 	/**
@@ -16233,10 +16216,10 @@ var StellarBase =
 
 
 /***/ }),
-/* 129 */
+/* 121 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var baseEach = __webpack_require__(130);
+	var baseEach = __webpack_require__(122);
 
 	/**
 	 * The base implementation of `_.every` without support for iteratee shorthands.
@@ -16260,11 +16243,11 @@ var StellarBase =
 
 
 /***/ }),
-/* 130 */
+/* 122 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var baseForOwn = __webpack_require__(131),
-	    createBaseEach = __webpack_require__(138);
+	var baseForOwn = __webpack_require__(123),
+	    createBaseEach = __webpack_require__(130);
 
 	/**
 	 * The base implementation of `_.forEach` without support for iteratee shorthands.
@@ -16280,11 +16263,11 @@ var StellarBase =
 
 
 /***/ }),
-/* 131 */
+/* 123 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var baseFor = __webpack_require__(132),
-	    keys = __webpack_require__(134);
+	var baseFor = __webpack_require__(124),
+	    keys = __webpack_require__(126);
 
 	/**
 	 * The base implementation of `_.forOwn` without support for iteratee shorthands.
@@ -16302,10 +16285,10 @@ var StellarBase =
 
 
 /***/ }),
-/* 132 */
+/* 124 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var createBaseFor = __webpack_require__(133);
+	var createBaseFor = __webpack_require__(125);
 
 	/**
 	 * The base implementation of `baseForOwn` which iterates over `object`
@@ -16324,7 +16307,7 @@ var StellarBase =
 
 
 /***/ }),
-/* 133 */
+/* 125 */
 /***/ (function(module, exports) {
 
 	/**
@@ -16355,12 +16338,12 @@ var StellarBase =
 
 
 /***/ }),
-/* 134 */
+/* 126 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var arrayLikeKeys = __webpack_require__(106),
-	    baseKeys = __webpack_require__(135),
-	    isArrayLike = __webpack_require__(102);
+	var arrayLikeKeys = __webpack_require__(99),
+	    baseKeys = __webpack_require__(127),
+	    isArrayLike = __webpack_require__(95);
 
 	/**
 	 * Creates an array of the own enumerable property names of `object`.
@@ -16398,11 +16381,11 @@ var StellarBase =
 
 
 /***/ }),
-/* 135 */
+/* 127 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var isPrototype = __webpack_require__(119),
-	    nativeKeys = __webpack_require__(136);
+	var isPrototype = __webpack_require__(111),
+	    nativeKeys = __webpack_require__(128);
 
 	/** Used for built-in method references. */
 	var objectProto = Object.prototype;
@@ -16434,10 +16417,10 @@ var StellarBase =
 
 
 /***/ }),
-/* 136 */
+/* 128 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var overArg = __webpack_require__(137);
+	var overArg = __webpack_require__(129);
 
 	/* Built-in method references for those with the same name as other `lodash` methods. */
 	var nativeKeys = overArg(Object.keys, Object);
@@ -16446,7 +16429,7 @@ var StellarBase =
 
 
 /***/ }),
-/* 137 */
+/* 129 */
 /***/ (function(module, exports) {
 
 	/**
@@ -16467,10 +16450,10 @@ var StellarBase =
 
 
 /***/ }),
-/* 138 */
+/* 130 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var isArrayLike = __webpack_require__(102);
+	var isArrayLike = __webpack_require__(95);
 
 	/**
 	 * Creates a `baseEach` or `baseEachRight` function.
@@ -16505,14 +16488,14 @@ var StellarBase =
 
 
 /***/ }),
-/* 139 */
+/* 131 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var baseMatches = __webpack_require__(140),
-	    baseMatchesProperty = __webpack_require__(198),
-	    identity = __webpack_require__(94),
-	    isArray = __webpack_require__(110),
-	    property = __webpack_require__(214);
+	var baseMatches = __webpack_require__(132),
+	    baseMatchesProperty = __webpack_require__(190),
+	    identity = __webpack_require__(87),
+	    isArray = __webpack_require__(62),
+	    property = __webpack_require__(206);
 
 	/**
 	 * The base implementation of `_.iteratee`.
@@ -16542,12 +16525,12 @@ var StellarBase =
 
 
 /***/ }),
-/* 140 */
+/* 132 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var baseIsMatch = __webpack_require__(141),
-	    getMatchData = __webpack_require__(195),
-	    matchesStrictComparable = __webpack_require__(197);
+	var baseIsMatch = __webpack_require__(133),
+	    getMatchData = __webpack_require__(187),
+	    matchesStrictComparable = __webpack_require__(189);
 
 	/**
 	 * The base implementation of `_.matches` which doesn't clone `source`.
@@ -16570,11 +16553,11 @@ var StellarBase =
 
 
 /***/ }),
-/* 141 */
+/* 133 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var Stack = __webpack_require__(142),
-	    baseIsEqual = __webpack_require__(171);
+	var Stack = __webpack_require__(134),
+	    baseIsEqual = __webpack_require__(163);
 
 	/** Used to compose bitmasks for value comparisons. */
 	var COMPARE_PARTIAL_FLAG = 1,
@@ -16638,15 +16621,15 @@ var StellarBase =
 
 
 /***/ }),
-/* 142 */
+/* 134 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var ListCache = __webpack_require__(143),
-	    stackClear = __webpack_require__(150),
-	    stackDelete = __webpack_require__(151),
-	    stackGet = __webpack_require__(152),
-	    stackHas = __webpack_require__(153),
-	    stackSet = __webpack_require__(154);
+	var ListCache = __webpack_require__(135),
+	    stackClear = __webpack_require__(142),
+	    stackDelete = __webpack_require__(143),
+	    stackGet = __webpack_require__(144),
+	    stackHas = __webpack_require__(145),
+	    stackSet = __webpack_require__(146);
 
 	/**
 	 * Creates a stack cache object to store key-value pairs.
@@ -16671,14 +16654,14 @@ var StellarBase =
 
 
 /***/ }),
-/* 143 */
+/* 135 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var listCacheClear = __webpack_require__(144),
-	    listCacheDelete = __webpack_require__(145),
-	    listCacheGet = __webpack_require__(147),
-	    listCacheHas = __webpack_require__(148),
-	    listCacheSet = __webpack_require__(149);
+	var listCacheClear = __webpack_require__(136),
+	    listCacheDelete = __webpack_require__(137),
+	    listCacheGet = __webpack_require__(139),
+	    listCacheHas = __webpack_require__(140),
+	    listCacheSet = __webpack_require__(141);
 
 	/**
 	 * Creates an list cache object.
@@ -16709,7 +16692,7 @@ var StellarBase =
 
 
 /***/ }),
-/* 144 */
+/* 136 */
 /***/ (function(module, exports) {
 
 	/**
@@ -16728,10 +16711,10 @@ var StellarBase =
 
 
 /***/ }),
-/* 145 */
+/* 137 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var assocIndexOf = __webpack_require__(146);
+	var assocIndexOf = __webpack_require__(138);
 
 	/** Used for built-in method references. */
 	var arrayProto = Array.prototype;
@@ -16769,10 +16752,10 @@ var StellarBase =
 
 
 /***/ }),
-/* 146 */
+/* 138 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var eq = __webpack_require__(91);
+	var eq = __webpack_require__(84);
 
 	/**
 	 * Gets the index at which the `key` is found in `array` of key-value pairs.
@@ -16796,10 +16779,10 @@ var StellarBase =
 
 
 /***/ }),
-/* 147 */
+/* 139 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var assocIndexOf = __webpack_require__(146);
+	var assocIndexOf = __webpack_require__(138);
 
 	/**
 	 * Gets the list cache value for `key`.
@@ -16821,10 +16804,10 @@ var StellarBase =
 
 
 /***/ }),
-/* 148 */
+/* 140 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var assocIndexOf = __webpack_require__(146);
+	var assocIndexOf = __webpack_require__(138);
 
 	/**
 	 * Checks if a list cache value for `key` exists.
@@ -16843,10 +16826,10 @@ var StellarBase =
 
 
 /***/ }),
-/* 149 */
+/* 141 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var assocIndexOf = __webpack_require__(146);
+	var assocIndexOf = __webpack_require__(138);
 
 	/**
 	 * Sets the list cache `key` to `value`.
@@ -16875,10 +16858,10 @@ var StellarBase =
 
 
 /***/ }),
-/* 150 */
+/* 142 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var ListCache = __webpack_require__(143);
+	var ListCache = __webpack_require__(135);
 
 	/**
 	 * Removes all key-value entries from the stack.
@@ -16896,7 +16879,7 @@ var StellarBase =
 
 
 /***/ }),
-/* 151 */
+/* 143 */
 /***/ (function(module, exports) {
 
 	/**
@@ -16920,7 +16903,7 @@ var StellarBase =
 
 
 /***/ }),
-/* 152 */
+/* 144 */
 /***/ (function(module, exports) {
 
 	/**
@@ -16940,7 +16923,7 @@ var StellarBase =
 
 
 /***/ }),
-/* 153 */
+/* 145 */
 /***/ (function(module, exports) {
 
 	/**
@@ -16960,12 +16943,12 @@ var StellarBase =
 
 
 /***/ }),
-/* 154 */
+/* 146 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var ListCache = __webpack_require__(143),
-	    Map = __webpack_require__(155),
-	    MapCache = __webpack_require__(156);
+	var ListCache = __webpack_require__(135),
+	    Map = __webpack_require__(147),
+	    MapCache = __webpack_require__(148);
 
 	/** Used as the size to enable large array optimizations. */
 	var LARGE_ARRAY_SIZE = 200;
@@ -17000,11 +16983,11 @@ var StellarBase =
 
 
 /***/ }),
-/* 155 */
+/* 147 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var getNative = __webpack_require__(83),
-	    root = __webpack_require__(71);
+	var getNative = __webpack_require__(76),
+	    root = __webpack_require__(58);
 
 	/* Built-in method references that are verified to be native. */
 	var Map = getNative(root, 'Map');
@@ -17013,14 +16996,14 @@ var StellarBase =
 
 
 /***/ }),
-/* 156 */
+/* 148 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var mapCacheClear = __webpack_require__(157),
-	    mapCacheDelete = __webpack_require__(165),
-	    mapCacheGet = __webpack_require__(168),
-	    mapCacheHas = __webpack_require__(169),
-	    mapCacheSet = __webpack_require__(170);
+	var mapCacheClear = __webpack_require__(149),
+	    mapCacheDelete = __webpack_require__(157),
+	    mapCacheGet = __webpack_require__(160),
+	    mapCacheHas = __webpack_require__(161),
+	    mapCacheSet = __webpack_require__(162);
 
 	/**
 	 * Creates a map cache object to store key-value pairs.
@@ -17051,12 +17034,12 @@ var StellarBase =
 
 
 /***/ }),
-/* 157 */
+/* 149 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var Hash = __webpack_require__(158),
-	    ListCache = __webpack_require__(143),
-	    Map = __webpack_require__(155);
+	var Hash = __webpack_require__(150),
+	    ListCache = __webpack_require__(135),
+	    Map = __webpack_require__(147);
 
 	/**
 	 * Removes all key-value entries from the map.
@@ -17078,14 +17061,14 @@ var StellarBase =
 
 
 /***/ }),
-/* 158 */
+/* 150 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var hashClear = __webpack_require__(159),
-	    hashDelete = __webpack_require__(161),
-	    hashGet = __webpack_require__(162),
-	    hashHas = __webpack_require__(163),
-	    hashSet = __webpack_require__(164);
+	var hashClear = __webpack_require__(151),
+	    hashDelete = __webpack_require__(153),
+	    hashGet = __webpack_require__(154),
+	    hashHas = __webpack_require__(155),
+	    hashSet = __webpack_require__(156);
 
 	/**
 	 * Creates a hash object.
@@ -17116,10 +17099,10 @@ var StellarBase =
 
 
 /***/ }),
-/* 159 */
+/* 151 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var nativeCreate = __webpack_require__(160);
+	var nativeCreate = __webpack_require__(152);
 
 	/**
 	 * Removes all key-value entries from the hash.
@@ -17137,10 +17120,10 @@ var StellarBase =
 
 
 /***/ }),
-/* 160 */
+/* 152 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var getNative = __webpack_require__(83);
+	var getNative = __webpack_require__(76);
 
 	/* Built-in method references that are verified to be native. */
 	var nativeCreate = getNative(Object, 'create');
@@ -17149,7 +17132,7 @@ var StellarBase =
 
 
 /***/ }),
-/* 161 */
+/* 153 */
 /***/ (function(module, exports) {
 
 	/**
@@ -17172,10 +17155,10 @@ var StellarBase =
 
 
 /***/ }),
-/* 162 */
+/* 154 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var nativeCreate = __webpack_require__(160);
+	var nativeCreate = __webpack_require__(152);
 
 	/** Used to stand-in for `undefined` hash values. */
 	var HASH_UNDEFINED = '__lodash_hash_undefined__';
@@ -17208,10 +17191,10 @@ var StellarBase =
 
 
 /***/ }),
-/* 163 */
+/* 155 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var nativeCreate = __webpack_require__(160);
+	var nativeCreate = __webpack_require__(152);
 
 	/** Used for built-in method references. */
 	var objectProto = Object.prototype;
@@ -17237,10 +17220,10 @@ var StellarBase =
 
 
 /***/ }),
-/* 164 */
+/* 156 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var nativeCreate = __webpack_require__(160);
+	var nativeCreate = __webpack_require__(152);
 
 	/** Used to stand-in for `undefined` hash values. */
 	var HASH_UNDEFINED = '__lodash_hash_undefined__';
@@ -17266,10 +17249,10 @@ var StellarBase =
 
 
 /***/ }),
-/* 165 */
+/* 157 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var getMapData = __webpack_require__(166);
+	var getMapData = __webpack_require__(158);
 
 	/**
 	 * Removes `key` and its value from the map.
@@ -17290,10 +17273,10 @@ var StellarBase =
 
 
 /***/ }),
-/* 166 */
+/* 158 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var isKeyable = __webpack_require__(167);
+	var isKeyable = __webpack_require__(159);
 
 	/**
 	 * Gets the data for `map`.
@@ -17314,7 +17297,7 @@ var StellarBase =
 
 
 /***/ }),
-/* 167 */
+/* 159 */
 /***/ (function(module, exports) {
 
 	/**
@@ -17335,10 +17318,10 @@ var StellarBase =
 
 
 /***/ }),
-/* 168 */
+/* 160 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var getMapData = __webpack_require__(166);
+	var getMapData = __webpack_require__(158);
 
 	/**
 	 * Gets the map value for `key`.
@@ -17357,10 +17340,10 @@ var StellarBase =
 
 
 /***/ }),
-/* 169 */
+/* 161 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var getMapData = __webpack_require__(166);
+	var getMapData = __webpack_require__(158);
 
 	/**
 	 * Checks if a map value for `key` exists.
@@ -17379,10 +17362,10 @@ var StellarBase =
 
 
 /***/ }),
-/* 170 */
+/* 162 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var getMapData = __webpack_require__(166);
+	var getMapData = __webpack_require__(158);
 
 	/**
 	 * Sets the map `key` to `value`.
@@ -17407,11 +17390,11 @@ var StellarBase =
 
 
 /***/ }),
-/* 171 */
+/* 163 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var baseIsEqualDeep = __webpack_require__(172),
-	    isObjectLike = __webpack_require__(75);
+	var baseIsEqualDeep = __webpack_require__(164),
+	    isObjectLike = __webpack_require__(63);
 
 	/**
 	 * The base implementation of `_.isEqual` which supports partial comparisons
@@ -17441,17 +17424,17 @@ var StellarBase =
 
 
 /***/ }),
-/* 172 */
+/* 164 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var Stack = __webpack_require__(142),
-	    equalArrays = __webpack_require__(173),
-	    equalByTag = __webpack_require__(179),
-	    equalObjects = __webpack_require__(183),
-	    getTag = __webpack_require__(190),
-	    isArray = __webpack_require__(110),
-	    isBuffer = __webpack_require__(111),
-	    isTypedArray = __webpack_require__(114);
+	var Stack = __webpack_require__(134),
+	    equalArrays = __webpack_require__(165),
+	    equalByTag = __webpack_require__(171),
+	    equalObjects = __webpack_require__(175),
+	    getTag = __webpack_require__(182),
+	    isArray = __webpack_require__(62),
+	    isBuffer = __webpack_require__(103),
+	    isTypedArray = __webpack_require__(106);
 
 	/** Used to compose bitmasks for value comparisons. */
 	var COMPARE_PARTIAL_FLAG = 1;
@@ -17530,12 +17513,12 @@ var StellarBase =
 
 
 /***/ }),
-/* 173 */
+/* 165 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var SetCache = __webpack_require__(174),
-	    arraySome = __webpack_require__(177),
-	    cacheHas = __webpack_require__(178);
+	var SetCache = __webpack_require__(166),
+	    arraySome = __webpack_require__(169),
+	    cacheHas = __webpack_require__(170);
 
 	/** Used to compose bitmasks for value comparisons. */
 	var COMPARE_PARTIAL_FLAG = 1,
@@ -17619,12 +17602,12 @@ var StellarBase =
 
 
 /***/ }),
-/* 174 */
+/* 166 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var MapCache = __webpack_require__(156),
-	    setCacheAdd = __webpack_require__(175),
-	    setCacheHas = __webpack_require__(176);
+	var MapCache = __webpack_require__(148),
+	    setCacheAdd = __webpack_require__(167),
+	    setCacheHas = __webpack_require__(168);
 
 	/**
 	 *
@@ -17652,7 +17635,7 @@ var StellarBase =
 
 
 /***/ }),
-/* 175 */
+/* 167 */
 /***/ (function(module, exports) {
 
 	/** Used to stand-in for `undefined` hash values. */
@@ -17677,7 +17660,7 @@ var StellarBase =
 
 
 /***/ }),
-/* 176 */
+/* 168 */
 /***/ (function(module, exports) {
 
 	/**
@@ -17697,7 +17680,7 @@ var StellarBase =
 
 
 /***/ }),
-/* 177 */
+/* 169 */
 /***/ (function(module, exports) {
 
 	/**
@@ -17726,7 +17709,7 @@ var StellarBase =
 
 
 /***/ }),
-/* 178 */
+/* 170 */
 /***/ (function(module, exports) {
 
 	/**
@@ -17745,15 +17728,15 @@ var StellarBase =
 
 
 /***/ }),
-/* 179 */
+/* 171 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var Symbol = __webpack_require__(70),
-	    Uint8Array = __webpack_require__(180),
-	    eq = __webpack_require__(91),
-	    equalArrays = __webpack_require__(173),
-	    mapToArray = __webpack_require__(181),
-	    setToArray = __webpack_require__(182);
+	var Symbol = __webpack_require__(57),
+	    Uint8Array = __webpack_require__(172),
+	    eq = __webpack_require__(84),
+	    equalArrays = __webpack_require__(165),
+	    mapToArray = __webpack_require__(173),
+	    setToArray = __webpack_require__(174);
 
 	/** Used to compose bitmasks for value comparisons. */
 	var COMPARE_PARTIAL_FLAG = 1,
@@ -17863,10 +17846,10 @@ var StellarBase =
 
 
 /***/ }),
-/* 180 */
+/* 172 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var root = __webpack_require__(71);
+	var root = __webpack_require__(58);
 
 	/** Built-in value references. */
 	var Uint8Array = root.Uint8Array;
@@ -17875,7 +17858,7 @@ var StellarBase =
 
 
 /***/ }),
-/* 181 */
+/* 173 */
 /***/ (function(module, exports) {
 
 	/**
@@ -17899,7 +17882,7 @@ var StellarBase =
 
 
 /***/ }),
-/* 182 */
+/* 174 */
 /***/ (function(module, exports) {
 
 	/**
@@ -17923,10 +17906,10 @@ var StellarBase =
 
 
 /***/ }),
-/* 183 */
+/* 175 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var getAllKeys = __webpack_require__(184);
+	var getAllKeys = __webpack_require__(176);
 
 	/** Used to compose bitmasks for value comparisons. */
 	var COMPARE_PARTIAL_FLAG = 1;
@@ -18018,12 +18001,12 @@ var StellarBase =
 
 
 /***/ }),
-/* 184 */
+/* 176 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var baseGetAllKeys = __webpack_require__(185),
-	    getSymbols = __webpack_require__(187),
-	    keys = __webpack_require__(134);
+	var baseGetAllKeys = __webpack_require__(177),
+	    getSymbols = __webpack_require__(179),
+	    keys = __webpack_require__(126);
 
 	/**
 	 * Creates an array of own enumerable property names and symbols of `object`.
@@ -18040,11 +18023,11 @@ var StellarBase =
 
 
 /***/ }),
-/* 185 */
+/* 177 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var arrayPush = __webpack_require__(186),
-	    isArray = __webpack_require__(110);
+	var arrayPush = __webpack_require__(178),
+	    isArray = __webpack_require__(62);
 
 	/**
 	 * The base implementation of `getAllKeys` and `getAllKeysIn` which uses
@@ -18066,7 +18049,7 @@ var StellarBase =
 
 
 /***/ }),
-/* 186 */
+/* 178 */
 /***/ (function(module, exports) {
 
 	/**
@@ -18092,11 +18075,11 @@ var StellarBase =
 
 
 /***/ }),
-/* 187 */
+/* 179 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var arrayFilter = __webpack_require__(188),
-	    stubArray = __webpack_require__(189);
+	var arrayFilter = __webpack_require__(180),
+	    stubArray = __webpack_require__(181);
 
 	/** Used for built-in method references. */
 	var objectProto = Object.prototype;
@@ -18128,7 +18111,7 @@ var StellarBase =
 
 
 /***/ }),
-/* 188 */
+/* 180 */
 /***/ (function(module, exports) {
 
 	/**
@@ -18159,7 +18142,7 @@ var StellarBase =
 
 
 /***/ }),
-/* 189 */
+/* 181 */
 /***/ (function(module, exports) {
 
 	/**
@@ -18188,16 +18171,16 @@ var StellarBase =
 
 
 /***/ }),
-/* 190 */
+/* 182 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var DataView = __webpack_require__(191),
-	    Map = __webpack_require__(155),
-	    Promise = __webpack_require__(192),
-	    Set = __webpack_require__(193),
-	    WeakMap = __webpack_require__(194),
-	    baseGetTag = __webpack_require__(69),
-	    toSource = __webpack_require__(89);
+	var DataView = __webpack_require__(183),
+	    Map = __webpack_require__(147),
+	    Promise = __webpack_require__(184),
+	    Set = __webpack_require__(185),
+	    WeakMap = __webpack_require__(186),
+	    baseGetTag = __webpack_require__(56),
+	    toSource = __webpack_require__(82);
 
 	/** `Object#toString` result references. */
 	var mapTag = '[object Map]',
@@ -18252,11 +18235,11 @@ var StellarBase =
 
 
 /***/ }),
-/* 191 */
+/* 183 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var getNative = __webpack_require__(83),
-	    root = __webpack_require__(71);
+	var getNative = __webpack_require__(76),
+	    root = __webpack_require__(58);
 
 	/* Built-in method references that are verified to be native. */
 	var DataView = getNative(root, 'DataView');
@@ -18265,11 +18248,11 @@ var StellarBase =
 
 
 /***/ }),
-/* 192 */
+/* 184 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var getNative = __webpack_require__(83),
-	    root = __webpack_require__(71);
+	var getNative = __webpack_require__(76),
+	    root = __webpack_require__(58);
 
 	/* Built-in method references that are verified to be native. */
 	var Promise = getNative(root, 'Promise');
@@ -18278,11 +18261,11 @@ var StellarBase =
 
 
 /***/ }),
-/* 193 */
+/* 185 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var getNative = __webpack_require__(83),
-	    root = __webpack_require__(71);
+	var getNative = __webpack_require__(76),
+	    root = __webpack_require__(58);
 
 	/* Built-in method references that are verified to be native. */
 	var Set = getNative(root, 'Set');
@@ -18291,11 +18274,11 @@ var StellarBase =
 
 
 /***/ }),
-/* 194 */
+/* 186 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var getNative = __webpack_require__(83),
-	    root = __webpack_require__(71);
+	var getNative = __webpack_require__(76),
+	    root = __webpack_require__(58);
 
 	/* Built-in method references that are verified to be native. */
 	var WeakMap = getNative(root, 'WeakMap');
@@ -18304,11 +18287,11 @@ var StellarBase =
 
 
 /***/ }),
-/* 195 */
+/* 187 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var isStrictComparable = __webpack_require__(196),
-	    keys = __webpack_require__(134);
+	var isStrictComparable = __webpack_require__(188),
+	    keys = __webpack_require__(126);
 
 	/**
 	 * Gets the property names, values, and compare flags of `object`.
@@ -18334,10 +18317,10 @@ var StellarBase =
 
 
 /***/ }),
-/* 196 */
+/* 188 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var isObject = __webpack_require__(86);
+	var isObject = __webpack_require__(79);
 
 	/**
 	 * Checks if `value` is suitable for strict equality comparisons, i.e. `===`.
@@ -18355,7 +18338,7 @@ var StellarBase =
 
 
 /***/ }),
-/* 197 */
+/* 189 */
 /***/ (function(module, exports) {
 
 	/**
@@ -18381,16 +18364,16 @@ var StellarBase =
 
 
 /***/ }),
-/* 198 */
+/* 190 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var baseIsEqual = __webpack_require__(171),
-	    get = __webpack_require__(199),
-	    hasIn = __webpack_require__(211),
-	    isKey = __webpack_require__(202),
-	    isStrictComparable = __webpack_require__(196),
-	    matchesStrictComparable = __webpack_require__(197),
-	    toKey = __webpack_require__(210);
+	var baseIsEqual = __webpack_require__(163),
+	    get = __webpack_require__(191),
+	    hasIn = __webpack_require__(203),
+	    isKey = __webpack_require__(194),
+	    isStrictComparable = __webpack_require__(188),
+	    matchesStrictComparable = __webpack_require__(189),
+	    toKey = __webpack_require__(202);
 
 	/** Used to compose bitmasks for value comparisons. */
 	var COMPARE_PARTIAL_FLAG = 1,
@@ -18420,10 +18403,10 @@ var StellarBase =
 
 
 /***/ }),
-/* 199 */
+/* 191 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var baseGet = __webpack_require__(200);
+	var baseGet = __webpack_require__(192);
 
 	/**
 	 * Gets the value at `path` of `object`. If the resolved value is
@@ -18459,11 +18442,11 @@ var StellarBase =
 
 
 /***/ }),
-/* 200 */
+/* 192 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var castPath = __webpack_require__(201),
-	    toKey = __webpack_require__(210);
+	var castPath = __webpack_require__(193),
+	    toKey = __webpack_require__(202);
 
 	/**
 	 * The base implementation of `_.get` without support for default values.
@@ -18489,13 +18472,13 @@ var StellarBase =
 
 
 /***/ }),
-/* 201 */
+/* 193 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var isArray = __webpack_require__(110),
-	    isKey = __webpack_require__(202),
-	    stringToPath = __webpack_require__(204),
-	    toString = __webpack_require__(207);
+	var isArray = __webpack_require__(62),
+	    isKey = __webpack_require__(194),
+	    stringToPath = __webpack_require__(196),
+	    toString = __webpack_require__(199);
 
 	/**
 	 * Casts `value` to a path array if it's not one.
@@ -18516,11 +18499,11 @@ var StellarBase =
 
 
 /***/ }),
-/* 202 */
+/* 194 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var isArray = __webpack_require__(110),
-	    isSymbol = __webpack_require__(203);
+	var isArray = __webpack_require__(62),
+	    isSymbol = __webpack_require__(195);
 
 	/** Used to match property names within property paths. */
 	var reIsDeepProp = /\.|\[(?:[^[\]]*|(["'])(?:(?!\1)[^\\]|\\.)*?\1)\]/,
@@ -18551,11 +18534,11 @@ var StellarBase =
 
 
 /***/ }),
-/* 203 */
+/* 195 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var baseGetTag = __webpack_require__(69),
-	    isObjectLike = __webpack_require__(75);
+	var baseGetTag = __webpack_require__(56),
+	    isObjectLike = __webpack_require__(63);
 
 	/** `Object#toString` result references. */
 	var symbolTag = '[object Symbol]';
@@ -18586,10 +18569,10 @@ var StellarBase =
 
 
 /***/ }),
-/* 204 */
+/* 196 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var memoizeCapped = __webpack_require__(205);
+	var memoizeCapped = __webpack_require__(197);
 
 	/** Used to match property names within property paths. */
 	var rePropName = /[^.[\]]+|\[(?:(-?\d+(?:\.\d+)?)|(["'])((?:(?!\2)[^\\]|\\.)*?)\2)\]|(?=(?:\.|\[\])(?:\.|\[\]|$))/g;
@@ -18619,10 +18602,10 @@ var StellarBase =
 
 
 /***/ }),
-/* 205 */
+/* 197 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var memoize = __webpack_require__(206);
+	var memoize = __webpack_require__(198);
 
 	/** Used as the maximum memoize cache size. */
 	var MAX_MEMOIZE_SIZE = 500;
@@ -18651,10 +18634,10 @@ var StellarBase =
 
 
 /***/ }),
-/* 206 */
+/* 198 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var MapCache = __webpack_require__(156);
+	var MapCache = __webpack_require__(148);
 
 	/** Error message constants. */
 	var FUNC_ERROR_TEXT = 'Expected a function';
@@ -18730,10 +18713,10 @@ var StellarBase =
 
 
 /***/ }),
-/* 207 */
+/* 199 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var baseToString = __webpack_require__(208);
+	var baseToString = __webpack_require__(200);
 
 	/**
 	 * Converts `value` to a string. An empty string is returned for `null`
@@ -18764,13 +18747,13 @@ var StellarBase =
 
 
 /***/ }),
-/* 208 */
+/* 200 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var Symbol = __webpack_require__(70),
-	    arrayMap = __webpack_require__(209),
-	    isArray = __webpack_require__(110),
-	    isSymbol = __webpack_require__(203);
+	var Symbol = __webpack_require__(57),
+	    arrayMap = __webpack_require__(201),
+	    isArray = __webpack_require__(62),
+	    isSymbol = __webpack_require__(195);
 
 	/** Used as references for various `Number` constants. */
 	var INFINITY = 1 / 0;
@@ -18807,7 +18790,7 @@ var StellarBase =
 
 
 /***/ }),
-/* 209 */
+/* 201 */
 /***/ (function(module, exports) {
 
 	/**
@@ -18834,10 +18817,10 @@ var StellarBase =
 
 
 /***/ }),
-/* 210 */
+/* 202 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var isSymbol = __webpack_require__(203);
+	var isSymbol = __webpack_require__(195);
 
 	/** Used as references for various `Number` constants. */
 	var INFINITY = 1 / 0;
@@ -18861,11 +18844,11 @@ var StellarBase =
 
 
 /***/ }),
-/* 211 */
+/* 203 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var baseHasIn = __webpack_require__(212),
-	    hasPath = __webpack_require__(213);
+	var baseHasIn = __webpack_require__(204),
+	    hasPath = __webpack_require__(205);
 
 	/**
 	 * Checks if `path` is a direct or inherited property of `object`.
@@ -18901,7 +18884,7 @@ var StellarBase =
 
 
 /***/ }),
-/* 212 */
+/* 204 */
 /***/ (function(module, exports) {
 
 	/**
@@ -18920,15 +18903,15 @@ var StellarBase =
 
 
 /***/ }),
-/* 213 */
+/* 205 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var castPath = __webpack_require__(201),
-	    isArguments = __webpack_require__(108),
-	    isArray = __webpack_require__(110),
-	    isIndex = __webpack_require__(104),
-	    isLength = __webpack_require__(103),
-	    toKey = __webpack_require__(210);
+	var castPath = __webpack_require__(193),
+	    isArguments = __webpack_require__(101),
+	    isArray = __webpack_require__(62),
+	    isIndex = __webpack_require__(97),
+	    isLength = __webpack_require__(96),
+	    toKey = __webpack_require__(202);
 
 	/**
 	 * Checks if `path` exists on `object`.
@@ -18965,13 +18948,13 @@ var StellarBase =
 
 
 /***/ }),
-/* 214 */
+/* 206 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var baseProperty = __webpack_require__(215),
-	    basePropertyDeep = __webpack_require__(216),
-	    isKey = __webpack_require__(202),
-	    toKey = __webpack_require__(210);
+	var baseProperty = __webpack_require__(207),
+	    basePropertyDeep = __webpack_require__(208),
+	    isKey = __webpack_require__(194),
+	    toKey = __webpack_require__(202);
 
 	/**
 	 * Creates a function that returns the value at `path` of a given object.
@@ -19003,7 +18986,7 @@ var StellarBase =
 
 
 /***/ }),
-/* 215 */
+/* 207 */
 /***/ (function(module, exports) {
 
 	/**
@@ -19023,10 +19006,10 @@ var StellarBase =
 
 
 /***/ }),
-/* 216 */
+/* 208 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var baseGet = __webpack_require__(200);
+	var baseGet = __webpack_require__(192);
 
 	/**
 	 * A specialized version of `baseProperty` which supports deep paths.
@@ -19045,7 +19028,7 @@ var StellarBase =
 
 
 /***/ }),
-/* 217 */
+/* 209 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -19059,11 +19042,11 @@ var StellarBase =
 
 	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
-	var _long = __webpack_require__(218);
+	var _long = __webpack_require__(210);
 
 	var _long2 = _interopRequireDefault(_long);
 
-	var _ioMixin = __webpack_require__(76);
+	var _ioMixin = __webpack_require__(69);
 
 	var _ioMixin2 = _interopRequireDefault(_ioMixin);
 
@@ -19132,7 +19115,7 @@ var StellarBase =
 	Hyper.MIN_VALUE = new Hyper(_long2.default.MIN_VALUE.low, _long2.default.MIN_VALUE.high);
 
 /***/ }),
-/* 218 */
+/* 210 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(module) {/*
@@ -19159,7 +19142,7 @@ var StellarBase =
 	 */
 	(function(global, factory) {
 
-	    /* AMD */ if ("function" === 'function' && __webpack_require__(219)["amd"])
+	    /* AMD */ if ("function" === 'function' && __webpack_require__(211)["amd"])
 	        !(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 	    /* CommonJS */ else if ("function" === 'function' && typeof module === "object" && module && module["exports"])
 	        module["exports"] = factory();
@@ -20215,17 +20198,17 @@ var StellarBase =
 	    return Long;
 	});
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(112)(module)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(104)(module)))
 
 /***/ }),
-/* 219 */
+/* 211 */
 /***/ (function(module, exports) {
 
 	module.exports = function() { throw new Error("define cannot be used indirect"); };
 
 
 /***/ }),
-/* 220 */
+/* 212 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -20239,7 +20222,7 @@ var StellarBase =
 
 	var _isNumber2 = _interopRequireDefault(_isNumber);
 
-	var _ioMixin = __webpack_require__(76);
+	var _ioMixin = __webpack_require__(69);
 
 	var _ioMixin2 = _interopRequireDefault(_ioMixin);
 
@@ -20282,7 +20265,7 @@ var StellarBase =
 	(0, _ioMixin2.default)(UnsignedInt);
 
 /***/ }),
-/* 221 */
+/* 213 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -20296,11 +20279,11 @@ var StellarBase =
 
 	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
-	var _long = __webpack_require__(218);
+	var _long = __webpack_require__(210);
 
 	var _long2 = _interopRequireDefault(_long);
 
-	var _ioMixin = __webpack_require__(76);
+	var _ioMixin = __webpack_require__(69);
 
 	var _ioMixin2 = _interopRequireDefault(_ioMixin);
 
@@ -20370,7 +20353,7 @@ var StellarBase =
 	UnsignedHyper.MIN_VALUE = new UnsignedHyper(_long2.default.MIN_VALUE.low, _long2.default.MIN_VALUE.high);
 
 /***/ }),
-/* 222 */
+/* 214 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -20384,7 +20367,7 @@ var StellarBase =
 
 	var _isNumber2 = _interopRequireDefault(_isNumber);
 
-	var _ioMixin = __webpack_require__(76);
+	var _ioMixin = __webpack_require__(69);
 
 	var _ioMixin2 = _interopRequireDefault(_ioMixin);
 
@@ -20409,7 +20392,7 @@ var StellarBase =
 	(0, _ioMixin2.default)(Float);
 
 /***/ }),
-/* 223 */
+/* 215 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -20423,7 +20406,7 @@ var StellarBase =
 
 	var _isNumber2 = _interopRequireDefault(_isNumber);
 
-	var _ioMixin = __webpack_require__(76);
+	var _ioMixin = __webpack_require__(69);
 
 	var _ioMixin2 = _interopRequireDefault(_ioMixin);
 
@@ -20448,7 +20431,7 @@ var StellarBase =
 	(0, _ioMixin2.default)(Double);
 
 /***/ }),
-/* 224 */
+/* 216 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -20458,7 +20441,7 @@ var StellarBase =
 	});
 	exports.Quadruple = undefined;
 
-	var _ioMixin = __webpack_require__(76);
+	var _ioMixin = __webpack_require__(69);
 
 	var _ioMixin2 = _interopRequireDefault(_ioMixin);
 
@@ -20481,7 +20464,7 @@ var StellarBase =
 	(0, _ioMixin2.default)(Quadruple);
 
 /***/ }),
-/* 225 */
+/* 217 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -20491,13 +20474,13 @@ var StellarBase =
 	});
 	exports.Bool = undefined;
 
-	var _isBoolean = __webpack_require__(226);
+	var _isBoolean = __webpack_require__(218);
 
 	var _isBoolean2 = _interopRequireDefault(_isBoolean);
 
 	var _int = __webpack_require__(67);
 
-	var _ioMixin = __webpack_require__(76);
+	var _ioMixin = __webpack_require__(69);
 
 	var _ioMixin2 = _interopRequireDefault(_ioMixin);
 
@@ -20528,11 +20511,11 @@ var StellarBase =
 	(0, _ioMixin2.default)(Bool);
 
 /***/ }),
-/* 226 */
+/* 218 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var baseGetTag = __webpack_require__(69),
-	    isObjectLike = __webpack_require__(75);
+	var baseGetTag = __webpack_require__(56),
+	    isObjectLike = __webpack_require__(63);
 
 	/** `Object#toString` result references. */
 	var boolTag = '[object Boolean]';
@@ -20563,7 +20546,7 @@ var StellarBase =
 
 
 /***/ }),
-/* 227 */
+/* 219 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(Buffer) {'use strict';
@@ -20575,21 +20558,21 @@ var StellarBase =
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _isString = __webpack_require__(228);
+	var _isString = __webpack_require__(55);
 
 	var _isString2 = _interopRequireDefault(_isString);
 
-	var _isArray = __webpack_require__(110);
+	var _isArray = __webpack_require__(62);
 
 	var _isArray2 = _interopRequireDefault(_isArray);
 
 	var _int = __webpack_require__(67);
 
-	var _unsignedInt = __webpack_require__(220);
+	var _unsignedInt = __webpack_require__(212);
 
-	var _util = __webpack_require__(126);
+	var _util = __webpack_require__(118);
 
-	var _ioMixin = __webpack_require__(76);
+	var _ioMixin = __webpack_require__(69);
 
 	var _ioMixin2 = _interopRequireDefault(_ioMixin);
 
@@ -20663,43 +20646,7 @@ var StellarBase =
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9).Buffer))
 
 /***/ }),
-/* 228 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var baseGetTag = __webpack_require__(69),
-	    isArray = __webpack_require__(110),
-	    isObjectLike = __webpack_require__(75);
-
-	/** `Object#toString` result references. */
-	var stringTag = '[object String]';
-
-	/**
-	 * Checks if `value` is classified as a `String` primitive or object.
-	 *
-	 * @static
-	 * @since 0.1.0
-	 * @memberOf _
-	 * @category Lang
-	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is a string, else `false`.
-	 * @example
-	 *
-	 * _.isString('abc');
-	 * // => true
-	 *
-	 * _.isString(1);
-	 * // => false
-	 */
-	function isString(value) {
-	  return typeof value == 'string' ||
-	    (!isArray(value) && isObjectLike(value) && baseGetTag(value) == stringTag);
-	}
-
-	module.exports = isString;
-
-
-/***/ }),
-/* 229 */
+/* 220 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(Buffer) {'use strict';
@@ -20711,9 +20658,9 @@ var StellarBase =
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _util = __webpack_require__(126);
+	var _util = __webpack_require__(118);
 
-	var _ioMixin = __webpack_require__(76);
+	var _ioMixin = __webpack_require__(69);
 
 	var _ioMixin2 = _interopRequireDefault(_ioMixin);
 
@@ -20759,7 +20706,7 @@ var StellarBase =
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9).Buffer))
 
 /***/ }),
-/* 230 */
+/* 221 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(Buffer) {'use strict';
@@ -20773,11 +20720,11 @@ var StellarBase =
 
 	var _int = __webpack_require__(67);
 
-	var _unsignedInt = __webpack_require__(220);
+	var _unsignedInt = __webpack_require__(212);
 
-	var _util = __webpack_require__(126);
+	var _util = __webpack_require__(118);
 
-	var _ioMixin = __webpack_require__(76);
+	var _ioMixin = __webpack_require__(69);
 
 	var _ioMixin2 = _interopRequireDefault(_ioMixin);
 
@@ -20830,7 +20777,7 @@ var StellarBase =
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9).Buffer))
 
 /***/ }),
-/* 231 */
+/* 222 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -20842,23 +20789,23 @@ var StellarBase =
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _every = __webpack_require__(127);
+	var _every = __webpack_require__(119);
 
 	var _every2 = _interopRequireDefault(_every);
 
-	var _each = __webpack_require__(232);
+	var _each = __webpack_require__(223);
 
 	var _each2 = _interopRequireDefault(_each);
 
-	var _times = __webpack_require__(236);
+	var _times = __webpack_require__(227);
 
 	var _times2 = _interopRequireDefault(_times);
 
-	var _isArray = __webpack_require__(110);
+	var _isArray = __webpack_require__(62);
 
 	var _isArray2 = _interopRequireDefault(_isArray);
 
-	var _ioMixin = __webpack_require__(76);
+	var _ioMixin = __webpack_require__(69);
 
 	var _ioMixin2 = _interopRequireDefault(_ioMixin);
 
@@ -20924,20 +20871,20 @@ var StellarBase =
 	(0, _ioMixin2.default)(Array.prototype);
 
 /***/ }),
-/* 232 */
+/* 223 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(233);
+	module.exports = __webpack_require__(224);
 
 
 /***/ }),
-/* 233 */
+/* 224 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var arrayEach = __webpack_require__(234),
-	    baseEach = __webpack_require__(130),
-	    castFunction = __webpack_require__(235),
-	    isArray = __webpack_require__(110);
+	var arrayEach = __webpack_require__(225),
+	    baseEach = __webpack_require__(122),
+	    castFunction = __webpack_require__(226),
+	    isArray = __webpack_require__(62);
 
 	/**
 	 * Iterates over elements of `collection` and invokes `iteratee` for each element.
@@ -20978,7 +20925,7 @@ var StellarBase =
 
 
 /***/ }),
-/* 234 */
+/* 225 */
 /***/ (function(module, exports) {
 
 	/**
@@ -21006,10 +20953,10 @@ var StellarBase =
 
 
 /***/ }),
-/* 235 */
+/* 226 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var identity = __webpack_require__(94);
+	var identity = __webpack_require__(87);
 
 	/**
 	 * Casts `value` to `identity` if it's not a function.
@@ -21026,12 +20973,12 @@ var StellarBase =
 
 
 /***/ }),
-/* 236 */
+/* 227 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var baseTimes = __webpack_require__(107),
-	    castFunction = __webpack_require__(235),
-	    toInteger = __webpack_require__(237);
+	var baseTimes = __webpack_require__(100),
+	    castFunction = __webpack_require__(226),
+	    toInteger = __webpack_require__(228);
 
 	/** Used as references for various `Number` constants. */
 	var MAX_SAFE_INTEGER = 9007199254740991;
@@ -21083,10 +21030,10 @@ var StellarBase =
 
 
 /***/ }),
-/* 237 */
+/* 228 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var toFinite = __webpack_require__(238);
+	var toFinite = __webpack_require__(229);
 
 	/**
 	 * Converts `value` to an integer.
@@ -21125,10 +21072,10 @@ var StellarBase =
 
 
 /***/ }),
-/* 238 */
+/* 229 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var toNumber = __webpack_require__(239);
+	var toNumber = __webpack_require__(230);
 
 	/** Used as references for various `Number` constants. */
 	var INFINITY = 1 / 0,
@@ -21173,11 +21120,11 @@ var StellarBase =
 
 
 /***/ }),
-/* 239 */
+/* 230 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var isObject = __webpack_require__(86),
-	    isSymbol = __webpack_require__(203);
+	var isObject = __webpack_require__(79),
+	    isSymbol = __webpack_require__(195);
 
 	/** Used as references for various `Number` constants. */
 	var NAN = 0 / 0;
@@ -21245,7 +21192,7 @@ var StellarBase =
 
 
 /***/ }),
-/* 240 */
+/* 231 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -21257,27 +21204,27 @@ var StellarBase =
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _every = __webpack_require__(127);
+	var _every = __webpack_require__(119);
 
 	var _every2 = _interopRequireDefault(_every);
 
-	var _each = __webpack_require__(232);
+	var _each = __webpack_require__(223);
 
 	var _each2 = _interopRequireDefault(_each);
 
-	var _times = __webpack_require__(236);
+	var _times = __webpack_require__(227);
 
 	var _times2 = _interopRequireDefault(_times);
 
-	var _isArray = __webpack_require__(110);
+	var _isArray = __webpack_require__(62);
 
 	var _isArray2 = _interopRequireDefault(_isArray);
 
-	var _unsignedInt = __webpack_require__(220);
+	var _unsignedInt = __webpack_require__(212);
 
 	var _int = __webpack_require__(67);
 
-	var _ioMixin = __webpack_require__(76);
+	var _ioMixin = __webpack_require__(69);
 
 	var _ioMixin2 = _interopRequireDefault(_ioMixin);
 
@@ -21352,7 +21299,7 @@ var StellarBase =
 	(0, _ioMixin2.default)(VarArray.prototype);
 
 /***/ }),
-/* 241 */
+/* 232 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -21364,17 +21311,17 @@ var StellarBase =
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _isNull = __webpack_require__(242);
+	var _isNull = __webpack_require__(54);
 
 	var _isNull2 = _interopRequireDefault(_isNull);
 
-	var _isUndefined = __webpack_require__(243);
+	var _isUndefined = __webpack_require__(24);
 
 	var _isUndefined2 = _interopRequireDefault(_isUndefined);
 
-	var _bool = __webpack_require__(225);
+	var _bool = __webpack_require__(217);
 
-	var _ioMixin = __webpack_require__(76);
+	var _ioMixin = __webpack_require__(69);
 
 	var _ioMixin2 = _interopRequireDefault(_ioMixin);
 
@@ -21429,63 +21376,7 @@ var StellarBase =
 	(0, _ioMixin2.default)(Option.prototype);
 
 /***/ }),
-/* 242 */
-/***/ (function(module, exports) {
-
-	/**
-	 * Checks if `value` is `null`.
-	 *
-	 * @static
-	 * @memberOf _
-	 * @since 0.1.0
-	 * @category Lang
-	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is `null`, else `false`.
-	 * @example
-	 *
-	 * _.isNull(null);
-	 * // => true
-	 *
-	 * _.isNull(void 0);
-	 * // => false
-	 */
-	function isNull(value) {
-	  return value === null;
-	}
-
-	module.exports = isNull;
-
-
-/***/ }),
-/* 243 */
-/***/ (function(module, exports) {
-
-	/**
-	 * Checks if `value` is `undefined`.
-	 *
-	 * @static
-	 * @since 0.1.0
-	 * @memberOf _
-	 * @category Lang
-	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is `undefined`, else `false`.
-	 * @example
-	 *
-	 * _.isUndefined(void 0);
-	 * // => true
-	 *
-	 * _.isUndefined(null);
-	 * // => false
-	 */
-	function isUndefined(value) {
-	  return value === undefined;
-	}
-
-	module.exports = isUndefined;
-
-
-/***/ }),
-/* 244 */
+/* 233 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -21495,11 +21386,11 @@ var StellarBase =
 	});
 	exports.Void = undefined;
 
-	var _isUndefined = __webpack_require__(243);
+	var _isUndefined = __webpack_require__(24);
 
 	var _isUndefined2 = _interopRequireDefault(_isUndefined);
 
-	var _ioMixin = __webpack_require__(76);
+	var _ioMixin = __webpack_require__(69);
 
 	var _ioMixin2 = _interopRequireDefault(_ioMixin);
 
@@ -21524,7 +21415,7 @@ var StellarBase =
 	(0, _ioMixin2.default)(Void);
 
 /***/ }),
-/* 245 */
+/* 234 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -21536,21 +21427,21 @@ var StellarBase =
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _map = __webpack_require__(246);
+	var _map = __webpack_require__(235);
 
 	var _map2 = _interopRequireDefault(_map);
 
-	var _each = __webpack_require__(232);
+	var _each = __webpack_require__(223);
 
 	var _each2 = _interopRequireDefault(_each);
 
-	var _values = __webpack_require__(313);
+	var _values = __webpack_require__(302);
 
 	var _values2 = _interopRequireDefault(_values);
 
 	var _int = __webpack_require__(67);
 
-	var _ioMixin = __webpack_require__(76);
+	var _ioMixin = __webpack_require__(69);
 
 	var _ioMixin2 = _interopRequireDefault(_ioMixin);
 
@@ -21667,31 +21558,31 @@ var StellarBase =
 	(0, _ioMixin2.default)(Enum);
 
 /***/ }),
-/* 246 */
+/* 235 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	__webpack_require__(247);
-	__webpack_require__(248);
-	__webpack_require__(292);
-	__webpack_require__(296);
-	module.exports = __webpack_require__(256).Map;
+	__webpack_require__(236);
+	__webpack_require__(237);
+	__webpack_require__(281);
+	__webpack_require__(285);
+	module.exports = __webpack_require__(245).Map;
 
 
 /***/ }),
-/* 247 */
+/* 236 */
 /***/ (function(module, exports) {
 
 	
 
 /***/ }),
-/* 248 */
+/* 237 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
-	var $at = __webpack_require__(249)(true);
+	var $at = __webpack_require__(238)(true);
 
 	// 21.1.3.27 String.prototype[@@iterator]()
-	__webpack_require__(252)(String, 'String', function (iterated) {
+	__webpack_require__(241)(String, 'String', function (iterated) {
 	  this._t = String(iterated); // target
 	  this._i = 0;                // next index
 	// 21.1.5.2.1 %StringIteratorPrototype%.next()
@@ -21707,11 +21598,11 @@ var StellarBase =
 
 
 /***/ }),
-/* 249 */
+/* 238 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var toInteger = __webpack_require__(250);
-	var defined = __webpack_require__(251);
+	var toInteger = __webpack_require__(239);
+	var defined = __webpack_require__(240);
 	// true  -> String#at
 	// false -> String#codePointAt
 	module.exports = function (TO_STRING) {
@@ -21730,7 +21621,7 @@ var StellarBase =
 
 
 /***/ }),
-/* 250 */
+/* 239 */
 /***/ (function(module, exports) {
 
 	// 7.1.4 ToInteger
@@ -21742,7 +21633,7 @@ var StellarBase =
 
 
 /***/ }),
-/* 251 */
+/* 240 */
 /***/ (function(module, exports) {
 
 	// 7.2.1 RequireObjectCoercible(argument)
@@ -21753,19 +21644,19 @@ var StellarBase =
 
 
 /***/ }),
-/* 252 */
+/* 241 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
-	var LIBRARY = __webpack_require__(253);
-	var $export = __webpack_require__(254);
-	var redefine = __webpack_require__(270);
-	var hide = __webpack_require__(259);
-	var Iterators = __webpack_require__(271);
-	var $iterCreate = __webpack_require__(272);
-	var setToStringTag = __webpack_require__(288);
-	var getPrototypeOf = __webpack_require__(290);
-	var ITERATOR = __webpack_require__(289)('iterator');
+	var LIBRARY = __webpack_require__(242);
+	var $export = __webpack_require__(243);
+	var redefine = __webpack_require__(259);
+	var hide = __webpack_require__(248);
+	var Iterators = __webpack_require__(260);
+	var $iterCreate = __webpack_require__(261);
+	var setToStringTag = __webpack_require__(277);
+	var getPrototypeOf = __webpack_require__(279);
+	var ITERATOR = __webpack_require__(278)('iterator');
 	var BUGGY = !([].keys && 'next' in [].keys()); // Safari has buggy iterators w/o `next`
 	var FF_ITERATOR = '@@iterator';
 	var KEYS = 'keys';
@@ -21828,21 +21719,21 @@ var StellarBase =
 
 
 /***/ }),
-/* 253 */
+/* 242 */
 /***/ (function(module, exports) {
 
 	module.exports = true;
 
 
 /***/ }),
-/* 254 */
+/* 243 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var global = __webpack_require__(255);
-	var core = __webpack_require__(256);
-	var ctx = __webpack_require__(257);
-	var hide = __webpack_require__(259);
-	var has = __webpack_require__(269);
+	var global = __webpack_require__(244);
+	var core = __webpack_require__(245);
+	var ctx = __webpack_require__(246);
+	var hide = __webpack_require__(248);
+	var has = __webpack_require__(258);
 	var PROTOTYPE = 'prototype';
 
 	var $export = function (type, name, source) {
@@ -21903,7 +21794,7 @@ var StellarBase =
 
 
 /***/ }),
-/* 255 */
+/* 244 */
 /***/ (function(module, exports) {
 
 	// https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
@@ -21915,19 +21806,19 @@ var StellarBase =
 
 
 /***/ }),
-/* 256 */
+/* 245 */
 /***/ (function(module, exports) {
 
-	var core = module.exports = { version: '2.6.3' };
+	var core = module.exports = { version: '2.6.5' };
 	if (typeof __e == 'number') __e = core; // eslint-disable-line no-undef
 
 
 /***/ }),
-/* 257 */
+/* 246 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	// optional / simple context binding
-	var aFunction = __webpack_require__(258);
+	var aFunction = __webpack_require__(247);
 	module.exports = function (fn, that, length) {
 	  aFunction(fn);
 	  if (that === undefined) return fn;
@@ -21949,7 +21840,7 @@ var StellarBase =
 
 
 /***/ }),
-/* 258 */
+/* 247 */
 /***/ (function(module, exports) {
 
 	module.exports = function (it) {
@@ -21959,12 +21850,12 @@ var StellarBase =
 
 
 /***/ }),
-/* 259 */
+/* 248 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var dP = __webpack_require__(260);
-	var createDesc = __webpack_require__(268);
-	module.exports = __webpack_require__(264) ? function (object, key, value) {
+	var dP = __webpack_require__(249);
+	var createDesc = __webpack_require__(257);
+	module.exports = __webpack_require__(253) ? function (object, key, value) {
 	  return dP.f(object, key, createDesc(1, value));
 	} : function (object, key, value) {
 	  object[key] = value;
@@ -21973,15 +21864,15 @@ var StellarBase =
 
 
 /***/ }),
-/* 260 */
+/* 249 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var anObject = __webpack_require__(261);
-	var IE8_DOM_DEFINE = __webpack_require__(263);
-	var toPrimitive = __webpack_require__(267);
+	var anObject = __webpack_require__(250);
+	var IE8_DOM_DEFINE = __webpack_require__(252);
+	var toPrimitive = __webpack_require__(256);
 	var dP = Object.defineProperty;
 
-	exports.f = __webpack_require__(264) ? Object.defineProperty : function defineProperty(O, P, Attributes) {
+	exports.f = __webpack_require__(253) ? Object.defineProperty : function defineProperty(O, P, Attributes) {
 	  anObject(O);
 	  P = toPrimitive(P, true);
 	  anObject(Attributes);
@@ -21995,10 +21886,10 @@ var StellarBase =
 
 
 /***/ }),
-/* 261 */
+/* 250 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var isObject = __webpack_require__(262);
+	var isObject = __webpack_require__(251);
 	module.exports = function (it) {
 	  if (!isObject(it)) throw TypeError(it + ' is not an object!');
 	  return it;
@@ -22006,7 +21897,7 @@ var StellarBase =
 
 
 /***/ }),
-/* 262 */
+/* 251 */
 /***/ (function(module, exports) {
 
 	module.exports = function (it) {
@@ -22015,26 +21906,26 @@ var StellarBase =
 
 
 /***/ }),
-/* 263 */
+/* 252 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	module.exports = !__webpack_require__(264) && !__webpack_require__(265)(function () {
-	  return Object.defineProperty(__webpack_require__(266)('div'), 'a', { get: function () { return 7; } }).a != 7;
+	module.exports = !__webpack_require__(253) && !__webpack_require__(254)(function () {
+	  return Object.defineProperty(__webpack_require__(255)('div'), 'a', { get: function () { return 7; } }).a != 7;
 	});
 
 
 /***/ }),
-/* 264 */
+/* 253 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	// Thank's IE8 for his funny defineProperty
-	module.exports = !__webpack_require__(265)(function () {
+	module.exports = !__webpack_require__(254)(function () {
 	  return Object.defineProperty({}, 'a', { get: function () { return 7; } }).a != 7;
 	});
 
 
 /***/ }),
-/* 265 */
+/* 254 */
 /***/ (function(module, exports) {
 
 	module.exports = function (exec) {
@@ -22047,11 +21938,11 @@ var StellarBase =
 
 
 /***/ }),
-/* 266 */
+/* 255 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var isObject = __webpack_require__(262);
-	var document = __webpack_require__(255).document;
+	var isObject = __webpack_require__(251);
+	var document = __webpack_require__(244).document;
 	// typeof document.createElement is 'object' in old IE
 	var is = isObject(document) && isObject(document.createElement);
 	module.exports = function (it) {
@@ -22060,11 +21951,11 @@ var StellarBase =
 
 
 /***/ }),
-/* 267 */
+/* 256 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	// 7.1.1 ToPrimitive(input [, PreferredType])
-	var isObject = __webpack_require__(262);
+	var isObject = __webpack_require__(251);
 	// instead of the ES6 spec version, we didn't implement @@toPrimitive case
 	// and the second argument - flag - preferred type is a string
 	module.exports = function (it, S) {
@@ -22078,7 +21969,7 @@ var StellarBase =
 
 
 /***/ }),
-/* 268 */
+/* 257 */
 /***/ (function(module, exports) {
 
 	module.exports = function (bitmap, value) {
@@ -22092,7 +21983,7 @@ var StellarBase =
 
 
 /***/ }),
-/* 269 */
+/* 258 */
 /***/ (function(module, exports) {
 
 	var hasOwnProperty = {}.hasOwnProperty;
@@ -22102,31 +21993,31 @@ var StellarBase =
 
 
 /***/ }),
-/* 270 */
+/* 259 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(259);
+	module.exports = __webpack_require__(248);
 
 
 /***/ }),
-/* 271 */
+/* 260 */
 /***/ (function(module, exports) {
 
 	module.exports = {};
 
 
 /***/ }),
-/* 272 */
+/* 261 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
-	var create = __webpack_require__(273);
-	var descriptor = __webpack_require__(268);
-	var setToStringTag = __webpack_require__(288);
+	var create = __webpack_require__(262);
+	var descriptor = __webpack_require__(257);
+	var setToStringTag = __webpack_require__(277);
 	var IteratorPrototype = {};
 
 	// 25.1.2.1.1 %IteratorPrototype%[@@iterator]()
-	__webpack_require__(259)(IteratorPrototype, __webpack_require__(289)('iterator'), function () { return this; });
+	__webpack_require__(248)(IteratorPrototype, __webpack_require__(278)('iterator'), function () { return this; });
 
 	module.exports = function (Constructor, NAME, next) {
 	  Constructor.prototype = create(IteratorPrototype, { next: descriptor(1, next) });
@@ -22135,27 +22026,27 @@ var StellarBase =
 
 
 /***/ }),
-/* 273 */
+/* 262 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	// 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
-	var anObject = __webpack_require__(261);
-	var dPs = __webpack_require__(274);
-	var enumBugKeys = __webpack_require__(286);
-	var IE_PROTO = __webpack_require__(283)('IE_PROTO');
+	var anObject = __webpack_require__(250);
+	var dPs = __webpack_require__(263);
+	var enumBugKeys = __webpack_require__(275);
+	var IE_PROTO = __webpack_require__(272)('IE_PROTO');
 	var Empty = function () { /* empty */ };
 	var PROTOTYPE = 'prototype';
 
 	// Create object with fake `null` prototype: use iframe Object with cleared prototype
 	var createDict = function () {
 	  // Thrash, waste and sodomy: IE GC bug
-	  var iframe = __webpack_require__(266)('iframe');
+	  var iframe = __webpack_require__(255)('iframe');
 	  var i = enumBugKeys.length;
 	  var lt = '<';
 	  var gt = '>';
 	  var iframeDocument;
 	  iframe.style.display = 'none';
-	  __webpack_require__(287).appendChild(iframe);
+	  __webpack_require__(276).appendChild(iframe);
 	  iframe.src = 'javascript:'; // eslint-disable-line no-script-url
 	  // createDict = iframe.contentWindow.Object;
 	  // html.removeChild(iframe);
@@ -22182,14 +22073,14 @@ var StellarBase =
 
 
 /***/ }),
-/* 274 */
+/* 263 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var dP = __webpack_require__(260);
-	var anObject = __webpack_require__(261);
-	var getKeys = __webpack_require__(275);
+	var dP = __webpack_require__(249);
+	var anObject = __webpack_require__(250);
+	var getKeys = __webpack_require__(264);
 
-	module.exports = __webpack_require__(264) ? Object.defineProperties : function defineProperties(O, Properties) {
+	module.exports = __webpack_require__(253) ? Object.defineProperties : function defineProperties(O, Properties) {
 	  anObject(O);
 	  var keys = getKeys(Properties);
 	  var length = keys.length;
@@ -22201,12 +22092,12 @@ var StellarBase =
 
 
 /***/ }),
-/* 275 */
+/* 264 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	// 19.1.2.14 / 15.2.3.14 Object.keys(O)
-	var $keys = __webpack_require__(276);
-	var enumBugKeys = __webpack_require__(286);
+	var $keys = __webpack_require__(265);
+	var enumBugKeys = __webpack_require__(275);
 
 	module.exports = Object.keys || function keys(O) {
 	  return $keys(O, enumBugKeys);
@@ -22214,13 +22105,13 @@ var StellarBase =
 
 
 /***/ }),
-/* 276 */
+/* 265 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var has = __webpack_require__(269);
-	var toIObject = __webpack_require__(277);
-	var arrayIndexOf = __webpack_require__(280)(false);
-	var IE_PROTO = __webpack_require__(283)('IE_PROTO');
+	var has = __webpack_require__(258);
+	var toIObject = __webpack_require__(266);
+	var arrayIndexOf = __webpack_require__(269)(false);
+	var IE_PROTO = __webpack_require__(272)('IE_PROTO');
 
 	module.exports = function (object, names) {
 	  var O = toIObject(object);
@@ -22237,23 +22128,23 @@ var StellarBase =
 
 
 /***/ }),
-/* 277 */
+/* 266 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	// to indexed object, toObject with fallback for non-array-like ES3 strings
-	var IObject = __webpack_require__(278);
-	var defined = __webpack_require__(251);
+	var IObject = __webpack_require__(267);
+	var defined = __webpack_require__(240);
 	module.exports = function (it) {
 	  return IObject(defined(it));
 	};
 
 
 /***/ }),
-/* 278 */
+/* 267 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	// fallback for non-array-like ES3 and non-enumerable old V8 strings
-	var cof = __webpack_require__(279);
+	var cof = __webpack_require__(268);
 	// eslint-disable-next-line no-prototype-builtins
 	module.exports = Object('z').propertyIsEnumerable(0) ? Object : function (it) {
 	  return cof(it) == 'String' ? it.split('') : Object(it);
@@ -22261,7 +22152,7 @@ var StellarBase =
 
 
 /***/ }),
-/* 279 */
+/* 268 */
 /***/ (function(module, exports) {
 
 	var toString = {}.toString;
@@ -22272,14 +22163,14 @@ var StellarBase =
 
 
 /***/ }),
-/* 280 */
+/* 269 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	// false -> Array#indexOf
 	// true  -> Array#includes
-	var toIObject = __webpack_require__(277);
-	var toLength = __webpack_require__(281);
-	var toAbsoluteIndex = __webpack_require__(282);
+	var toIObject = __webpack_require__(266);
+	var toLength = __webpack_require__(270);
+	var toAbsoluteIndex = __webpack_require__(271);
 	module.exports = function (IS_INCLUDES) {
 	  return function ($this, el, fromIndex) {
 	    var O = toIObject($this);
@@ -22301,11 +22192,11 @@ var StellarBase =
 
 
 /***/ }),
-/* 281 */
+/* 270 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	// 7.1.15 ToLength
-	var toInteger = __webpack_require__(250);
+	var toInteger = __webpack_require__(239);
 	var min = Math.min;
 	module.exports = function (it) {
 	  return it > 0 ? min(toInteger(it), 0x1fffffffffffff) : 0; // pow(2, 53) - 1 == 9007199254740991
@@ -22313,10 +22204,10 @@ var StellarBase =
 
 
 /***/ }),
-/* 282 */
+/* 271 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var toInteger = __webpack_require__(250);
+	var toInteger = __webpack_require__(239);
 	var max = Math.max;
 	var min = Math.min;
 	module.exports = function (index, length) {
@@ -22326,22 +22217,22 @@ var StellarBase =
 
 
 /***/ }),
-/* 283 */
+/* 272 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var shared = __webpack_require__(284)('keys');
-	var uid = __webpack_require__(285);
+	var shared = __webpack_require__(273)('keys');
+	var uid = __webpack_require__(274);
 	module.exports = function (key) {
 	  return shared[key] || (shared[key] = uid(key));
 	};
 
 
 /***/ }),
-/* 284 */
+/* 273 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var core = __webpack_require__(256);
-	var global = __webpack_require__(255);
+	var core = __webpack_require__(245);
+	var global = __webpack_require__(244);
 	var SHARED = '__core-js_shared__';
 	var store = global[SHARED] || (global[SHARED] = {});
 
@@ -22349,13 +22240,13 @@ var StellarBase =
 	  return store[key] || (store[key] = value !== undefined ? value : {});
 	})('versions', []).push({
 	  version: core.version,
-	  mode: __webpack_require__(253) ? 'pure' : 'global',
+	  mode: __webpack_require__(242) ? 'pure' : 'global',
 	  copyright: '© 2019 Denis Pushkarev (zloirock.ru)'
 	});
 
 
 /***/ }),
-/* 285 */
+/* 274 */
 /***/ (function(module, exports) {
 
 	var id = 0;
@@ -22366,7 +22257,7 @@ var StellarBase =
 
 
 /***/ }),
-/* 286 */
+/* 275 */
 /***/ (function(module, exports) {
 
 	// IE 8- don't enum bug keys
@@ -22376,20 +22267,20 @@ var StellarBase =
 
 
 /***/ }),
-/* 287 */
+/* 276 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var document = __webpack_require__(255).document;
+	var document = __webpack_require__(244).document;
 	module.exports = document && document.documentElement;
 
 
 /***/ }),
-/* 288 */
+/* 277 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var def = __webpack_require__(260).f;
-	var has = __webpack_require__(269);
-	var TAG = __webpack_require__(289)('toStringTag');
+	var def = __webpack_require__(249).f;
+	var has = __webpack_require__(258);
+	var TAG = __webpack_require__(278)('toStringTag');
 
 	module.exports = function (it, tag, stat) {
 	  if (it && !has(it = stat ? it : it.prototype, TAG)) def(it, TAG, { configurable: true, value: tag });
@@ -22397,12 +22288,12 @@ var StellarBase =
 
 
 /***/ }),
-/* 289 */
+/* 278 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var store = __webpack_require__(284)('wks');
-	var uid = __webpack_require__(285);
-	var Symbol = __webpack_require__(255).Symbol;
+	var store = __webpack_require__(273)('wks');
+	var uid = __webpack_require__(274);
+	var Symbol = __webpack_require__(244).Symbol;
 	var USE_SYMBOL = typeof Symbol == 'function';
 
 	var $exports = module.exports = function (name) {
@@ -22414,13 +22305,13 @@ var StellarBase =
 
 
 /***/ }),
-/* 290 */
+/* 279 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	// 19.1.2.9 / 15.2.3.2 Object.getPrototypeOf(O)
-	var has = __webpack_require__(269);
-	var toObject = __webpack_require__(291);
-	var IE_PROTO = __webpack_require__(283)('IE_PROTO');
+	var has = __webpack_require__(258);
+	var toObject = __webpack_require__(280);
+	var IE_PROTO = __webpack_require__(272)('IE_PROTO');
 	var ObjectProto = Object.prototype;
 
 	module.exports = Object.getPrototypeOf || function (O) {
@@ -22433,25 +22324,25 @@ var StellarBase =
 
 
 /***/ }),
-/* 291 */
+/* 280 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	// 7.1.13 ToObject(argument)
-	var defined = __webpack_require__(251);
+	var defined = __webpack_require__(240);
 	module.exports = function (it) {
 	  return Object(defined(it));
 	};
 
 
 /***/ }),
-/* 292 */
+/* 281 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	__webpack_require__(293);
-	var global = __webpack_require__(255);
-	var hide = __webpack_require__(259);
-	var Iterators = __webpack_require__(271);
-	var TO_STRING_TAG = __webpack_require__(289)('toStringTag');
+	__webpack_require__(282);
+	var global = __webpack_require__(244);
+	var hide = __webpack_require__(248);
+	var Iterators = __webpack_require__(260);
+	var TO_STRING_TAG = __webpack_require__(278)('toStringTag');
 
 	var DOMIterables = ('CSSRuleList,CSSStyleDeclaration,CSSValueList,ClientRectList,DOMRectList,DOMStringList,' +
 	  'DOMTokenList,DataTransferItemList,FileList,HTMLAllCollection,HTMLCollection,HTMLFormElement,HTMLSelectElement,' +
@@ -22469,20 +22360,20 @@ var StellarBase =
 
 
 /***/ }),
-/* 293 */
+/* 282 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
-	var addToUnscopables = __webpack_require__(294);
-	var step = __webpack_require__(295);
-	var Iterators = __webpack_require__(271);
-	var toIObject = __webpack_require__(277);
+	var addToUnscopables = __webpack_require__(283);
+	var step = __webpack_require__(284);
+	var Iterators = __webpack_require__(260);
+	var toIObject = __webpack_require__(266);
 
 	// 22.1.3.4 Array.prototype.entries()
 	// 22.1.3.13 Array.prototype.keys()
 	// 22.1.3.29 Array.prototype.values()
 	// 22.1.3.30 Array.prototype[@@iterator]()
-	module.exports = __webpack_require__(252)(Array, 'Array', function (iterated, kind) {
+	module.exports = __webpack_require__(241)(Array, 'Array', function (iterated, kind) {
 	  this._t = toIObject(iterated); // target
 	  this._i = 0;                   // next index
 	  this._k = kind;                // kind
@@ -22509,14 +22400,14 @@ var StellarBase =
 
 
 /***/ }),
-/* 294 */
+/* 283 */
 /***/ (function(module, exports) {
 
 	module.exports = function () { /* empty */ };
 
 
 /***/ }),
-/* 295 */
+/* 284 */
 /***/ (function(module, exports) {
 
 	module.exports = function (done, value) {
@@ -22525,16 +22416,16 @@ var StellarBase =
 
 
 /***/ }),
-/* 296 */
+/* 285 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
-	var strong = __webpack_require__(297);
-	var validate = __webpack_require__(307);
+	var strong = __webpack_require__(286);
+	var validate = __webpack_require__(296);
 	var MAP = 'Map';
 
 	// 23.1 Map Objects
-	module.exports = __webpack_require__(308)(MAP, function (get) {
+	module.exports = __webpack_require__(297)(MAP, function (get) {
 	  return function Map() { return get(this, arguments.length > 0 ? arguments[0] : undefined); };
 	}, {
 	  // 23.1.3.6 Map.prototype.get(key)
@@ -22550,22 +22441,22 @@ var StellarBase =
 
 
 /***/ }),
-/* 297 */
+/* 286 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
-	var dP = __webpack_require__(260).f;
-	var create = __webpack_require__(273);
-	var redefineAll = __webpack_require__(298);
-	var ctx = __webpack_require__(257);
-	var anInstance = __webpack_require__(299);
-	var forOf = __webpack_require__(300);
-	var $iterDefine = __webpack_require__(252);
-	var step = __webpack_require__(295);
-	var setSpecies = __webpack_require__(305);
-	var DESCRIPTORS = __webpack_require__(264);
-	var fastKey = __webpack_require__(306).fastKey;
-	var validate = __webpack_require__(307);
+	var dP = __webpack_require__(249).f;
+	var create = __webpack_require__(262);
+	var redefineAll = __webpack_require__(287);
+	var ctx = __webpack_require__(246);
+	var anInstance = __webpack_require__(288);
+	var forOf = __webpack_require__(289);
+	var $iterDefine = __webpack_require__(241);
+	var step = __webpack_require__(284);
+	var setSpecies = __webpack_require__(294);
+	var DESCRIPTORS = __webpack_require__(253);
+	var fastKey = __webpack_require__(295).fastKey;
+	var validate = __webpack_require__(296);
 	var SIZE = DESCRIPTORS ? '_s' : 'size';
 
 	var getEntry = function (that, key) {
@@ -22700,10 +22591,10 @@ var StellarBase =
 
 
 /***/ }),
-/* 298 */
+/* 287 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var hide = __webpack_require__(259);
+	var hide = __webpack_require__(248);
 	module.exports = function (target, src, safe) {
 	  for (var key in src) {
 	    if (safe && target[key]) target[key] = src[key];
@@ -22713,7 +22604,7 @@ var StellarBase =
 
 
 /***/ }),
-/* 299 */
+/* 288 */
 /***/ (function(module, exports) {
 
 	module.exports = function (it, Constructor, name, forbiddenField) {
@@ -22724,15 +22615,15 @@ var StellarBase =
 
 
 /***/ }),
-/* 300 */
+/* 289 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var ctx = __webpack_require__(257);
-	var call = __webpack_require__(301);
-	var isArrayIter = __webpack_require__(302);
-	var anObject = __webpack_require__(261);
-	var toLength = __webpack_require__(281);
-	var getIterFn = __webpack_require__(303);
+	var ctx = __webpack_require__(246);
+	var call = __webpack_require__(290);
+	var isArrayIter = __webpack_require__(291);
+	var anObject = __webpack_require__(250);
+	var toLength = __webpack_require__(270);
+	var getIterFn = __webpack_require__(292);
 	var BREAK = {};
 	var RETURN = {};
 	var exports = module.exports = function (iterable, entries, fn, that, ITERATOR) {
@@ -22755,11 +22646,11 @@ var StellarBase =
 
 
 /***/ }),
-/* 301 */
+/* 290 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	// call something on iterator step with safe closing on error
-	var anObject = __webpack_require__(261);
+	var anObject = __webpack_require__(250);
 	module.exports = function (iterator, fn, value, entries) {
 	  try {
 	    return entries ? fn(anObject(value)[0], value[1]) : fn(value);
@@ -22773,12 +22664,12 @@ var StellarBase =
 
 
 /***/ }),
-/* 302 */
+/* 291 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	// check on default Array iterator
-	var Iterators = __webpack_require__(271);
-	var ITERATOR = __webpack_require__(289)('iterator');
+	var Iterators = __webpack_require__(260);
+	var ITERATOR = __webpack_require__(278)('iterator');
 	var ArrayProto = Array.prototype;
 
 	module.exports = function (it) {
@@ -22787,13 +22678,13 @@ var StellarBase =
 
 
 /***/ }),
-/* 303 */
+/* 292 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var classof = __webpack_require__(304);
-	var ITERATOR = __webpack_require__(289)('iterator');
-	var Iterators = __webpack_require__(271);
-	module.exports = __webpack_require__(256).getIteratorMethod = function (it) {
+	var classof = __webpack_require__(293);
+	var ITERATOR = __webpack_require__(278)('iterator');
+	var Iterators = __webpack_require__(260);
+	module.exports = __webpack_require__(245).getIteratorMethod = function (it) {
 	  if (it != undefined) return it[ITERATOR]
 	    || it['@@iterator']
 	    || Iterators[classof(it)];
@@ -22801,12 +22692,12 @@ var StellarBase =
 
 
 /***/ }),
-/* 304 */
+/* 293 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	// getting tag from 19.1.3.6 Object.prototype.toString()
-	var cof = __webpack_require__(279);
-	var TAG = __webpack_require__(289)('toStringTag');
+	var cof = __webpack_require__(268);
+	var TAG = __webpack_require__(278)('toStringTag');
 	// ES3 wrong here
 	var ARG = cof(function () { return arguments; }()) == 'Arguments';
 
@@ -22830,15 +22721,15 @@ var StellarBase =
 
 
 /***/ }),
-/* 305 */
+/* 294 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
-	var global = __webpack_require__(255);
-	var core = __webpack_require__(256);
-	var dP = __webpack_require__(260);
-	var DESCRIPTORS = __webpack_require__(264);
-	var SPECIES = __webpack_require__(289)('species');
+	var global = __webpack_require__(244);
+	var core = __webpack_require__(245);
+	var dP = __webpack_require__(249);
+	var DESCRIPTORS = __webpack_require__(253);
+	var SPECIES = __webpack_require__(278)('species');
 
 	module.exports = function (KEY) {
 	  var C = typeof core[KEY] == 'function' ? core[KEY] : global[KEY];
@@ -22850,18 +22741,18 @@ var StellarBase =
 
 
 /***/ }),
-/* 306 */
+/* 295 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var META = __webpack_require__(285)('meta');
-	var isObject = __webpack_require__(262);
-	var has = __webpack_require__(269);
-	var setDesc = __webpack_require__(260).f;
+	var META = __webpack_require__(274)('meta');
+	var isObject = __webpack_require__(251);
+	var has = __webpack_require__(258);
+	var setDesc = __webpack_require__(249).f;
 	var id = 0;
 	var isExtensible = Object.isExtensible || function () {
 	  return true;
 	};
-	var FREEZE = !__webpack_require__(265)(function () {
+	var FREEZE = !__webpack_require__(254)(function () {
 	  return isExtensible(Object.preventExtensions({}));
 	});
 	var setMeta = function (it) {
@@ -22909,10 +22800,10 @@ var StellarBase =
 
 
 /***/ }),
-/* 307 */
+/* 296 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var isObject = __webpack_require__(262);
+	var isObject = __webpack_require__(251);
 	module.exports = function (it, TYPE) {
 	  if (!isObject(it) || it._t !== TYPE) throw TypeError('Incompatible receiver, ' + TYPE + ' required!');
 	  return it;
@@ -22920,23 +22811,23 @@ var StellarBase =
 
 
 /***/ }),
-/* 308 */
+/* 297 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
-	var global = __webpack_require__(255);
-	var $export = __webpack_require__(254);
-	var meta = __webpack_require__(306);
-	var fails = __webpack_require__(265);
-	var hide = __webpack_require__(259);
-	var redefineAll = __webpack_require__(298);
-	var forOf = __webpack_require__(300);
-	var anInstance = __webpack_require__(299);
-	var isObject = __webpack_require__(262);
-	var setToStringTag = __webpack_require__(288);
-	var dP = __webpack_require__(260).f;
-	var each = __webpack_require__(309)(0);
-	var DESCRIPTORS = __webpack_require__(264);
+	var global = __webpack_require__(244);
+	var $export = __webpack_require__(243);
+	var meta = __webpack_require__(295);
+	var fails = __webpack_require__(254);
+	var hide = __webpack_require__(248);
+	var redefineAll = __webpack_require__(287);
+	var forOf = __webpack_require__(289);
+	var anInstance = __webpack_require__(288);
+	var isObject = __webpack_require__(251);
+	var setToStringTag = __webpack_require__(277);
+	var dP = __webpack_require__(249).f;
+	var each = __webpack_require__(298)(0);
+	var DESCRIPTORS = __webpack_require__(253);
 
 	module.exports = function (NAME, wrapper, methods, common, IS_MAP, IS_WEAK) {
 	  var Base = global[NAME];
@@ -22985,7 +22876,7 @@ var StellarBase =
 
 
 /***/ }),
-/* 309 */
+/* 298 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	// 0 -> Array#forEach
@@ -22995,11 +22886,11 @@ var StellarBase =
 	// 4 -> Array#every
 	// 5 -> Array#find
 	// 6 -> Array#findIndex
-	var ctx = __webpack_require__(257);
-	var IObject = __webpack_require__(278);
-	var toObject = __webpack_require__(291);
-	var toLength = __webpack_require__(281);
-	var asc = __webpack_require__(310);
+	var ctx = __webpack_require__(246);
+	var IObject = __webpack_require__(267);
+	var toObject = __webpack_require__(280);
+	var toLength = __webpack_require__(270);
+	var asc = __webpack_require__(299);
 	module.exports = function (TYPE, $create) {
 	  var IS_MAP = TYPE == 1;
 	  var IS_FILTER = TYPE == 2;
@@ -23035,11 +22926,11 @@ var StellarBase =
 
 
 /***/ }),
-/* 310 */
+/* 299 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	// 9.4.2.3 ArraySpeciesCreate(originalArray, length)
-	var speciesConstructor = __webpack_require__(311);
+	var speciesConstructor = __webpack_require__(300);
 
 	module.exports = function (original, length) {
 	  return new (speciesConstructor(original))(length);
@@ -23047,12 +22938,12 @@ var StellarBase =
 
 
 /***/ }),
-/* 311 */
+/* 300 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var isObject = __webpack_require__(262);
-	var isArray = __webpack_require__(312);
-	var SPECIES = __webpack_require__(289)('species');
+	var isObject = __webpack_require__(251);
+	var isArray = __webpack_require__(301);
+	var SPECIES = __webpack_require__(278)('species');
 
 	module.exports = function (original) {
 	  var C;
@@ -23069,22 +22960,22 @@ var StellarBase =
 
 
 /***/ }),
-/* 312 */
+/* 301 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	// 7.2.2 IsArray(argument)
-	var cof = __webpack_require__(279);
+	var cof = __webpack_require__(268);
 	module.exports = Array.isArray || function isArray(arg) {
 	  return cof(arg) == 'Array';
 	};
 
 
 /***/ }),
-/* 313 */
+/* 302 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var baseValues = __webpack_require__(314),
-	    keys = __webpack_require__(134);
+	var baseValues = __webpack_require__(303),
+	    keys = __webpack_require__(126);
 
 	/**
 	 * Creates an array of the own enumerable string keyed property values of `object`.
@@ -23120,10 +23011,10 @@ var StellarBase =
 
 
 /***/ }),
-/* 314 */
+/* 303 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var arrayMap = __webpack_require__(209);
+	var arrayMap = __webpack_require__(201);
 
 	/**
 	 * The base implementation of `_.values` and `_.valuesIn` which creates an
@@ -23145,7 +23036,7 @@ var StellarBase =
 
 
 /***/ }),
-/* 315 */
+/* 304 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -23159,25 +23050,25 @@ var StellarBase =
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _each = __webpack_require__(232);
+	var _each = __webpack_require__(223);
 
 	var _each2 = _interopRequireDefault(_each);
 
-	var _map = __webpack_require__(316);
+	var _map = __webpack_require__(305);
 
 	var _map2 = _interopRequireDefault(_map);
 
-	var _isUndefined = __webpack_require__(243);
+	var _isUndefined = __webpack_require__(24);
 
 	var _isUndefined2 = _interopRequireDefault(_isUndefined);
 
-	var _fromPairs = __webpack_require__(318);
+	var _fromPairs = __webpack_require__(307);
 
 	var _fromPairs2 = _interopRequireDefault(_fromPairs);
 
-	var _config = __webpack_require__(319);
+	var _config = __webpack_require__(308);
 
-	var _ioMixin = __webpack_require__(76);
+	var _ioMixin = __webpack_require__(69);
 
 	var _ioMixin2 = _interopRequireDefault(_ioMixin);
 
@@ -23288,13 +23179,13 @@ var StellarBase =
 	}
 
 /***/ }),
-/* 316 */
+/* 305 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var arrayMap = __webpack_require__(209),
-	    baseIteratee = __webpack_require__(139),
-	    baseMap = __webpack_require__(317),
-	    isArray = __webpack_require__(110);
+	var arrayMap = __webpack_require__(201),
+	    baseIteratee = __webpack_require__(131),
+	    baseMap = __webpack_require__(306),
+	    isArray = __webpack_require__(62);
 
 	/**
 	 * Creates an array of values by running each element in `collection` thru
@@ -23347,11 +23238,11 @@ var StellarBase =
 
 
 /***/ }),
-/* 317 */
+/* 306 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var baseEach = __webpack_require__(130),
-	    isArrayLike = __webpack_require__(102);
+	var baseEach = __webpack_require__(122),
+	    isArrayLike = __webpack_require__(95);
 
 	/**
 	 * The base implementation of `_.map` without support for iteratee shorthands.
@@ -23375,7 +23266,7 @@ var StellarBase =
 
 
 /***/ }),
-/* 318 */
+/* 307 */
 /***/ (function(module, exports) {
 
 	/**
@@ -23409,7 +23300,7 @@ var StellarBase =
 
 
 /***/ }),
-/* 319 */
+/* 308 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -23423,11 +23314,11 @@ var StellarBase =
 
 	exports.config = config;
 
-	var _isUndefined = __webpack_require__(243);
+	var _isUndefined = __webpack_require__(24);
 
 	var _isUndefined2 = _interopRequireDefault(_isUndefined);
 
-	var _each = __webpack_require__(232);
+	var _each = __webpack_require__(223);
 
 	var _each2 = _interopRequireDefault(_each);
 
@@ -23786,7 +23677,7 @@ var StellarBase =
 	}();
 
 /***/ }),
-/* 320 */
+/* 309 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -23800,27 +23691,27 @@ var StellarBase =
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _map = __webpack_require__(246);
+	var _map = __webpack_require__(235);
 
 	var _map2 = _interopRequireDefault(_map);
 
-	var _each = __webpack_require__(232);
+	var _each = __webpack_require__(223);
 
 	var _each2 = _interopRequireDefault(_each);
 
-	var _isUndefined = __webpack_require__(243);
+	var _isUndefined = __webpack_require__(24);
 
 	var _isUndefined2 = _interopRequireDefault(_isUndefined);
 
-	var _isString = __webpack_require__(228);
+	var _isString = __webpack_require__(55);
 
 	var _isString2 = _interopRequireDefault(_isString);
 
-	var _void = __webpack_require__(244);
+	var _void = __webpack_require__(233);
 
-	var _config = __webpack_require__(319);
+	var _config = __webpack_require__(308);
 
-	var _ioMixin = __webpack_require__(76);
+	var _ioMixin = __webpack_require__(69);
 
 	var _ioMixin2 = _interopRequireDefault(_ioMixin);
 
@@ -24025,7 +23916,7 @@ var StellarBase =
 	(0, _ioMixin2.default)(Union);
 
 /***/ }),
-/* 321 */
+/* 310 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(Buffer) {'use strict';
@@ -24037,11 +23928,11 @@ var StellarBase =
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _map = __webpack_require__(322);
+	var _map = __webpack_require__(305);
 
 	var _map2 = _interopRequireDefault(_map);
 
-	var _each = __webpack_require__(435);
+	var _each = __webpack_require__(223);
 
 	var _each2 = _interopRequireDefault(_each);
 
@@ -24053,11 +23944,11 @@ var StellarBase =
 
 	var _strkey = __webpack_require__(27);
 
-	var _operation = __webpack_require__(439);
+	var _operation = __webpack_require__(311);
 
 	var _network = __webpack_require__(22);
 
-	var _memo = __webpack_require__(510);
+	var _memo = __webpack_require__(372);
 
 	var _keypair = __webpack_require__(21);
 
@@ -24315,3803 +24206,7 @@ var StellarBase =
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9).Buffer))
 
 /***/ }),
-/* 322 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var arrayMap = __webpack_require__(323),
-	    baseIteratee = __webpack_require__(324),
-	    baseMap = __webpack_require__(429),
-	    isArray = __webpack_require__(62);
-
-	/**
-	 * Creates an array of values by running each element in `collection` thru
-	 * `iteratee`. The iteratee is invoked with three arguments:
-	 * (value, index|key, collection).
-	 *
-	 * Many lodash methods are guarded to work as iteratees for methods like
-	 * `_.every`, `_.filter`, `_.map`, `_.mapValues`, `_.reject`, and `_.some`.
-	 *
-	 * The guarded methods are:
-	 * `ary`, `chunk`, `curry`, `curryRight`, `drop`, `dropRight`, `every`,
-	 * `fill`, `invert`, `parseInt`, `random`, `range`, `rangeRight`, `repeat`,
-	 * `sampleSize`, `slice`, `some`, `sortBy`, `split`, `take`, `takeRight`,
-	 * `template`, `trim`, `trimEnd`, `trimStart`, and `words`
-	 *
-	 * @static
-	 * @memberOf _
-	 * @since 0.1.0
-	 * @category Collection
-	 * @param {Array|Object} collection The collection to iterate over.
-	 * @param {Function} [iteratee=_.identity] The function invoked per iteration.
-	 * @returns {Array} Returns the new mapped array.
-	 * @example
-	 *
-	 * function square(n) {
-	 *   return n * n;
-	 * }
-	 *
-	 * _.map([4, 8], square);
-	 * // => [16, 64]
-	 *
-	 * _.map({ 'a': 4, 'b': 8 }, square);
-	 * // => [16, 64] (iteration order is not guaranteed)
-	 *
-	 * var users = [
-	 *   { 'user': 'barney' },
-	 *   { 'user': 'fred' }
-	 * ];
-	 *
-	 * // The `_.property` iteratee shorthand.
-	 * _.map(users, 'user');
-	 * // => ['barney', 'fred']
-	 */
-	function map(collection, iteratee) {
-	  var func = isArray(collection) ? arrayMap : baseMap;
-	  return func(collection, baseIteratee(iteratee, 3));
-	}
-
-	module.exports = map;
-
-
-/***/ }),
-/* 323 */
-/***/ (function(module, exports) {
-
-	/**
-	 * A specialized version of `_.map` for arrays without support for iteratee
-	 * shorthands.
-	 *
-	 * @private
-	 * @param {Array} [array] The array to iterate over.
-	 * @param {Function} iteratee The function invoked per iteration.
-	 * @returns {Array} Returns the new mapped array.
-	 */
-	function arrayMap(array, iteratee) {
-	  var index = -1,
-	      length = array == null ? 0 : array.length,
-	      result = Array(length);
-
-	  while (++index < length) {
-	    result[index] = iteratee(array[index], index, array);
-	  }
-	  return result;
-	}
-
-	module.exports = arrayMap;
-
-
-/***/ }),
-/* 324 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var baseMatches = __webpack_require__(325),
-	    baseMatchesProperty = __webpack_require__(410),
-	    identity = __webpack_require__(425),
-	    isArray = __webpack_require__(62),
-	    property = __webpack_require__(426);
-
-	/**
-	 * The base implementation of `_.iteratee`.
-	 *
-	 * @private
-	 * @param {*} [value=_.identity] The value to convert to an iteratee.
-	 * @returns {Function} Returns the iteratee.
-	 */
-	function baseIteratee(value) {
-	  // Don't store the `typeof` result in a variable to avoid a JIT bug in Safari 9.
-	  // See https://bugs.webkit.org/show_bug.cgi?id=156034 for more details.
-	  if (typeof value == 'function') {
-	    return value;
-	  }
-	  if (value == null) {
-	    return identity;
-	  }
-	  if (typeof value == 'object') {
-	    return isArray(value)
-	      ? baseMatchesProperty(value[0], value[1])
-	      : baseMatches(value);
-	  }
-	  return property(value);
-	}
-
-	module.exports = baseIteratee;
-
-
-/***/ }),
-/* 325 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var baseIsMatch = __webpack_require__(326),
-	    getMatchData = __webpack_require__(407),
-	    matchesStrictComparable = __webpack_require__(409);
-
-	/**
-	 * The base implementation of `_.matches` which doesn't clone `source`.
-	 *
-	 * @private
-	 * @param {Object} source The object of property values to match.
-	 * @returns {Function} Returns the new spec function.
-	 */
-	function baseMatches(source) {
-	  var matchData = getMatchData(source);
-	  if (matchData.length == 1 && matchData[0][2]) {
-	    return matchesStrictComparable(matchData[0][0], matchData[0][1]);
-	  }
-	  return function(object) {
-	    return object === source || baseIsMatch(object, source, matchData);
-	  };
-	}
-
-	module.exports = baseMatches;
-
-
-/***/ }),
-/* 326 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var Stack = __webpack_require__(327),
-	    baseIsEqual = __webpack_require__(365);
-
-	/** Used to compose bitmasks for value comparisons. */
-	var COMPARE_PARTIAL_FLAG = 1,
-	    COMPARE_UNORDERED_FLAG = 2;
-
-	/**
-	 * The base implementation of `_.isMatch` without support for iteratee shorthands.
-	 *
-	 * @private
-	 * @param {Object} object The object to inspect.
-	 * @param {Object} source The object of property values to match.
-	 * @param {Array} matchData The property names, values, and compare flags to match.
-	 * @param {Function} [customizer] The function to customize comparisons.
-	 * @returns {boolean} Returns `true` if `object` is a match, else `false`.
-	 */
-	function baseIsMatch(object, source, matchData, customizer) {
-	  var index = matchData.length,
-	      length = index,
-	      noCustomizer = !customizer;
-
-	  if (object == null) {
-	    return !length;
-	  }
-	  object = Object(object);
-	  while (index--) {
-	    var data = matchData[index];
-	    if ((noCustomizer && data[2])
-	          ? data[1] !== object[data[0]]
-	          : !(data[0] in object)
-	        ) {
-	      return false;
-	    }
-	  }
-	  while (++index < length) {
-	    data = matchData[index];
-	    var key = data[0],
-	        objValue = object[key],
-	        srcValue = data[1];
-
-	    if (noCustomizer && data[2]) {
-	      if (objValue === undefined && !(key in object)) {
-	        return false;
-	      }
-	    } else {
-	      var stack = new Stack;
-	      if (customizer) {
-	        var result = customizer(objValue, srcValue, key, object, source, stack);
-	      }
-	      if (!(result === undefined
-	            ? baseIsEqual(srcValue, objValue, COMPARE_PARTIAL_FLAG | COMPARE_UNORDERED_FLAG, customizer, stack)
-	            : result
-	          )) {
-	        return false;
-	      }
-	    }
-	  }
-	  return true;
-	}
-
-	module.exports = baseIsMatch;
-
-
-/***/ }),
-/* 327 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var ListCache = __webpack_require__(328),
-	    stackClear = __webpack_require__(336),
-	    stackDelete = __webpack_require__(337),
-	    stackGet = __webpack_require__(338),
-	    stackHas = __webpack_require__(339),
-	    stackSet = __webpack_require__(340);
-
-	/**
-	 * Creates a stack cache object to store key-value pairs.
-	 *
-	 * @private
-	 * @constructor
-	 * @param {Array} [entries] The key-value pairs to cache.
-	 */
-	function Stack(entries) {
-	  var data = this.__data__ = new ListCache(entries);
-	  this.size = data.size;
-	}
-
-	// Add methods to `Stack`.
-	Stack.prototype.clear = stackClear;
-	Stack.prototype['delete'] = stackDelete;
-	Stack.prototype.get = stackGet;
-	Stack.prototype.has = stackHas;
-	Stack.prototype.set = stackSet;
-
-	module.exports = Stack;
-
-
-/***/ }),
-/* 328 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var listCacheClear = __webpack_require__(329),
-	    listCacheDelete = __webpack_require__(330),
-	    listCacheGet = __webpack_require__(333),
-	    listCacheHas = __webpack_require__(334),
-	    listCacheSet = __webpack_require__(335);
-
-	/**
-	 * Creates an list cache object.
-	 *
-	 * @private
-	 * @constructor
-	 * @param {Array} [entries] The key-value pairs to cache.
-	 */
-	function ListCache(entries) {
-	  var index = -1,
-	      length = entries == null ? 0 : entries.length;
-
-	  this.clear();
-	  while (++index < length) {
-	    var entry = entries[index];
-	    this.set(entry[0], entry[1]);
-	  }
-	}
-
-	// Add methods to `ListCache`.
-	ListCache.prototype.clear = listCacheClear;
-	ListCache.prototype['delete'] = listCacheDelete;
-	ListCache.prototype.get = listCacheGet;
-	ListCache.prototype.has = listCacheHas;
-	ListCache.prototype.set = listCacheSet;
-
-	module.exports = ListCache;
-
-
-/***/ }),
-/* 329 */
-/***/ (function(module, exports) {
-
-	/**
-	 * Removes all key-value entries from the list cache.
-	 *
-	 * @private
-	 * @name clear
-	 * @memberOf ListCache
-	 */
-	function listCacheClear() {
-	  this.__data__ = [];
-	  this.size = 0;
-	}
-
-	module.exports = listCacheClear;
-
-
-/***/ }),
-/* 330 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var assocIndexOf = __webpack_require__(331);
-
-	/** Used for built-in method references. */
-	var arrayProto = Array.prototype;
-
-	/** Built-in value references. */
-	var splice = arrayProto.splice;
-
-	/**
-	 * Removes `key` and its value from the list cache.
-	 *
-	 * @private
-	 * @name delete
-	 * @memberOf ListCache
-	 * @param {string} key The key of the value to remove.
-	 * @returns {boolean} Returns `true` if the entry was removed, else `false`.
-	 */
-	function listCacheDelete(key) {
-	  var data = this.__data__,
-	      index = assocIndexOf(data, key);
-
-	  if (index < 0) {
-	    return false;
-	  }
-	  var lastIndex = data.length - 1;
-	  if (index == lastIndex) {
-	    data.pop();
-	  } else {
-	    splice.call(data, index, 1);
-	  }
-	  --this.size;
-	  return true;
-	}
-
-	module.exports = listCacheDelete;
-
-
-/***/ }),
-/* 331 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var eq = __webpack_require__(332);
-
-	/**
-	 * Gets the index at which the `key` is found in `array` of key-value pairs.
-	 *
-	 * @private
-	 * @param {Array} array The array to inspect.
-	 * @param {*} key The key to search for.
-	 * @returns {number} Returns the index of the matched value, else `-1`.
-	 */
-	function assocIndexOf(array, key) {
-	  var length = array.length;
-	  while (length--) {
-	    if (eq(array[length][0], key)) {
-	      return length;
-	    }
-	  }
-	  return -1;
-	}
-
-	module.exports = assocIndexOf;
-
-
-/***/ }),
-/* 332 */
-/***/ (function(module, exports) {
-
-	/**
-	 * Performs a
-	 * [`SameValueZero`](http://ecma-international.org/ecma-262/7.0/#sec-samevaluezero)
-	 * comparison between two values to determine if they are equivalent.
-	 *
-	 * @static
-	 * @memberOf _
-	 * @since 4.0.0
-	 * @category Lang
-	 * @param {*} value The value to compare.
-	 * @param {*} other The other value to compare.
-	 * @returns {boolean} Returns `true` if the values are equivalent, else `false`.
-	 * @example
-	 *
-	 * var object = { 'a': 1 };
-	 * var other = { 'a': 1 };
-	 *
-	 * _.eq(object, object);
-	 * // => true
-	 *
-	 * _.eq(object, other);
-	 * // => false
-	 *
-	 * _.eq('a', 'a');
-	 * // => true
-	 *
-	 * _.eq('a', Object('a'));
-	 * // => false
-	 *
-	 * _.eq(NaN, NaN);
-	 * // => true
-	 */
-	function eq(value, other) {
-	  return value === other || (value !== value && other !== other);
-	}
-
-	module.exports = eq;
-
-
-/***/ }),
-/* 333 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var assocIndexOf = __webpack_require__(331);
-
-	/**
-	 * Gets the list cache value for `key`.
-	 *
-	 * @private
-	 * @name get
-	 * @memberOf ListCache
-	 * @param {string} key The key of the value to get.
-	 * @returns {*} Returns the entry value.
-	 */
-	function listCacheGet(key) {
-	  var data = this.__data__,
-	      index = assocIndexOf(data, key);
-
-	  return index < 0 ? undefined : data[index][1];
-	}
-
-	module.exports = listCacheGet;
-
-
-/***/ }),
-/* 334 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var assocIndexOf = __webpack_require__(331);
-
-	/**
-	 * Checks if a list cache value for `key` exists.
-	 *
-	 * @private
-	 * @name has
-	 * @memberOf ListCache
-	 * @param {string} key The key of the entry to check.
-	 * @returns {boolean} Returns `true` if an entry for `key` exists, else `false`.
-	 */
-	function listCacheHas(key) {
-	  return assocIndexOf(this.__data__, key) > -1;
-	}
-
-	module.exports = listCacheHas;
-
-
-/***/ }),
-/* 335 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var assocIndexOf = __webpack_require__(331);
-
-	/**
-	 * Sets the list cache `key` to `value`.
-	 *
-	 * @private
-	 * @name set
-	 * @memberOf ListCache
-	 * @param {string} key The key of the value to set.
-	 * @param {*} value The value to set.
-	 * @returns {Object} Returns the list cache instance.
-	 */
-	function listCacheSet(key, value) {
-	  var data = this.__data__,
-	      index = assocIndexOf(data, key);
-
-	  if (index < 0) {
-	    ++this.size;
-	    data.push([key, value]);
-	  } else {
-	    data[index][1] = value;
-	  }
-	  return this;
-	}
-
-	module.exports = listCacheSet;
-
-
-/***/ }),
-/* 336 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var ListCache = __webpack_require__(328);
-
-	/**
-	 * Removes all key-value entries from the stack.
-	 *
-	 * @private
-	 * @name clear
-	 * @memberOf Stack
-	 */
-	function stackClear() {
-	  this.__data__ = new ListCache;
-	  this.size = 0;
-	}
-
-	module.exports = stackClear;
-
-
-/***/ }),
-/* 337 */
-/***/ (function(module, exports) {
-
-	/**
-	 * Removes `key` and its value from the stack.
-	 *
-	 * @private
-	 * @name delete
-	 * @memberOf Stack
-	 * @param {string} key The key of the value to remove.
-	 * @returns {boolean} Returns `true` if the entry was removed, else `false`.
-	 */
-	function stackDelete(key) {
-	  var data = this.__data__,
-	      result = data['delete'](key);
-
-	  this.size = data.size;
-	  return result;
-	}
-
-	module.exports = stackDelete;
-
-
-/***/ }),
-/* 338 */
-/***/ (function(module, exports) {
-
-	/**
-	 * Gets the stack value for `key`.
-	 *
-	 * @private
-	 * @name get
-	 * @memberOf Stack
-	 * @param {string} key The key of the value to get.
-	 * @returns {*} Returns the entry value.
-	 */
-	function stackGet(key) {
-	  return this.__data__.get(key);
-	}
-
-	module.exports = stackGet;
-
-
-/***/ }),
-/* 339 */
-/***/ (function(module, exports) {
-
-	/**
-	 * Checks if a stack value for `key` exists.
-	 *
-	 * @private
-	 * @name has
-	 * @memberOf Stack
-	 * @param {string} key The key of the entry to check.
-	 * @returns {boolean} Returns `true` if an entry for `key` exists, else `false`.
-	 */
-	function stackHas(key) {
-	  return this.__data__.has(key);
-	}
-
-	module.exports = stackHas;
-
-
-/***/ }),
-/* 340 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var ListCache = __webpack_require__(328),
-	    Map = __webpack_require__(341),
-	    MapCache = __webpack_require__(350);
-
-	/** Used as the size to enable large array optimizations. */
-	var LARGE_ARRAY_SIZE = 200;
-
-	/**
-	 * Sets the stack `key` to `value`.
-	 *
-	 * @private
-	 * @name set
-	 * @memberOf Stack
-	 * @param {string} key The key of the value to set.
-	 * @param {*} value The value to set.
-	 * @returns {Object} Returns the stack cache instance.
-	 */
-	function stackSet(key, value) {
-	  var data = this.__data__;
-	  if (data instanceof ListCache) {
-	    var pairs = data.__data__;
-	    if (!Map || (pairs.length < LARGE_ARRAY_SIZE - 1)) {
-	      pairs.push([key, value]);
-	      this.size = ++data.size;
-	      return this;
-	    }
-	    data = this.__data__ = new MapCache(pairs);
-	  }
-	  data.set(key, value);
-	  this.size = data.size;
-	  return this;
-	}
-
-	module.exports = stackSet;
-
-
-/***/ }),
-/* 341 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var getNative = __webpack_require__(342),
-	    root = __webpack_require__(58);
-
-	/* Built-in method references that are verified to be native. */
-	var Map = getNative(root, 'Map');
-
-	module.exports = Map;
-
-
-/***/ }),
-/* 342 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var baseIsNative = __webpack_require__(343),
-	    getValue = __webpack_require__(349);
-
-	/**
-	 * Gets the native function at `key` of `object`.
-	 *
-	 * @private
-	 * @param {Object} object The object to query.
-	 * @param {string} key The key of the method to get.
-	 * @returns {*} Returns the function if it's native, else `undefined`.
-	 */
-	function getNative(object, key) {
-	  var value = getValue(object, key);
-	  return baseIsNative(value) ? value : undefined;
-	}
-
-	module.exports = getNative;
-
-
-/***/ }),
-/* 343 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var isFunction = __webpack_require__(344),
-	    isMasked = __webpack_require__(346),
-	    isObject = __webpack_require__(345),
-	    toSource = __webpack_require__(348);
-
-	/**
-	 * Used to match `RegExp`
-	 * [syntax characters](http://ecma-international.org/ecma-262/7.0/#sec-patterns).
-	 */
-	var reRegExpChar = /[\\^$.*+?()[\]{}|]/g;
-
-	/** Used to detect host constructors (Safari). */
-	var reIsHostCtor = /^\[object .+?Constructor\]$/;
-
-	/** Used for built-in method references. */
-	var funcProto = Function.prototype,
-	    objectProto = Object.prototype;
-
-	/** Used to resolve the decompiled source of functions. */
-	var funcToString = funcProto.toString;
-
-	/** Used to check objects for own properties. */
-	var hasOwnProperty = objectProto.hasOwnProperty;
-
-	/** Used to detect if a method is native. */
-	var reIsNative = RegExp('^' +
-	  funcToString.call(hasOwnProperty).replace(reRegExpChar, '\\$&')
-	  .replace(/hasOwnProperty|(function).*?(?=\\\()| for .+?(?=\\\])/g, '$1.*?') + '$'
-	);
-
-	/**
-	 * The base implementation of `_.isNative` without bad shim checks.
-	 *
-	 * @private
-	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is a native function,
-	 *  else `false`.
-	 */
-	function baseIsNative(value) {
-	  if (!isObject(value) || isMasked(value)) {
-	    return false;
-	  }
-	  var pattern = isFunction(value) ? reIsNative : reIsHostCtor;
-	  return pattern.test(toSource(value));
-	}
-
-	module.exports = baseIsNative;
-
-
-/***/ }),
-/* 344 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var baseGetTag = __webpack_require__(56),
-	    isObject = __webpack_require__(345);
-
-	/** `Object#toString` result references. */
-	var asyncTag = '[object AsyncFunction]',
-	    funcTag = '[object Function]',
-	    genTag = '[object GeneratorFunction]',
-	    proxyTag = '[object Proxy]';
-
-	/**
-	 * Checks if `value` is classified as a `Function` object.
-	 *
-	 * @static
-	 * @memberOf _
-	 * @since 0.1.0
-	 * @category Lang
-	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is a function, else `false`.
-	 * @example
-	 *
-	 * _.isFunction(_);
-	 * // => true
-	 *
-	 * _.isFunction(/abc/);
-	 * // => false
-	 */
-	function isFunction(value) {
-	  if (!isObject(value)) {
-	    return false;
-	  }
-	  // The use of `Object#toString` avoids issues with the `typeof` operator
-	  // in Safari 9 which returns 'object' for typed arrays and other constructors.
-	  var tag = baseGetTag(value);
-	  return tag == funcTag || tag == genTag || tag == asyncTag || tag == proxyTag;
-	}
-
-	module.exports = isFunction;
-
-
-/***/ }),
-/* 345 */
-/***/ (function(module, exports) {
-
-	/**
-	 * Checks if `value` is the
-	 * [language type](http://www.ecma-international.org/ecma-262/7.0/#sec-ecmascript-language-types)
-	 * of `Object`. (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
-	 *
-	 * @static
-	 * @memberOf _
-	 * @since 0.1.0
-	 * @category Lang
-	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is an object, else `false`.
-	 * @example
-	 *
-	 * _.isObject({});
-	 * // => true
-	 *
-	 * _.isObject([1, 2, 3]);
-	 * // => true
-	 *
-	 * _.isObject(_.noop);
-	 * // => true
-	 *
-	 * _.isObject(null);
-	 * // => false
-	 */
-	function isObject(value) {
-	  var type = typeof value;
-	  return value != null && (type == 'object' || type == 'function');
-	}
-
-	module.exports = isObject;
-
-
-/***/ }),
-/* 346 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var coreJsData = __webpack_require__(347);
-
-	/** Used to detect methods masquerading as native. */
-	var maskSrcKey = (function() {
-	  var uid = /[^.]+$/.exec(coreJsData && coreJsData.keys && coreJsData.keys.IE_PROTO || '');
-	  return uid ? ('Symbol(src)_1.' + uid) : '';
-	}());
-
-	/**
-	 * Checks if `func` has its source masked.
-	 *
-	 * @private
-	 * @param {Function} func The function to check.
-	 * @returns {boolean} Returns `true` if `func` is masked, else `false`.
-	 */
-	function isMasked(func) {
-	  return !!maskSrcKey && (maskSrcKey in func);
-	}
-
-	module.exports = isMasked;
-
-
-/***/ }),
-/* 347 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var root = __webpack_require__(58);
-
-	/** Used to detect overreaching core-js shims. */
-	var coreJsData = root['__core-js_shared__'];
-
-	module.exports = coreJsData;
-
-
-/***/ }),
-/* 348 */
-/***/ (function(module, exports) {
-
-	/** Used for built-in method references. */
-	var funcProto = Function.prototype;
-
-	/** Used to resolve the decompiled source of functions. */
-	var funcToString = funcProto.toString;
-
-	/**
-	 * Converts `func` to its source code.
-	 *
-	 * @private
-	 * @param {Function} func The function to convert.
-	 * @returns {string} Returns the source code.
-	 */
-	function toSource(func) {
-	  if (func != null) {
-	    try {
-	      return funcToString.call(func);
-	    } catch (e) {}
-	    try {
-	      return (func + '');
-	    } catch (e) {}
-	  }
-	  return '';
-	}
-
-	module.exports = toSource;
-
-
-/***/ }),
-/* 349 */
-/***/ (function(module, exports) {
-
-	/**
-	 * Gets the value at `key` of `object`.
-	 *
-	 * @private
-	 * @param {Object} [object] The object to query.
-	 * @param {string} key The key of the property to get.
-	 * @returns {*} Returns the property value.
-	 */
-	function getValue(object, key) {
-	  return object == null ? undefined : object[key];
-	}
-
-	module.exports = getValue;
-
-
-/***/ }),
-/* 350 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var mapCacheClear = __webpack_require__(351),
-	    mapCacheDelete = __webpack_require__(359),
-	    mapCacheGet = __webpack_require__(362),
-	    mapCacheHas = __webpack_require__(363),
-	    mapCacheSet = __webpack_require__(364);
-
-	/**
-	 * Creates a map cache object to store key-value pairs.
-	 *
-	 * @private
-	 * @constructor
-	 * @param {Array} [entries] The key-value pairs to cache.
-	 */
-	function MapCache(entries) {
-	  var index = -1,
-	      length = entries == null ? 0 : entries.length;
-
-	  this.clear();
-	  while (++index < length) {
-	    var entry = entries[index];
-	    this.set(entry[0], entry[1]);
-	  }
-	}
-
-	// Add methods to `MapCache`.
-	MapCache.prototype.clear = mapCacheClear;
-	MapCache.prototype['delete'] = mapCacheDelete;
-	MapCache.prototype.get = mapCacheGet;
-	MapCache.prototype.has = mapCacheHas;
-	MapCache.prototype.set = mapCacheSet;
-
-	module.exports = MapCache;
-
-
-/***/ }),
-/* 351 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var Hash = __webpack_require__(352),
-	    ListCache = __webpack_require__(328),
-	    Map = __webpack_require__(341);
-
-	/**
-	 * Removes all key-value entries from the map.
-	 *
-	 * @private
-	 * @name clear
-	 * @memberOf MapCache
-	 */
-	function mapCacheClear() {
-	  this.size = 0;
-	  this.__data__ = {
-	    'hash': new Hash,
-	    'map': new (Map || ListCache),
-	    'string': new Hash
-	  };
-	}
-
-	module.exports = mapCacheClear;
-
-
-/***/ }),
-/* 352 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var hashClear = __webpack_require__(353),
-	    hashDelete = __webpack_require__(355),
-	    hashGet = __webpack_require__(356),
-	    hashHas = __webpack_require__(357),
-	    hashSet = __webpack_require__(358);
-
-	/**
-	 * Creates a hash object.
-	 *
-	 * @private
-	 * @constructor
-	 * @param {Array} [entries] The key-value pairs to cache.
-	 */
-	function Hash(entries) {
-	  var index = -1,
-	      length = entries == null ? 0 : entries.length;
-
-	  this.clear();
-	  while (++index < length) {
-	    var entry = entries[index];
-	    this.set(entry[0], entry[1]);
-	  }
-	}
-
-	// Add methods to `Hash`.
-	Hash.prototype.clear = hashClear;
-	Hash.prototype['delete'] = hashDelete;
-	Hash.prototype.get = hashGet;
-	Hash.prototype.has = hashHas;
-	Hash.prototype.set = hashSet;
-
-	module.exports = Hash;
-
-
-/***/ }),
-/* 353 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var nativeCreate = __webpack_require__(354);
-
-	/**
-	 * Removes all key-value entries from the hash.
-	 *
-	 * @private
-	 * @name clear
-	 * @memberOf Hash
-	 */
-	function hashClear() {
-	  this.__data__ = nativeCreate ? nativeCreate(null) : {};
-	  this.size = 0;
-	}
-
-	module.exports = hashClear;
-
-
-/***/ }),
-/* 354 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var getNative = __webpack_require__(342);
-
-	/* Built-in method references that are verified to be native. */
-	var nativeCreate = getNative(Object, 'create');
-
-	module.exports = nativeCreate;
-
-
-/***/ }),
-/* 355 */
-/***/ (function(module, exports) {
-
-	/**
-	 * Removes `key` and its value from the hash.
-	 *
-	 * @private
-	 * @name delete
-	 * @memberOf Hash
-	 * @param {Object} hash The hash to modify.
-	 * @param {string} key The key of the value to remove.
-	 * @returns {boolean} Returns `true` if the entry was removed, else `false`.
-	 */
-	function hashDelete(key) {
-	  var result = this.has(key) && delete this.__data__[key];
-	  this.size -= result ? 1 : 0;
-	  return result;
-	}
-
-	module.exports = hashDelete;
-
-
-/***/ }),
-/* 356 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var nativeCreate = __webpack_require__(354);
-
-	/** Used to stand-in for `undefined` hash values. */
-	var HASH_UNDEFINED = '__lodash_hash_undefined__';
-
-	/** Used for built-in method references. */
-	var objectProto = Object.prototype;
-
-	/** Used to check objects for own properties. */
-	var hasOwnProperty = objectProto.hasOwnProperty;
-
-	/**
-	 * Gets the hash value for `key`.
-	 *
-	 * @private
-	 * @name get
-	 * @memberOf Hash
-	 * @param {string} key The key of the value to get.
-	 * @returns {*} Returns the entry value.
-	 */
-	function hashGet(key) {
-	  var data = this.__data__;
-	  if (nativeCreate) {
-	    var result = data[key];
-	    return result === HASH_UNDEFINED ? undefined : result;
-	  }
-	  return hasOwnProperty.call(data, key) ? data[key] : undefined;
-	}
-
-	module.exports = hashGet;
-
-
-/***/ }),
-/* 357 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var nativeCreate = __webpack_require__(354);
-
-	/** Used for built-in method references. */
-	var objectProto = Object.prototype;
-
-	/** Used to check objects for own properties. */
-	var hasOwnProperty = objectProto.hasOwnProperty;
-
-	/**
-	 * Checks if a hash value for `key` exists.
-	 *
-	 * @private
-	 * @name has
-	 * @memberOf Hash
-	 * @param {string} key The key of the entry to check.
-	 * @returns {boolean} Returns `true` if an entry for `key` exists, else `false`.
-	 */
-	function hashHas(key) {
-	  var data = this.__data__;
-	  return nativeCreate ? (data[key] !== undefined) : hasOwnProperty.call(data, key);
-	}
-
-	module.exports = hashHas;
-
-
-/***/ }),
-/* 358 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var nativeCreate = __webpack_require__(354);
-
-	/** Used to stand-in for `undefined` hash values. */
-	var HASH_UNDEFINED = '__lodash_hash_undefined__';
-
-	/**
-	 * Sets the hash `key` to `value`.
-	 *
-	 * @private
-	 * @name set
-	 * @memberOf Hash
-	 * @param {string} key The key of the value to set.
-	 * @param {*} value The value to set.
-	 * @returns {Object} Returns the hash instance.
-	 */
-	function hashSet(key, value) {
-	  var data = this.__data__;
-	  this.size += this.has(key) ? 0 : 1;
-	  data[key] = (nativeCreate && value === undefined) ? HASH_UNDEFINED : value;
-	  return this;
-	}
-
-	module.exports = hashSet;
-
-
-/***/ }),
-/* 359 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var getMapData = __webpack_require__(360);
-
-	/**
-	 * Removes `key` and its value from the map.
-	 *
-	 * @private
-	 * @name delete
-	 * @memberOf MapCache
-	 * @param {string} key The key of the value to remove.
-	 * @returns {boolean} Returns `true` if the entry was removed, else `false`.
-	 */
-	function mapCacheDelete(key) {
-	  var result = getMapData(this, key)['delete'](key);
-	  this.size -= result ? 1 : 0;
-	  return result;
-	}
-
-	module.exports = mapCacheDelete;
-
-
-/***/ }),
-/* 360 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var isKeyable = __webpack_require__(361);
-
-	/**
-	 * Gets the data for `map`.
-	 *
-	 * @private
-	 * @param {Object} map The map to query.
-	 * @param {string} key The reference key.
-	 * @returns {*} Returns the map data.
-	 */
-	function getMapData(map, key) {
-	  var data = map.__data__;
-	  return isKeyable(key)
-	    ? data[typeof key == 'string' ? 'string' : 'hash']
-	    : data.map;
-	}
-
-	module.exports = getMapData;
-
-
-/***/ }),
-/* 361 */
-/***/ (function(module, exports) {
-
-	/**
-	 * Checks if `value` is suitable for use as unique object key.
-	 *
-	 * @private
-	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is suitable, else `false`.
-	 */
-	function isKeyable(value) {
-	  var type = typeof value;
-	  return (type == 'string' || type == 'number' || type == 'symbol' || type == 'boolean')
-	    ? (value !== '__proto__')
-	    : (value === null);
-	}
-
-	module.exports = isKeyable;
-
-
-/***/ }),
-/* 362 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var getMapData = __webpack_require__(360);
-
-	/**
-	 * Gets the map value for `key`.
-	 *
-	 * @private
-	 * @name get
-	 * @memberOf MapCache
-	 * @param {string} key The key of the value to get.
-	 * @returns {*} Returns the entry value.
-	 */
-	function mapCacheGet(key) {
-	  return getMapData(this, key).get(key);
-	}
-
-	module.exports = mapCacheGet;
-
-
-/***/ }),
-/* 363 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var getMapData = __webpack_require__(360);
-
-	/**
-	 * Checks if a map value for `key` exists.
-	 *
-	 * @private
-	 * @name has
-	 * @memberOf MapCache
-	 * @param {string} key The key of the entry to check.
-	 * @returns {boolean} Returns `true` if an entry for `key` exists, else `false`.
-	 */
-	function mapCacheHas(key) {
-	  return getMapData(this, key).has(key);
-	}
-
-	module.exports = mapCacheHas;
-
-
-/***/ }),
-/* 364 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var getMapData = __webpack_require__(360);
-
-	/**
-	 * Sets the map `key` to `value`.
-	 *
-	 * @private
-	 * @name set
-	 * @memberOf MapCache
-	 * @param {string} key The key of the value to set.
-	 * @param {*} value The value to set.
-	 * @returns {Object} Returns the map cache instance.
-	 */
-	function mapCacheSet(key, value) {
-	  var data = getMapData(this, key),
-	      size = data.size;
-
-	  data.set(key, value);
-	  this.size += data.size == size ? 0 : 1;
-	  return this;
-	}
-
-	module.exports = mapCacheSet;
-
-
-/***/ }),
-/* 365 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var baseIsEqualDeep = __webpack_require__(366),
-	    isObjectLike = __webpack_require__(63);
-
-	/**
-	 * The base implementation of `_.isEqual` which supports partial comparisons
-	 * and tracks traversed objects.
-	 *
-	 * @private
-	 * @param {*} value The value to compare.
-	 * @param {*} other The other value to compare.
-	 * @param {boolean} bitmask The bitmask flags.
-	 *  1 - Unordered comparison
-	 *  2 - Partial comparison
-	 * @param {Function} [customizer] The function to customize comparisons.
-	 * @param {Object} [stack] Tracks traversed `value` and `other` objects.
-	 * @returns {boolean} Returns `true` if the values are equivalent, else `false`.
-	 */
-	function baseIsEqual(value, other, bitmask, customizer, stack) {
-	  if (value === other) {
-	    return true;
-	  }
-	  if (value == null || other == null || (!isObjectLike(value) && !isObjectLike(other))) {
-	    return value !== value && other !== other;
-	  }
-	  return baseIsEqualDeep(value, other, bitmask, customizer, baseIsEqual, stack);
-	}
-
-	module.exports = baseIsEqual;
-
-
-/***/ }),
-/* 366 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var Stack = __webpack_require__(327),
-	    equalArrays = __webpack_require__(367),
-	    equalByTag = __webpack_require__(373),
-	    equalObjects = __webpack_require__(377),
-	    getTag = __webpack_require__(402),
-	    isArray = __webpack_require__(62),
-	    isBuffer = __webpack_require__(389),
-	    isTypedArray = __webpack_require__(392);
-
-	/** Used to compose bitmasks for value comparisons. */
-	var COMPARE_PARTIAL_FLAG = 1;
-
-	/** `Object#toString` result references. */
-	var argsTag = '[object Arguments]',
-	    arrayTag = '[object Array]',
-	    objectTag = '[object Object]';
-
-	/** Used for built-in method references. */
-	var objectProto = Object.prototype;
-
-	/** Used to check objects for own properties. */
-	var hasOwnProperty = objectProto.hasOwnProperty;
-
-	/**
-	 * A specialized version of `baseIsEqual` for arrays and objects which performs
-	 * deep comparisons and tracks traversed objects enabling objects with circular
-	 * references to be compared.
-	 *
-	 * @private
-	 * @param {Object} object The object to compare.
-	 * @param {Object} other The other object to compare.
-	 * @param {number} bitmask The bitmask flags. See `baseIsEqual` for more details.
-	 * @param {Function} customizer The function to customize comparisons.
-	 * @param {Function} equalFunc The function to determine equivalents of values.
-	 * @param {Object} [stack] Tracks traversed `object` and `other` objects.
-	 * @returns {boolean} Returns `true` if the objects are equivalent, else `false`.
-	 */
-	function baseIsEqualDeep(object, other, bitmask, customizer, equalFunc, stack) {
-	  var objIsArr = isArray(object),
-	      othIsArr = isArray(other),
-	      objTag = objIsArr ? arrayTag : getTag(object),
-	      othTag = othIsArr ? arrayTag : getTag(other);
-
-	  objTag = objTag == argsTag ? objectTag : objTag;
-	  othTag = othTag == argsTag ? objectTag : othTag;
-
-	  var objIsObj = objTag == objectTag,
-	      othIsObj = othTag == objectTag,
-	      isSameTag = objTag == othTag;
-
-	  if (isSameTag && isBuffer(object)) {
-	    if (!isBuffer(other)) {
-	      return false;
-	    }
-	    objIsArr = true;
-	    objIsObj = false;
-	  }
-	  if (isSameTag && !objIsObj) {
-	    stack || (stack = new Stack);
-	    return (objIsArr || isTypedArray(object))
-	      ? equalArrays(object, other, bitmask, customizer, equalFunc, stack)
-	      : equalByTag(object, other, objTag, bitmask, customizer, equalFunc, stack);
-	  }
-	  if (!(bitmask & COMPARE_PARTIAL_FLAG)) {
-	    var objIsWrapped = objIsObj && hasOwnProperty.call(object, '__wrapped__'),
-	        othIsWrapped = othIsObj && hasOwnProperty.call(other, '__wrapped__');
-
-	    if (objIsWrapped || othIsWrapped) {
-	      var objUnwrapped = objIsWrapped ? object.value() : object,
-	          othUnwrapped = othIsWrapped ? other.value() : other;
-
-	      stack || (stack = new Stack);
-	      return equalFunc(objUnwrapped, othUnwrapped, bitmask, customizer, stack);
-	    }
-	  }
-	  if (!isSameTag) {
-	    return false;
-	  }
-	  stack || (stack = new Stack);
-	  return equalObjects(object, other, bitmask, customizer, equalFunc, stack);
-	}
-
-	module.exports = baseIsEqualDeep;
-
-
-/***/ }),
-/* 367 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var SetCache = __webpack_require__(368),
-	    arraySome = __webpack_require__(371),
-	    cacheHas = __webpack_require__(372);
-
-	/** Used to compose bitmasks for value comparisons. */
-	var COMPARE_PARTIAL_FLAG = 1,
-	    COMPARE_UNORDERED_FLAG = 2;
-
-	/**
-	 * A specialized version of `baseIsEqualDeep` for arrays with support for
-	 * partial deep comparisons.
-	 *
-	 * @private
-	 * @param {Array} array The array to compare.
-	 * @param {Array} other The other array to compare.
-	 * @param {number} bitmask The bitmask flags. See `baseIsEqual` for more details.
-	 * @param {Function} customizer The function to customize comparisons.
-	 * @param {Function} equalFunc The function to determine equivalents of values.
-	 * @param {Object} stack Tracks traversed `array` and `other` objects.
-	 * @returns {boolean} Returns `true` if the arrays are equivalent, else `false`.
-	 */
-	function equalArrays(array, other, bitmask, customizer, equalFunc, stack) {
-	  var isPartial = bitmask & COMPARE_PARTIAL_FLAG,
-	      arrLength = array.length,
-	      othLength = other.length;
-
-	  if (arrLength != othLength && !(isPartial && othLength > arrLength)) {
-	    return false;
-	  }
-	  // Assume cyclic values are equal.
-	  var stacked = stack.get(array);
-	  if (stacked && stack.get(other)) {
-	    return stacked == other;
-	  }
-	  var index = -1,
-	      result = true,
-	      seen = (bitmask & COMPARE_UNORDERED_FLAG) ? new SetCache : undefined;
-
-	  stack.set(array, other);
-	  stack.set(other, array);
-
-	  // Ignore non-index properties.
-	  while (++index < arrLength) {
-	    var arrValue = array[index],
-	        othValue = other[index];
-
-	    if (customizer) {
-	      var compared = isPartial
-	        ? customizer(othValue, arrValue, index, other, array, stack)
-	        : customizer(arrValue, othValue, index, array, other, stack);
-	    }
-	    if (compared !== undefined) {
-	      if (compared) {
-	        continue;
-	      }
-	      result = false;
-	      break;
-	    }
-	    // Recursively compare arrays (susceptible to call stack limits).
-	    if (seen) {
-	      if (!arraySome(other, function(othValue, othIndex) {
-	            if (!cacheHas(seen, othIndex) &&
-	                (arrValue === othValue || equalFunc(arrValue, othValue, bitmask, customizer, stack))) {
-	              return seen.push(othIndex);
-	            }
-	          })) {
-	        result = false;
-	        break;
-	      }
-	    } else if (!(
-	          arrValue === othValue ||
-	            equalFunc(arrValue, othValue, bitmask, customizer, stack)
-	        )) {
-	      result = false;
-	      break;
-	    }
-	  }
-	  stack['delete'](array);
-	  stack['delete'](other);
-	  return result;
-	}
-
-	module.exports = equalArrays;
-
-
-/***/ }),
-/* 368 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var MapCache = __webpack_require__(350),
-	    setCacheAdd = __webpack_require__(369),
-	    setCacheHas = __webpack_require__(370);
-
-	/**
-	 *
-	 * Creates an array cache object to store unique values.
-	 *
-	 * @private
-	 * @constructor
-	 * @param {Array} [values] The values to cache.
-	 */
-	function SetCache(values) {
-	  var index = -1,
-	      length = values == null ? 0 : values.length;
-
-	  this.__data__ = new MapCache;
-	  while (++index < length) {
-	    this.add(values[index]);
-	  }
-	}
-
-	// Add methods to `SetCache`.
-	SetCache.prototype.add = SetCache.prototype.push = setCacheAdd;
-	SetCache.prototype.has = setCacheHas;
-
-	module.exports = SetCache;
-
-
-/***/ }),
-/* 369 */
-/***/ (function(module, exports) {
-
-	/** Used to stand-in for `undefined` hash values. */
-	var HASH_UNDEFINED = '__lodash_hash_undefined__';
-
-	/**
-	 * Adds `value` to the array cache.
-	 *
-	 * @private
-	 * @name add
-	 * @memberOf SetCache
-	 * @alias push
-	 * @param {*} value The value to cache.
-	 * @returns {Object} Returns the cache instance.
-	 */
-	function setCacheAdd(value) {
-	  this.__data__.set(value, HASH_UNDEFINED);
-	  return this;
-	}
-
-	module.exports = setCacheAdd;
-
-
-/***/ }),
-/* 370 */
-/***/ (function(module, exports) {
-
-	/**
-	 * Checks if `value` is in the array cache.
-	 *
-	 * @private
-	 * @name has
-	 * @memberOf SetCache
-	 * @param {*} value The value to search for.
-	 * @returns {number} Returns `true` if `value` is found, else `false`.
-	 */
-	function setCacheHas(value) {
-	  return this.__data__.has(value);
-	}
-
-	module.exports = setCacheHas;
-
-
-/***/ }),
-/* 371 */
-/***/ (function(module, exports) {
-
-	/**
-	 * A specialized version of `_.some` for arrays without support for iteratee
-	 * shorthands.
-	 *
-	 * @private
-	 * @param {Array} [array] The array to iterate over.
-	 * @param {Function} predicate The function invoked per iteration.
-	 * @returns {boolean} Returns `true` if any element passes the predicate check,
-	 *  else `false`.
-	 */
-	function arraySome(array, predicate) {
-	  var index = -1,
-	      length = array == null ? 0 : array.length;
-
-	  while (++index < length) {
-	    if (predicate(array[index], index, array)) {
-	      return true;
-	    }
-	  }
-	  return false;
-	}
-
-	module.exports = arraySome;
-
-
-/***/ }),
-/* 372 */
-/***/ (function(module, exports) {
-
-	/**
-	 * Checks if a `cache` value for `key` exists.
-	 *
-	 * @private
-	 * @param {Object} cache The cache to query.
-	 * @param {string} key The key of the entry to check.
-	 * @returns {boolean} Returns `true` if an entry for `key` exists, else `false`.
-	 */
-	function cacheHas(cache, key) {
-	  return cache.has(key);
-	}
-
-	module.exports = cacheHas;
-
-
-/***/ }),
-/* 373 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var Symbol = __webpack_require__(57),
-	    Uint8Array = __webpack_require__(374),
-	    eq = __webpack_require__(332),
-	    equalArrays = __webpack_require__(367),
-	    mapToArray = __webpack_require__(375),
-	    setToArray = __webpack_require__(376);
-
-	/** Used to compose bitmasks for value comparisons. */
-	var COMPARE_PARTIAL_FLAG = 1,
-	    COMPARE_UNORDERED_FLAG = 2;
-
-	/** `Object#toString` result references. */
-	var boolTag = '[object Boolean]',
-	    dateTag = '[object Date]',
-	    errorTag = '[object Error]',
-	    mapTag = '[object Map]',
-	    numberTag = '[object Number]',
-	    regexpTag = '[object RegExp]',
-	    setTag = '[object Set]',
-	    stringTag = '[object String]',
-	    symbolTag = '[object Symbol]';
-
-	var arrayBufferTag = '[object ArrayBuffer]',
-	    dataViewTag = '[object DataView]';
-
-	/** Used to convert symbols to primitives and strings. */
-	var symbolProto = Symbol ? Symbol.prototype : undefined,
-	    symbolValueOf = symbolProto ? symbolProto.valueOf : undefined;
-
-	/**
-	 * A specialized version of `baseIsEqualDeep` for comparing objects of
-	 * the same `toStringTag`.
-	 *
-	 * **Note:** This function only supports comparing values with tags of
-	 * `Boolean`, `Date`, `Error`, `Number`, `RegExp`, or `String`.
-	 *
-	 * @private
-	 * @param {Object} object The object to compare.
-	 * @param {Object} other The other object to compare.
-	 * @param {string} tag The `toStringTag` of the objects to compare.
-	 * @param {number} bitmask The bitmask flags. See `baseIsEqual` for more details.
-	 * @param {Function} customizer The function to customize comparisons.
-	 * @param {Function} equalFunc The function to determine equivalents of values.
-	 * @param {Object} stack Tracks traversed `object` and `other` objects.
-	 * @returns {boolean} Returns `true` if the objects are equivalent, else `false`.
-	 */
-	function equalByTag(object, other, tag, bitmask, customizer, equalFunc, stack) {
-	  switch (tag) {
-	    case dataViewTag:
-	      if ((object.byteLength != other.byteLength) ||
-	          (object.byteOffset != other.byteOffset)) {
-	        return false;
-	      }
-	      object = object.buffer;
-	      other = other.buffer;
-
-	    case arrayBufferTag:
-	      if ((object.byteLength != other.byteLength) ||
-	          !equalFunc(new Uint8Array(object), new Uint8Array(other))) {
-	        return false;
-	      }
-	      return true;
-
-	    case boolTag:
-	    case dateTag:
-	    case numberTag:
-	      // Coerce booleans to `1` or `0` and dates to milliseconds.
-	      // Invalid dates are coerced to `NaN`.
-	      return eq(+object, +other);
-
-	    case errorTag:
-	      return object.name == other.name && object.message == other.message;
-
-	    case regexpTag:
-	    case stringTag:
-	      // Coerce regexes to strings and treat strings, primitives and objects,
-	      // as equal. See http://www.ecma-international.org/ecma-262/7.0/#sec-regexp.prototype.tostring
-	      // for more details.
-	      return object == (other + '');
-
-	    case mapTag:
-	      var convert = mapToArray;
-
-	    case setTag:
-	      var isPartial = bitmask & COMPARE_PARTIAL_FLAG;
-	      convert || (convert = setToArray);
-
-	      if (object.size != other.size && !isPartial) {
-	        return false;
-	      }
-	      // Assume cyclic values are equal.
-	      var stacked = stack.get(object);
-	      if (stacked) {
-	        return stacked == other;
-	      }
-	      bitmask |= COMPARE_UNORDERED_FLAG;
-
-	      // Recursively compare objects (susceptible to call stack limits).
-	      stack.set(object, other);
-	      var result = equalArrays(convert(object), convert(other), bitmask, customizer, equalFunc, stack);
-	      stack['delete'](object);
-	      return result;
-
-	    case symbolTag:
-	      if (symbolValueOf) {
-	        return symbolValueOf.call(object) == symbolValueOf.call(other);
-	      }
-	  }
-	  return false;
-	}
-
-	module.exports = equalByTag;
-
-
-/***/ }),
-/* 374 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var root = __webpack_require__(58);
-
-	/** Built-in value references. */
-	var Uint8Array = root.Uint8Array;
-
-	module.exports = Uint8Array;
-
-
-/***/ }),
-/* 375 */
-/***/ (function(module, exports) {
-
-	/**
-	 * Converts `map` to its key-value pairs.
-	 *
-	 * @private
-	 * @param {Object} map The map to convert.
-	 * @returns {Array} Returns the key-value pairs.
-	 */
-	function mapToArray(map) {
-	  var index = -1,
-	      result = Array(map.size);
-
-	  map.forEach(function(value, key) {
-	    result[++index] = [key, value];
-	  });
-	  return result;
-	}
-
-	module.exports = mapToArray;
-
-
-/***/ }),
-/* 376 */
-/***/ (function(module, exports) {
-
-	/**
-	 * Converts `set` to an array of its values.
-	 *
-	 * @private
-	 * @param {Object} set The set to convert.
-	 * @returns {Array} Returns the values.
-	 */
-	function setToArray(set) {
-	  var index = -1,
-	      result = Array(set.size);
-
-	  set.forEach(function(value) {
-	    result[++index] = value;
-	  });
-	  return result;
-	}
-
-	module.exports = setToArray;
-
-
-/***/ }),
-/* 377 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var getAllKeys = __webpack_require__(378);
-
-	/** Used to compose bitmasks for value comparisons. */
-	var COMPARE_PARTIAL_FLAG = 1;
-
-	/** Used for built-in method references. */
-	var objectProto = Object.prototype;
-
-	/** Used to check objects for own properties. */
-	var hasOwnProperty = objectProto.hasOwnProperty;
-
-	/**
-	 * A specialized version of `baseIsEqualDeep` for objects with support for
-	 * partial deep comparisons.
-	 *
-	 * @private
-	 * @param {Object} object The object to compare.
-	 * @param {Object} other The other object to compare.
-	 * @param {number} bitmask The bitmask flags. See `baseIsEqual` for more details.
-	 * @param {Function} customizer The function to customize comparisons.
-	 * @param {Function} equalFunc The function to determine equivalents of values.
-	 * @param {Object} stack Tracks traversed `object` and `other` objects.
-	 * @returns {boolean} Returns `true` if the objects are equivalent, else `false`.
-	 */
-	function equalObjects(object, other, bitmask, customizer, equalFunc, stack) {
-	  var isPartial = bitmask & COMPARE_PARTIAL_FLAG,
-	      objProps = getAllKeys(object),
-	      objLength = objProps.length,
-	      othProps = getAllKeys(other),
-	      othLength = othProps.length;
-
-	  if (objLength != othLength && !isPartial) {
-	    return false;
-	  }
-	  var index = objLength;
-	  while (index--) {
-	    var key = objProps[index];
-	    if (!(isPartial ? key in other : hasOwnProperty.call(other, key))) {
-	      return false;
-	    }
-	  }
-	  // Assume cyclic values are equal.
-	  var stacked = stack.get(object);
-	  if (stacked && stack.get(other)) {
-	    return stacked == other;
-	  }
-	  var result = true;
-	  stack.set(object, other);
-	  stack.set(other, object);
-
-	  var skipCtor = isPartial;
-	  while (++index < objLength) {
-	    key = objProps[index];
-	    var objValue = object[key],
-	        othValue = other[key];
-
-	    if (customizer) {
-	      var compared = isPartial
-	        ? customizer(othValue, objValue, key, other, object, stack)
-	        : customizer(objValue, othValue, key, object, other, stack);
-	    }
-	    // Recursively compare objects (susceptible to call stack limits).
-	    if (!(compared === undefined
-	          ? (objValue === othValue || equalFunc(objValue, othValue, bitmask, customizer, stack))
-	          : compared
-	        )) {
-	      result = false;
-	      break;
-	    }
-	    skipCtor || (skipCtor = key == 'constructor');
-	  }
-	  if (result && !skipCtor) {
-	    var objCtor = object.constructor,
-	        othCtor = other.constructor;
-
-	    // Non `Object` object instances with different constructors are not equal.
-	    if (objCtor != othCtor &&
-	        ('constructor' in object && 'constructor' in other) &&
-	        !(typeof objCtor == 'function' && objCtor instanceof objCtor &&
-	          typeof othCtor == 'function' && othCtor instanceof othCtor)) {
-	      result = false;
-	    }
-	  }
-	  stack['delete'](object);
-	  stack['delete'](other);
-	  return result;
-	}
-
-	module.exports = equalObjects;
-
-
-/***/ }),
-/* 378 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var baseGetAllKeys = __webpack_require__(379),
-	    getSymbols = __webpack_require__(381),
-	    keys = __webpack_require__(384);
-
-	/**
-	 * Creates an array of own enumerable property names and symbols of `object`.
-	 *
-	 * @private
-	 * @param {Object} object The object to query.
-	 * @returns {Array} Returns the array of property names and symbols.
-	 */
-	function getAllKeys(object) {
-	  return baseGetAllKeys(object, keys, getSymbols);
-	}
-
-	module.exports = getAllKeys;
-
-
-/***/ }),
-/* 379 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var arrayPush = __webpack_require__(380),
-	    isArray = __webpack_require__(62);
-
-	/**
-	 * The base implementation of `getAllKeys` and `getAllKeysIn` which uses
-	 * `keysFunc` and `symbolsFunc` to get the enumerable property names and
-	 * symbols of `object`.
-	 *
-	 * @private
-	 * @param {Object} object The object to query.
-	 * @param {Function} keysFunc The function to get the keys of `object`.
-	 * @param {Function} symbolsFunc The function to get the symbols of `object`.
-	 * @returns {Array} Returns the array of property names and symbols.
-	 */
-	function baseGetAllKeys(object, keysFunc, symbolsFunc) {
-	  var result = keysFunc(object);
-	  return isArray(object) ? result : arrayPush(result, symbolsFunc(object));
-	}
-
-	module.exports = baseGetAllKeys;
-
-
-/***/ }),
-/* 380 */
-/***/ (function(module, exports) {
-
-	/**
-	 * Appends the elements of `values` to `array`.
-	 *
-	 * @private
-	 * @param {Array} array The array to modify.
-	 * @param {Array} values The values to append.
-	 * @returns {Array} Returns `array`.
-	 */
-	function arrayPush(array, values) {
-	  var index = -1,
-	      length = values.length,
-	      offset = array.length;
-
-	  while (++index < length) {
-	    array[offset + index] = values[index];
-	  }
-	  return array;
-	}
-
-	module.exports = arrayPush;
-
-
-/***/ }),
-/* 381 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var arrayFilter = __webpack_require__(382),
-	    stubArray = __webpack_require__(383);
-
-	/** Used for built-in method references. */
-	var objectProto = Object.prototype;
-
-	/** Built-in value references. */
-	var propertyIsEnumerable = objectProto.propertyIsEnumerable;
-
-	/* Built-in method references for those with the same name as other `lodash` methods. */
-	var nativeGetSymbols = Object.getOwnPropertySymbols;
-
-	/**
-	 * Creates an array of the own enumerable symbols of `object`.
-	 *
-	 * @private
-	 * @param {Object} object The object to query.
-	 * @returns {Array} Returns the array of symbols.
-	 */
-	var getSymbols = !nativeGetSymbols ? stubArray : function(object) {
-	  if (object == null) {
-	    return [];
-	  }
-	  object = Object(object);
-	  return arrayFilter(nativeGetSymbols(object), function(symbol) {
-	    return propertyIsEnumerable.call(object, symbol);
-	  });
-	};
-
-	module.exports = getSymbols;
-
-
-/***/ }),
-/* 382 */
-/***/ (function(module, exports) {
-
-	/**
-	 * A specialized version of `_.filter` for arrays without support for
-	 * iteratee shorthands.
-	 *
-	 * @private
-	 * @param {Array} [array] The array to iterate over.
-	 * @param {Function} predicate The function invoked per iteration.
-	 * @returns {Array} Returns the new filtered array.
-	 */
-	function arrayFilter(array, predicate) {
-	  var index = -1,
-	      length = array == null ? 0 : array.length,
-	      resIndex = 0,
-	      result = [];
-
-	  while (++index < length) {
-	    var value = array[index];
-	    if (predicate(value, index, array)) {
-	      result[resIndex++] = value;
-	    }
-	  }
-	  return result;
-	}
-
-	module.exports = arrayFilter;
-
-
-/***/ }),
-/* 383 */
-/***/ (function(module, exports) {
-
-	/**
-	 * This method returns a new empty array.
-	 *
-	 * @static
-	 * @memberOf _
-	 * @since 4.13.0
-	 * @category Util
-	 * @returns {Array} Returns the new empty array.
-	 * @example
-	 *
-	 * var arrays = _.times(2, _.stubArray);
-	 *
-	 * console.log(arrays);
-	 * // => [[], []]
-	 *
-	 * console.log(arrays[0] === arrays[1]);
-	 * // => false
-	 */
-	function stubArray() {
-	  return [];
-	}
-
-	module.exports = stubArray;
-
-
-/***/ }),
-/* 384 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var arrayLikeKeys = __webpack_require__(385),
-	    baseKeys = __webpack_require__(397),
-	    isArrayLike = __webpack_require__(401);
-
-	/**
-	 * Creates an array of the own enumerable property names of `object`.
-	 *
-	 * **Note:** Non-object values are coerced to objects. See the
-	 * [ES spec](http://ecma-international.org/ecma-262/7.0/#sec-object.keys)
-	 * for more details.
-	 *
-	 * @static
-	 * @since 0.1.0
-	 * @memberOf _
-	 * @category Object
-	 * @param {Object} object The object to query.
-	 * @returns {Array} Returns the array of property names.
-	 * @example
-	 *
-	 * function Foo() {
-	 *   this.a = 1;
-	 *   this.b = 2;
-	 * }
-	 *
-	 * Foo.prototype.c = 3;
-	 *
-	 * _.keys(new Foo);
-	 * // => ['a', 'b'] (iteration order is not guaranteed)
-	 *
-	 * _.keys('hi');
-	 * // => ['0', '1']
-	 */
-	function keys(object) {
-	  return isArrayLike(object) ? arrayLikeKeys(object) : baseKeys(object);
-	}
-
-	module.exports = keys;
-
-
-/***/ }),
-/* 385 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var baseTimes = __webpack_require__(386),
-	    isArguments = __webpack_require__(387),
-	    isArray = __webpack_require__(62),
-	    isBuffer = __webpack_require__(389),
-	    isIndex = __webpack_require__(391),
-	    isTypedArray = __webpack_require__(392);
-
-	/** Used for built-in method references. */
-	var objectProto = Object.prototype;
-
-	/** Used to check objects for own properties. */
-	var hasOwnProperty = objectProto.hasOwnProperty;
-
-	/**
-	 * Creates an array of the enumerable property names of the array-like `value`.
-	 *
-	 * @private
-	 * @param {*} value The value to query.
-	 * @param {boolean} inherited Specify returning inherited property names.
-	 * @returns {Array} Returns the array of property names.
-	 */
-	function arrayLikeKeys(value, inherited) {
-	  var isArr = isArray(value),
-	      isArg = !isArr && isArguments(value),
-	      isBuff = !isArr && !isArg && isBuffer(value),
-	      isType = !isArr && !isArg && !isBuff && isTypedArray(value),
-	      skipIndexes = isArr || isArg || isBuff || isType,
-	      result = skipIndexes ? baseTimes(value.length, String) : [],
-	      length = result.length;
-
-	  for (var key in value) {
-	    if ((inherited || hasOwnProperty.call(value, key)) &&
-	        !(skipIndexes && (
-	           // Safari 9 has enumerable `arguments.length` in strict mode.
-	           key == 'length' ||
-	           // Node.js 0.10 has enumerable non-index properties on buffers.
-	           (isBuff && (key == 'offset' || key == 'parent')) ||
-	           // PhantomJS 2 has enumerable non-index properties on typed arrays.
-	           (isType && (key == 'buffer' || key == 'byteLength' || key == 'byteOffset')) ||
-	           // Skip index properties.
-	           isIndex(key, length)
-	        ))) {
-	      result.push(key);
-	    }
-	  }
-	  return result;
-	}
-
-	module.exports = arrayLikeKeys;
-
-
-/***/ }),
-/* 386 */
-/***/ (function(module, exports) {
-
-	/**
-	 * The base implementation of `_.times` without support for iteratee shorthands
-	 * or max array length checks.
-	 *
-	 * @private
-	 * @param {number} n The number of times to invoke `iteratee`.
-	 * @param {Function} iteratee The function invoked per iteration.
-	 * @returns {Array} Returns the array of results.
-	 */
-	function baseTimes(n, iteratee) {
-	  var index = -1,
-	      result = Array(n);
-
-	  while (++index < n) {
-	    result[index] = iteratee(index);
-	  }
-	  return result;
-	}
-
-	module.exports = baseTimes;
-
-
-/***/ }),
-/* 387 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var baseIsArguments = __webpack_require__(388),
-	    isObjectLike = __webpack_require__(63);
-
-	/** Used for built-in method references. */
-	var objectProto = Object.prototype;
-
-	/** Used to check objects for own properties. */
-	var hasOwnProperty = objectProto.hasOwnProperty;
-
-	/** Built-in value references. */
-	var propertyIsEnumerable = objectProto.propertyIsEnumerable;
-
-	/**
-	 * Checks if `value` is likely an `arguments` object.
-	 *
-	 * @static
-	 * @memberOf _
-	 * @since 0.1.0
-	 * @category Lang
-	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is an `arguments` object,
-	 *  else `false`.
-	 * @example
-	 *
-	 * _.isArguments(function() { return arguments; }());
-	 * // => true
-	 *
-	 * _.isArguments([1, 2, 3]);
-	 * // => false
-	 */
-	var isArguments = baseIsArguments(function() { return arguments; }()) ? baseIsArguments : function(value) {
-	  return isObjectLike(value) && hasOwnProperty.call(value, 'callee') &&
-	    !propertyIsEnumerable.call(value, 'callee');
-	};
-
-	module.exports = isArguments;
-
-
-/***/ }),
-/* 388 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var baseGetTag = __webpack_require__(56),
-	    isObjectLike = __webpack_require__(63);
-
-	/** `Object#toString` result references. */
-	var argsTag = '[object Arguments]';
-
-	/**
-	 * The base implementation of `_.isArguments`.
-	 *
-	 * @private
-	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is an `arguments` object,
-	 */
-	function baseIsArguments(value) {
-	  return isObjectLike(value) && baseGetTag(value) == argsTag;
-	}
-
-	module.exports = baseIsArguments;
-
-
-/***/ }),
-/* 389 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function(module) {var root = __webpack_require__(58),
-	    stubFalse = __webpack_require__(390);
-
-	/** Detect free variable `exports`. */
-	var freeExports = typeof exports == 'object' && exports && !exports.nodeType && exports;
-
-	/** Detect free variable `module`. */
-	var freeModule = freeExports && typeof module == 'object' && module && !module.nodeType && module;
-
-	/** Detect the popular CommonJS extension `module.exports`. */
-	var moduleExports = freeModule && freeModule.exports === freeExports;
-
-	/** Built-in value references. */
-	var Buffer = moduleExports ? root.Buffer : undefined;
-
-	/* Built-in method references for those with the same name as other `lodash` methods. */
-	var nativeIsBuffer = Buffer ? Buffer.isBuffer : undefined;
-
-	/**
-	 * Checks if `value` is a buffer.
-	 *
-	 * @static
-	 * @memberOf _
-	 * @since 4.3.0
-	 * @category Lang
-	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is a buffer, else `false`.
-	 * @example
-	 *
-	 * _.isBuffer(new Buffer(2));
-	 * // => true
-	 *
-	 * _.isBuffer(new Uint8Array(2));
-	 * // => false
-	 */
-	var isBuffer = nativeIsBuffer || stubFalse;
-
-	module.exports = isBuffer;
-
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(112)(module)))
-
-/***/ }),
-/* 390 */
-/***/ (function(module, exports) {
-
-	/**
-	 * This method returns `false`.
-	 *
-	 * @static
-	 * @memberOf _
-	 * @since 4.13.0
-	 * @category Util
-	 * @returns {boolean} Returns `false`.
-	 * @example
-	 *
-	 * _.times(2, _.stubFalse);
-	 * // => [false, false]
-	 */
-	function stubFalse() {
-	  return false;
-	}
-
-	module.exports = stubFalse;
-
-
-/***/ }),
-/* 391 */
-/***/ (function(module, exports) {
-
-	/** Used as references for various `Number` constants. */
-	var MAX_SAFE_INTEGER = 9007199254740991;
-
-	/** Used to detect unsigned integer values. */
-	var reIsUint = /^(?:0|[1-9]\d*)$/;
-
-	/**
-	 * Checks if `value` is a valid array-like index.
-	 *
-	 * @private
-	 * @param {*} value The value to check.
-	 * @param {number} [length=MAX_SAFE_INTEGER] The upper bounds of a valid index.
-	 * @returns {boolean} Returns `true` if `value` is a valid index, else `false`.
-	 */
-	function isIndex(value, length) {
-	  var type = typeof value;
-	  length = length == null ? MAX_SAFE_INTEGER : length;
-
-	  return !!length &&
-	    (type == 'number' ||
-	      (type != 'symbol' && reIsUint.test(value))) &&
-	        (value > -1 && value % 1 == 0 && value < length);
-	}
-
-	module.exports = isIndex;
-
-
-/***/ }),
-/* 392 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var baseIsTypedArray = __webpack_require__(393),
-	    baseUnary = __webpack_require__(395),
-	    nodeUtil = __webpack_require__(396);
-
-	/* Node.js helper references. */
-	var nodeIsTypedArray = nodeUtil && nodeUtil.isTypedArray;
-
-	/**
-	 * Checks if `value` is classified as a typed array.
-	 *
-	 * @static
-	 * @memberOf _
-	 * @since 3.0.0
-	 * @category Lang
-	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is a typed array, else `false`.
-	 * @example
-	 *
-	 * _.isTypedArray(new Uint8Array);
-	 * // => true
-	 *
-	 * _.isTypedArray([]);
-	 * // => false
-	 */
-	var isTypedArray = nodeIsTypedArray ? baseUnary(nodeIsTypedArray) : baseIsTypedArray;
-
-	module.exports = isTypedArray;
-
-
-/***/ }),
-/* 393 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var baseGetTag = __webpack_require__(56),
-	    isLength = __webpack_require__(394),
-	    isObjectLike = __webpack_require__(63);
-
-	/** `Object#toString` result references. */
-	var argsTag = '[object Arguments]',
-	    arrayTag = '[object Array]',
-	    boolTag = '[object Boolean]',
-	    dateTag = '[object Date]',
-	    errorTag = '[object Error]',
-	    funcTag = '[object Function]',
-	    mapTag = '[object Map]',
-	    numberTag = '[object Number]',
-	    objectTag = '[object Object]',
-	    regexpTag = '[object RegExp]',
-	    setTag = '[object Set]',
-	    stringTag = '[object String]',
-	    weakMapTag = '[object WeakMap]';
-
-	var arrayBufferTag = '[object ArrayBuffer]',
-	    dataViewTag = '[object DataView]',
-	    float32Tag = '[object Float32Array]',
-	    float64Tag = '[object Float64Array]',
-	    int8Tag = '[object Int8Array]',
-	    int16Tag = '[object Int16Array]',
-	    int32Tag = '[object Int32Array]',
-	    uint8Tag = '[object Uint8Array]',
-	    uint8ClampedTag = '[object Uint8ClampedArray]',
-	    uint16Tag = '[object Uint16Array]',
-	    uint32Tag = '[object Uint32Array]';
-
-	/** Used to identify `toStringTag` values of typed arrays. */
-	var typedArrayTags = {};
-	typedArrayTags[float32Tag] = typedArrayTags[float64Tag] =
-	typedArrayTags[int8Tag] = typedArrayTags[int16Tag] =
-	typedArrayTags[int32Tag] = typedArrayTags[uint8Tag] =
-	typedArrayTags[uint8ClampedTag] = typedArrayTags[uint16Tag] =
-	typedArrayTags[uint32Tag] = true;
-	typedArrayTags[argsTag] = typedArrayTags[arrayTag] =
-	typedArrayTags[arrayBufferTag] = typedArrayTags[boolTag] =
-	typedArrayTags[dataViewTag] = typedArrayTags[dateTag] =
-	typedArrayTags[errorTag] = typedArrayTags[funcTag] =
-	typedArrayTags[mapTag] = typedArrayTags[numberTag] =
-	typedArrayTags[objectTag] = typedArrayTags[regexpTag] =
-	typedArrayTags[setTag] = typedArrayTags[stringTag] =
-	typedArrayTags[weakMapTag] = false;
-
-	/**
-	 * The base implementation of `_.isTypedArray` without Node.js optimizations.
-	 *
-	 * @private
-	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is a typed array, else `false`.
-	 */
-	function baseIsTypedArray(value) {
-	  return isObjectLike(value) &&
-	    isLength(value.length) && !!typedArrayTags[baseGetTag(value)];
-	}
-
-	module.exports = baseIsTypedArray;
-
-
-/***/ }),
-/* 394 */
-/***/ (function(module, exports) {
-
-	/** Used as references for various `Number` constants. */
-	var MAX_SAFE_INTEGER = 9007199254740991;
-
-	/**
-	 * Checks if `value` is a valid array-like length.
-	 *
-	 * **Note:** This method is loosely based on
-	 * [`ToLength`](http://ecma-international.org/ecma-262/7.0/#sec-tolength).
-	 *
-	 * @static
-	 * @memberOf _
-	 * @since 4.0.0
-	 * @category Lang
-	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is a valid length, else `false`.
-	 * @example
-	 *
-	 * _.isLength(3);
-	 * // => true
-	 *
-	 * _.isLength(Number.MIN_VALUE);
-	 * // => false
-	 *
-	 * _.isLength(Infinity);
-	 * // => false
-	 *
-	 * _.isLength('3');
-	 * // => false
-	 */
-	function isLength(value) {
-	  return typeof value == 'number' &&
-	    value > -1 && value % 1 == 0 && value <= MAX_SAFE_INTEGER;
-	}
-
-	module.exports = isLength;
-
-
-/***/ }),
-/* 395 */
-/***/ (function(module, exports) {
-
-	/**
-	 * The base implementation of `_.unary` without support for storing metadata.
-	 *
-	 * @private
-	 * @param {Function} func The function to cap arguments for.
-	 * @returns {Function} Returns the new capped function.
-	 */
-	function baseUnary(func) {
-	  return function(value) {
-	    return func(value);
-	  };
-	}
-
-	module.exports = baseUnary;
-
-
-/***/ }),
-/* 396 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function(module) {var freeGlobal = __webpack_require__(59);
-
-	/** Detect free variable `exports`. */
-	var freeExports = typeof exports == 'object' && exports && !exports.nodeType && exports;
-
-	/** Detect free variable `module`. */
-	var freeModule = freeExports && typeof module == 'object' && module && !module.nodeType && module;
-
-	/** Detect the popular CommonJS extension `module.exports`. */
-	var moduleExports = freeModule && freeModule.exports === freeExports;
-
-	/** Detect free variable `process` from Node.js. */
-	var freeProcess = moduleExports && freeGlobal.process;
-
-	/** Used to access faster Node.js helpers. */
-	var nodeUtil = (function() {
-	  try {
-	    // Use `util.types` for Node.js 10+.
-	    var types = freeModule && freeModule.require && freeModule.require('util').types;
-
-	    if (types) {
-	      return types;
-	    }
-
-	    // Legacy `process.binding('util')` for Node.js < 10.
-	    return freeProcess && freeProcess.binding && freeProcess.binding('util');
-	  } catch (e) {}
-	}());
-
-	module.exports = nodeUtil;
-
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(112)(module)))
-
-/***/ }),
-/* 397 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var isPrototype = __webpack_require__(398),
-	    nativeKeys = __webpack_require__(399);
-
-	/** Used for built-in method references. */
-	var objectProto = Object.prototype;
-
-	/** Used to check objects for own properties. */
-	var hasOwnProperty = objectProto.hasOwnProperty;
-
-	/**
-	 * The base implementation of `_.keys` which doesn't treat sparse arrays as dense.
-	 *
-	 * @private
-	 * @param {Object} object The object to query.
-	 * @returns {Array} Returns the array of property names.
-	 */
-	function baseKeys(object) {
-	  if (!isPrototype(object)) {
-	    return nativeKeys(object);
-	  }
-	  var result = [];
-	  for (var key in Object(object)) {
-	    if (hasOwnProperty.call(object, key) && key != 'constructor') {
-	      result.push(key);
-	    }
-	  }
-	  return result;
-	}
-
-	module.exports = baseKeys;
-
-
-/***/ }),
-/* 398 */
-/***/ (function(module, exports) {
-
-	/** Used for built-in method references. */
-	var objectProto = Object.prototype;
-
-	/**
-	 * Checks if `value` is likely a prototype object.
-	 *
-	 * @private
-	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is a prototype, else `false`.
-	 */
-	function isPrototype(value) {
-	  var Ctor = value && value.constructor,
-	      proto = (typeof Ctor == 'function' && Ctor.prototype) || objectProto;
-
-	  return value === proto;
-	}
-
-	module.exports = isPrototype;
-
-
-/***/ }),
-/* 399 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var overArg = __webpack_require__(400);
-
-	/* Built-in method references for those with the same name as other `lodash` methods. */
-	var nativeKeys = overArg(Object.keys, Object);
-
-	module.exports = nativeKeys;
-
-
-/***/ }),
-/* 400 */
-/***/ (function(module, exports) {
-
-	/**
-	 * Creates a unary function that invokes `func` with its argument transformed.
-	 *
-	 * @private
-	 * @param {Function} func The function to wrap.
-	 * @param {Function} transform The argument transform.
-	 * @returns {Function} Returns the new function.
-	 */
-	function overArg(func, transform) {
-	  return function(arg) {
-	    return func(transform(arg));
-	  };
-	}
-
-	module.exports = overArg;
-
-
-/***/ }),
-/* 401 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var isFunction = __webpack_require__(344),
-	    isLength = __webpack_require__(394);
-
-	/**
-	 * Checks if `value` is array-like. A value is considered array-like if it's
-	 * not a function and has a `value.length` that's an integer greater than or
-	 * equal to `0` and less than or equal to `Number.MAX_SAFE_INTEGER`.
-	 *
-	 * @static
-	 * @memberOf _
-	 * @since 4.0.0
-	 * @category Lang
-	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is array-like, else `false`.
-	 * @example
-	 *
-	 * _.isArrayLike([1, 2, 3]);
-	 * // => true
-	 *
-	 * _.isArrayLike(document.body.children);
-	 * // => true
-	 *
-	 * _.isArrayLike('abc');
-	 * // => true
-	 *
-	 * _.isArrayLike(_.noop);
-	 * // => false
-	 */
-	function isArrayLike(value) {
-	  return value != null && isLength(value.length) && !isFunction(value);
-	}
-
-	module.exports = isArrayLike;
-
-
-/***/ }),
-/* 402 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var DataView = __webpack_require__(403),
-	    Map = __webpack_require__(341),
-	    Promise = __webpack_require__(404),
-	    Set = __webpack_require__(405),
-	    WeakMap = __webpack_require__(406),
-	    baseGetTag = __webpack_require__(56),
-	    toSource = __webpack_require__(348);
-
-	/** `Object#toString` result references. */
-	var mapTag = '[object Map]',
-	    objectTag = '[object Object]',
-	    promiseTag = '[object Promise]',
-	    setTag = '[object Set]',
-	    weakMapTag = '[object WeakMap]';
-
-	var dataViewTag = '[object DataView]';
-
-	/** Used to detect maps, sets, and weakmaps. */
-	var dataViewCtorString = toSource(DataView),
-	    mapCtorString = toSource(Map),
-	    promiseCtorString = toSource(Promise),
-	    setCtorString = toSource(Set),
-	    weakMapCtorString = toSource(WeakMap);
-
-	/**
-	 * Gets the `toStringTag` of `value`.
-	 *
-	 * @private
-	 * @param {*} value The value to query.
-	 * @returns {string} Returns the `toStringTag`.
-	 */
-	var getTag = baseGetTag;
-
-	// Fallback for data views, maps, sets, and weak maps in IE 11 and promises in Node.js < 6.
-	if ((DataView && getTag(new DataView(new ArrayBuffer(1))) != dataViewTag) ||
-	    (Map && getTag(new Map) != mapTag) ||
-	    (Promise && getTag(Promise.resolve()) != promiseTag) ||
-	    (Set && getTag(new Set) != setTag) ||
-	    (WeakMap && getTag(new WeakMap) != weakMapTag)) {
-	  getTag = function(value) {
-	    var result = baseGetTag(value),
-	        Ctor = result == objectTag ? value.constructor : undefined,
-	        ctorString = Ctor ? toSource(Ctor) : '';
-
-	    if (ctorString) {
-	      switch (ctorString) {
-	        case dataViewCtorString: return dataViewTag;
-	        case mapCtorString: return mapTag;
-	        case promiseCtorString: return promiseTag;
-	        case setCtorString: return setTag;
-	        case weakMapCtorString: return weakMapTag;
-	      }
-	    }
-	    return result;
-	  };
-	}
-
-	module.exports = getTag;
-
-
-/***/ }),
-/* 403 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var getNative = __webpack_require__(342),
-	    root = __webpack_require__(58);
-
-	/* Built-in method references that are verified to be native. */
-	var DataView = getNative(root, 'DataView');
-
-	module.exports = DataView;
-
-
-/***/ }),
-/* 404 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var getNative = __webpack_require__(342),
-	    root = __webpack_require__(58);
-
-	/* Built-in method references that are verified to be native. */
-	var Promise = getNative(root, 'Promise');
-
-	module.exports = Promise;
-
-
-/***/ }),
-/* 405 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var getNative = __webpack_require__(342),
-	    root = __webpack_require__(58);
-
-	/* Built-in method references that are verified to be native. */
-	var Set = getNative(root, 'Set');
-
-	module.exports = Set;
-
-
-/***/ }),
-/* 406 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var getNative = __webpack_require__(342),
-	    root = __webpack_require__(58);
-
-	/* Built-in method references that are verified to be native. */
-	var WeakMap = getNative(root, 'WeakMap');
-
-	module.exports = WeakMap;
-
-
-/***/ }),
-/* 407 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var isStrictComparable = __webpack_require__(408),
-	    keys = __webpack_require__(384);
-
-	/**
-	 * Gets the property names, values, and compare flags of `object`.
-	 *
-	 * @private
-	 * @param {Object} object The object to query.
-	 * @returns {Array} Returns the match data of `object`.
-	 */
-	function getMatchData(object) {
-	  var result = keys(object),
-	      length = result.length;
-
-	  while (length--) {
-	    var key = result[length],
-	        value = object[key];
-
-	    result[length] = [key, value, isStrictComparable(value)];
-	  }
-	  return result;
-	}
-
-	module.exports = getMatchData;
-
-
-/***/ }),
-/* 408 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var isObject = __webpack_require__(345);
-
-	/**
-	 * Checks if `value` is suitable for strict equality comparisons, i.e. `===`.
-	 *
-	 * @private
-	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` if suitable for strict
-	 *  equality comparisons, else `false`.
-	 */
-	function isStrictComparable(value) {
-	  return value === value && !isObject(value);
-	}
-
-	module.exports = isStrictComparable;
-
-
-/***/ }),
-/* 409 */
-/***/ (function(module, exports) {
-
-	/**
-	 * A specialized version of `matchesProperty` for source values suitable
-	 * for strict equality comparisons, i.e. `===`.
-	 *
-	 * @private
-	 * @param {string} key The key of the property to get.
-	 * @param {*} srcValue The value to match.
-	 * @returns {Function} Returns the new spec function.
-	 */
-	function matchesStrictComparable(key, srcValue) {
-	  return function(object) {
-	    if (object == null) {
-	      return false;
-	    }
-	    return object[key] === srcValue &&
-	      (srcValue !== undefined || (key in Object(object)));
-	  };
-	}
-
-	module.exports = matchesStrictComparable;
-
-
-/***/ }),
-/* 410 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var baseIsEqual = __webpack_require__(365),
-	    get = __webpack_require__(411),
-	    hasIn = __webpack_require__(422),
-	    isKey = __webpack_require__(414),
-	    isStrictComparable = __webpack_require__(408),
-	    matchesStrictComparable = __webpack_require__(409),
-	    toKey = __webpack_require__(421);
-
-	/** Used to compose bitmasks for value comparisons. */
-	var COMPARE_PARTIAL_FLAG = 1,
-	    COMPARE_UNORDERED_FLAG = 2;
-
-	/**
-	 * The base implementation of `_.matchesProperty` which doesn't clone `srcValue`.
-	 *
-	 * @private
-	 * @param {string} path The path of the property to get.
-	 * @param {*} srcValue The value to match.
-	 * @returns {Function} Returns the new spec function.
-	 */
-	function baseMatchesProperty(path, srcValue) {
-	  if (isKey(path) && isStrictComparable(srcValue)) {
-	    return matchesStrictComparable(toKey(path), srcValue);
-	  }
-	  return function(object) {
-	    var objValue = get(object, path);
-	    return (objValue === undefined && objValue === srcValue)
-	      ? hasIn(object, path)
-	      : baseIsEqual(srcValue, objValue, COMPARE_PARTIAL_FLAG | COMPARE_UNORDERED_FLAG);
-	  };
-	}
-
-	module.exports = baseMatchesProperty;
-
-
-/***/ }),
-/* 411 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var baseGet = __webpack_require__(412);
-
-	/**
-	 * Gets the value at `path` of `object`. If the resolved value is
-	 * `undefined`, the `defaultValue` is returned in its place.
-	 *
-	 * @static
-	 * @memberOf _
-	 * @since 3.7.0
-	 * @category Object
-	 * @param {Object} object The object to query.
-	 * @param {Array|string} path The path of the property to get.
-	 * @param {*} [defaultValue] The value returned for `undefined` resolved values.
-	 * @returns {*} Returns the resolved value.
-	 * @example
-	 *
-	 * var object = { 'a': [{ 'b': { 'c': 3 } }] };
-	 *
-	 * _.get(object, 'a[0].b.c');
-	 * // => 3
-	 *
-	 * _.get(object, ['a', '0', 'b', 'c']);
-	 * // => 3
-	 *
-	 * _.get(object, 'a.b.c', 'default');
-	 * // => 'default'
-	 */
-	function get(object, path, defaultValue) {
-	  var result = object == null ? undefined : baseGet(object, path);
-	  return result === undefined ? defaultValue : result;
-	}
-
-	module.exports = get;
-
-
-/***/ }),
-/* 412 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var castPath = __webpack_require__(413),
-	    toKey = __webpack_require__(421);
-
-	/**
-	 * The base implementation of `_.get` without support for default values.
-	 *
-	 * @private
-	 * @param {Object} object The object to query.
-	 * @param {Array|string} path The path of the property to get.
-	 * @returns {*} Returns the resolved value.
-	 */
-	function baseGet(object, path) {
-	  path = castPath(path, object);
-
-	  var index = 0,
-	      length = path.length;
-
-	  while (object != null && index < length) {
-	    object = object[toKey(path[index++])];
-	  }
-	  return (index && index == length) ? object : undefined;
-	}
-
-	module.exports = baseGet;
-
-
-/***/ }),
-/* 413 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var isArray = __webpack_require__(62),
-	    isKey = __webpack_require__(414),
-	    stringToPath = __webpack_require__(416),
-	    toString = __webpack_require__(419);
-
-	/**
-	 * Casts `value` to a path array if it's not one.
-	 *
-	 * @private
-	 * @param {*} value The value to inspect.
-	 * @param {Object} [object] The object to query keys on.
-	 * @returns {Array} Returns the cast property path array.
-	 */
-	function castPath(value, object) {
-	  if (isArray(value)) {
-	    return value;
-	  }
-	  return isKey(value, object) ? [value] : stringToPath(toString(value));
-	}
-
-	module.exports = castPath;
-
-
-/***/ }),
-/* 414 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var isArray = __webpack_require__(62),
-	    isSymbol = __webpack_require__(415);
-
-	/** Used to match property names within property paths. */
-	var reIsDeepProp = /\.|\[(?:[^[\]]*|(["'])(?:(?!\1)[^\\]|\\.)*?\1)\]/,
-	    reIsPlainProp = /^\w*$/;
-
-	/**
-	 * Checks if `value` is a property name and not a property path.
-	 *
-	 * @private
-	 * @param {*} value The value to check.
-	 * @param {Object} [object] The object to query keys on.
-	 * @returns {boolean} Returns `true` if `value` is a property name, else `false`.
-	 */
-	function isKey(value, object) {
-	  if (isArray(value)) {
-	    return false;
-	  }
-	  var type = typeof value;
-	  if (type == 'number' || type == 'symbol' || type == 'boolean' ||
-	      value == null || isSymbol(value)) {
-	    return true;
-	  }
-	  return reIsPlainProp.test(value) || !reIsDeepProp.test(value) ||
-	    (object != null && value in Object(object));
-	}
-
-	module.exports = isKey;
-
-
-/***/ }),
-/* 415 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var baseGetTag = __webpack_require__(56),
-	    isObjectLike = __webpack_require__(63);
-
-	/** `Object#toString` result references. */
-	var symbolTag = '[object Symbol]';
-
-	/**
-	 * Checks if `value` is classified as a `Symbol` primitive or object.
-	 *
-	 * @static
-	 * @memberOf _
-	 * @since 4.0.0
-	 * @category Lang
-	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is a symbol, else `false`.
-	 * @example
-	 *
-	 * _.isSymbol(Symbol.iterator);
-	 * // => true
-	 *
-	 * _.isSymbol('abc');
-	 * // => false
-	 */
-	function isSymbol(value) {
-	  return typeof value == 'symbol' ||
-	    (isObjectLike(value) && baseGetTag(value) == symbolTag);
-	}
-
-	module.exports = isSymbol;
-
-
-/***/ }),
-/* 416 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var memoizeCapped = __webpack_require__(417);
-
-	/** Used to match property names within property paths. */
-	var rePropName = /[^.[\]]+|\[(?:(-?\d+(?:\.\d+)?)|(["'])((?:(?!\2)[^\\]|\\.)*?)\2)\]|(?=(?:\.|\[\])(?:\.|\[\]|$))/g;
-
-	/** Used to match backslashes in property paths. */
-	var reEscapeChar = /\\(\\)?/g;
-
-	/**
-	 * Converts `string` to a property path array.
-	 *
-	 * @private
-	 * @param {string} string The string to convert.
-	 * @returns {Array} Returns the property path array.
-	 */
-	var stringToPath = memoizeCapped(function(string) {
-	  var result = [];
-	  if (string.charCodeAt(0) === 46 /* . */) {
-	    result.push('');
-	  }
-	  string.replace(rePropName, function(match, number, quote, subString) {
-	    result.push(quote ? subString.replace(reEscapeChar, '$1') : (number || match));
-	  });
-	  return result;
-	});
-
-	module.exports = stringToPath;
-
-
-/***/ }),
-/* 417 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var memoize = __webpack_require__(418);
-
-	/** Used as the maximum memoize cache size. */
-	var MAX_MEMOIZE_SIZE = 500;
-
-	/**
-	 * A specialized version of `_.memoize` which clears the memoized function's
-	 * cache when it exceeds `MAX_MEMOIZE_SIZE`.
-	 *
-	 * @private
-	 * @param {Function} func The function to have its output memoized.
-	 * @returns {Function} Returns the new memoized function.
-	 */
-	function memoizeCapped(func) {
-	  var result = memoize(func, function(key) {
-	    if (cache.size === MAX_MEMOIZE_SIZE) {
-	      cache.clear();
-	    }
-	    return key;
-	  });
-
-	  var cache = result.cache;
-	  return result;
-	}
-
-	module.exports = memoizeCapped;
-
-
-/***/ }),
-/* 418 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var MapCache = __webpack_require__(350);
-
-	/** Error message constants. */
-	var FUNC_ERROR_TEXT = 'Expected a function';
-
-	/**
-	 * Creates a function that memoizes the result of `func`. If `resolver` is
-	 * provided, it determines the cache key for storing the result based on the
-	 * arguments provided to the memoized function. By default, the first argument
-	 * provided to the memoized function is used as the map cache key. The `func`
-	 * is invoked with the `this` binding of the memoized function.
-	 *
-	 * **Note:** The cache is exposed as the `cache` property on the memoized
-	 * function. Its creation may be customized by replacing the `_.memoize.Cache`
-	 * constructor with one whose instances implement the
-	 * [`Map`](http://ecma-international.org/ecma-262/7.0/#sec-properties-of-the-map-prototype-object)
-	 * method interface of `clear`, `delete`, `get`, `has`, and `set`.
-	 *
-	 * @static
-	 * @memberOf _
-	 * @since 0.1.0
-	 * @category Function
-	 * @param {Function} func The function to have its output memoized.
-	 * @param {Function} [resolver] The function to resolve the cache key.
-	 * @returns {Function} Returns the new memoized function.
-	 * @example
-	 *
-	 * var object = { 'a': 1, 'b': 2 };
-	 * var other = { 'c': 3, 'd': 4 };
-	 *
-	 * var values = _.memoize(_.values);
-	 * values(object);
-	 * // => [1, 2]
-	 *
-	 * values(other);
-	 * // => [3, 4]
-	 *
-	 * object.a = 2;
-	 * values(object);
-	 * // => [1, 2]
-	 *
-	 * // Modify the result cache.
-	 * values.cache.set(object, ['a', 'b']);
-	 * values(object);
-	 * // => ['a', 'b']
-	 *
-	 * // Replace `_.memoize.Cache`.
-	 * _.memoize.Cache = WeakMap;
-	 */
-	function memoize(func, resolver) {
-	  if (typeof func != 'function' || (resolver != null && typeof resolver != 'function')) {
-	    throw new TypeError(FUNC_ERROR_TEXT);
-	  }
-	  var memoized = function() {
-	    var args = arguments,
-	        key = resolver ? resolver.apply(this, args) : args[0],
-	        cache = memoized.cache;
-
-	    if (cache.has(key)) {
-	      return cache.get(key);
-	    }
-	    var result = func.apply(this, args);
-	    memoized.cache = cache.set(key, result) || cache;
-	    return result;
-	  };
-	  memoized.cache = new (memoize.Cache || MapCache);
-	  return memoized;
-	}
-
-	// Expose `MapCache`.
-	memoize.Cache = MapCache;
-
-	module.exports = memoize;
-
-
-/***/ }),
-/* 419 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var baseToString = __webpack_require__(420);
-
-	/**
-	 * Converts `value` to a string. An empty string is returned for `null`
-	 * and `undefined` values. The sign of `-0` is preserved.
-	 *
-	 * @static
-	 * @memberOf _
-	 * @since 4.0.0
-	 * @category Lang
-	 * @param {*} value The value to convert.
-	 * @returns {string} Returns the converted string.
-	 * @example
-	 *
-	 * _.toString(null);
-	 * // => ''
-	 *
-	 * _.toString(-0);
-	 * // => '-0'
-	 *
-	 * _.toString([1, 2, 3]);
-	 * // => '1,2,3'
-	 */
-	function toString(value) {
-	  return value == null ? '' : baseToString(value);
-	}
-
-	module.exports = toString;
-
-
-/***/ }),
-/* 420 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var Symbol = __webpack_require__(57),
-	    arrayMap = __webpack_require__(323),
-	    isArray = __webpack_require__(62),
-	    isSymbol = __webpack_require__(415);
-
-	/** Used as references for various `Number` constants. */
-	var INFINITY = 1 / 0;
-
-	/** Used to convert symbols to primitives and strings. */
-	var symbolProto = Symbol ? Symbol.prototype : undefined,
-	    symbolToString = symbolProto ? symbolProto.toString : undefined;
-
-	/**
-	 * The base implementation of `_.toString` which doesn't convert nullish
-	 * values to empty strings.
-	 *
-	 * @private
-	 * @param {*} value The value to process.
-	 * @returns {string} Returns the string.
-	 */
-	function baseToString(value) {
-	  // Exit early for strings to avoid a performance hit in some environments.
-	  if (typeof value == 'string') {
-	    return value;
-	  }
-	  if (isArray(value)) {
-	    // Recursively convert values (susceptible to call stack limits).
-	    return arrayMap(value, baseToString) + '';
-	  }
-	  if (isSymbol(value)) {
-	    return symbolToString ? symbolToString.call(value) : '';
-	  }
-	  var result = (value + '');
-	  return (result == '0' && (1 / value) == -INFINITY) ? '-0' : result;
-	}
-
-	module.exports = baseToString;
-
-
-/***/ }),
-/* 421 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var isSymbol = __webpack_require__(415);
-
-	/** Used as references for various `Number` constants. */
-	var INFINITY = 1 / 0;
-
-	/**
-	 * Converts `value` to a string key if it's not a string or symbol.
-	 *
-	 * @private
-	 * @param {*} value The value to inspect.
-	 * @returns {string|symbol} Returns the key.
-	 */
-	function toKey(value) {
-	  if (typeof value == 'string' || isSymbol(value)) {
-	    return value;
-	  }
-	  var result = (value + '');
-	  return (result == '0' && (1 / value) == -INFINITY) ? '-0' : result;
-	}
-
-	module.exports = toKey;
-
-
-/***/ }),
-/* 422 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var baseHasIn = __webpack_require__(423),
-	    hasPath = __webpack_require__(424);
-
-	/**
-	 * Checks if `path` is a direct or inherited property of `object`.
-	 *
-	 * @static
-	 * @memberOf _
-	 * @since 4.0.0
-	 * @category Object
-	 * @param {Object} object The object to query.
-	 * @param {Array|string} path The path to check.
-	 * @returns {boolean} Returns `true` if `path` exists, else `false`.
-	 * @example
-	 *
-	 * var object = _.create({ 'a': _.create({ 'b': 2 }) });
-	 *
-	 * _.hasIn(object, 'a');
-	 * // => true
-	 *
-	 * _.hasIn(object, 'a.b');
-	 * // => true
-	 *
-	 * _.hasIn(object, ['a', 'b']);
-	 * // => true
-	 *
-	 * _.hasIn(object, 'b');
-	 * // => false
-	 */
-	function hasIn(object, path) {
-	  return object != null && hasPath(object, path, baseHasIn);
-	}
-
-	module.exports = hasIn;
-
-
-/***/ }),
-/* 423 */
-/***/ (function(module, exports) {
-
-	/**
-	 * The base implementation of `_.hasIn` without support for deep paths.
-	 *
-	 * @private
-	 * @param {Object} [object] The object to query.
-	 * @param {Array|string} key The key to check.
-	 * @returns {boolean} Returns `true` if `key` exists, else `false`.
-	 */
-	function baseHasIn(object, key) {
-	  return object != null && key in Object(object);
-	}
-
-	module.exports = baseHasIn;
-
-
-/***/ }),
-/* 424 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var castPath = __webpack_require__(413),
-	    isArguments = __webpack_require__(387),
-	    isArray = __webpack_require__(62),
-	    isIndex = __webpack_require__(391),
-	    isLength = __webpack_require__(394),
-	    toKey = __webpack_require__(421);
-
-	/**
-	 * Checks if `path` exists on `object`.
-	 *
-	 * @private
-	 * @param {Object} object The object to query.
-	 * @param {Array|string} path The path to check.
-	 * @param {Function} hasFunc The function to check properties.
-	 * @returns {boolean} Returns `true` if `path` exists, else `false`.
-	 */
-	function hasPath(object, path, hasFunc) {
-	  path = castPath(path, object);
-
-	  var index = -1,
-	      length = path.length,
-	      result = false;
-
-	  while (++index < length) {
-	    var key = toKey(path[index]);
-	    if (!(result = object != null && hasFunc(object, key))) {
-	      break;
-	    }
-	    object = object[key];
-	  }
-	  if (result || ++index != length) {
-	    return result;
-	  }
-	  length = object == null ? 0 : object.length;
-	  return !!length && isLength(length) && isIndex(key, length) &&
-	    (isArray(object) || isArguments(object));
-	}
-
-	module.exports = hasPath;
-
-
-/***/ }),
-/* 425 */
-/***/ (function(module, exports) {
-
-	/**
-	 * This method returns the first argument it receives.
-	 *
-	 * @static
-	 * @since 0.1.0
-	 * @memberOf _
-	 * @category Util
-	 * @param {*} value Any value.
-	 * @returns {*} Returns `value`.
-	 * @example
-	 *
-	 * var object = { 'a': 1 };
-	 *
-	 * console.log(_.identity(object) === object);
-	 * // => true
-	 */
-	function identity(value) {
-	  return value;
-	}
-
-	module.exports = identity;
-
-
-/***/ }),
-/* 426 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var baseProperty = __webpack_require__(427),
-	    basePropertyDeep = __webpack_require__(428),
-	    isKey = __webpack_require__(414),
-	    toKey = __webpack_require__(421);
-
-	/**
-	 * Creates a function that returns the value at `path` of a given object.
-	 *
-	 * @static
-	 * @memberOf _
-	 * @since 2.4.0
-	 * @category Util
-	 * @param {Array|string} path The path of the property to get.
-	 * @returns {Function} Returns the new accessor function.
-	 * @example
-	 *
-	 * var objects = [
-	 *   { 'a': { 'b': 2 } },
-	 *   { 'a': { 'b': 1 } }
-	 * ];
-	 *
-	 * _.map(objects, _.property('a.b'));
-	 * // => [2, 1]
-	 *
-	 * _.map(_.sortBy(objects, _.property(['a', 'b'])), 'a.b');
-	 * // => [1, 2]
-	 */
-	function property(path) {
-	  return isKey(path) ? baseProperty(toKey(path)) : basePropertyDeep(path);
-	}
-
-	module.exports = property;
-
-
-/***/ }),
-/* 427 */
-/***/ (function(module, exports) {
-
-	/**
-	 * The base implementation of `_.property` without support for deep paths.
-	 *
-	 * @private
-	 * @param {string} key The key of the property to get.
-	 * @returns {Function} Returns the new accessor function.
-	 */
-	function baseProperty(key) {
-	  return function(object) {
-	    return object == null ? undefined : object[key];
-	  };
-	}
-
-	module.exports = baseProperty;
-
-
-/***/ }),
-/* 428 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var baseGet = __webpack_require__(412);
-
-	/**
-	 * A specialized version of `baseProperty` which supports deep paths.
-	 *
-	 * @private
-	 * @param {Array|string} path The path of the property to get.
-	 * @returns {Function} Returns the new accessor function.
-	 */
-	function basePropertyDeep(path) {
-	  return function(object) {
-	    return baseGet(object, path);
-	  };
-	}
-
-	module.exports = basePropertyDeep;
-
-
-/***/ }),
-/* 429 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var baseEach = __webpack_require__(430),
-	    isArrayLike = __webpack_require__(401);
-
-	/**
-	 * The base implementation of `_.map` without support for iteratee shorthands.
-	 *
-	 * @private
-	 * @param {Array|Object} collection The collection to iterate over.
-	 * @param {Function} iteratee The function invoked per iteration.
-	 * @returns {Array} Returns the new mapped array.
-	 */
-	function baseMap(collection, iteratee) {
-	  var index = -1,
-	      result = isArrayLike(collection) ? Array(collection.length) : [];
-
-	  baseEach(collection, function(value, key, collection) {
-	    result[++index] = iteratee(value, key, collection);
-	  });
-	  return result;
-	}
-
-	module.exports = baseMap;
-
-
-/***/ }),
-/* 430 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var baseForOwn = __webpack_require__(431),
-	    createBaseEach = __webpack_require__(434);
-
-	/**
-	 * The base implementation of `_.forEach` without support for iteratee shorthands.
-	 *
-	 * @private
-	 * @param {Array|Object} collection The collection to iterate over.
-	 * @param {Function} iteratee The function invoked per iteration.
-	 * @returns {Array|Object} Returns `collection`.
-	 */
-	var baseEach = createBaseEach(baseForOwn);
-
-	module.exports = baseEach;
-
-
-/***/ }),
-/* 431 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var baseFor = __webpack_require__(432),
-	    keys = __webpack_require__(384);
-
-	/**
-	 * The base implementation of `_.forOwn` without support for iteratee shorthands.
-	 *
-	 * @private
-	 * @param {Object} object The object to iterate over.
-	 * @param {Function} iteratee The function invoked per iteration.
-	 * @returns {Object} Returns `object`.
-	 */
-	function baseForOwn(object, iteratee) {
-	  return object && baseFor(object, iteratee, keys);
-	}
-
-	module.exports = baseForOwn;
-
-
-/***/ }),
-/* 432 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var createBaseFor = __webpack_require__(433);
-
-	/**
-	 * The base implementation of `baseForOwn` which iterates over `object`
-	 * properties returned by `keysFunc` and invokes `iteratee` for each property.
-	 * Iteratee functions may exit iteration early by explicitly returning `false`.
-	 *
-	 * @private
-	 * @param {Object} object The object to iterate over.
-	 * @param {Function} iteratee The function invoked per iteration.
-	 * @param {Function} keysFunc The function to get the keys of `object`.
-	 * @returns {Object} Returns `object`.
-	 */
-	var baseFor = createBaseFor();
-
-	module.exports = baseFor;
-
-
-/***/ }),
-/* 433 */
-/***/ (function(module, exports) {
-
-	/**
-	 * Creates a base function for methods like `_.forIn` and `_.forOwn`.
-	 *
-	 * @private
-	 * @param {boolean} [fromRight] Specify iterating from right to left.
-	 * @returns {Function} Returns the new base function.
-	 */
-	function createBaseFor(fromRight) {
-	  return function(object, iteratee, keysFunc) {
-	    var index = -1,
-	        iterable = Object(object),
-	        props = keysFunc(object),
-	        length = props.length;
-
-	    while (length--) {
-	      var key = props[fromRight ? length : ++index];
-	      if (iteratee(iterable[key], key, iterable) === false) {
-	        break;
-	      }
-	    }
-	    return object;
-	  };
-	}
-
-	module.exports = createBaseFor;
-
-
-/***/ }),
-/* 434 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var isArrayLike = __webpack_require__(401);
-
-	/**
-	 * Creates a `baseEach` or `baseEachRight` function.
-	 *
-	 * @private
-	 * @param {Function} eachFunc The function to iterate over a collection.
-	 * @param {boolean} [fromRight] Specify iterating from right to left.
-	 * @returns {Function} Returns the new base function.
-	 */
-	function createBaseEach(eachFunc, fromRight) {
-	  return function(collection, iteratee) {
-	    if (collection == null) {
-	      return collection;
-	    }
-	    if (!isArrayLike(collection)) {
-	      return eachFunc(collection, iteratee);
-	    }
-	    var length = collection.length,
-	        index = fromRight ? length : -1,
-	        iterable = Object(collection);
-
-	    while ((fromRight ? index-- : ++index < length)) {
-	      if (iteratee(iterable[index], index, iterable) === false) {
-	        break;
-	      }
-	    }
-	    return collection;
-	  };
-	}
-
-	module.exports = createBaseEach;
-
-
-/***/ }),
-/* 435 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__(436);
-
-
-/***/ }),
-/* 436 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var arrayEach = __webpack_require__(437),
-	    baseEach = __webpack_require__(430),
-	    castFunction = __webpack_require__(438),
-	    isArray = __webpack_require__(62);
-
-	/**
-	 * Iterates over elements of `collection` and invokes `iteratee` for each element.
-	 * The iteratee is invoked with three arguments: (value, index|key, collection).
-	 * Iteratee functions may exit iteration early by explicitly returning `false`.
-	 *
-	 * **Note:** As with other "Collections" methods, objects with a "length"
-	 * property are iterated like arrays. To avoid this behavior use `_.forIn`
-	 * or `_.forOwn` for object iteration.
-	 *
-	 * @static
-	 * @memberOf _
-	 * @since 0.1.0
-	 * @alias each
-	 * @category Collection
-	 * @param {Array|Object} collection The collection to iterate over.
-	 * @param {Function} [iteratee=_.identity] The function invoked per iteration.
-	 * @returns {Array|Object} Returns `collection`.
-	 * @see _.forEachRight
-	 * @example
-	 *
-	 * _.forEach([1, 2], function(value) {
-	 *   console.log(value);
-	 * });
-	 * // => Logs `1` then `2`.
-	 *
-	 * _.forEach({ 'a': 1, 'b': 2 }, function(value, key) {
-	 *   console.log(key);
-	 * });
-	 * // => Logs 'a' then 'b' (iteration order is not guaranteed).
-	 */
-	function forEach(collection, iteratee) {
-	  var func = isArray(collection) ? arrayEach : baseEach;
-	  return func(collection, castFunction(iteratee));
-	}
-
-	module.exports = forEach;
-
-
-/***/ }),
-/* 437 */
-/***/ (function(module, exports) {
-
-	/**
-	 * A specialized version of `_.forEach` for arrays without support for
-	 * iteratee shorthands.
-	 *
-	 * @private
-	 * @param {Array} [array] The array to iterate over.
-	 * @param {Function} iteratee The function invoked per iteration.
-	 * @returns {Array} Returns `array`.
-	 */
-	function arrayEach(array, iteratee) {
-	  var index = -1,
-	      length = array == null ? 0 : array.length;
-
-	  while (++index < length) {
-	    if (iteratee(array[index], index, array) === false) {
-	      break;
-	    }
-	  }
-	  return array;
-	}
-
-	module.exports = arrayEach;
-
-
-/***/ }),
-/* 438 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var identity = __webpack_require__(425);
-
-	/**
-	 * Casts `value` to `identity` if it's not a function.
-	 *
-	 * @private
-	 * @param {*} value The value to inspect.
-	 * @returns {Function} Returns cast function.
-	 */
-	function castFunction(value) {
-	  return typeof value == 'function' ? value : identity;
-	}
-
-	module.exports = castFunction;
-
-
-/***/ }),
-/* 439 */
+/* 311 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -28125,11 +24220,11 @@ var StellarBase =
 
 	var _jsXdr = __webpack_require__(65);
 
-	var _bignumber = __webpack_require__(440);
+	var _bignumber = __webpack_require__(312);
 
 	var _bignumber2 = _interopRequireDefault(_bignumber);
 
-	var _trimEnd = __webpack_require__(441);
+	var _trimEnd = __webpack_require__(313);
 
 	var _trimEnd2 = _interopRequireDefault(_trimEnd);
 
@@ -28141,17 +24236,17 @@ var StellarBase =
 
 	var _isString2 = _interopRequireDefault(_isString);
 
-	var _isNumber = __webpack_require__(453);
+	var _isNumber = __webpack_require__(68);
 
 	var _isNumber2 = _interopRequireDefault(_isNumber);
 
-	var _isFinite = __webpack_require__(454);
+	var _isFinite = __webpack_require__(325);
 
 	var _isFinite2 = _interopRequireDefault(_isFinite);
 
-	var _continued_fraction = __webpack_require__(455);
+	var _continued_fraction = __webpack_require__(326);
 
-	var _asset = __webpack_require__(456);
+	var _asset = __webpack_require__(327);
 
 	var _strkey = __webpack_require__(27);
 
@@ -28161,7 +24256,7 @@ var StellarBase =
 
 	var _stellarXdr_generated2 = _interopRequireDefault(_stellarXdr_generated);
 
-	var _index = __webpack_require__(497);
+	var _index = __webpack_require__(358);
 
 	var ops = _interopRequireWildcard(_index);
 
@@ -28202,8 +24297,9 @@ var StellarBase =
 	 * * `{@link Operation.createAccount}`
 	 * * `{@link Operation.payment}`
 	 * * `{@link Operation.pathPayment}`
-	 * * `{@link Operation.manageOffer}`
-	 * * `{@link Operation.createPassiveOffer}`
+	 * * `{@link Operation.manageSellOffer}`
+	 * * `{@link Operation.manageBuyOffer}`
+	 * * `{@link Operation.createPassiveSellOffer}`
 	 * * `{@link Operation.setOptions}`
 	 * * `{@link Operation.changeTrust}`
 	 * * `{@link Operation.allowTrust}`
@@ -28334,9 +24430,9 @@ var StellarBase =
 	            }
 	            break;
 	          }
-	        case 'manageOffer':
+	        case 'manageSellOffer':
 	          {
-	            result.type = 'manageOffer';
+	            result.type = 'manageSellOffer';
 	            result.selling = _asset.Asset.fromOperation(attrs.selling());
 	            result.buying = _asset.Asset.fromOperation(attrs.buying());
 	            result.amount = this._fromXDRAmount(attrs.amount());
@@ -28344,9 +24440,19 @@ var StellarBase =
 	            result.offerId = attrs.offerId().toString();
 	            break;
 	          }
-	        case 'createPassiveOffer':
+	        case 'manageBuyOffer':
 	          {
-	            result.type = 'createPassiveOffer';
+	            result.type = 'manageBuyOffer';
+	            result.selling = _asset.Asset.fromOperation(attrs.selling());
+	            result.buying = _asset.Asset.fromOperation(attrs.buying());
+	            result.buyAmount = this._fromXDRAmount(attrs.buyAmount());
+	            result.price = this._fromXDRPrice(attrs.price());
+	            result.offerId = attrs.offerId().toString();
+	            break;
+	          }
+	        case 'createPassiveSellOffer':
+	          {
+	            result.type = 'createPassiveSellOffer';
 	            result.selling = _asset.Asset.fromOperation(attrs.selling());
 	            result.buying = _asset.Asset.fromOperation(attrs.buying());
 	            result.amount = this._fromXDRAmount(attrs.amount());
@@ -28540,16 +24646,17 @@ var StellarBase =
 	Operation.bumpSequence = ops.bumpSequence;
 	Operation.changeTrust = ops.changeTrust;
 	Operation.createAccount = ops.createAccount;
-	Operation.createPassiveOffer = ops.createPassiveOffer;
+	Operation.createPassiveSellOffer = ops.createPassiveSellOffer;
 	Operation.inflation = ops.inflation;
 	Operation.manageData = ops.manageData;
-	Operation.manageOffer = ops.manageOffer;
+	Operation.manageSellOffer = ops.manageSellOffer;
+	Operation.manageBuyOffer = ops.manageBuyOffer;
 	Operation.pathPayment = ops.pathPayment;
 	Operation.payment = ops.payment;
 	Operation.setOptions = ops.setOptions;
 
 /***/ }),
-/* 440 */
+/* 312 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/*! bignumber.js v4.1.0 https://github.com/MikeMcl/bignumber.js/LICENCE */
@@ -31289,14 +27396,14 @@ var StellarBase =
 
 
 /***/ }),
-/* 441 */
+/* 313 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var baseToString = __webpack_require__(420),
-	    castSlice = __webpack_require__(442),
-	    charsEndIndex = __webpack_require__(444),
-	    stringToArray = __webpack_require__(449),
-	    toString = __webpack_require__(419);
+	var baseToString = __webpack_require__(200),
+	    castSlice = __webpack_require__(314),
+	    charsEndIndex = __webpack_require__(316),
+	    stringToArray = __webpack_require__(321),
+	    toString = __webpack_require__(199);
 
 	/** Used to match leading and trailing whitespace. */
 	var reTrimEnd = /\s+$/;
@@ -31338,10 +27445,10 @@ var StellarBase =
 
 
 /***/ }),
-/* 442 */
+/* 314 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var baseSlice = __webpack_require__(443);
+	var baseSlice = __webpack_require__(315);
 
 	/**
 	 * Casts `array` to a slice if it's needed.
@@ -31362,7 +27469,7 @@ var StellarBase =
 
 
 /***/ }),
-/* 443 */
+/* 315 */
 /***/ (function(module, exports) {
 
 	/**
@@ -31399,10 +27506,10 @@ var StellarBase =
 
 
 /***/ }),
-/* 444 */
+/* 316 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var baseIndexOf = __webpack_require__(445);
+	var baseIndexOf = __webpack_require__(317);
 
 	/**
 	 * Used by `_.trim` and `_.trimEnd` to get the index of the last string symbol
@@ -31424,12 +27531,12 @@ var StellarBase =
 
 
 /***/ }),
-/* 445 */
+/* 317 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var baseFindIndex = __webpack_require__(446),
-	    baseIsNaN = __webpack_require__(447),
-	    strictIndexOf = __webpack_require__(448);
+	var baseFindIndex = __webpack_require__(318),
+	    baseIsNaN = __webpack_require__(319),
+	    strictIndexOf = __webpack_require__(320);
 
 	/**
 	 * The base implementation of `_.indexOf` without `fromIndex` bounds checks.
@@ -31450,7 +27557,7 @@ var StellarBase =
 
 
 /***/ }),
-/* 446 */
+/* 318 */
 /***/ (function(module, exports) {
 
 	/**
@@ -31480,7 +27587,7 @@ var StellarBase =
 
 
 /***/ }),
-/* 447 */
+/* 319 */
 /***/ (function(module, exports) {
 
 	/**
@@ -31498,7 +27605,7 @@ var StellarBase =
 
 
 /***/ }),
-/* 448 */
+/* 320 */
 /***/ (function(module, exports) {
 
 	/**
@@ -31527,12 +27634,12 @@ var StellarBase =
 
 
 /***/ }),
-/* 449 */
+/* 321 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var asciiToArray = __webpack_require__(450),
-	    hasUnicode = __webpack_require__(451),
-	    unicodeToArray = __webpack_require__(452);
+	var asciiToArray = __webpack_require__(322),
+	    hasUnicode = __webpack_require__(323),
+	    unicodeToArray = __webpack_require__(324);
 
 	/**
 	 * Converts `string` to an array.
@@ -31551,7 +27658,7 @@ var StellarBase =
 
 
 /***/ }),
-/* 450 */
+/* 322 */
 /***/ (function(module, exports) {
 
 	/**
@@ -31569,7 +27676,7 @@ var StellarBase =
 
 
 /***/ }),
-/* 451 */
+/* 323 */
 /***/ (function(module, exports) {
 
 	/** Used to compose unicode character classes. */
@@ -31601,7 +27708,7 @@ var StellarBase =
 
 
 /***/ }),
-/* 452 */
+/* 324 */
 /***/ (function(module, exports) {
 
 	/** Used to compose unicode character classes. */
@@ -31647,51 +27754,7 @@ var StellarBase =
 
 
 /***/ }),
-/* 453 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var baseGetTag = __webpack_require__(56),
-	    isObjectLike = __webpack_require__(63);
-
-	/** `Object#toString` result references. */
-	var numberTag = '[object Number]';
-
-	/**
-	 * Checks if `value` is classified as a `Number` primitive or object.
-	 *
-	 * **Note:** To exclude `Infinity`, `-Infinity`, and `NaN`, which are
-	 * classified as numbers, use the `_.isFinite` method.
-	 *
-	 * @static
-	 * @memberOf _
-	 * @since 0.1.0
-	 * @category Lang
-	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is a number, else `false`.
-	 * @example
-	 *
-	 * _.isNumber(3);
-	 * // => true
-	 *
-	 * _.isNumber(Number.MIN_VALUE);
-	 * // => true
-	 *
-	 * _.isNumber(Infinity);
-	 * // => true
-	 *
-	 * _.isNumber('3');
-	 * // => false
-	 */
-	function isNumber(value) {
-	  return typeof value == 'number' ||
-	    (isObjectLike(value) && baseGetTag(value) == numberTag);
-	}
-
-	module.exports = isNumber;
-
-
-/***/ }),
-/* 454 */
+/* 325 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var root = __webpack_require__(58);
@@ -31733,7 +27796,7 @@ var StellarBase =
 
 
 /***/ }),
-/* 455 */
+/* 326 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -31746,7 +27809,7 @@ var StellarBase =
 
 	exports.best_r = best_r;
 
-	var _bignumber = __webpack_require__(440);
+	var _bignumber = __webpack_require__(312);
 
 	var _bignumber2 = _interopRequireDefault(_bignumber);
 
@@ -31801,7 +27864,7 @@ var StellarBase =
 	}
 
 /***/ }),
-/* 456 */
+/* 327 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -31813,15 +27876,15 @@ var StellarBase =
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _clone = __webpack_require__(457);
+	var _clone = __webpack_require__(328);
 
 	var _clone2 = _interopRequireDefault(_clone);
 
-	var _padEnd = __webpack_require__(488);
+	var _padEnd = __webpack_require__(352);
 
 	var _padEnd2 = _interopRequireDefault(_padEnd);
 
-	var _trimEnd = __webpack_require__(441);
+	var _trimEnd = __webpack_require__(313);
 
 	var _trimEnd2 = _interopRequireDefault(_trimEnd);
 
@@ -32012,10 +28075,10 @@ var StellarBase =
 	}();
 
 /***/ }),
-/* 457 */
+/* 328 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var baseClone = __webpack_require__(458);
+	var baseClone = __webpack_require__(329);
 
 	/** Used to compose bitmasks for cloning. */
 	var CLONE_SYMBOLS_FLAG = 4;
@@ -32054,30 +28117,30 @@ var StellarBase =
 
 
 /***/ }),
-/* 458 */
+/* 329 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var Stack = __webpack_require__(327),
-	    arrayEach = __webpack_require__(437),
-	    assignValue = __webpack_require__(459),
-	    baseAssign = __webpack_require__(462),
-	    baseAssignIn = __webpack_require__(464),
-	    cloneBuffer = __webpack_require__(468),
-	    copyArray = __webpack_require__(469),
-	    copySymbols = __webpack_require__(470),
-	    copySymbolsIn = __webpack_require__(471),
-	    getAllKeys = __webpack_require__(378),
-	    getAllKeysIn = __webpack_require__(474),
-	    getTag = __webpack_require__(402),
-	    initCloneArray = __webpack_require__(475),
-	    initCloneByTag = __webpack_require__(476),
-	    initCloneObject = __webpack_require__(482),
+	var Stack = __webpack_require__(134),
+	    arrayEach = __webpack_require__(225),
+	    assignValue = __webpack_require__(73),
+	    baseAssign = __webpack_require__(330),
+	    baseAssignIn = __webpack_require__(331),
+	    cloneBuffer = __webpack_require__(332),
+	    copyArray = __webpack_require__(333),
+	    copySymbols = __webpack_require__(334),
+	    copySymbolsIn = __webpack_require__(335),
+	    getAllKeys = __webpack_require__(176),
+	    getAllKeysIn = __webpack_require__(338),
+	    getTag = __webpack_require__(182),
+	    initCloneArray = __webpack_require__(339),
+	    initCloneByTag = __webpack_require__(340),
+	    initCloneObject = __webpack_require__(346),
 	    isArray = __webpack_require__(62),
-	    isBuffer = __webpack_require__(389),
-	    isMap = __webpack_require__(484),
-	    isObject = __webpack_require__(345),
-	    isSet = __webpack_require__(486),
-	    keys = __webpack_require__(384);
+	    isBuffer = __webpack_require__(103),
+	    isMap = __webpack_require__(348),
+	    isObject = __webpack_require__(79),
+	    isSet = __webpack_require__(350),
+	    keys = __webpack_require__(126);
 
 	/** Used to compose bitmasks for cloning. */
 	var CLONE_DEEP_FLAG = 1,
@@ -32231,93 +28294,11 @@ var StellarBase =
 
 
 /***/ }),
-/* 459 */
+/* 330 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var baseAssignValue = __webpack_require__(460),
-	    eq = __webpack_require__(332);
-
-	/** Used for built-in method references. */
-	var objectProto = Object.prototype;
-
-	/** Used to check objects for own properties. */
-	var hasOwnProperty = objectProto.hasOwnProperty;
-
-	/**
-	 * Assigns `value` to `key` of `object` if the existing value is not equivalent
-	 * using [`SameValueZero`](http://ecma-international.org/ecma-262/7.0/#sec-samevaluezero)
-	 * for equality comparisons.
-	 *
-	 * @private
-	 * @param {Object} object The object to modify.
-	 * @param {string} key The key of the property to assign.
-	 * @param {*} value The value to assign.
-	 */
-	function assignValue(object, key, value) {
-	  var objValue = object[key];
-	  if (!(hasOwnProperty.call(object, key) && eq(objValue, value)) ||
-	      (value === undefined && !(key in object))) {
-	    baseAssignValue(object, key, value);
-	  }
-	}
-
-	module.exports = assignValue;
-
-
-/***/ }),
-/* 460 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var defineProperty = __webpack_require__(461);
-
-	/**
-	 * The base implementation of `assignValue` and `assignMergeValue` without
-	 * value checks.
-	 *
-	 * @private
-	 * @param {Object} object The object to modify.
-	 * @param {string} key The key of the property to assign.
-	 * @param {*} value The value to assign.
-	 */
-	function baseAssignValue(object, key, value) {
-	  if (key == '__proto__' && defineProperty) {
-	    defineProperty(object, key, {
-	      'configurable': true,
-	      'enumerable': true,
-	      'value': value,
-	      'writable': true
-	    });
-	  } else {
-	    object[key] = value;
-	  }
-	}
-
-	module.exports = baseAssignValue;
-
-
-/***/ }),
-/* 461 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var getNative = __webpack_require__(342);
-
-	var defineProperty = (function() {
-	  try {
-	    var func = getNative(Object, 'defineProperty');
-	    func({}, '', {});
-	    return func;
-	  } catch (e) {}
-	}());
-
-	module.exports = defineProperty;
-
-
-/***/ }),
-/* 462 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var copyObject = __webpack_require__(463),
-	    keys = __webpack_require__(384);
+	var copyObject = __webpack_require__(72),
+	    keys = __webpack_require__(126);
 
 	/**
 	 * The base implementation of `_.assign` without support for multiple sources
@@ -32336,57 +28317,11 @@ var StellarBase =
 
 
 /***/ }),
-/* 463 */
+/* 331 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var assignValue = __webpack_require__(459),
-	    baseAssignValue = __webpack_require__(460);
-
-	/**
-	 * Copies properties of `source` to `object`.
-	 *
-	 * @private
-	 * @param {Object} source The object to copy properties from.
-	 * @param {Array} props The property identifiers to copy.
-	 * @param {Object} [object={}] The object to copy properties to.
-	 * @param {Function} [customizer] The function to customize copied values.
-	 * @returns {Object} Returns `object`.
-	 */
-	function copyObject(source, props, object, customizer) {
-	  var isNew = !object;
-	  object || (object = {});
-
-	  var index = -1,
-	      length = props.length;
-
-	  while (++index < length) {
-	    var key = props[index];
-
-	    var newValue = customizer
-	      ? customizer(object[key], source[key], key, object, source)
-	      : undefined;
-
-	    if (newValue === undefined) {
-	      newValue = source[key];
-	    }
-	    if (isNew) {
-	      baseAssignValue(object, key, newValue);
-	    } else {
-	      assignValue(object, key, newValue);
-	    }
-	  }
-	  return object;
-	}
-
-	module.exports = copyObject;
-
-
-/***/ }),
-/* 464 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var copyObject = __webpack_require__(463),
-	    keysIn = __webpack_require__(465);
+	var copyObject = __webpack_require__(72),
+	    keysIn = __webpack_require__(98);
 
 	/**
 	 * The base implementation of `_.assignIn` without support for multiple sources
@@ -32405,110 +28340,7 @@ var StellarBase =
 
 
 /***/ }),
-/* 465 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var arrayLikeKeys = __webpack_require__(385),
-	    baseKeysIn = __webpack_require__(466),
-	    isArrayLike = __webpack_require__(401);
-
-	/**
-	 * Creates an array of the own and inherited enumerable property names of `object`.
-	 *
-	 * **Note:** Non-object values are coerced to objects.
-	 *
-	 * @static
-	 * @memberOf _
-	 * @since 3.0.0
-	 * @category Object
-	 * @param {Object} object The object to query.
-	 * @returns {Array} Returns the array of property names.
-	 * @example
-	 *
-	 * function Foo() {
-	 *   this.a = 1;
-	 *   this.b = 2;
-	 * }
-	 *
-	 * Foo.prototype.c = 3;
-	 *
-	 * _.keysIn(new Foo);
-	 * // => ['a', 'b', 'c'] (iteration order is not guaranteed)
-	 */
-	function keysIn(object) {
-	  return isArrayLike(object) ? arrayLikeKeys(object, true) : baseKeysIn(object);
-	}
-
-	module.exports = keysIn;
-
-
-/***/ }),
-/* 466 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var isObject = __webpack_require__(345),
-	    isPrototype = __webpack_require__(398),
-	    nativeKeysIn = __webpack_require__(467);
-
-	/** Used for built-in method references. */
-	var objectProto = Object.prototype;
-
-	/** Used to check objects for own properties. */
-	var hasOwnProperty = objectProto.hasOwnProperty;
-
-	/**
-	 * The base implementation of `_.keysIn` which doesn't treat sparse arrays as dense.
-	 *
-	 * @private
-	 * @param {Object} object The object to query.
-	 * @returns {Array} Returns the array of property names.
-	 */
-	function baseKeysIn(object) {
-	  if (!isObject(object)) {
-	    return nativeKeysIn(object);
-	  }
-	  var isProto = isPrototype(object),
-	      result = [];
-
-	  for (var key in object) {
-	    if (!(key == 'constructor' && (isProto || !hasOwnProperty.call(object, key)))) {
-	      result.push(key);
-	    }
-	  }
-	  return result;
-	}
-
-	module.exports = baseKeysIn;
-
-
-/***/ }),
-/* 467 */
-/***/ (function(module, exports) {
-
-	/**
-	 * This function is like
-	 * [`Object.keys`](http://ecma-international.org/ecma-262/7.0/#sec-object.keys)
-	 * except that it includes inherited enumerable properties.
-	 *
-	 * @private
-	 * @param {Object} object The object to query.
-	 * @returns {Array} Returns the array of property names.
-	 */
-	function nativeKeysIn(object) {
-	  var result = [];
-	  if (object != null) {
-	    for (var key in Object(object)) {
-	      result.push(key);
-	    }
-	  }
-	  return result;
-	}
-
-	module.exports = nativeKeysIn;
-
-
-/***/ }),
-/* 468 */
+/* 332 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(module) {var root = __webpack_require__(58);
@@ -32547,10 +28379,10 @@ var StellarBase =
 
 	module.exports = cloneBuffer;
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(112)(module)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(104)(module)))
 
 /***/ }),
-/* 469 */
+/* 333 */
 /***/ (function(module, exports) {
 
 	/**
@@ -32576,11 +28408,11 @@ var StellarBase =
 
 
 /***/ }),
-/* 470 */
+/* 334 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var copyObject = __webpack_require__(463),
-	    getSymbols = __webpack_require__(381);
+	var copyObject = __webpack_require__(72),
+	    getSymbols = __webpack_require__(179);
 
 	/**
 	 * Copies own symbols of `source` to `object`.
@@ -32598,11 +28430,11 @@ var StellarBase =
 
 
 /***/ }),
-/* 471 */
+/* 335 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var copyObject = __webpack_require__(463),
-	    getSymbolsIn = __webpack_require__(472);
+	var copyObject = __webpack_require__(72),
+	    getSymbolsIn = __webpack_require__(336);
 
 	/**
 	 * Copies own and inherited symbols of `source` to `object`.
@@ -32620,13 +28452,13 @@ var StellarBase =
 
 
 /***/ }),
-/* 472 */
+/* 336 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var arrayPush = __webpack_require__(380),
-	    getPrototype = __webpack_require__(473),
-	    getSymbols = __webpack_require__(381),
-	    stubArray = __webpack_require__(383);
+	var arrayPush = __webpack_require__(178),
+	    getPrototype = __webpack_require__(337),
+	    getSymbols = __webpack_require__(179),
+	    stubArray = __webpack_require__(181);
 
 	/* Built-in method references for those with the same name as other `lodash` methods. */
 	var nativeGetSymbols = Object.getOwnPropertySymbols;
@@ -32651,10 +28483,10 @@ var StellarBase =
 
 
 /***/ }),
-/* 473 */
+/* 337 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var overArg = __webpack_require__(400);
+	var overArg = __webpack_require__(129);
 
 	/** Built-in value references. */
 	var getPrototype = overArg(Object.getPrototypeOf, Object);
@@ -32663,12 +28495,12 @@ var StellarBase =
 
 
 /***/ }),
-/* 474 */
+/* 338 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var baseGetAllKeys = __webpack_require__(379),
-	    getSymbolsIn = __webpack_require__(472),
-	    keysIn = __webpack_require__(465);
+	var baseGetAllKeys = __webpack_require__(177),
+	    getSymbolsIn = __webpack_require__(336),
+	    keysIn = __webpack_require__(98);
 
 	/**
 	 * Creates an array of own and inherited enumerable property names and
@@ -32686,7 +28518,7 @@ var StellarBase =
 
 
 /***/ }),
-/* 475 */
+/* 339 */
 /***/ (function(module, exports) {
 
 	/** Used for built-in method references. */
@@ -32718,14 +28550,14 @@ var StellarBase =
 
 
 /***/ }),
-/* 476 */
+/* 340 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var cloneArrayBuffer = __webpack_require__(477),
-	    cloneDataView = __webpack_require__(478),
-	    cloneRegExp = __webpack_require__(479),
-	    cloneSymbol = __webpack_require__(480),
-	    cloneTypedArray = __webpack_require__(481);
+	var cloneArrayBuffer = __webpack_require__(341),
+	    cloneDataView = __webpack_require__(342),
+	    cloneRegExp = __webpack_require__(343),
+	    cloneSymbol = __webpack_require__(344),
+	    cloneTypedArray = __webpack_require__(345);
 
 	/** `Object#toString` result references. */
 	var boolTag = '[object Boolean]',
@@ -32801,10 +28633,10 @@ var StellarBase =
 
 
 /***/ }),
-/* 477 */
+/* 341 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var Uint8Array = __webpack_require__(374);
+	var Uint8Array = __webpack_require__(172);
 
 	/**
 	 * Creates a clone of `arrayBuffer`.
@@ -32823,10 +28655,10 @@ var StellarBase =
 
 
 /***/ }),
-/* 478 */
+/* 342 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var cloneArrayBuffer = __webpack_require__(477);
+	var cloneArrayBuffer = __webpack_require__(341);
 
 	/**
 	 * Creates a clone of `dataView`.
@@ -32845,7 +28677,7 @@ var StellarBase =
 
 
 /***/ }),
-/* 479 */
+/* 343 */
 /***/ (function(module, exports) {
 
 	/** Used to match `RegExp` flags from their coerced string values. */
@@ -32868,7 +28700,7 @@ var StellarBase =
 
 
 /***/ }),
-/* 480 */
+/* 344 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var Symbol = __webpack_require__(57);
@@ -32892,10 +28724,10 @@ var StellarBase =
 
 
 /***/ }),
-/* 481 */
+/* 345 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var cloneArrayBuffer = __webpack_require__(477);
+	var cloneArrayBuffer = __webpack_require__(341);
 
 	/**
 	 * Creates a clone of `typedArray`.
@@ -32914,12 +28746,12 @@ var StellarBase =
 
 
 /***/ }),
-/* 482 */
+/* 346 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var baseCreate = __webpack_require__(483),
-	    getPrototype = __webpack_require__(473),
-	    isPrototype = __webpack_require__(398);
+	var baseCreate = __webpack_require__(347),
+	    getPrototype = __webpack_require__(337),
+	    isPrototype = __webpack_require__(111);
 
 	/**
 	 * Initializes an object clone.
@@ -32938,10 +28770,10 @@ var StellarBase =
 
 
 /***/ }),
-/* 483 */
+/* 347 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var isObject = __webpack_require__(345);
+	var isObject = __webpack_require__(79);
 
 	/** Built-in value references. */
 	var objectCreate = Object.create;
@@ -32974,12 +28806,12 @@ var StellarBase =
 
 
 /***/ }),
-/* 484 */
+/* 348 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var baseIsMap = __webpack_require__(485),
-	    baseUnary = __webpack_require__(395),
-	    nodeUtil = __webpack_require__(396);
+	var baseIsMap = __webpack_require__(349),
+	    baseUnary = __webpack_require__(108),
+	    nodeUtil = __webpack_require__(109);
 
 	/* Node.js helper references. */
 	var nodeIsMap = nodeUtil && nodeUtil.isMap;
@@ -33007,10 +28839,10 @@ var StellarBase =
 
 
 /***/ }),
-/* 485 */
+/* 349 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var getTag = __webpack_require__(402),
+	var getTag = __webpack_require__(182),
 	    isObjectLike = __webpack_require__(63);
 
 	/** `Object#toString` result references. */
@@ -33031,12 +28863,12 @@ var StellarBase =
 
 
 /***/ }),
-/* 486 */
+/* 350 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var baseIsSet = __webpack_require__(487),
-	    baseUnary = __webpack_require__(395),
-	    nodeUtil = __webpack_require__(396);
+	var baseIsSet = __webpack_require__(351),
+	    baseUnary = __webpack_require__(108),
+	    nodeUtil = __webpack_require__(109);
 
 	/* Node.js helper references. */
 	var nodeIsSet = nodeUtil && nodeUtil.isSet;
@@ -33064,10 +28896,10 @@ var StellarBase =
 
 
 /***/ }),
-/* 487 */
+/* 351 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var getTag = __webpack_require__(402),
+	var getTag = __webpack_require__(182),
 	    isObjectLike = __webpack_require__(63);
 
 	/** `Object#toString` result references. */
@@ -33088,13 +28920,13 @@ var StellarBase =
 
 
 /***/ }),
-/* 488 */
+/* 352 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var createPadding = __webpack_require__(489),
-	    stringSize = __webpack_require__(491),
-	    toInteger = __webpack_require__(494),
-	    toString = __webpack_require__(419);
+	var createPadding = __webpack_require__(353),
+	    stringSize = __webpack_require__(355),
+	    toInteger = __webpack_require__(228),
+	    toString = __webpack_require__(199);
 
 	/**
 	 * Pads `string` on the right side if it's shorter than `length`. Padding
@@ -33133,15 +28965,15 @@ var StellarBase =
 
 
 /***/ }),
-/* 489 */
+/* 353 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var baseRepeat = __webpack_require__(490),
-	    baseToString = __webpack_require__(420),
-	    castSlice = __webpack_require__(442),
-	    hasUnicode = __webpack_require__(451),
-	    stringSize = __webpack_require__(491),
-	    stringToArray = __webpack_require__(449);
+	var baseRepeat = __webpack_require__(354),
+	    baseToString = __webpack_require__(200),
+	    castSlice = __webpack_require__(314),
+	    hasUnicode = __webpack_require__(323),
+	    stringSize = __webpack_require__(355),
+	    stringToArray = __webpack_require__(321);
 
 	/* Built-in method references for those with the same name as other `lodash` methods. */
 	var nativeCeil = Math.ceil;
@@ -33172,7 +29004,7 @@ var StellarBase =
 
 
 /***/ }),
-/* 490 */
+/* 354 */
 /***/ (function(module, exports) {
 
 	/** Used as references for various `Number` constants. */
@@ -33213,12 +29045,12 @@ var StellarBase =
 
 
 /***/ }),
-/* 491 */
+/* 355 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var asciiSize = __webpack_require__(492),
-	    hasUnicode = __webpack_require__(451),
-	    unicodeSize = __webpack_require__(493);
+	var asciiSize = __webpack_require__(356),
+	    hasUnicode = __webpack_require__(323),
+	    unicodeSize = __webpack_require__(357);
 
 	/**
 	 * Gets the number of symbols in `string`.
@@ -33237,10 +29069,10 @@ var StellarBase =
 
 
 /***/ }),
-/* 492 */
+/* 356 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var baseProperty = __webpack_require__(427);
+	var baseProperty = __webpack_require__(207);
 
 	/**
 	 * Gets the size of an ASCII `string`.
@@ -33255,7 +29087,7 @@ var StellarBase =
 
 
 /***/ }),
-/* 493 */
+/* 357 */
 /***/ (function(module, exports) {
 
 	/** Used to compose unicode character classes. */
@@ -33305,169 +29137,7 @@ var StellarBase =
 
 
 /***/ }),
-/* 494 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var toFinite = __webpack_require__(495);
-
-	/**
-	 * Converts `value` to an integer.
-	 *
-	 * **Note:** This method is loosely based on
-	 * [`ToInteger`](http://www.ecma-international.org/ecma-262/7.0/#sec-tointeger).
-	 *
-	 * @static
-	 * @memberOf _
-	 * @since 4.0.0
-	 * @category Lang
-	 * @param {*} value The value to convert.
-	 * @returns {number} Returns the converted integer.
-	 * @example
-	 *
-	 * _.toInteger(3.2);
-	 * // => 3
-	 *
-	 * _.toInteger(Number.MIN_VALUE);
-	 * // => 0
-	 *
-	 * _.toInteger(Infinity);
-	 * // => 1.7976931348623157e+308
-	 *
-	 * _.toInteger('3.2');
-	 * // => 3
-	 */
-	function toInteger(value) {
-	  var result = toFinite(value),
-	      remainder = result % 1;
-
-	  return result === result ? (remainder ? result - remainder : result) : 0;
-	}
-
-	module.exports = toInteger;
-
-
-/***/ }),
-/* 495 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var toNumber = __webpack_require__(496);
-
-	/** Used as references for various `Number` constants. */
-	var INFINITY = 1 / 0,
-	    MAX_INTEGER = 1.7976931348623157e+308;
-
-	/**
-	 * Converts `value` to a finite number.
-	 *
-	 * @static
-	 * @memberOf _
-	 * @since 4.12.0
-	 * @category Lang
-	 * @param {*} value The value to convert.
-	 * @returns {number} Returns the converted number.
-	 * @example
-	 *
-	 * _.toFinite(3.2);
-	 * // => 3.2
-	 *
-	 * _.toFinite(Number.MIN_VALUE);
-	 * // => 5e-324
-	 *
-	 * _.toFinite(Infinity);
-	 * // => 1.7976931348623157e+308
-	 *
-	 * _.toFinite('3.2');
-	 * // => 3.2
-	 */
-	function toFinite(value) {
-	  if (!value) {
-	    return value === 0 ? value : 0;
-	  }
-	  value = toNumber(value);
-	  if (value === INFINITY || value === -INFINITY) {
-	    var sign = (value < 0 ? -1 : 1);
-	    return sign * MAX_INTEGER;
-	  }
-	  return value === value ? value : 0;
-	}
-
-	module.exports = toFinite;
-
-
-/***/ }),
-/* 496 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var isObject = __webpack_require__(345),
-	    isSymbol = __webpack_require__(415);
-
-	/** Used as references for various `Number` constants. */
-	var NAN = 0 / 0;
-
-	/** Used to match leading and trailing whitespace. */
-	var reTrim = /^\s+|\s+$/g;
-
-	/** Used to detect bad signed hexadecimal string values. */
-	var reIsBadHex = /^[-+]0x[0-9a-f]+$/i;
-
-	/** Used to detect binary string values. */
-	var reIsBinary = /^0b[01]+$/i;
-
-	/** Used to detect octal string values. */
-	var reIsOctal = /^0o[0-7]+$/i;
-
-	/** Built-in method references without a dependency on `root`. */
-	var freeParseInt = parseInt;
-
-	/**
-	 * Converts `value` to a number.
-	 *
-	 * @static
-	 * @memberOf _
-	 * @since 4.0.0
-	 * @category Lang
-	 * @param {*} value The value to process.
-	 * @returns {number} Returns the number.
-	 * @example
-	 *
-	 * _.toNumber(3.2);
-	 * // => 3.2
-	 *
-	 * _.toNumber(Number.MIN_VALUE);
-	 * // => 5e-324
-	 *
-	 * _.toNumber(Infinity);
-	 * // => Infinity
-	 *
-	 * _.toNumber('3.2');
-	 * // => 3.2
-	 */
-	function toNumber(value) {
-	  if (typeof value == 'number') {
-	    return value;
-	  }
-	  if (isSymbol(value)) {
-	    return NAN;
-	  }
-	  if (isObject(value)) {
-	    var other = typeof value.valueOf == 'function' ? value.valueOf() : value;
-	    value = isObject(other) ? (other + '') : other;
-	  }
-	  if (typeof value != 'string') {
-	    return value === 0 ? value : +value;
-	  }
-	  value = value.replace(reTrim, '');
-	  var isBinary = reIsBinary.test(value);
-	  return (isBinary || reIsOctal.test(value))
-	    ? freeParseInt(value.slice(2), isBinary ? 2 : 8)
-	    : (reIsBadHex.test(value) ? NAN : +value);
-	}
-
-	module.exports = toNumber;
-
-
-/***/ }),
-/* 497 */
+/* 358 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -33476,7 +29146,7 @@ var StellarBase =
 	  value: true
 	});
 
-	var _account_merge = __webpack_require__(498);
+	var _account_merge = __webpack_require__(359);
 
 	Object.defineProperty(exports, 'accountMerge', {
 	  enumerable: true,
@@ -33485,7 +29155,7 @@ var StellarBase =
 	  }
 	});
 
-	var _allow_trust = __webpack_require__(499);
+	var _allow_trust = __webpack_require__(360);
 
 	Object.defineProperty(exports, 'allowTrust', {
 	  enumerable: true,
@@ -33494,7 +29164,7 @@ var StellarBase =
 	  }
 	});
 
-	var _bump_sequence = __webpack_require__(500);
+	var _bump_sequence = __webpack_require__(361);
 
 	Object.defineProperty(exports, 'bumpSequence', {
 	  enumerable: true,
@@ -33503,7 +29173,7 @@ var StellarBase =
 	  }
 	});
 
-	var _change_trust = __webpack_require__(501);
+	var _change_trust = __webpack_require__(362);
 
 	Object.defineProperty(exports, 'changeTrust', {
 	  enumerable: true,
@@ -33512,7 +29182,7 @@ var StellarBase =
 	  }
 	});
 
-	var _create_account = __webpack_require__(502);
+	var _create_account = __webpack_require__(363);
 
 	Object.defineProperty(exports, 'createAccount', {
 	  enumerable: true,
@@ -33521,16 +29191,16 @@ var StellarBase =
 	  }
 	});
 
-	var _create_passive_offer = __webpack_require__(503);
+	var _create_passive_sell_offer = __webpack_require__(364);
 
-	Object.defineProperty(exports, 'createPassiveOffer', {
+	Object.defineProperty(exports, 'createPassiveSellOffer', {
 	  enumerable: true,
 	  get: function get() {
-	    return _create_passive_offer.createPassiveOffer;
+	    return _create_passive_sell_offer.createPassiveSellOffer;
 	  }
 	});
 
-	var _inflation = __webpack_require__(504);
+	var _inflation = __webpack_require__(365);
 
 	Object.defineProperty(exports, 'inflation', {
 	  enumerable: true,
@@ -33539,7 +29209,7 @@ var StellarBase =
 	  }
 	});
 
-	var _manage_data = __webpack_require__(505);
+	var _manage_data = __webpack_require__(366);
 
 	Object.defineProperty(exports, 'manageData', {
 	  enumerable: true,
@@ -33548,16 +29218,25 @@ var StellarBase =
 	  }
 	});
 
-	var _manage_offer = __webpack_require__(506);
+	var _manage_sell_offer = __webpack_require__(367);
 
-	Object.defineProperty(exports, 'manageOffer', {
+	Object.defineProperty(exports, 'manageSellOffer', {
 	  enumerable: true,
 	  get: function get() {
-	    return _manage_offer.manageOffer;
+	    return _manage_sell_offer.manageSellOffer;
 	  }
 	});
 
-	var _path_payment = __webpack_require__(507);
+	var _manage_buy_offer = __webpack_require__(368);
+
+	Object.defineProperty(exports, 'manageBuyOffer', {
+	  enumerable: true,
+	  get: function get() {
+	    return _manage_buy_offer.manageBuyOffer;
+	  }
+	});
+
+	var _path_payment = __webpack_require__(369);
 
 	Object.defineProperty(exports, 'pathPayment', {
 	  enumerable: true,
@@ -33566,7 +29245,7 @@ var StellarBase =
 	  }
 	});
 
-	var _payment = __webpack_require__(508);
+	var _payment = __webpack_require__(370);
 
 	Object.defineProperty(exports, 'payment', {
 	  enumerable: true,
@@ -33575,7 +29254,7 @@ var StellarBase =
 	  }
 	});
 
-	var _set_options = __webpack_require__(509);
+	var _set_options = __webpack_require__(371);
 
 	Object.defineProperty(exports, 'setOptions', {
 	  enumerable: true,
@@ -33585,7 +29264,7 @@ var StellarBase =
 	});
 
 /***/ }),
-/* 498 */
+/* 359 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -33626,7 +29305,7 @@ var StellarBase =
 	}
 
 /***/ }),
-/* 499 */
+/* 360 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -33636,7 +29315,7 @@ var StellarBase =
 	});
 	exports.allowTrust = allowTrust;
 
-	var _padEnd = __webpack_require__(488);
+	var _padEnd = __webpack_require__(352);
 
 	var _padEnd2 = _interopRequireDefault(_padEnd);
 
@@ -33688,7 +29367,7 @@ var StellarBase =
 	}
 
 /***/ }),
-/* 500 */
+/* 361 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -33700,7 +29379,7 @@ var StellarBase =
 
 	var _jsXdr = __webpack_require__(65);
 
-	var _bignumber = __webpack_require__(440);
+	var _bignumber = __webpack_require__(312);
 
 	var _bignumber2 = _interopRequireDefault(_bignumber);
 
@@ -33749,7 +29428,7 @@ var StellarBase =
 	}
 
 /***/ }),
-/* 501 */
+/* 362 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -33765,7 +29444,7 @@ var StellarBase =
 
 	var _jsXdr = __webpack_require__(65);
 
-	var _bignumber = __webpack_require__(440);
+	var _bignumber = __webpack_require__(312);
 
 	var _bignumber2 = _interopRequireDefault(_bignumber);
 
@@ -33816,7 +29495,7 @@ var StellarBase =
 	}
 
 /***/ }),
-/* 502 */
+/* 363 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -33867,7 +29546,7 @@ var StellarBase =
 	}
 
 /***/ }),
-/* 503 */
+/* 364 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -33875,7 +29554,7 @@ var StellarBase =
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.createPassiveOffer = createPassiveOffer;
+	exports.createPassiveSellOffer = createPassiveSellOffer;
 
 	var _isUndefined = __webpack_require__(24);
 
@@ -33888,12 +29567,12 @@ var StellarBase =
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	/**
-	 * Returns a XDR CreatePasiveOfferOp. A "create passive offer" operation creates an
+	 * Returns a XDR CreatePasiveSellOfferOp. A "create passive offer" operation creates an
 	 * offer that won't consume a counter offer that exactly matches this offer. This is
 	 * useful for offers just used as 1:1 exchanges for path payments. Use manage offer
 	 * to manage this offer after using this operation to create it.
 	 * @function
-	 * @alias Operation.createPassiveOffer
+	 * @alias Operation.createPassiveSellOffer
 	 * @param {object} opts Options object
 	 * @param {Asset} opts.selling - What you're selling.
 	 * @param {Asset} opts.buying - What you're buying.
@@ -33903,9 +29582,9 @@ var StellarBase =
 	 * @param {number} opts.price.d - If `opts.price` is an object: the price denominator
 	 * @param {string} [opts.source] - The source account (defaults to transaction source).
 	 * @throws {Error} Throws `Error` when the best rational approximation of `price` cannot be found.
-	 * @returns {xdr.CreatePassiveOfferOp} Create Passive Offer operation
+	 * @returns {xdr.CreatePassiveSellOfferOp} Create Passive Sell Offer operation
 	 */
-	function createPassiveOffer(opts) {
+	function createPassiveSellOffer(opts) {
 	  var attributes = {};
 	  attributes.selling = opts.selling.toXDRObject();
 	  attributes.buying = opts.buying.toXDRObject();
@@ -33917,17 +29596,17 @@ var StellarBase =
 	    throw new TypeError('price argument is required');
 	  }
 	  attributes.price = this._toXDRPrice(opts.price);
-	  var createPassiveOfferOp = new _stellarXdr_generated2.default.CreatePassiveOfferOp(attributes);
+	  var createPassiveSellOfferOp = new _stellarXdr_generated2.default.CreatePassiveSellOfferOp(attributes);
 
 	  var opAttributes = {};
-	  opAttributes.body = _stellarXdr_generated2.default.OperationBody.createPassiveOffer(createPassiveOfferOp);
+	  opAttributes.body = _stellarXdr_generated2.default.OperationBody.createPassiveSellOffer(createPassiveSellOfferOp);
 	  this.setSourceAccount(opAttributes, opts);
 
 	  return new _stellarXdr_generated2.default.Operation(opAttributes);
 	}
 
 /***/ }),
-/* 504 */
+/* 365 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -33961,7 +29640,7 @@ var StellarBase =
 	}
 
 /***/ }),
-/* 505 */
+/* 366 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(Buffer) {'use strict';
@@ -34024,7 +29703,7 @@ var StellarBase =
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9).Buffer))
 
 /***/ }),
-/* 506 */
+/* 367 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -34032,7 +29711,7 @@ var StellarBase =
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.manageOffer = manageOffer;
+	exports.manageSellOffer = manageSellOffer;
 
 	var _isUndefined = __webpack_require__(24);
 
@@ -34047,10 +29726,10 @@ var StellarBase =
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	/**
-	 * Returns a XDR ManageOfferOp. A "manage offer" operation creates, updates, or
+	 * Returns a XDR ManageSellOfferOp. A "manage sell offer" operation creates, updates, or
 	 * deletes an offer.
 	 * @function
-	 * @alias Operation.manageOffer
+	 * @alias Operation.manageSellOffer
 	 * @param {object} opts Options object
 	 * @param {Asset} opts.selling - What you're selling.
 	 * @param {Asset} opts.buying - What you're buying.
@@ -34061,9 +29740,9 @@ var StellarBase =
 	 * @param {number|string} [opts.offerId ] - If `0`, will create a new offer (default). Otherwise, edits an exisiting offer.
 	 * @param {string} [opts.source] - The source account (defaults to transaction source).
 	 * @throws {Error} Throws `Error` when the best rational approximation of `price` cannot be found.
-	 * @returns {xdr.ManageOfferOp} Manage Offer operation
+	 * @returns {xdr.ManageSellOfferOp} Manage Sell Offer operation
 	 */
-	function manageOffer(opts) {
+	function manageSellOffer(opts) {
 	  var attributes = {};
 	  attributes.selling = opts.selling.toXDRObject();
 	  attributes.buying = opts.buying.toXDRObject();
@@ -34082,18 +29761,87 @@ var StellarBase =
 	    opts.offerId = '0';
 	  }
 
-	  attributes.offerId = _jsXdr.UnsignedHyper.fromString(opts.offerId);
-	  var manageOfferOp = new _stellarXdr_generated2.default.ManageOfferOp(attributes);
+	  attributes.offerId = _jsXdr.Hyper.fromString(opts.offerId);
+	  var manageSellOfferOp = new _stellarXdr_generated2.default.ManageSellOfferOp(attributes);
 
 	  var opAttributes = {};
-	  opAttributes.body = _stellarXdr_generated2.default.OperationBody.manageOffer(manageOfferOp);
+	  opAttributes.body = _stellarXdr_generated2.default.OperationBody.manageSellOffer(manageSellOfferOp);
 	  this.setSourceAccount(opAttributes, opts);
 
 	  return new _stellarXdr_generated2.default.Operation(opAttributes);
 	}
 
 /***/ }),
-/* 507 */
+/* 368 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.manageBuyOffer = manageBuyOffer;
+
+	var _isUndefined = __webpack_require__(24);
+
+	var _isUndefined2 = _interopRequireDefault(_isUndefined);
+
+	var _jsXdr = __webpack_require__(65);
+
+	var _stellarXdr_generated = __webpack_require__(64);
+
+	var _stellarXdr_generated2 = _interopRequireDefault(_stellarXdr_generated);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	/**
+	 * Returns a XDR ManageBuyOfferOp. A "manage buy offer" operation creates, updates, or
+	 * deletes a buy offer.
+	 * @function
+	 * @alias Operation.manageBuyOffer
+	 * @param {object} opts Options object
+	 * @param {Asset} opts.selling - What you're selling.
+	 * @param {Asset} opts.buying - What you're buying.
+	 * @param {string} opts.buyAmount - The total amount you're buying. If 0, deletes the offer.
+	 * @param {number|string|BigNumber|Object} opts.price - Price of 1 unit of `selling` in terms of `buying`.
+	 * @param {number} opts.price.n - If `opts.price` is an object: the price numerator
+	 * @param {number} opts.price.d - If `opts.price` is an object: the price denominator
+	 * @param {number|string} [opts.offerId ] - If `0`, will create a new offer (default). Otherwise, edits an exisiting offer.
+	 * @param {string} [opts.source] - The source account (defaults to transaction source).
+	 * @throws {Error} Throws `Error` when the best rational approximation of `price` cannot be found.
+	 * @returns {xdr.ManageBuyOfferOp} Manage Buy Offer operation
+	 */
+	function manageBuyOffer(opts) {
+	  var attributes = {};
+	  attributes.selling = opts.selling.toXDRObject();
+	  attributes.buying = opts.buying.toXDRObject();
+	  if (!this.isValidAmount(opts.buyAmount, true)) {
+	    throw new TypeError(this.constructAmountRequirementsError('buyAmount'));
+	  }
+	  attributes.buyAmount = this._toXDRAmount(opts.buyAmount);
+	  if ((0, _isUndefined2.default)(opts.price)) {
+	    throw new TypeError('price argument is required');
+	  }
+	  attributes.price = this._toXDRPrice(opts.price);
+
+	  if (!(0, _isUndefined2.default)(opts.offerId)) {
+	    opts.offerId = opts.offerId.toString();
+	  } else {
+	    opts.offerId = '0';
+	  }
+
+	  attributes.offerId = _jsXdr.Hyper.fromString(opts.offerId);
+	  var manageBuyOfferOp = new _stellarXdr_generated2.default.ManageBuyOfferOp(attributes);
+
+	  var opAttributes = {};
+	  opAttributes.body = _stellarXdr_generated2.default.OperationBody.manageBuyOffer(manageBuyOfferOp);
+	  this.setSourceAccount(opAttributes, opts);
+
+	  return new _stellarXdr_generated2.default.Operation(opAttributes);
+	}
+
+/***/ }),
+/* 369 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -34167,7 +29915,7 @@ var StellarBase =
 	}
 
 /***/ }),
-/* 508 */
+/* 370 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -34223,7 +29971,7 @@ var StellarBase =
 	}
 
 /***/ }),
-/* 509 */
+/* 371 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(Buffer) {'use strict';
@@ -34375,7 +30123,7 @@ var StellarBase =
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9).Buffer))
 
 /***/ }),
-/* 510 */
+/* 372 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(Buffer) {'use strict';
@@ -34395,13 +30143,13 @@ var StellarBase =
 
 	var _isString2 = _interopRequireDefault(_isString);
 
-	var _clone = __webpack_require__(457);
+	var _clone = __webpack_require__(328);
 
 	var _clone2 = _interopRequireDefault(_clone);
 
 	var _jsXdr = __webpack_require__(65);
 
-	var _bignumber = __webpack_require__(440);
+	var _bignumber = __webpack_require__(312);
 
 	var _bignumber2 = _interopRequireDefault(_bignumber);
 
@@ -34694,7 +30442,7 @@ var StellarBase =
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9).Buffer))
 
 /***/ }),
-/* 511 */
+/* 373 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -34710,11 +30458,11 @@ var StellarBase =
 
 	var _jsXdr = __webpack_require__(65);
 
-	var _bignumber = __webpack_require__(440);
+	var _bignumber = __webpack_require__(312);
 
 	var _bignumber2 = _interopRequireDefault(_bignumber);
 
-	var _clone = __webpack_require__(457);
+	var _clone = __webpack_require__(328);
 
 	var _clone2 = _interopRequireDefault(_clone);
 
@@ -34728,9 +30476,9 @@ var StellarBase =
 
 	var _keypair = __webpack_require__(21);
 
-	var _transaction = __webpack_require__(321);
+	var _transaction = __webpack_require__(310);
 
-	var _memo = __webpack_require__(510);
+	var _memo = __webpack_require__(372);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -34805,13 +30553,13 @@ var StellarBase =
 	    if (!sourceAccount) {
 	      throw new Error('must specify source account for the transaction');
 	    }
-	    this.source = sourceAccount;
-	    this.operations = [];
 
 	    if ((0, _isUndefined2.default)(opts.fee)) {
-	      // eslint-disable-next-line no-console
-	      console.log('[TransactionBuilder] The `fee` parameter of `TransactionBuilder` is required. Future versions of this library will error if not provided.');
+	      throw new Error('must specify fee for the transaction (in stroops)');
 	    }
+
+	    this.source = sourceAccount;
+	    this.operations = [];
 
 	    this.baseFee = (0, _isUndefined2.default)(opts.fee) ? BASE_FEE : opts.fee;
 	    this.timebounds = (0, _clone2.default)(opts.timebounds) || null;
@@ -34959,7 +30707,7 @@ var StellarBase =
 	}
 
 /***/ }),
-/* 512 */
+/* 374 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -34971,7 +30719,7 @@ var StellarBase =
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _bignumber = __webpack_require__(440);
+	var _bignumber = __webpack_require__(312);
 
 	var _bignumber2 = _interopRequireDefault(_bignumber);
 
