@@ -24308,6 +24308,11 @@ var StellarBase =
 	 * * `{@link Operation.manageData}`
 	 * * `{@link Operation.bumpSequence}`
 	 *
+	 * These operations are deprecated and will be removed in a later version:
+	 * * `{@link Operation.manageOffer}`
+	 * * `{@link Operation.createPassiveOffer}`
+	 *
+	 *
 	 * @class Operation
 	 */
 
@@ -24430,6 +24435,8 @@ var StellarBase =
 	            }
 	            break;
 	          }
+	        // the next case intentionally falls through!
+	        case 'manageOffer':
 	        case 'manageSellOffer':
 	          {
 	            result.type = 'manageSellOffer';
@@ -24450,6 +24457,8 @@ var StellarBase =
 	            result.offerId = attrs.offerId().toString();
 	            break;
 	          }
+	        // the next case intentionally falls through!
+	        case 'createPassiveOffer':
 	        case 'createPassiveSellOffer':
 	          {
 	            result.type = 'createPassiveSellOffer';
@@ -24654,6 +24663,10 @@ var StellarBase =
 	Operation.pathPayment = ops.pathPayment;
 	Operation.payment = ops.payment;
 	Operation.setOptions = ops.setOptions;
+
+	// deprecated, to be removed after 1.0.1
+	Operation.manageOffer = ops.manageOffer;
+	Operation.createPassiveOffer = ops.createPassiveOffer;
 
 /***/ }),
 /* 312 */
@@ -29145,6 +29158,7 @@ var StellarBase =
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+	exports.createPassiveSellOffer = exports.manageSellOffer = exports.setOptions = exports.payment = exports.pathPayment = exports.manageBuyOffer = exports.manageData = exports.inflation = exports.createAccount = exports.changeTrust = exports.bumpSequence = exports.allowTrust = exports.accountMerge = undefined;
 
 	var _account_merge = __webpack_require__(359);
 
@@ -29191,16 +29205,7 @@ var StellarBase =
 	  }
 	});
 
-	var _create_passive_sell_offer = __webpack_require__(364);
-
-	Object.defineProperty(exports, 'createPassiveSellOffer', {
-	  enumerable: true,
-	  get: function get() {
-	    return _create_passive_sell_offer.createPassiveSellOffer;
-	  }
-	});
-
-	var _inflation = __webpack_require__(365);
+	var _inflation = __webpack_require__(364);
 
 	Object.defineProperty(exports, 'inflation', {
 	  enumerable: true,
@@ -29209,7 +29214,7 @@ var StellarBase =
 	  }
 	});
 
-	var _manage_data = __webpack_require__(366);
+	var _manage_data = __webpack_require__(365);
 
 	Object.defineProperty(exports, 'manageData', {
 	  enumerable: true,
@@ -29218,16 +29223,7 @@ var StellarBase =
 	  }
 	});
 
-	var _manage_sell_offer = __webpack_require__(367);
-
-	Object.defineProperty(exports, 'manageSellOffer', {
-	  enumerable: true,
-	  get: function get() {
-	    return _manage_sell_offer.manageSellOffer;
-	  }
-	});
-
-	var _manage_buy_offer = __webpack_require__(368);
+	var _manage_buy_offer = __webpack_require__(366);
 
 	Object.defineProperty(exports, 'manageBuyOffer', {
 	  enumerable: true,
@@ -29236,7 +29232,7 @@ var StellarBase =
 	  }
 	});
 
-	var _path_payment = __webpack_require__(369);
+	var _path_payment = __webpack_require__(367);
 
 	Object.defineProperty(exports, 'pathPayment', {
 	  enumerable: true,
@@ -29245,7 +29241,7 @@ var StellarBase =
 	  }
 	});
 
-	var _payment = __webpack_require__(370);
+	var _payment = __webpack_require__(368);
 
 	Object.defineProperty(exports, 'payment', {
 	  enumerable: true,
@@ -29254,7 +29250,7 @@ var StellarBase =
 	  }
 	});
 
-	var _set_options = __webpack_require__(371);
+	var _set_options = __webpack_require__(369);
 
 	Object.defineProperty(exports, 'setOptions', {
 	  enumerable: true,
@@ -29262,6 +29258,28 @@ var StellarBase =
 	    return _set_options.setOptions;
 	  }
 	});
+	exports.manageOffer = manageOffer;
+	exports.createPassiveOffer = createPassiveOffer;
+
+	var _manage_sell_offer = __webpack_require__(370);
+
+	var _create_passive_sell_offer = __webpack_require__(371);
+
+	exports.manageSellOffer = _manage_sell_offer.manageSellOffer;
+	exports.createPassiveSellOffer = _create_passive_sell_offer.createPassiveSellOffer;
+	function manageOffer(opts) {
+	  // eslint-disable-next-line no-console
+	  console.log('[Operation] Operation.manageOffer has been renamed to Operation.manageSellOffer! The old name is deprecated and will be removed in a later version!');
+
+	  return _manage_sell_offer.manageSellOffer.call(this, opts);
+	}
+
+	function createPassiveOffer(opts) {
+	  // eslint-disable-next-line no-console
+	  console.log('[Operation] Operation.createPassiveOffer has been renamed to Operation.createPassiveSellOffer! The old name is deprecated and will be removed in a later version!');
+
+	  return _create_passive_sell_offer.createPassiveSellOffer.call(this, opts);
+	}
 
 /***/ }),
 /* 359 */
@@ -29554,66 +29572,6 @@ var StellarBase =
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.createPassiveSellOffer = createPassiveSellOffer;
-
-	var _isUndefined = __webpack_require__(24);
-
-	var _isUndefined2 = _interopRequireDefault(_isUndefined);
-
-	var _stellarXdr_generated = __webpack_require__(64);
-
-	var _stellarXdr_generated2 = _interopRequireDefault(_stellarXdr_generated);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	/**
-	 * Returns a XDR CreatePasiveSellOfferOp. A "create passive offer" operation creates an
-	 * offer that won't consume a counter offer that exactly matches this offer. This is
-	 * useful for offers just used as 1:1 exchanges for path payments. Use manage offer
-	 * to manage this offer after using this operation to create it.
-	 * @function
-	 * @alias Operation.createPassiveSellOffer
-	 * @param {object} opts Options object
-	 * @param {Asset} opts.selling - What you're selling.
-	 * @param {Asset} opts.buying - What you're buying.
-	 * @param {string} opts.amount - The total amount you're selling. If 0, deletes the offer.
-	 * @param {number|string|BigNumber|Object} opts.price - Price of 1 unit of `selling` in terms of `buying`.
-	 * @param {number} opts.price.n - If `opts.price` is an object: the price numerator
-	 * @param {number} opts.price.d - If `opts.price` is an object: the price denominator
-	 * @param {string} [opts.source] - The source account (defaults to transaction source).
-	 * @throws {Error} Throws `Error` when the best rational approximation of `price` cannot be found.
-	 * @returns {xdr.CreatePassiveSellOfferOp} Create Passive Sell Offer operation
-	 */
-	function createPassiveSellOffer(opts) {
-	  var attributes = {};
-	  attributes.selling = opts.selling.toXDRObject();
-	  attributes.buying = opts.buying.toXDRObject();
-	  if (!this.isValidAmount(opts.amount)) {
-	    throw new TypeError(this.constructAmountRequirementsError('amount'));
-	  }
-	  attributes.amount = this._toXDRAmount(opts.amount);
-	  if ((0, _isUndefined2.default)(opts.price)) {
-	    throw new TypeError('price argument is required');
-	  }
-	  attributes.price = this._toXDRPrice(opts.price);
-	  var createPassiveSellOfferOp = new _stellarXdr_generated2.default.CreatePassiveSellOfferOp(attributes);
-
-	  var opAttributes = {};
-	  opAttributes.body = _stellarXdr_generated2.default.OperationBody.createPassiveSellOffer(createPassiveSellOfferOp);
-	  this.setSourceAccount(opAttributes, opts);
-
-	  return new _stellarXdr_generated2.default.Operation(opAttributes);
-	}
-
-/***/ }),
-/* 365 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
 	exports.inflation = inflation;
 
 	var _stellarXdr_generated = __webpack_require__(64);
@@ -29640,7 +29598,7 @@ var StellarBase =
 	}
 
 /***/ }),
-/* 366 */
+/* 365 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(Buffer) {'use strict';
@@ -29703,76 +29661,7 @@ var StellarBase =
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9).Buffer))
 
 /***/ }),
-/* 367 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.manageSellOffer = manageSellOffer;
-
-	var _isUndefined = __webpack_require__(24);
-
-	var _isUndefined2 = _interopRequireDefault(_isUndefined);
-
-	var _jsXdr = __webpack_require__(65);
-
-	var _stellarXdr_generated = __webpack_require__(64);
-
-	var _stellarXdr_generated2 = _interopRequireDefault(_stellarXdr_generated);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	/**
-	 * Returns a XDR ManageSellOfferOp. A "manage sell offer" operation creates, updates, or
-	 * deletes an offer.
-	 * @function
-	 * @alias Operation.manageSellOffer
-	 * @param {object} opts Options object
-	 * @param {Asset} opts.selling - What you're selling.
-	 * @param {Asset} opts.buying - What you're buying.
-	 * @param {string} opts.amount - The total amount you're selling. If 0, deletes the offer.
-	 * @param {number|string|BigNumber|Object} opts.price - Price of 1 unit of `selling` in terms of `buying`.
-	 * @param {number} opts.price.n - If `opts.price` is an object: the price numerator
-	 * @param {number} opts.price.d - If `opts.price` is an object: the price denominator
-	 * @param {number|string} [opts.offerId ] - If `0`, will create a new offer (default). Otherwise, edits an exisiting offer.
-	 * @param {string} [opts.source] - The source account (defaults to transaction source).
-	 * @throws {Error} Throws `Error` when the best rational approximation of `price` cannot be found.
-	 * @returns {xdr.ManageSellOfferOp} Manage Sell Offer operation
-	 */
-	function manageSellOffer(opts) {
-	  var attributes = {};
-	  attributes.selling = opts.selling.toXDRObject();
-	  attributes.buying = opts.buying.toXDRObject();
-	  if (!this.isValidAmount(opts.amount, true)) {
-	    throw new TypeError(this.constructAmountRequirementsError('amount'));
-	  }
-	  attributes.amount = this._toXDRAmount(opts.amount);
-	  if ((0, _isUndefined2.default)(opts.price)) {
-	    throw new TypeError('price argument is required');
-	  }
-	  attributes.price = this._toXDRPrice(opts.price);
-
-	  if (!(0, _isUndefined2.default)(opts.offerId)) {
-	    opts.offerId = opts.offerId.toString();
-	  } else {
-	    opts.offerId = '0';
-	  }
-
-	  attributes.offerId = _jsXdr.Hyper.fromString(opts.offerId);
-	  var manageSellOfferOp = new _stellarXdr_generated2.default.ManageSellOfferOp(attributes);
-
-	  var opAttributes = {};
-	  opAttributes.body = _stellarXdr_generated2.default.OperationBody.manageSellOffer(manageSellOfferOp);
-	  this.setSourceAccount(opAttributes, opts);
-
-	  return new _stellarXdr_generated2.default.Operation(opAttributes);
-	}
-
-/***/ }),
-/* 368 */
+/* 366 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -29841,7 +29730,7 @@ var StellarBase =
 	}
 
 /***/ }),
-/* 369 */
+/* 367 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -29915,7 +29804,7 @@ var StellarBase =
 	}
 
 /***/ }),
-/* 370 */
+/* 368 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -29971,7 +29860,7 @@ var StellarBase =
 	}
 
 /***/ }),
-/* 371 */
+/* 369 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(Buffer) {'use strict';
@@ -30121,6 +30010,135 @@ var StellarBase =
 	  return new _stellarXdr_generated2.default.Operation(opAttributes);
 	}
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9).Buffer))
+
+/***/ }),
+/* 370 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.manageSellOffer = manageSellOffer;
+
+	var _isUndefined = __webpack_require__(24);
+
+	var _isUndefined2 = _interopRequireDefault(_isUndefined);
+
+	var _jsXdr = __webpack_require__(65);
+
+	var _stellarXdr_generated = __webpack_require__(64);
+
+	var _stellarXdr_generated2 = _interopRequireDefault(_stellarXdr_generated);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	/**
+	 * Returns a XDR ManageSellOfferOp. A "manage sell offer" operation creates, updates, or
+	 * deletes an offer.
+	 * @function
+	 * @alias Operation.manageSellOffer
+	 * @param {object} opts Options object
+	 * @param {Asset} opts.selling - What you're selling.
+	 * @param {Asset} opts.buying - What you're buying.
+	 * @param {string} opts.amount - The total amount you're selling. If 0, deletes the offer.
+	 * @param {number|string|BigNumber|Object} opts.price - Price of 1 unit of `selling` in terms of `buying`.
+	 * @param {number} opts.price.n - If `opts.price` is an object: the price numerator
+	 * @param {number} opts.price.d - If `opts.price` is an object: the price denominator
+	 * @param {number|string} [opts.offerId ] - If `0`, will create a new offer (default). Otherwise, edits an exisiting offer.
+	 * @param {string} [opts.source] - The source account (defaults to transaction source).
+	 * @throws {Error} Throws `Error` when the best rational approximation of `price` cannot be found.
+	 * @returns {xdr.ManageSellOfferOp} Manage Sell Offer operation
+	 */
+	function manageSellOffer(opts) {
+	  var attributes = {};
+	  attributes.selling = opts.selling.toXDRObject();
+	  attributes.buying = opts.buying.toXDRObject();
+	  if (!this.isValidAmount(opts.amount, true)) {
+	    throw new TypeError(this.constructAmountRequirementsError('amount'));
+	  }
+	  attributes.amount = this._toXDRAmount(opts.amount);
+	  if ((0, _isUndefined2.default)(opts.price)) {
+	    throw new TypeError('price argument is required');
+	  }
+	  attributes.price = this._toXDRPrice(opts.price);
+
+	  if (!(0, _isUndefined2.default)(opts.offerId)) {
+	    opts.offerId = opts.offerId.toString();
+	  } else {
+	    opts.offerId = '0';
+	  }
+
+	  attributes.offerId = _jsXdr.Hyper.fromString(opts.offerId);
+	  var manageSellOfferOp = new _stellarXdr_generated2.default.ManageSellOfferOp(attributes);
+
+	  var opAttributes = {};
+	  opAttributes.body = _stellarXdr_generated2.default.OperationBody.manageSellOffer(manageSellOfferOp);
+	  this.setSourceAccount(opAttributes, opts);
+
+	  return new _stellarXdr_generated2.default.Operation(opAttributes);
+	}
+
+/***/ }),
+/* 371 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.createPassiveSellOffer = createPassiveSellOffer;
+
+	var _isUndefined = __webpack_require__(24);
+
+	var _isUndefined2 = _interopRequireDefault(_isUndefined);
+
+	var _stellarXdr_generated = __webpack_require__(64);
+
+	var _stellarXdr_generated2 = _interopRequireDefault(_stellarXdr_generated);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	/**
+	 * Returns a XDR CreatePasiveSellOfferOp. A "create passive offer" operation creates an
+	 * offer that won't consume a counter offer that exactly matches this offer. This is
+	 * useful for offers just used as 1:1 exchanges for path payments. Use manage offer
+	 * to manage this offer after using this operation to create it.
+	 * @function
+	 * @alias Operation.createPassiveSellOffer
+	 * @param {object} opts Options object
+	 * @param {Asset} opts.selling - What you're selling.
+	 * @param {Asset} opts.buying - What you're buying.
+	 * @param {string} opts.amount - The total amount you're selling. If 0, deletes the offer.
+	 * @param {number|string|BigNumber|Object} opts.price - Price of 1 unit of `selling` in terms of `buying`.
+	 * @param {number} opts.price.n - If `opts.price` is an object: the price numerator
+	 * @param {number} opts.price.d - If `opts.price` is an object: the price denominator
+	 * @param {string} [opts.source] - The source account (defaults to transaction source).
+	 * @throws {Error} Throws `Error` when the best rational approximation of `price` cannot be found.
+	 * @returns {xdr.CreatePassiveSellOfferOp} Create Passive Sell Offer operation
+	 */
+	function createPassiveSellOffer(opts) {
+	  var attributes = {};
+	  attributes.selling = opts.selling.toXDRObject();
+	  attributes.buying = opts.buying.toXDRObject();
+	  if (!this.isValidAmount(opts.amount)) {
+	    throw new TypeError(this.constructAmountRequirementsError('amount'));
+	  }
+	  attributes.amount = this._toXDRAmount(opts.amount);
+	  if ((0, _isUndefined2.default)(opts.price)) {
+	    throw new TypeError('price argument is required');
+	  }
+	  attributes.price = this._toXDRPrice(opts.price);
+	  var createPassiveSellOfferOp = new _stellarXdr_generated2.default.CreatePassiveSellOfferOp(attributes);
+
+	  var opAttributes = {};
+	  opAttributes.body = _stellarXdr_generated2.default.OperationBody.createPassiveSellOffer(createPassiveSellOfferOp);
+	  this.setSourceAccount(opAttributes, opts);
+
+	  return new _stellarXdr_generated2.default.Operation(opAttributes);
+	}
 
 /***/ }),
 /* 372 */
