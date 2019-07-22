@@ -28049,6 +28049,15 @@ var StellarBase =
 	    value: function equals(asset) {
 	      return this.code === asset.getCode() && this.issuer === asset.getIssuer();
 	    }
+	  }, {
+	    key: 'toString',
+	    value: function toString() {
+	      if (this.isNative()) {
+	        return 'native';
+	      }
+
+	      return this.getCode() + '-' + this.getIssuer();
+	    }
 	  }], [{
 	    key: 'native',
 	    value: function native() {
