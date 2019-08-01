@@ -7525,6 +7525,8 @@ var StellarBase =
 
 	var _stellarXdr_generated2 = _interopRequireDefault(_stellarXdr_generated);
 
+	var _hashing = __webpack_require__(2);
+
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -7742,16 +7744,22 @@ var StellarBase =
 
 	    /**
 	     * Returns `Keypair` object representing network master key.
+	     * @param {string} [networkPassphrase] passphrase of the target stellar network (e.g. "Public Global Stellar Network ; September 2015").
 	     * @returns {Keypair}
 	     */
 
 	  }, {
 	    key: 'master',
-	    value: function master() {
-	      if (_network.Network.current() === null) {
-	        throw new Error('No network selected. Use `Network.use`, `Network.usePublicNetwork` or `Network.useTestNetwork` helper methods to select network.');
+	    value: function master(networkPassphrase) {
+	      // Deprecation warning. TODO: remove optionality with next major release.
+	      if (!networkPassphrase) {
+	        console.warn('Global `Network.current()` is deprecated. Please pass explicit argument instead, e.g. `Keypair.master(Networks.PUBLIC)` (see https://git.io/fj9fG for more info).');
+	        if (_network.Network.current() === null) {
+	          throw new Error('No network selected. Use `Network.use`, `Network.usePublicNetwork` or `Network.useTestNetwork` helper methods to select network.');
+	        }
+	        networkPassphrase = _network.Network.current().networkPassphrase();
 	      }
-	      return this.fromRawEd25519Seed(_network.Network.current().networkId());
+	      return this.fromRawEd25519Seed((0, _hashing.hash)(networkPassphrase));
 	    }
 
 	    /**
@@ -7828,6 +7836,7 @@ var StellarBase =
 	 * Creates a new `Network` object.
 	 * @constructor
 	 * @param {string} networkPassphrase Network passphrase
+	 * @deprecated
 	 */
 
 	var Network = exports.Network = function () {
@@ -7889,6 +7898,8 @@ var StellarBase =
 	  }, {
 	    key: 'use',
 	    value: function use(network) {
+	      console.warn('Global class `Network` is deprecated. Please pass explicit argument instead, e.g. `new Transaction(envelope, Networks.PUBLIC)` (see https://git.io/fj9fG for more info).');
+
 	      _current = network;
 	    }
 
@@ -23940,7 +23951,11 @@ var StellarBase =
 
 	var _isString2 = _interopRequireDefault(_isString);
 
-	var _index = __webpack_require__(1);
+	var _stellarXdr_generated = __webpack_require__(64);
+
+	var _stellarXdr_generated2 = _interopRequireDefault(_stellarXdr_generated);
+
+	var _hashing = __webpack_require__(2);
 
 	var _strkey = __webpack_require__(27);
 
@@ -23964,15 +23979,23 @@ var StellarBase =
 	 * submitting to the network or forwarding on to additional signers.
 	 * @constructor
 	 * @param {string|xdr.TransactionEnvelope} envelope - The transaction envelope object or base64 encoded string.
+	 * @param {string} [networkPassphrase] passphrase of the target stellar network (e.g. "Public Global Stellar Network ; September 2015").
 	 */
 	var Transaction = exports.Transaction = function () {
-	  function Transaction(envelope) {
+	  function Transaction(envelope, networkPassphrase) {
 	    _classCallCheck(this, Transaction);
 
 	    if (typeof envelope === 'string') {
 	      var buffer = Buffer.from(envelope, 'base64');
-	      envelope = _index.xdr.TransactionEnvelope.fromXDR(buffer);
+	      envelope = _stellarXdr_generated2.default.TransactionEnvelope.fromXDR(buffer);
 	    }
+
+	    // Deprecation warning. TODO: remove optionality with next major release.
+	    if (typeof networkPassphrase !== 'string') {
+	      console.warn('Global `Network.current()` is deprecated. Please pass explicit argument instead, e.g. `new Transaction(envelope, Networks.PUBLIC)` (see https://git.io/fj9fG for more info).');
+	    }
+	    this._networkPassphrase = networkPassphrase;
+
 	    // since this transaction is immutable, save the tx
 	    this.tx = envelope.tx();
 	    this.source = _strkey.StrKey.encodeEd25519PublicKey(envelope.tx().sourceAccount().ed25519());
@@ -24037,7 +24060,7 @@ var StellarBase =
 	     * Example:
 	     * ```javascript
 	     * // `transactionXDR` is a string from the person generating the transaction
-	     * const transaction = new Transaction(transactionXDR);
+	     * const transaction = new Transaction(transactionXDR, networkPassphrase);
 	     * const keypair = Keypair.fromSecret(myStellarSeed);
 	     * return transaction.getKeypairSignature(keypair);
 	     * ```
@@ -24106,7 +24129,7 @@ var StellarBase =
 	        throw new Error('Invalid signature');
 	      }
 
-	      this.signatures.push(new _index.xdr.DecoratedSignature({
+	      this.signatures.push(new _stellarXdr_generated2.default.DecoratedSignature({
 	        hint: hint,
 	        signature: signatureBuffer
 	      }));
@@ -24130,9 +24153,9 @@ var StellarBase =
 	      }
 
 	      var signature = preimage;
-	      var hashX = (0, _index.hash)(preimage);
+	      var hashX = (0, _hashing.hash)(preimage);
 	      var hint = hashX.slice(hashX.length - 4);
-	      this.signatures.push(new _index.xdr.DecoratedSignature({ hint: hint, signature: signature }));
+	      this.signatures.push(new _stellarXdr_generated2.default.DecoratedSignature({ hint: hint, signature: signature }));
 	    }
 
 	    /**
@@ -24143,7 +24166,7 @@ var StellarBase =
 	  }, {
 	    key: 'hash',
 	    value: function hash() {
-	      return (0, _index.hash)(this.signatureBase());
+	      return (0, _hashing.hash)(this.signatureBase());
 	    }
 
 	    /**
@@ -24159,11 +24182,7 @@ var StellarBase =
 	  }, {
 	    key: 'signatureBase',
 	    value: function signatureBase() {
-	      if (_network.Network.current() === null) {
-	        throw new Error('No network selected. Use `Network.use`, `Network.usePublicNetwork` or `Network.useTestNetwork` helper methods to select network.');
-	      }
-
-	      return Buffer.concat([_network.Network.current().networkId(), _index.xdr.EnvelopeType.envelopeTypeTx().toXDR(), this.tx.toXDR()]);
+	      return Buffer.concat([(0, _hashing.hash)(this.networkPassphrase), _stellarXdr_generated2.default.EnvelopeType.envelopeTypeTx().toXDR(), this.tx.toXDR()]);
 	    }
 
 	    /**
@@ -24176,7 +24195,7 @@ var StellarBase =
 	    value: function toEnvelope() {
 	      var tx = this.tx;
 	      var signatures = this.signatures;
-	      var envelope = new _index.xdr.TransactionEnvelope({ tx: tx, signatures: signatures });
+	      var envelope = new _stellarXdr_generated2.default.TransactionEnvelope({ tx: tx, signatures: signatures });
 
 	      return envelope;
 	    }
@@ -24190,6 +24209,24 @@ var StellarBase =
 	    key: 'toXDR',
 	    value: function toXDR() {
 	      return this.toEnvelope().toXDR().toString('base64');
+	    }
+	  }, {
+	    key: 'networkPassphrase',
+	    get: function get() {
+	      if (this._networkPassphrase) {
+	        return this._networkPassphrase;
+	      }
+
+	      console.warn('Global `Network.current()` is deprecated. Please pass explicit argument instead, e.g. `new Transaction(envelope, Networks.PUBLIC)` (see https://git.io/fj9fG for more info).');
+
+	      if (_network.Network.current() === null) {
+	        throw new Error('No network selected. Use `Network.use`, `Network.usePublicNetwork` or `Network.useTestNetwork` helper methods to select network.');
+	      }
+
+	      return _network.Network.current().networkPassphrase();
+	    },
+	    set: function set(networkPassphrase) {
+	      this._networkPassphrase = networkPassphrase;
 	    }
 	  }, {
 	    key: 'memo',
@@ -30507,10 +30544,22 @@ var StellarBase =
 
 	var _memo = __webpack_require__(372);
 
+	var _network = __webpack_require__(22);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+	/**
+	 * Minimum base fee for transactions. If this fee is below the network
+	 * minimum, the transaction will fail. The more operations in the
+	 * transaction, the greater the required fee. Use {@link
+	 * Server#fetchBaseFee} to get an accurate value of minimum transaction
+	 * fee on the network.
+	 *
+	 * @constant
+	 * @see [Fees](https://www.stellar.org/developers/guides/concepts/fees.html)
+	 */
 	var BASE_FEE = exports.BASE_FEE = 100; // Stroops
 
 	/**
@@ -30532,12 +30581,12 @@ var StellarBase =
 	 * the desired operations, call the `build()` method on the `TransactionBuilder` to return a fully
 	 * constructed `{@link Transaction}` that can be signed. The returned transaction will contain the
 	 * sequence number of the source account and include the signature from the source account.</p>
-	 * 
+	 *
 	 * <p><strong>Be careful about unsubmitted transactions!</strong> When you build a transaction, stellar-sdk
-	 * automatically increments the source account's sequence number. If you end up 
+	 * automatically increments the source account's sequence number. If you end up
 	 * not submitting this transaction and submitting another one instead, it'll fail due to
 	 * the sequence number being wrong. So if you decide not to use a built transaction,
-	 * make sure to update the source account's sequence number 
+	 * make sure to update the source account's sequence number
 	 * with [Server.loadAccount](https://stellar.github.io/js-stellar-sdk/Server.html#loadAccount) before creating another transaction.</p>
 	 *
 	 * <p>The following code example creates a new transaction with {@link Operation.createAccount} and
@@ -30546,18 +30595,18 @@ var StellarBase =
 	 * a payment to `destinationB`. The built transaction is then signed by `sourceKeypair`.</p>
 	 *
 	 * ```
-	 * var transaction = new TransactionBuilder(source, { fee })
-	 *  .addOperation(Operation.createAccount({
-	        destination: destinationA,
-	        startingBalance: "20"
-	    })) // <- funds and creates destinationA
-	    .addOperation(Operation.payment({
-	        destination: destinationB,
-	        amount: "100",
-	        asset: Asset.native()
-	    })) // <- sends 100 XLM to destinationB
-	 *   .setTimeout(30)
-	 *   .build();
+	 * var transaction = new TransactionBuilder(source, { fee, networkPassphrase: Networks.TESTNET })
+	 * .addOperation(Operation.createAccount({
+	 *     destination: destinationA,
+	 *     startingBalance: "20"
+	 * })) // <- funds and creates destinationA
+	 * .addOperation(Operation.payment({
+	 *     destination: destinationB,
+	 *     amount: "100",
+	 *     asset: Asset.native()
+	 * })) // <- sends 100 XLM to destinationB
+	 * .setTimeout(30)
+	 * .build();
 	 *
 	 * transaction.sign(sourceKeypair);
 	 * ```
@@ -30569,6 +30618,7 @@ var StellarBase =
 	 * @param {number|string|Date} [opts.timebounds.minTime] - 64 bit unix timestamp or Date object
 	 * @param {number|string|Date} [opts.timebounds.maxTime] - 64 bit unix timestamp or Date object
 	 * @param {Memo} [opts.memo] - The memo for the transaction
+	 * @param {string} [opts.networkPassphrase] passphrase of the target stellar network (e.g. "Public Global Stellar Network ; September 2015").
 	 */
 
 	var TransactionBuilder = exports.TransactionBuilder = function () {
@@ -30592,6 +30642,7 @@ var StellarBase =
 	    this.timebounds = (0, _clone2.default)(opts.timebounds) || null;
 	    this.memo = opts.memo || _memo.Memo.none();
 	    this.timeoutSet = false;
+	    this.networkPassphrase = opts.networkPassphrase || null;
 	  }
 
 	  /**
@@ -30668,6 +30719,20 @@ var StellarBase =
 	    }
 
 	    /**
+	     * Set network nassphrase for the Transaction that will be built.
+	     *
+	     * @param {string} [networkPassphrase] passphrase of the target stellar network (e.g. "Public Global Stellar Network ; September 2015").
+	     * @returns {TransactionBuilder}
+	     */
+
+	  }, {
+	    key: 'setNetworkPassphrase',
+	    value: function setNetworkPassphrase(networkPassphrase) {
+	      this.networkPassphrase = networkPassphrase;
+	      return this;
+	    }
+
+	    /**
 	     * This will build the transaction.
 	     * It will also increment the source account's sequence number by 1.
 	     * @returns {Transaction} This method will return the built {@link Transaction}.
@@ -30709,7 +30774,7 @@ var StellarBase =
 	      xtx.operations(this.operations);
 
 	      var xenv = new _stellarXdr_generated2.default.TransactionEnvelope({ tx: xtx });
-	      var tx = new _transaction.Transaction(xenv);
+	      var tx = new _transaction.Transaction(xenv, this.networkPassphrase);
 
 	      this.source.incrementSequenceNumber();
 
