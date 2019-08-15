@@ -7755,7 +7755,7 @@ var StellarBase =
 	      if (!networkPassphrase) {
 	        console.warn('Global `Network.current()` is deprecated. Please pass explicit argument instead, e.g. `Keypair.master(Networks.PUBLIC)` (see https://git.io/fj9fG for more info).');
 	        if (_network.Network.current() === null) {
-	          throw new Error('No network selected. Use `Network.use`, `Network.usePublicNetwork` or `Network.useTestNetwork` helper methods to select network.');
+	          throw new Error('No network selected. Please pass a network argument, e.g. `Keypair.master(Networks.PUBLIC)`.');
 	        }
 	        networkPassphrase = _network.Network.current().networkPassphrase();
 	      }
@@ -24220,7 +24220,7 @@ var StellarBase =
 	      console.warn('Global `Network.current()` is deprecated. Please pass explicit argument instead, e.g. `new Transaction(envelope, Networks.PUBLIC)` (see https://git.io/fj9fG for more info).');
 
 	      if (_network.Network.current() === null) {
-	        throw new Error('No network selected. Use `Network.use`, `Network.usePublicNetwork` or `Network.useTestNetwork` helper methods to select network.');
+	        throw new Error('No network selected. Please pass a network argument, e.g. `new Transaction(envelope, Networks.PUBLIC)`.');
 	      }
 
 	      return _network.Network.current().networkPassphrase();
