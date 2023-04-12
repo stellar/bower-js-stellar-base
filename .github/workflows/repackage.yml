@@ -1,0 +1,63 @@
+name: Package SDK for Bower
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 12 * * *'  # daily @ noon
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout JS Base
+        uses: actions/checkout@v3
+        with:
+          repository: stellar/js-stellar-base
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Checkout Bower
+        uses: actions/checkout@v3
+        with:
+          repository: stellar/bower-js-stellar-base
+          fetch-depth: 0
+          ref: master
+          path: bower
+
+      # if this check fails then the job doesn't need to proceed
+      - name: Check for updated base package
+        shell: bash
+        run: |
+          TAG=`git describe --tags`
+          cd bower/
+          OLDTAG=`git describe --abbrev=0 --tags`
+          if [ "$OLDTAG" == "$TAG" ]; then
+            echo "No new JavaScript Base version was found, skipping run."
+            exit 1
+          else
+            echo "::group::New JavaScript Base version found:"
+            echo "Previous version: $OLDTAG"
+            echo "New version: $TAG"
+            echo "::endgroup::"
+          fi
+
+      - name: Install Node (14.x)
+        uses: actions/setup-node@v3
+        with:
+          node-version: '14.x'
+
+      - name: Install and build package
+        run: |
+          yarn install
+          yarn
+          cp dist/* bower/
+
+      - name: Publish package
+        run: |
+          TAG=`git describe --tags`
+          cd bower/
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add .
+          git commit -m $TAG
+          git tag -a $TAG -m $TAG
+          git push --atomic origin master "$TAG"
