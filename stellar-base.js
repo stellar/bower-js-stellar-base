@@ -7454,15 +7454,20 @@ var types = lib.config(function (xdr) {
 
   // === xdr source ============================================================
   //
+  //   const AUTH_MSG_FLAG_PULL_MODE_REQUESTED = 100;
+  //
+  // ===========================================================================
+  xdr["const"]("AUTH_MSG_FLAG_PULL_MODE_REQUESTED", 100);
+
+  // === xdr source ============================================================
+  //
   //   struct Auth
   //   {
-  //       // Empty message, just to confirm
-  //       // establishment of MAC keys.
-  //       int unused;
+  //       int flags;
   //   };
   //
   // ===========================================================================
-  xdr.struct("Auth", [["unused", xdr["int"]()]]);
+  xdr.struct("Auth", [["flags", xdr["int"]()]]);
 
   // === xdr source ============================================================
   //
@@ -7547,7 +7552,9 @@ var types = lib.config(function (xdr) {
   //       SURVEY_REQUEST = 14,
   //       SURVEY_RESPONSE = 15,
   //   
-  //       SEND_MORE = 16
+  //       SEND_MORE = 16,
+  //       FLOOD_ADVERT = 18,
+  //       FLOOD_DEMAND = 19
   //   };
   //
   // ===========================================================================
@@ -7568,7 +7575,9 @@ var types = lib.config(function (xdr) {
     hello: 13,
     surveyRequest: 14,
     surveyResponse: 15,
-    sendMore: 16
+    sendMore: 16,
+    floodAdvert: 18,
+    floodDemand: 19
   });
 
   // === xdr source ============================================================
@@ -7718,6 +7727,54 @@ var types = lib.config(function (xdr) {
 
   // === xdr source ============================================================
   //
+  //   const TX_ADVERT_VECTOR_MAX_SIZE = 1000;
+  //
+  // ===========================================================================
+  xdr["const"]("TX_ADVERT_VECTOR_MAX_SIZE", 1000);
+
+  // === xdr source ============================================================
+  //
+  //   typedef Hash TxAdvertVector<TX_ADVERT_VECTOR_MAX_SIZE>;
+  //
+  // ===========================================================================
+  xdr.typedef("TxAdvertVector", xdr.varArray(xdr.lookup("Hash"), xdr.lookup("TX_ADVERT_VECTOR_MAX_SIZE")));
+
+  // === xdr source ============================================================
+  //
+  //   struct FloodAdvert
+  //   {
+  //       TxAdvertVector txHashes;
+  //   };
+  //
+  // ===========================================================================
+  xdr.struct("FloodAdvert", [["txHashes", xdr.lookup("TxAdvertVector")]]);
+
+  // === xdr source ============================================================
+  //
+  //   const TX_DEMAND_VECTOR_MAX_SIZE = 1000;
+  //
+  // ===========================================================================
+  xdr["const"]("TX_DEMAND_VECTOR_MAX_SIZE", 1000);
+
+  // === xdr source ============================================================
+  //
+  //   typedef Hash TxDemandVector<TX_DEMAND_VECTOR_MAX_SIZE>;
+  //
+  // ===========================================================================
+  xdr.typedef("TxDemandVector", xdr.varArray(xdr.lookup("Hash"), xdr.lookup("TX_DEMAND_VECTOR_MAX_SIZE")));
+
+  // === xdr source ============================================================
+  //
+  //   struct FloodDemand
+  //   {
+  //       TxDemandVector txHashes;
+  //   };
+  //
+  // ===========================================================================
+  xdr.struct("FloodDemand", [["txHashes", xdr.lookup("TxDemandVector")]]);
+
+  // === xdr source ============================================================
+  //
   //   union StellarMessage switch (MessageType type)
   //   {
   //   case ERROR_MSG:
@@ -7760,13 +7817,19 @@ var types = lib.config(function (xdr) {
   //       uint32 getSCPLedgerSeq; // ledger seq requested ; if 0, requests the latest
   //   case SEND_MORE:
   //       SendMore sendMoreMessage;
+  //   
+  //   // Pull mode
+  //   case FLOOD_ADVERT:
+  //        FloodAdvert floodAdvert;
+  //   case FLOOD_DEMAND:
+  //        FloodDemand floodDemand;
   //   };
   //
   // ===========================================================================
   xdr.union("StellarMessage", {
     switchOn: xdr.lookup("MessageType"),
     switchName: "type",
-    switches: [["errorMsg", "error"], ["hello", "hello"], ["auth", "auth"], ["dontHave", "dontHave"], ["getPeers", xdr["void"]()], ["peers", "peers"], ["getTxSet", "txSetHash"], ["txSet", "txSet"], ["generalizedTxSet", "generalizedTxSet"], ["transaction", "transaction"], ["surveyRequest", "signedSurveyRequestMessage"], ["surveyResponse", "signedSurveyResponseMessage"], ["getScpQuorumset", "qSetHash"], ["scpQuorumset", "qSet"], ["scpMessage", "envelope"], ["getScpState", "getScpLedgerSeq"], ["sendMore", "sendMoreMessage"]],
+    switches: [["errorMsg", "error"], ["hello", "hello"], ["auth", "auth"], ["dontHave", "dontHave"], ["getPeers", xdr["void"]()], ["peers", "peers"], ["getTxSet", "txSetHash"], ["txSet", "txSet"], ["generalizedTxSet", "generalizedTxSet"], ["transaction", "transaction"], ["surveyRequest", "signedSurveyRequestMessage"], ["surveyResponse", "signedSurveyResponseMessage"], ["getScpQuorumset", "qSetHash"], ["scpQuorumset", "qSet"], ["scpMessage", "envelope"], ["getScpState", "getScpLedgerSeq"], ["sendMore", "sendMoreMessage"], ["floodAdvert", "floodAdvert"], ["floodDemand", "floodDemand"]],
     arms: {
       error: xdr.lookup("Error"),
       hello: xdr.lookup("Hello"),
@@ -7783,7 +7846,9 @@ var types = lib.config(function (xdr) {
       qSet: xdr.lookup("ScpQuorumSet"),
       envelope: xdr.lookup("ScpEnvelope"),
       getScpLedgerSeq: xdr.lookup("Uint32"),
-      sendMoreMessage: xdr.lookup("SendMore")
+      sendMoreMessage: xdr.lookup("SendMore"),
+      floodAdvert: xdr.lookup("FloodAdvert"),
+      floodDemand: xdr.lookup("FloodDemand")
     }
   });
 
@@ -13665,8 +13730,8 @@ function _decodeAddressFullyToMuxedAccount(address) {
   // Refer to https://github.com/stellar/go/blob/master/xdr/muxed_account.go#L26
   // for the Golang implementation of the M... parsing.
   return xdr.MuxedAccount.keyTypeMuxedEd25519(new xdr.MuxedAccountMed25519({
-    id: xdr.Uint64.fromXDR(rawBytes.slice(-8)),
-    ed25519: rawBytes.slice(0, -8)
+    id: xdr.Uint64.fromXDR(rawBytes.subarray(-8)),
+    ed25519: rawBytes.subarray(0, -8)
   }));
 }
 
