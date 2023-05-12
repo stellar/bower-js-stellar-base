@@ -12492,6 +12492,7 @@ var Keypair = /*#__PURE__*/function () {
   return Keypair;
 }();
 ;// CONCATENATED MODULE: ./src/asset.js
+/* provided dependency */ var asset_Buffer = __webpack_require__(8764)["Buffer"];
 function asset_typeof(obj) { "@babel/helpers - typeof"; return asset_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, asset_typeof(obj); }
 function asset_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 function asset_defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, asset_toPropertyKey(descriptor.key), descriptor); } }
@@ -12778,13 +12779,9 @@ var Asset = /*#__PURE__*/function () {
  *     -1 if `a < b`, 0 if `a == b`, and 1 if `a > b`
  *
  * @warning No type-checks are done on the parameters
- *
- * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/localeCompare
  */
 function asciiCompare(a, b) {
-  return a.localeCompare(b, 'en', {
-    caseFirst: 'upper'
-  });
+  return asset_Buffer.compare(asset_Buffer.from(a, 'ascii'), asset_Buffer.from(b, 'ascii'));
 }
 ;// CONCATENATED MODULE: ./src/get_liquidity_pool_id.js
 /* provided dependency */ var get_liquidity_pool_id_Buffer = __webpack_require__(8764)["Buffer"];
