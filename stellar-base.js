@@ -15457,6 +15457,22 @@ var Operation = /*#__PURE__*/function () {
       }
       return result;
     }
+
+    /**
+     * Validates that a given amount is possible for a Stellar asset.
+     *
+     * Specifically, this means that the amount is well, a valid number, but also
+     * that it is within the int64 range and has no more than 7 decimal levels of
+     * precision.
+     *
+     * Note that while smart contracts allow larger amounts, this is oriented
+     * towards validating the standard Stellar operations.
+     *
+     * @param {string} value          the amount to validate
+     * @param {[boolean]} allowZero   whether or not zero is valid (default: no)
+     *
+     * @returns {boolean}
+     */
   }, {
     key: "isValidAmount",
     value: function isValidAmount(value) {
